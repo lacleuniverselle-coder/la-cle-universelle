@@ -169,30 +169,41 @@ document.addEventListener('DOMContentLoaded', () => {
 // SCROLL DOUX POUR LES LIENS INTERNES
 // =============================================
 
-document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-  anchor.addEventListener('click', function (e) {
-    e.preventDefault();
+function setupInternalLinks() {
+  document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+    anchor.addEventListener('click', function (e) {
+      const targetId = this.getAttribute('href');
+      if (targetId === '#') return;
 
-    // Ferme le menu mobile si ouvert
-    closeMenu();
+      e.preventDefault();
 
-    const targetId = this.getAttribute('href');
-    if (targetId === '#') return;
+      // Ferme le menu mobile si ouvert
+      closeMenu();
 
-    const targetElement = document.querySelector(targetId);
-    if (targetElement) {
-      // Affiche le site principal si on vient d'une page cachée
-      document.getElementById('site-main').style.display = 'block';
-      const pages = ['page-mentions-legales', 'page-cgv', 'page-tarifs-serrurerie', 'page-tarifs-velo', 'page-tarifs-pack'];
-      pages.forEach(id => {
-        document.getElementById(id).classList.remove('active');
-      });
+      const targetElement = document.querySelector(targetId);
+      if (targetElement) {
+        // Affiche le site principal si on vient d'une page cachée
+        const mainSite = document.getElementById('site-main');
+        if (mainSite) {
+          mainSite.style.display = 'block';
+        }
+        const pages = ['page-mentions-legales', 'page-cgv', 'page-tarifs-serrurerie', 'page-tarifs-velo', 'page-tarifs-pack'];
+        pages.forEach(id => {
+          const el = document.getElementById(id);
+          if (el) el.classList.remove('active');
+        });
 
-      // Scroll doux
-      targetElement.scrollIntoView({
-        behavior: 'smooth',
-        block: 'start'
-      });
-    }
+        // Scroll doux
+        setTimeout(() => {
+          targetElement.scrollIntoView({
+            behavior: 'smooth',
+            block: 'start'
+          });
+        }, 50);
+      }
+    });
   });
-});
+}
+
+// Initialise les liens quand le DOM est prêt
+document.addEventListener('DOMContentLoaded', setupInternalLinks);
