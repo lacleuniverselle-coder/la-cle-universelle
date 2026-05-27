@@ -1030,14 +1030,17 @@ footer span {
     justify-content: center;
     margin: 0 auto .8rem;
     padding: .8rem .8rem .4rem;
-    overflow: visible
+    overflow: hidden;
+    max-width: 100%;
+    width: 100%
 }
 
 .hero-logo-wrap img {
     height: 130px;
     width: auto;
+    max-width: 100%;
     display: block;
-    overflow: visible
+    overflow: hidden
 }
 
 .pene-irise {
@@ -1092,7 +1095,7 @@ footer span {
 .apropos-image {
     max-width: 300px;
     height: 350px;
-    overflow: hidden;
+    overflow: clip;
     border-radius: 14px;
     box-shadow: 0 8px 32px rgba(92, 46, 122, 0.15);
     border: 1.8px solid rgba(255, 255, 255, 0.2);
@@ -1105,7 +1108,8 @@ footer span {
     height: 100%;
     object-fit: cover;
     object-position: center top;
-    border-radius: 14px
+    border-radius: 14px;
+    -webkit-border-radius: 14px
 }
 
 .apropos-text p {
@@ -1240,7 +1244,11 @@ footer span {
     }
 
     .hero-logo-wrap img {
-        height: 100px
+        height: 100px;
+        width: auto;
+        max-width: 100%;
+        display: block;
+        overflow: hidden
     }
 
     .hero-dispo {
@@ -1283,7 +1291,11 @@ footer span {
     }
 
     .hero-logo-wrap img {
-        height: 76px
+        height: 76px;
+        width: auto;
+        max-width: 100%;
+        display: block;
+        overflow: hidden
     }
 
     .concept-grid {
@@ -1309,7 +1321,11 @@ footer span {
 
 @media(max-width:360px) {
     .hero-logo-wrap img {
-        height: 62px
+        height: 62px;
+        width: auto;
+        max-width: 100%;
+        display: block;
+        overflow: hidden
     }
 
     .hero {
