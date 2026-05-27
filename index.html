@@ -1,161 +1,302 @@
 <!DOCTYPE html>
-<html lang="fr">
-<head>
+<html lang="fr"><head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="description" content="La clé universElle — Serrurière et mécanicienne vélo à Toulouse. Serrurerie Toulouse. Serrurier femme Toulouse. Interventions à domicile en urgence, à vélo cargo. Toulouse centre, est et nord. Réparation vélo.">
+<meta name="description" content="La clé universElle — Serrurière et mécanicienne vélo à Toulouse. Interventions et réparations à domicile en urgence, à vélo cargo.réparateur, réparatrice vélos, Serrurier femme Toulouse centre, nord et est. Disponible juillet 2026.">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://lacleuniverselle.fr">
 <meta property="og:title" content="La clé universElle — Serrurerie & Réparation Vélo à Toulouse">
-<meta property="og:description" content="Serrurière et mécanicienne vélo à Toulouse. Interventions à domicile en urgence, à vélo cargo. Toulouse centre et nord.">
+<meta property="og:description" content="Serrurière et mécanicienne vélo à Toulouse. Interventions à domicile en urgence, à vélo cargo. Toulouse centre, nord et est.">
 <meta property="og:image" content="https://lacleuniverselle.fr/og-image.jpg">
 <meta property="og:locale" content="fr_FR">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="La clé universElle — Serrurerie & Réparation Vélo à Toulouse">
-<meta name="twitter:description" content="Serrurière et mécanicienne vélo à Toulouse. Interventions à domicile en urgence, à vélo cargo. Toulouse centre, est et nord.">
+<meta name="twitter:description" content="Serrurière et mécanicienne vélo à Toulouse. Interventions à domicile en urgence, à vélo cargo. Toulouse centre, nord et est.">
 <meta name="twitter:image" content="https://lacleuniverselle.fr/og-image.jpg">
 <link rel="canonical" href="https://lacleuniverselle.fr">
 <meta name="theme-color" content="#482664">
 <meta name="robots" content="index, follow">
 <link rel="icon" href="favicon.ico" type="image/x-icon">
-<title>La clé universElle — Site en maintenance</title>
-<style>
-  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
-
-  :root {
-    --violet:      #821FA0;
-    --violet-dark: #3B1A6B;
-    --lilas:       #B86FC8;
-    --lilas-clair: #E8D0F0;
-    --lilas-pale:  #F5EBF9;
-    --blanc:       #FFFFFF;
-    --texte:       #1A0A2E;
-    --gris:        #3D2B52;
-  }
-
-  * { margin: 0; padding: 0; box-sizing: border-box; }
-
-  body {
-    font-family: 'Inter', sans-serif;
-    background: var(--blanc);
-    color: var(--texte);
-    min-height: 100vh;
-    display: flex;
-    flex-direction: column;
-  }
-
-  /* ── MAIN ── */
-  .maintenance-main {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    padding: 3rem 2rem 2rem;
-    background: linear-gradient(160deg, #f8f2fc 0%, #fff 60%);
-    text-align: center;
-  }
-
-  /* ── LOGO ANIMÉ ── */
-  .logo-wrap {
-    position: relative;
-    width: 160px;
-    height: 160px;
-    margin-bottom: 2.2rem;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-
-  /* Halo pulsé */
-  .logo-glow {
-    position: absolute;
-    inset: 0;
-    border-radius: 50%;
-    background: radial-gradient(circle, rgba(184,111,200,0.18) 0%, transparent 70%);
-    animation: pulse 2.5s ease-in-out infinite;
-  }
-  @keyframes pulse {
-    0%, 100% { transform: scale(1); opacity: 0.7; }
-    50%       { transform: scale(1.12); opacity: 1; }
-  }
-
-  .logo-img {
-    width: 120px;
-    height: auto;
-    position: relative;
-    z-index: 2;
-    filter: drop-shadow(0 4px 16px rgba(130,31,160,0.18));
-    animation: logoFloat 3s ease-in-out infinite;
-  }
-
-  @keyframes logoFloat {
-    0%, 100% { transform: translateY(0px); }
-    50% { transform: translateY(-12px); }
-  }
-
-  /* ── TEXTE ── */
-  .maintenance-badge {
-    display: inline-block;
-    background: var(--lilas-clair);
-    color: var(--violet);
-    font-size: 0.72rem;
-    font-weight: 700;
-    letter-spacing: 2px;
-    text-transform: uppercase;
-    padding: 0.3rem 1rem;
-    border-radius: 999px;
-    margin-bottom: 1.2rem;
-  }
-
-  .maintenance-title {
-    font-size: clamp(1.1rem, 3vw, 1.45rem);
-    font-weight: 700;
-    color: var(--violet-dark);
-    line-height: 1.5;
-    max-width: 520px;
-    margin-bottom: 2.4rem;
-  }
-
-  .maintenance-title em {
-    font-style: normal;
-    color: var(--lilas);
-  }
-
-  /* Fade-in au chargement */
-  .fade-in {
-    opacity: 0;
-    transform: translateY(16px);
-    animation: fadeUp 0.7s ease forwards;
-  }
-  .fade-in:nth-child(1) { animation-delay: 0.1s; }
-  .fade-in:nth-child(2) { animation-delay: 0.25s; }
-  .fade-in:nth-child(3) { animation-delay: 0.4s; }
-  @keyframes fadeUp {
-    to { opacity: 1; transform: translateY(0); }
-  }
-</style>
+<link rel="stylesheet" href="leaflet.css" />
+<link rel="stylesheet" href="styles.css" />
+<script src="leaflet.js" defer></script>
+<script src="script.js" defer></script>
+<title>La clé universElle — Serrurière & Mécanicienne Vélo à Toulouse</title>
 </head>
 <body>
 
-<!-- ── SECTION PRINCIPALE ── -->
-<div class="maintenance-main">
-
-  <!-- Logo animé -->
-  <div class="logo-wrap fade-in">
-    <div class="logo-glow"></div>
-    <img src="LOGO_seulpunchy.svg" alt="La clé universElle" class="logo-img">
+<!-- NAV -->
+<nav id="main-nav">
+  <button class="nav-logo" onclick="openLogoStory()" aria-label="Découvrir l'histoire du logo" type="button">
+    <div class="nav-logo-svg-wrap"><img src="LOGO_seulpunchy.svg" alt="Logo La clé universElle" style="height:48px;width:auto;display:block;"></div>
+  </button>
+  <ul class="nav-links">
+    <li><a href="#apropos">À propos</a></li>
+    <li><a href="#services">Services</a></li>
+    <li><a href="#concept">Le concept</a></li>
+    <li><a href="#pourquoi">Pourquoi moi</a></li>
+    <li><a href="#zones">Zones</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+  <div style="display:flex; align-items:center; gap:0.6rem;">
+    <button class="hamburger" id="hamburger-btn" aria-label="Menu" onclick="toggleMenu()">
+      <span></span><span></span><span></span>
+    </button>
   </div>
+  <div class="mobile-menu" id="mobile-menu">
+    <a href="#apropos" onclick="closeMenu()">À propos</a>
+    <a href="#services" onclick="closeMenu()">Services</a>
+    <a href="#concept" onclick="closeMenu()">Le concept</a>
+    <a href="#pourquoi" onclick="closeMenu()">Pourquoi moi</a>
+    <a href="#zones" onclick="closeMenu()">Zones</a>
+    <a href="#contact" onclick="closeMenu()">Contact</a>
+  </div>
+</nav>
 
-  <!-- Badge -->
-  <div class="maintenance-badge fade-in">En cours de création</div>
+<!-- SITE PRINCIPAL -->
+<div id="site-main" style="display: block;">
 
-  <!-- Message principal -->
-  <p class="maintenance-title fade-in">
-    Le site est en pleine maintenance — je reviens bientôt ouvrir vos portes,<br>
-    mais avant ça, je dois réparer mon portail ;)
+  <!-- HERO -->
+  <div class="hero" aria-label="Présentation">
+    <div class="hero-logo-wrap">
+      <img src="Elle_Logo_complet_punchy.svg" alt="La clé universElle" style="height:130px;width:auto;display:block;overflow:visible;">
+    </div>
+    <div class="hero-text">
+      <p class="hero-line1">Serrurière &amp; Mécanicienne vélo<br>·</br>Toulouse</p>
+      <p class="hero-line3">Votre serrure résiste&nbsp;? Votre vélo rend l'âme&nbsp;?</p>
+      <p class="hero-line4">J'arrive, je répare et je repars.</p>
+<p class="hero-dispo">📅 Disponible à partir de juillet 2026</p>
+    </div>
+  </div>
+<div class="gradient-separator"></div>
+  <!-- À PROPOS -->
+  <section id="apropos">
+    <div class="section-inner">
+      <span class="section-label">Qui suis-je</span>
+      <h2>Moi c'est Elena.</h2>
+      <div class="apropos-content">
+        <div class="apropos-image">
+          <img src="velomoi.jpg" alt="Elena sur son vélo">
+        </div>
+        <div class="apropos-text">
+          <p>Je me suis formée d'abord à la mécanique vélo (CQP Mécanicienne cycles), puis attirée par la complexité des systèmes de fermeture, j'ai obtenu la certification RNCP Niveau IV en serrurerie.</p> <p>Deux métiers qui semblent éloignés, mais qui révèlent une même philosophie : agir avec les mains, résoudre des problèmes concrets, et voir le sourire des gens quand tout remarche.</p>
+<p>Je me déplace à vélo cargo, assemblé par moi-même, bien évidemment ! Un choix délibéré : rester en mouvement, réduire mon empreinte et être à votre porte rapidement, avec efficacité, professionnalisme et bonne humeur.</p>
+                           </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SERVICES -->
+  <section id="services">
+    <div class="section-inner">
+      <span class="section-label">Ce que je fais</span>
+      <h2>Deux métiers, une seule personne.</h2>
+      <p class="section-desc">La plupart des artisans se spécialisent dans un domaine. Moi j'ai décidé d'en faire deux — parce que la vie vous envoie rarement qu'un seul problème à la fois.</p>
+      <div class="services-grid">
+        <!-- SERRURERIE -->
+        <div class="card">
+          <div class="card-icon">🗝</div>
+          <h3>Serrurerie</h3>
+          <p>Remplacement de serrures et cylindres, ouverture de porte claquée..je ne juge pas, ça m'est déjà arrivé ;)</p>
+          <div class="card-detail">✓ Intervention d'urgence · ✓ Tous types de serrures</div><div class="card-detail">Tarifs à venirs</div>
+        </div>
+        <!-- MÉCANIQUE VÉLO -->
+        <div class="card">
+          <div class="card-icon">🚲</div>
+          <h3>Mécanique vélo</h3>
+          <p>Service de dépannage : crevaison, dérailleur capricieux, frein qui grince, câblerie HS, roue qui vacille — J'irai où tu seras, qu'importe la place, qu'importe l'endroit ♬</p>
+          <div class="card-detail">✓ À domicile / sur place · ✓ Tous types de vélo ou presque</div><div class="card-detail">Tarifs à venirs</div>
+        </div>
+        <!-- LE PACK -->
+        <div class="card card-featured">
+          <div class="card-icon">🎭</div>
+          <h3>Le pack "double <span class="mot-tooltip pene-irise">pêne<span class="tooltip-bulle">Le pêne est la pièce métallique mobile d'une serrure. Il constitue l'élément essentiel du verrouillage, agissant comme un crochet qui bloque l'ouverture — Ça valait la peine de l'expliquer&nbsp;;)</span></span>"</h3>
+          <p>Oh non, vous avez crevé en rentrant du boulot et en plus votre porte ne s'ouvre plus? Pas de panique! Je règle les deux lors de la même intervention. C'est inclus dans ma philosophie — et dans mon devis :)</p>
+          <div class="card-detail">✓ Service combiné · ✓ Tarif unique</div><div class="card-detail">Tarifs à venirs</div>
+        </div>
+      </div>
+      <div class="highlight-box" style="margin-top:2rem;">
+        <strong>La clé universElle</strong><br>
+        <span style="font-size:0.95rem; opacity:0.9;">Eh oui, il m'arrive de réparer une serrure et un vélo lors de la même visite. Dans les deux cas, le multi-tool c'est moi et le vélo cargo, mon atelier ambulant.</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- CONCEPT -->
+  <section id="concept">
+    <div class="section-inner">
+      <span class="section-label">Comment ça roule</span>
+      <h2>Un vélo cargo. Beaucoup d'efficacité.</h2>
+      <div class="concept-grid">
+        <div class="concept-item"><h4>⚡ Rapide</h4><p>Pas de parking à chercher, pas d'embouteillages. Le vélo cargo passe partout où une voiture reste coincée.</p></div>
+        <div class="concept-item"><h4>☘️ Responsable</h4><p>Zéro émission, zéro bruit, à part ma sonnette! Une intervention clean au sens propre comme au sens figuré.</p></div>
+        <div class="concept-item"><h4>👌 Équipé</h4><p>Le cargo embarque tout le matériel nécessaire. Mon atelier se déplace avec moi, mon poncho aussi.</p></div>
+        <div class="concept-item"><h4>🎯 Local</h4><p>Toulouse centre et nord. Je connais chaque rue, chaque impasse, chaque raccourci. Vous attendez moins, je pédale mieux.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- POURQUOI -->
+  <section id="pourquoi">
+    <div class="section-inner">
+      <span class="section-label">Pourquoi choisir</span>
+      <h2>Ce qui me distingue.</h2>
+      <div class="raisons">
+        <div class="raison"><h4>Réactivité réelle</h4><div class="raison-body"><p>Quand ça sonne, je réponds et je me déplace — sauf raison de sécurité valable, et une meuleuse en marche, ça compte.</p></div></div>
+        <div class="raison"><h4>Transparence</h4><div class="raison-body"><p>Avant de commencer toute intervention, on s'entend ensemble sur le prix. Après, plus de surprises... sauf mon accent.</p></div></div>
+        <div class="raison"><h4>Artisane engagée</h4><div class="raison-body"><p>Le travail bien fait, c'est mon exigence. Chaque détail compte — du diagnostic à la réparation. Vous méritez de la qualité, c'est ce que je vous apporte.</p></div></div>
+        <div class="raison"><h4>2-en-1 Exclusif</h4><div class="raison-body"><p>Seule artisane à Toulouse capable de réparer votre serrure ET votre vélo le même jour, lors de la même intervention. Té, franchement, c'est unique!</p></div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ZONES -->
+  <section id="zones" style="background:var(--blanc); padding:2rem 2.5rem;">
+    <div class="section-inner">
+      <div style="display:grid; grid-template-columns:1fr 1.4fr; gap:2rem; align-items:center;">
+        <div>
+          <span class="section-label">Où j'interviens</span>
+          <h2 style="margin-bottom:1.2rem; font-size:1.3rem;">Toulouse Nord, Centre &amp; Est</h2>
+          <p style="font-size:0.72rem; font-weight:700; text-transform:uppercase; letter-spacing:2px; color:var(--violet); margin-bottom:0.4rem;">Toulouse Nord *</p>
+          <p style="font-size:0.82rem; color:var(--gris); line-height:2;">Minimes – Barrière de Paris &nbsp;·&nbsp; Sept Deniers – Ginestous &nbsp;·&nbsp; Lalande – Grand Selve &nbsp;·&nbsp; Izards – Borderouge – Croix Daurade</p>
+          <p style="font-size:0.78rem; color:var(--violet); font-style:italic; font-weight:700; margin-bottom:1rem;">* L'Union</p>
+          <p style="font-size:0.72rem; font-weight:700; text-transform:uppercase; letter-spacing:2px; color:var(--violet); margin-bottom:0.4rem;">Toulouse Centre *</p>
+          <p style="font-size:0.82rem; color:var(--gris); line-height:2;">Capitole – Chalet – Saint-Aubin – Matabiau – Saint-Étienne &nbsp;·&nbsp; Amidonniers – Caffarelli</p>
+          <p style="font-size:0.78rem; color:var(--violet); font-style:italic; font-weight:700; margin-bottom:1rem;">* Arènes Romaines – Ancely – Purpan – Cartoucherie</p>
+          <p style="font-size:0.72rem; font-weight:700; text-transform:uppercase; letter-spacing:2px; color:var(--violet); margin-bottom:0.4rem;">Toulouse Est *</p>
+          <p style="font-size:0.82rem; color:var(--gris); line-height:2;">Bonnefoy – Roseraie – Gramont &nbsp;·&nbsp; Jolimont – Soupetard – Bonhoure &nbsp;·&nbsp; Côte Pavée – Château de l'Hers – La Terrasse</p>
+          <p style="font-size:0.78rem; color:var(--violet); font-style:italic; font-weight:700; margin-bottom:0;">* Balma</p>
+        </div>
+        <div>
+          <div id="map-zones" style="border-radius:14px; overflow:hidden; border:1.5px solid var(--lilas-clair); box-shadow:0 4px 20px rgba(139,95,192,0.1); height:280px;"></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CONTACT -->
+  <section id="contact">
+    <div class="section-inner">
+      <span class="section-label">Me contacter</span>
+      <h2>Disponible à partir de juillet 2026.</h2>
+      <div style="text-align:center; padding: 2rem 0;">
+        <p style="font-size:1rem; margin-bottom:1.2rem;">Pour toute demande, devis ou question :</p>
+        <a href="mailto:contact@lacleuniverselle.fr" class="btn-primary" style="display:inline-block;">contact@lacleuniverselle.fr</a>
+        <div style="margin-top:1.5rem;">
+          <span class="zone-tag" style="font-size:0.72rem; padding:0.2rem 0.6rem;">Toulouse Nord</span>
+          <span class="zone-tag" style="font-size:0.72rem; padding:0.2rem 0.6rem;">Toulouse Centre</span>
+          <span class="zone-tag" style="font-size:0.72rem; padding:0.2rem 0.6rem;">Toulouse Est</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <p>© 2026 <span>La clé universElle</span> — Serrurerie &amp; Mécanique vélo</p>
+    <p style="margin-top:0.4rem;">Fait avec 🌸 et un vélo cargo · Toulouse, Occitanie</p>
+    <div class="footer-links">
+      <a href="javascript:void(0)" onclick="showPage('mentions-legales')">Mentions légales</a>
+      <a href="javascript:void(0)" onclick="showPage('cgv')">CGV</a>
+    </div>
+  </footer>
+
+</div><!-- /#site-main -->
+
+<!-- OVERLAY HISTOIRE DU LOGO -->
+<div class="logo-overlay" id="logo-overlay" onclick="closeLogoStory(event)">
+  <div class="logo-overlay-inner">
+    <div class="logo-overlay-logo"><img src="LOGO_seulpunchy.svg" alt="Logo La clé universElle" style="height:72px;width:auto;display:block;"></div>
+    <button class="logo-overlay-close" onclick="closeLogoStory()" aria-label="Fermer">✕</button>
+    <h3>Pourquoi ce logo ?</h3>
+    Ce logo définit ma philosophie, mon amour pour les savoir-faire. Un galet de dérailleur coupé en deux pour vous partager mes deux passions.<br><br>
+    Ce même galet — sa forme et sa couleur — devrait vous rappeler… la violette! La fleur de la ville de Toulouse.<br><br>
+    La maison, avec un peu d'imagination, symbolise aussi une clé plate (de 15 plus précisément&nbsp;:P) très souvent utilisée dans le vélo. La serrure, ben, pour vous faire sentir en sécurité.<br><br>
+    Et voici les clés de l'univers : <em>Elle</em>.
+  </div>
+</div>
+
+<!-- PAGE : MENTIONS LÉGALES -->
+<div id="page-mentions-legales" style="display:none">
+<div class="page-content">
+  <button class="back-btn" onclick="showPage('main')">← Retour au site</button>
+  <h1>Mentions légales</h1>
+  <p style="color:var(--gris); font-size:0.85rem; margin-bottom:2rem;">Conformément aux dispositions de la loi n° 2004-575 du 21 juin 2004 pour la confiance en l'économie numérique.</p>
+  <h2>Éditeur du site</h2>
+  <p>
+    <strong>Dénomination :</strong> La clé universElle<br>
+    <strong>Forme juridique :</strong> [À compléter — ex : Auto-entrepreneur / EI]<br>
+    <strong>SIRET :</strong> [À compléter]<br>
+    <strong>Adresse :</strong> [À compléter] — Toulouse, France<br>
+    <strong>Responsable de publication :</strong> Elena<br>
+    <strong>Email :</strong> contact@lacleuniverselle.fr
   </p>
+  <h2>Hébergement</h2>
+  <p>
+    Ce site est hébergé par :<br>
+    GitHub Pages (Microsoft Ireland Operations Limited)<br>
+    70 Sir John Rogerson's Quay, Dublin 2, Irlande
+  </p>
+  <h2>Propriété intellectuelle</h2>
+  <p>L'ensemble du contenu de ce site (textes, images, design) est la propriété exclusive de La clé universElle, sauf mention contraire. Toute reproduction, même partielle, est strictement interdite sans autorisation préalable écrite.</p>
+  <h2>Données personnelles</h2>
+  <p>Ce site ne collecte aucune donnée personnelle via formulaire. Conformément au RGPD, pour toute question relative à vos données, écrivez à : contact@lacleuniverselle.fr</p>
+  <h2>Cookies</h2>
+  <p>Ce site n'utilise pas de cookies à des fins de traçage publicitaire ou commercial.</p>
+  <h2>Responsabilité</h2>
+  <p>La clé universElle ne saurait être tenue responsable des dommages directs ou indirects résultant de l'utilisation de ce site ou de l'impossibilité d'y accéder.</p>
+</div>
+<footer>
+  <p>© 2026 <span>La clé universElle</span></p>
+  <div class="footer-links">
+    <a href="javascript:void(0)" onclick="showPage('mentions-legales')">Mentions légales</a>
+    <a href="javascript:void(0)" onclick="showPage('cgv')">CGV</a>
+    <a href="javascript:void(0)" onclick="showPage('main')">← Retour au site</a>
+  </div>
+</footer>
+</div>
 
+<!-- PAGE : CGV -->
+<div id="page-cgv" style="display:none">
+<div class="page-content">
+  <button class="back-btn" onclick="showPage('main')">← Retour au site</button>
+  <h1>Conditions Générales de Vente</h1>
+  <p style="color:var(--gris); font-size:0.85rem; margin-bottom:2rem;">En vigueur au 1er janvier 2026 — La clé universElle, [SIRET à compléter]</p>
+  <h2>Article 1 — Champ d'application</h2>
+  <p>Les présentes CGV s'appliquent à toutes les prestations de services réalisées par La clé universElle (serrurerie, mécanique vélo, pack combiné) auprès de ses clients, particuliers ou professionnels, sur le territoire de Toulouse et sa périphérie (rayon 5 km).</p>
+  <h2>Article 2 — Devis et acceptation</h2>
+  <p>Toute intervention est précédée d'un devis oral ou écrit communiqué au client avant le début des travaux. L'acceptation du devis par le client vaut bon de commande et engage les deux parties. Aucun travail supplémentaire ne sera effectué sans accord préalable.</p>
+  <h2>Article 3 — Tarifs</h2>
+  <p>Les prix indiqués sur le site sont en Euros, hors taxes (H.T.), et correspondent à la main d'œuvre uniquement. Les pièces détachées éventuellement nécessaires sont facturées en supplément et mentionnées dans le devis. Les tarifs peuvent être révisés à tout moment ; les modifications n'affectent pas les devis déjà acceptés.</p>
+  <h2>Article 4 — Modalités de paiement</h2>
+  <p>Le règlement est exigible à la fin de chaque intervention, sur place. Les moyens de paiement acceptés sont :</p>
+  <ul>
+    <li>Espèces</li>
+    <li>Virement bancaire</li>
+    <li>Paiement mobile (Lydia, Sumeria, PayPal, etc.)</li>
+  </ul>
+  <p>Aucun acompte n'est exigé, sauf accord particulier mentionné dans le devis.</p>
+  <h2>Article 5 — Délais d'intervention</h2>
+  <p>La clé universElle s'engage à intervenir dans les meilleurs délais, selon disponibilité. Les délais communiqués lors de la prise de rendez-vous sont donnés à titre indicatif et peuvent varier en cas de force majeure (conditions météorologiques, accident, etc.).</p>
+  <h2>Article 6 — Zone géographique</h2>
+  <p>Les interventions sont réalisées sur Toulouse centre, nord et est, dans un rayon de 5 km. Toute demande hors zone doit faire l'objet d'un accord préalable et pourra entraîner une majoration du déplacement.</p>
+  <h2>Article 7 — Garantie des prestations</h2>
+  <p>La clé universElle garantit ses interventions contre tout défaut d'exécution imputable à sa faute, pendant une durée de [X jours/semaines à compléter] à compter de la date d'intervention. Cette garantie ne couvre pas l'usure normale, les dommages causés par le client ou des tiers, ni les pièces fournies par le client.</p>
+  <h2>Article 8 — Responsabilité</h2>
+  <p>La clé universElle est assurée en responsabilité civile professionnelle. Sa responsabilité ne peut excéder le montant de la prestation facturée. Elle ne saurait être tenue responsable des dommages indirects ou immatériels.</p>
+  <h2>Article 9 — Réclamations</h2>
+  <p>Toute réclamation doit être formulée dans les 48 heures suivant l'intervention, par email à contact@lacleuniverselle.fr. La clé universElle s'engage à y répondre dans les meilleurs délais.</p>
+  <h2>Article 10 — Droit applicable</h2>
+  <p>Les présentes CGV sont soumises au droit français. En cas de litige, une solution amiable sera recherchée en priorité. À défaut, les tribunaux compétents de Toulouse seront seuls compétents.</p>
+</div>
+<footer>
+  <p>© 2026 <span>La clé universElle</span></p>
+  <div class="footer-links">
+    <a href="javascript:void(0)" onclick="showPage('mentions-legales')">Mentions légales</a>
+    <a href="javascript:void(0)" onclick="showPage('cgv')">CGV</a>
+    <a href="javascript:void(0)" onclick="showPage('main')">← Retour au site</a>
+  </div>
+</footer>
 </div>
 
 </body>
