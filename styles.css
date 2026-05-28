@@ -1354,15 +1354,42 @@ footer span {
     margin: 2rem auto;
     width: 80%;
 }
-@media (max-width: 860px) {
+/* Pour tous les écrans */
+.apropos-content {
+    display: grid;
+    gap: 1.5rem;
+    align-items: start; /* Aligne les éléments en haut */
+}
+
+/* Sur desktop (écrans larges) */
+@media (min-width: 861px) {
     .apropos-content {
-        grid-template-columns: 1fr; /* Passe en colonne sur mobile */
-        gap: 1.5rem;
+        grid-template-columns: auto 1fr; /* Image à gauche, texte à droite */
+        align-items: center; /* Centre verticalement */
     }
 
     .apropos-image {
-        width: 100%; /* Prend toute la largeur sur mobile */
+        width: 200px; /* Taille raisonnable sur desktop */
+        height: auto;
+    }
+}
+
+/* Sur mobile (écrans < 861px) */
+@media (max-width: 860px) {
+    .apropos-content {
+        grid-template-columns: 1fr; /* Une seule colonne : image + texte en dessous */
+    }
+
+    .apropos-image {
+        width: 100%; /* Prend toute la largeur disponible */
         max-width: 250px; /* Limite la taille maximale */
-        margin: 0 auto; /* Centre l'image */
+        margin: 0 auto; /* Centre l'image horizontalement */
+        height: auto; /* Hauteur automatique */
+    }
+
+    .apropos-image img {
+        width: 100%; /* Remplit le conteneur */
+        height: auto; /* Évite la distorsion */
+        object-fit: cover; /* Ajuste l'image sans étirement */
     }
 }
