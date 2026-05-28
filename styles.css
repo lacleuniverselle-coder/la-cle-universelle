@@ -1319,23 +1319,38 @@ footer span {
     margin: 2rem auto;
     width: 80%;
 }
+
 /* Pour tous les écrans */
 .apropos-content {
     display: grid;
     gap: 1.5rem;
-    align-items: start; /* Aligne les éléments en haut */
+    align-items: start;
+    max-width: 100%;
 }
 
-/* Sur desktop (écrans larges) */
+.apropos-image {
+    width: 100%;
+    max-width: 300px; /* Largeur maximale pour éviter les images trop grandes */
+    margin: 0 auto; /* Centre l'image horizontalement */
+}
+
+.apropos-image img {
+    width: 100%;
+    height: auto;
+    border-radius: 12px; /* Optionnel : arrondir les coins */
+    object-fit: cover; /* Évite la distorsion */
+}
+
+/* Sur desktop (écrans >= 861px) */
 @media (min-width: 861px) {
     .apropos-content {
-        grid-template-columns: auto 1fr; /* Image à gauche, texte à droite */
+        grid-template-columns: 300px 1fr; /* Largeur fixe pour l'image, texte à droite */
         align-items: center; /* Centre verticalement */
     }
 
     .apropos-image {
-        width: 200px; /* Taille raisonnable sur desktop */
-        height: auto;
+        width: 300px; /* Largeur fixe sur desktop */
+        margin: 0; /* Pas de centrage sur desktop */
     }
 }
 
@@ -1343,18 +1358,5 @@ footer span {
 @media (max-width: 860px) {
     .apropos-content {
         grid-template-columns: 1fr; /* Une seule colonne : image + texte en dessous */
-    }
-
-    .apropos-image {
-        width: 100%; /* Prend toute la largeur disponible */
-        max-width: 250px; /* Limite la taille maximale */
-        margin: 0 auto; /* Centre l'image horizontalement */
-        height: auto; /* Hauteur automatique */
-    }
-
-    .apropos-image img {
-        width: 100%; /* Remplit le conteneur */
-        height: auto; /* Évite la distorsion */
-        object-fit: cover; /* Ajuste l'image sans étirement */
     }
 }
