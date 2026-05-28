@@ -1354,3 +1354,15 @@ footer span {
     margin: 2rem auto;
     width: 80%;
 }
+@media (max-width: 860px) {
+    .apropos-content {
+        grid-template-columns: 1fr; /* Passe en colonne sur mobile */
+        gap: 1.5rem;
+    }
+
+    .apropos-image {
+        width: 100%; /* Prend toute la largeur sur mobile */
+        max-width: 250px; /* Limite la taille maximale */
+        margin: 0 auto; /* Centre l'image */
+    }
+}
