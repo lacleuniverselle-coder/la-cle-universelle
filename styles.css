@@ -1166,16 +1166,6 @@ footer span {
         grid-template-columns: repeat(2, 1fr)
     }
 
-    .apropos-content {
-        grid-template-columns: 1fr;
-        gap: 2rem
-    }
-
-    .apropos-image {
-        max-width: 100%;
-        height: auto;
-        min-height: 300px
-    }
 }
 
 @media(max-width:640px) {
@@ -1313,32 +1303,7 @@ footer span {
 
    
 }
-.apropos-content {
-    display: grid;
-    grid-template-columns: auto 1fr;
-    gap: 2rem;
-    align-items: center;
-    margin-top: 1.5rem;
-}
 
-.apropos-image {
-    width: 200px; /* Réduction de la largeur */
-    height: auto; /* Hauteur automatique pour éviter la distorsion */
-    border-radius: 12px; /* Bordures plus douces */
-    overflow: hidden; /* Cache les parties de l'image qui dépassent */
-    box-shadow: 0 4px 12px rgba(92, 46, 122, 0.15); /* Ombre plus légère */
-    border: 1px solid rgba(255, 255, 255, 0.2); /* Bordure plus fine */
-    flex-shrink: 0;
-}
-
-.apropos-image img {
-    width: 100%; /* L'image prend toute la largeur du conteneur */
-    height: auto; /* Hauteur ajustée automatiquement */
-    display: block;
-    object-fit: cover; /* Remplit le conteneur sans distorsion */
-    object-position: center top; /* Centre l'image en haut */
-    border-radius: 12px; /* Même bordure que le parent */
-}
 @media(min-width:641px) {
     .hamburger {
         display: none
