@@ -201,9 +201,9 @@ nav {
     flex-direction: column;
     align-items: center;
     border-radius: 16px;
-    max-width: 900px;
+    max-width: 820px;
     margin: 1.2rem auto 0;
-    box-shadow: 0 8px 20px rgba(92, 46, 122, 0.08);
+    box-shadow: 0 4px 20px rgba(92, 46, 122, 0.08);
     position: relative;
     border: 1.5px solid var(--lilas-clair)
 }
@@ -242,13 +242,13 @@ nav {
 
 .hero-line1 {
     font-family: 'Monitorica', 'Inter', sans-serif;
-    font-size: clamp(1rem, 2.2vw, 1.35rem);
-    font-weight: 350;
+    font-size: clamp(1.05rem, 2.2vw, 1.45rem);
+    font-weight: 700;
     color: var(--texte);
     text-align: center;
     letter-spacing: .01em;
     margin: 0 0 .25rem;
-    line-height: 1
+    line-height: 1.2
 }
 
 .hero-line2 {
@@ -260,7 +260,23 @@ nav {
     line-height: 1.4
 }
 
+.hero-line3 {
+    font-size: clamp(0.78rem, 1.2vw, 0.9rem);
+    color: var(--gris);
+    text-align: center;
+    font-weight: 300;
+    margin: 0 0 .1rem;
+    line-height: 1.5
+}
 
+.hero-line4 {
+    font-size: clamp(0.82rem, 1.3vw, 0.95rem);
+    color: var(--violet);
+    font-weight: 700;
+    text-align: center;
+    margin: 0 0 .5rem;
+    line-height: 1.4
+}
 
 .hero-text {
     display: flex;
@@ -281,7 +297,6 @@ nav {
 }
 
 .logo-overlay {
-    overflow-y: auto; /* Permet de scroller verticalement */
     position: fixed;
     inset: 0;
     z-index: 999;
@@ -293,7 +308,6 @@ nav {
     pointer-events: none;
     transition: opacity .35s;
     padding: 2rem
-    
 }
 
 .logo-overlay.open {
@@ -302,29 +316,27 @@ nav {
 }
 
 .logo-overlay-inner {
-    /* Garde tes styles actuels */
     background: var(--blanc);
     border-radius: 20px;
     padding: 2.5rem 2rem;
-    max-width: 90%; /* Remplace 520px par un % pour mobile */
+    max-width: 520px;
     width: 100%;
     text-align: center;
     box-shadow: 0 20px 60px rgba(107, 63, 160, 0.35);
     position: relative;
     transform: translateY(20px);
-    transition: transform .35s;
-    overflow-y: auto; /* Permet de scroller si le contenu est trop long */
-    max-height: 90vh; /* Limite la hauteur à 90% de l'écran */
+    transition: transform .35s
 }
+
 .logo-overlay.open .logo-overlay-inner {
     transform: translateY(0)
 }
 
 .logo-overlay-img {
-    width: clamp(80px, 20%, 160px); /* Réduit la taille minimale et le % */
+    width: clamp(60px, 18%, 80px);
     height: auto;
     display: block;
-    margin: 0 auto 1rem;
+    margin: 0 auto 1.5rem
 }
 
 .logo-overlay h3 {
@@ -360,31 +372,6 @@ nav {
 .logo-overlay-close:hover {
     background: var(--lilas-clair)
 }
-/* paddings media queries pour mobile overlay */
-
-@media (max-width: 768px) {
-    .logo-overlay {
-        padding: 1rem; /* Réduit le padding autour de l'overlay */
-    }
-
-    .logo-overlay-inner {
-        padding: 1.5rem 1rem; /* Réduit le padding interne */
-        max-width: 95%; /* Prend presque toute la largeur */
-    }
-
-    .logo-overlay-img {
-        width: clamp(60px, 15%, 120px); /* Logo encore plus petit */
-    }
-
-    .logo-overlay h3 {
-        font-size: 1rem; /* Réduit la taille du titre */
-    }
-
-    .logo-overlay p {
-        font-size: 0.85rem; /* Réduit la taille du texte */
-    }
-}
-
 
 section {
     padding: 3.5rem 2.5rem
@@ -439,8 +426,12 @@ h3 {
     margin-top: 1.5rem;
     align-items: stretch
 }
+* {
+  box-sizing: border-box;
+}
 
-.card {
+.card {flex: 1 1 300px; /* Largeur minimale de 300px, mais flexible */
+    max-width: 100%; /* Ne dépasse pas la largeur du conteneur */
     border: 1.5px solid var(--violet);
     border-radius: 14px;
     padding: 1.4rem;
@@ -448,8 +439,8 @@ h3 {
     background: var(--blanc);
     display: flex;
     flex-direction: column;
-    height: 100%
-}
+    height: 100% 
+    }
 
 .card:hover {
     box-shadow: 0 6px 24px rgba(139, 95, 192, 0.15)
@@ -1097,6 +1088,33 @@ footer span {
     font-weight: 700
 }
 
+.apropos-content {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 2rem;
+    align-items: center;
+    margin-top: 1.5rem
+}
+
+.apropos-image {
+    max-width: 300px;
+    height: 350px;
+    overflow: clip;
+    border-radius: 14px;
+    box-shadow: 0 8px 32px rgba(92, 46, 122, 0.15);
+    border: 1.8px solid rgba(255, 255, 255, 0.2);
+    flex-shrink: 0
+}
+
+.apropos-image img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center top;
+    border-radius: 14px;
+    -webkit-border-radius: 14px
+}
 
 .apropos-text p {
     font-size: .95rem;
@@ -1170,6 +1188,12 @@ footer span {
     .services-grid {
         grid-template-columns: 1fr
     }
+.card-container {
+  display: flex;
+  flex-wrap: wrap; /* Permet aux cartes de passer à la ligne si nécessaire */
+  gap: 20px; /* Espacement entre les cartes */
+  justify-content: center; /* Centre les cartes horizontalement */
+}
 
     .card-featured {
         max-width: 100%
@@ -1179,6 +1203,16 @@ footer span {
         grid-template-columns: repeat(2, 1fr)
     }
 
+    .apropos-content {
+        grid-template-columns: 1fr;
+        gap: 2rem
+    }
+
+    .apropos-image {
+        max-width: 100%;
+        height: auto;
+        min-height: 300px
+    }
 }
 
 @media(max-width:640px) {
@@ -1248,7 +1282,10 @@ footer span {
         gap: 1.8rem !important
     }
 
-   
+    .apropos-image {
+        margin: 0 auto
+    }
+
     .concept-grid {
         grid-template-columns: 1fr
     }
@@ -1314,7 +1351,9 @@ footer span {
         font-size: .6rem
     }
 
-   
+    .apropos-image {
+        min-height: 250px
+    }
 }
 
 @media(min-width:641px) {
@@ -1326,128 +1365,4 @@ footer span {
         display: none !important
     }
 }
-.custom-separator {
-    height: 2px;
-    background: linear-gradient(to right, var(--violet), var(--lilas), var(--violet));
-    margin: 2rem auto;
-    width: 80%;
-}
-
-/* Pour tous les écrans */
-.apropos-content {
-    display: grid;
-    gap: 1.5rem;
-    align-items: start;
-    max-width: 100%;
-}
-
-.apropos-image {
-    width: 100%;
-    max-width: 300px; /* Largeur maximale pour éviter les images trop grandes */
-    margin: 0 auto; /* Centre l'image horizontalement */
-}
-
-.apropos-image img {
-    width: 100%;
-    height: auto;
-    border-radius: 12px; /* Optionnel : arrondir les coins */
-    object-fit: cover; /* Évite la distorsion */
-}
-
-/* Sur desktop (écrans >= 861px) */
-@media (min-width: 861px) {
-    .apropos-content {
-        grid-template-columns: 300px 1fr; /* Largeur fixe pour l'image, texte à droite */
-        align-items: center; /* Centre verticalement */
-    }
-
-    .apropos-image {
-        width: 300px; /* Largeur fixe sur desktop */
-        margin: 0; /* Pas de centrage sur desktop */
-    }
-}
-
-/* Sur mobile (écrans < 861px) */
-@media (max-width: 860px) {
-    .apropos-content {
-        grid-template-columns: 1fr; /* Une seule colonne : image + texte en dessous */
-    }
-}
-
-/* Style pour la section des services */
-#services {
-  width: 100%;
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 20px;
-}
-
-/* Style pour le conteneur des cartes */
-.services-grid {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 20px;
-  justify-content: center;
-  width: 100%;
-}
-
-/* Style pour chaque carte */
-.card {
-  flex: 1 1 300px; /* Largeur minimale de 300px, flexible */
-  max-width: 100%;
-  background: white;
-  border: 1px solid #e0e0e0;
-  border-radius: 8px;
-  padding: 20px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  display: flex; /* Active flexbox pour la carte */
-  flex-direction: column; /* Organise le contenu en colonne */
-}
-
-/* Uniformise la hauteur des cartes */
-.card {
-  height: 100%; /* Prend toute la hauteur disponible */
-}
-
-/* Force le contenu à remplir l'espace vertical */
-.card h3, .card p, .card .card-detail {
-  margin-bottom: 10px;
-}
-
-.card p {
-  flex-grow: 1; /* Permet au paragraphe de s'étirer pour uniformiser la hauteur */
-}
-
-/* Style pour la section des services */
-#services {
-  width: 100%;
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 20px;
-}
-
-/* Adaptation pour mobile */
-@media (max-width: 768px) {
-  .services-grid {
-    flex-direction: column; /* Affiche les cartes en colonne */
-    align-items: center; /* Centre les cartes horizontalement */
-  }
-
-  .card {
-    flex: 1 1 100%; /* Une carte par ligne */
-    width: 100%; /* Prend toute la largeur */
-    margin-bottom: 20px; /* Espacement entre les cartes */
-  }
-}
-.rdv-field-group {
-    display: flex;
-    flex-direction: column;
-    gap: 0;
-}
-
-.rdv-field-hint {
-    font-size: .75rem;
-    color: rgba(255, 255, 255, 0.65);
-    margin-top: .3rem;
-    margin-bottom: 0;
-}
+  
