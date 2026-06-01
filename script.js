@@ -60,23 +60,9 @@ function closeMenu() {
 // POLITIQUE DE CONFIDENTIALITÉ (MODALE)
 // =============================================
 
-function openPolitiqueConfidentialite() {
-  const overlay = document.getElementById('politique-overlay');
-  if (overlay) {
-    overlay.classList.add('open');
-    document.body.style.overflow = 'hidden';
-  }
-}
 
-function closePolitiqueConfidentialite(e) {
-  const overlay = document.getElementById('politique-overlay');
-  if (!e || e.target === overlay || (e.currentTarget && e.currentTarget.classList.contains('politique-close'))) {
-    if (overlay) {
-      overlay.classList.remove('open');
-      document.body.style.overflow = '';
-    }
-  }
-}
+
+
 
 // =============================================
 // LOGO STORY (OVERLAY)
@@ -213,7 +199,7 @@ function setupInternalLinks() {
         if (mainSite) {
           mainSite.style.display = 'block';
         }
-        const pages = ['page-mentions-legales', 'page-cgv', 'page-tarifs-serrurerie', 'page-tarifs-velo', 'page-tarifs-pack'];
+        const pages = ['page-mentions-legales', 'page-cgv', 'page-tarifs-serrurerie', 'page-tarifs-velo', 'page-tarifs-pack', 'page-politique'];
         pages.forEach(id => {
           const el = document.getElementById(id);
           if (el) el.classList.remove('active');

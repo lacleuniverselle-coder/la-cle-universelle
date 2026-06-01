@@ -269,7 +269,7 @@
       <div class="section-inner">
         <span class="section-label">Me contacter</span>
         <h2>Disponible à partir de juillet 2026.</h2>
-        <p style="color:var(--lilas-clair); font-size:.95rem; margin-bottom:2rem;">Pour toute demande ou devis vous pouvez me contacter par mail: contact@lacleuniverselle.fr</p>
+        <p style="color:var(--lilas-clair); font-size:.95rem; margin-bottom:2rem;">Pour toute demande ou devis vous pouvez me contacter par mail : <a href="mailto:contact@lacleuniverselle.fr">contact@lacleuniverselle.fr</a></p>
 
        
 
@@ -822,6 +822,39 @@
 
 
 
+
+  <div id="page-politique" style="display:none">
+    <div class="page-content">
+      <button class="back-btn" onclick="showPage('main')">← Retour au site</button>
+       <h1>Politique de Confidentialité</h1>
+    <p class="politique-date">Dernière mise à jour : juin 2026</p>
+    <p>La présente politique vous informe sur la façon dont <strong>La Clé Universelle</strong> collecte, utilise et protège vos données personnelles, conformément au <strong>RGPD</strong>.</p>
+    <h3>1. Responsable du traitement</h3>
+    <p><strong>La Clé Universelle</strong> — Elena Righettini EI<br>Toulouse, France<br>Email : <a href="mailto:contact@lacleuniverselle.fr">contact@lacleuniverselle.fr</a></p>
+    <h3>2. Données collectées</h3>
+    <p>Nom, prénom, email, téléphone, adresse postale, description de votre situation. Aucune donnée bancaire ni sensible n'est demandée.</p>
+    <h3>3. Finalité</h3>
+    <p>Vos données sont utilisées exclusivement pour traiter votre demande et vous contacter (email ou WhatsApp Business). Elles ne sont jamais transmises à des tiers à des fins commerciales.</p>
+    <h3>4. Service tiers — Web3Forms</h3>
+    <p>Le formulaire transite via <strong>Web3Forms</strong>, qui achemine vos données vers notre email professionnel sans les conserver au-delà de 30 jours.</p>
+    <h3>5. Durée de conservation</h3>
+    <p>Vos données sont conservées le temps nécessaire à votre demande, et au maximum <strong>3 ans</strong> après notre dernier échange.</p>
+    <h3>6. Sécurité</h3>
+    <p>Les échanges sont sécurisés par <strong>HTTPS</strong>. Les échanges WhatsApp bénéficient du chiffrement de bout en bout.</p>
+    <h3>7. Vos droits (RGPD)</h3>
+    <p>Accès, rectification, effacement, opposition, portabilité. Pour exercer vos droits : <a href="mailto:contact@lacleuniverselle.fr">contact@lacleuniverselle.fr</a> — réponse sous 30 jours. Recours possible auprès de la <a href="https://www.cnil.fr" target="_blank" rel="noopener">CNIL</a>.</p>
+    <h3>8. Cookies</h3>
+    <p>Aucun cookie de traçage publicitaire n'est déposé sur ce site.</p>
+  </div>
+
+   <footer>
+               <p>© 2026 <span>La clé universElle</span></p>
+               <div class="footer-links"> <a href="javascript:void(0)" onclick="showPage('mentions-legales')">Mentions
+                         légales</a> <a href="javascript:void(0)" onclick="showPage('cgv')">CGV</a> <a
+                         href="javascript:void(0)" onclick="showPage('main')">← Retour au site</a> </div>
+          </footer>
+</div>
+
    <!-- FOOTER -->
          <footer id="footer-main">
       <p>© 2026 <span>"La clé universElle"</span> — Serrurerie &amp; Mécanique vélo</p>
@@ -830,38 +863,9 @@
         <a href="javascript:void(0)" onclick="showPage('main')">← Retour au site</a>
         <a href="javascript:void(0)" onclick="showPage('mentions-legales')">Mentions légales</a>
         <a href="javascript:void(0)" onclick="showPage('cgv')">CGV</a>
-        <a href="javascript:void(0)" onclick="openPolitiqueConfidentialite()">Politique de confidentialité</a>
+        <a href="javascript:void(0)" onclick="showPage('politique')">Politique de confidentialité</a>
       </div>
    </footer>
-
-  <!-- MODALE : POLITIQUE DE CONFIDENTIALITÉ -->
-  <div class="politique-overlay" id="politique-overlay" onclick="closePolitiqueConfidentialite(event)" aria-modal="true" role="dialog" aria-label="Politique de confidentialité">
-    <div class="politique-inner">
-      <button class="politique-close" onclick="closePolitiqueConfidentialite()" aria-label="Fermer">✕</button>
-      <div class="politique-content">
-        <h2>Politique de Confidentialité</h2>
-        <p class="politique-date">Dernière mise à jour : juin 2026</p>
-        <p>La présente politique vous informe sur la façon dont <strong>La Clé Universelle</strong> collecte, utilise et protège vos données personnelles, conformément au <strong>RGPD</strong>.</p>
-        <h3>1. Responsable du traitement</h3>
-        <p><strong>La Clé Universelle</strong> — Elena Righettini EI<br>Toulouse, France<br>Email : <a href="mailto:contact@lacleuniverselle.fr">contact@lacleuniverselle.fr</a></p>
-        <h3>2. Données collectées</h3>
-        <p>Nom, prénom, email, téléphone, adresse postale, description de votre situation. Aucune donnée bancaire ni sensible n'est demandée.</p>
-        <h3>3. Finalité</h3>
-        <p>Vos données sont utilisées exclusivement pour traiter votre demande et vous contacter (email ou WhatsApp Business). Elles ne sont jamais transmises à des tiers à des fins commerciales.</p>
-        <h3>4. Service tiers — Web3Forms</h3>
-        <p>Le formulaire transite via <strong>Web3Forms</strong>, qui achemine vos données vers notre email professionnel sans les conserver au-delà de 30 jours.</p>
-        <h3>5. Durée de conservation</h3>
-        <p>Vos données sont conservées le temps nécessaire à votre demande, et au maximum <strong>3 ans</strong> après notre dernier échange.</p>
-        <h3>6. Sécurité</h3>
-        <p>Les échanges sont sécurisés par <strong>HTTPS</strong>. Les échanges WhatsApp bénéficient du chiffrement de bout en bout.</p>
-        <h3>7. Vos droits (RGPD)</h3>
-        <p>Accès, rectification, effacement, opposition, portabilité. Pour exercer vos droits : <a href="mailto:contact@lacleuniverselle.fr">contact@lacleuniverselle.fr</a> — réponse sous 30 jours. Recours possible auprès de la <a href="https://www.cnil.fr" target="_blank" rel="noopener">CNIL</a>.</p>
-        <h3>8. Cookies</h3>
-        <p>Aucun cookie de traçage publicitaire n'est déposé sur ce site.</p>
-      </div>
-    </div>
-  </div>
-
 
 </body>
 
