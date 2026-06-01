@@ -1,5 +1,5 @@
 // =============================================
-// NAVIGATION & PAGES 
+// NAVIGATION & PAGES
 // =============================================
 
 const allPages = ['site-main', 'page-mentions-legales', 'page-cgv', 'page-tarifs-serrurerie', 'page-tarifs-velo', 'page-tarifs-pack'];
@@ -12,6 +12,10 @@ function showPage(page, anchor) {
       el.classList.remove('active');
     }
   });
+
+  // Footer principal : visible uniquement sur la page principale
+  const footerMain = document.getElementById('footer-main');
+  if (footerMain) footerMain.style.display = page === 'main' ? '' : 'none';
 
   if (page === 'main') {
     const main = document.getElementById('site-main');
@@ -50,6 +54,28 @@ function closeMenu() {
   const menu = document.getElementById('mobile-menu');
   btn.classList.remove('open');
   menu.classList.remove('open');
+}
+
+// =============================================
+// POLITIQUE DE CONFIDENTIALITÉ (MODALE)
+// =============================================
+
+function openPolitiqueConfidentialite() {
+  const overlay = document.getElementById('politique-overlay');
+  if (overlay) {
+    overlay.classList.add('open');
+    document.body.style.overflow = 'hidden';
+  }
+}
+
+function closePolitiqueConfidentialite(e) {
+  const overlay = document.getElementById('politique-overlay');
+  if (!e || e.target === overlay || (e.currentTarget && e.currentTarget.classList.contains('politique-close'))) {
+    if (overlay) {
+      overlay.classList.remove('open');
+      document.body.style.overflow = '';
+    }
+  }
 }
 
 // =============================================
@@ -207,3 +233,84 @@ function setupInternalLinks() {
 
 // Initialise les liens quand le DOM est prêt
 document.addEventListener('DOMContentLoaded', setupInternalLinks);
+
+// =============================================
+// ACCORDÉON TARIFS
+// =============================================
+
+function toggleAccordeon(btn) {
+  var panel = btn.nextElementSibling;
+  var ouvert = btn.classList.contains('ouvert');
+  btn.classList.toggle('ouvert', !ouvert);
+  panel.classList.toggle('ouvert', !ouvert);
+}
+
+// =============================================
+// TOGGLE PRIX (📅 semaine / ⭐ férié)
+// =============================================
+
+function setPrixMode(mode, page) {
+  var conteneur = document.getElementById('page-tarifs-' + (page === 'serr' ? 'serrurerie' : 'velo'));
+  if (!conteneur) return;
+  var semCells  = conteneur.querySelectorAll('.prix-semaine');
+  var nuitCells = conteneur.querySelectorAll('.prix-nuit');
+  var ferCells  = conteneur.querySelectorAll('.prix-ferie');
+  var btnSem  = conteneur.querySelector('#toggle-sem-'  + page);
+  var btnNuit = conteneur.querySelector('#toggle-nuit-' + page);
+  var btnFer  = conteneur.querySelector('#toggle-fer-'  + page);
+
+  // Cacher tout
+  semCells.forEach(function(c)  { c.style.display = 'none'; });
+  nuitCells.forEach(function(c) { c.style.display = 'none'; });
+  ferCells.forEach(function(c)  { c.style.display = 'none'; });
+  [btnSem, btnNuit, btnFer].forEach(function(b) { if (b) b.classList.remove('actif'); });
+
+  if (mode === 'semaine') {
+    semCells.forEach(function(c) { c.style.display = ''; });
+    if (btnSem) btnSem.classList.add('actif');
+  } else if (mode === 'nuit') {
+    nuitCells.forEach(function(c) { c.style.display = ''; });
+    if (btnNuit) btnNuit.classList.add('actif');
+  } else {
+    ferCells.forEach(function(c) { c.style.display = ''; });
+    if (btnFer) btnFer.classList.add('actif');
+  }
+}
+
+// =============================================
+// EVENT LISTENERS (remplacent les onclick="")
+// =============================================
+
+document.addEventListener('DOMContentLoaded', function () {
+
+  // Boutons "Voir les tarifs →" (data-page)
+  document.querySelectorAll('.btn-tarifs[data-page]').forEach(function (btn) {
+    btn.addEventListener('click', function () {
+      showPage(btn.dataset.page);
+    });
+  });
+
+  // Accordéon tarifs
+  document.querySelectorAll('.tarif-accordeon').forEach(function (btn) {
+    btn.addEventListener('click', function () {
+      toggleAccordeon(btn);
+    });
+  });
+
+  // Toggle prix — serrurerie
+  var toggleSemSerr  = document.getElementById('toggle-sem-serr');
+  var toggleNuitSerr = document.getElementById('toggle-nuit-serr');
+  var toggleFerSerr  = document.getElementById('toggle-fer-serr');
+  if (toggleSemSerr)  toggleSemSerr.addEventListener('click',  function () { setPrixMode('semaine', 'serr'); });
+  if (toggleNuitSerr) toggleNuitSerr.addEventListener('click', function () { setPrixMode('nuit',    'serr'); });
+  if (toggleFerSerr)  toggleFerSerr.addEventListener('click',  function () { setPrixMode('ferie',   'serr'); });
+
+  // Toggle prix — vélo
+  var toggleSemVelo  = document.getElementById('toggle-sem-velo');
+  var toggleNuitVelo = document.getElementById('toggle-nuit-velo');
+  var toggleFerVelo  = document.getElementById('toggle-fer-velo');
+  if (toggleSemVelo)  toggleSemVelo.addEventListener('click',  function () { setPrixMode('semaine', 'velo'); });
+  if (toggleNuitVelo) toggleNuitVelo.addEventListener('click', function () { setPrixMode('nuit',    'velo'); });
+  if (toggleFerVelo)  toggleFerVelo.addEventListener('click',  function () { setPrixMode('ferie',   'velo'); });
+
+});
