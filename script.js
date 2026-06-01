@@ -1,5 +1,5 @@
 // =============================================
-// NAVIGATION & PAGES
+// NAVIGATION & PAGES 
 // =============================================
 
 const allPages = ['site-main', 'page-mentions-legales', 'page-cgv', 'page-tarifs-serrurerie', 'page-tarifs-velo', 'page-tarifs-pack'];
