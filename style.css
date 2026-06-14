@@ -64,19 +64,16 @@ nav {
 }
 
 .nav-logo-svg-wrap {
-      margin: 0.4rem auto;
-  padding: 2.5rem 2rem;
-
-  border-radius: 10px;
-  shadow: 0 10px 60px rgba(107, 63, 160, 0.35);
-    max-width: 600px;
     background: var(--blanc);
-       padding: 4px 6px;
+    border-radius: 10px;
+    box-shadow: 0 1px 6px rgba(76, 20, 132, 0.13);
+    padding: 4px 6px;
     display: flex;
     align-items: center;
     justify-content: center;
     flex-shrink: 0
- }
+    
+}
 
 .nav-logo-svg-wrap svg {
     height: 55px;
@@ -185,7 +182,7 @@ nav {
     font-size: 1rem;
     font-weight: 500;
     border-bottom: 1px solid var(--lilas-clair);
-    transition: .15s, color .15s
+    transition: background .15s, color .15s
 }
 
 .mobile-menu a:last-child {
@@ -199,7 +196,7 @@ nav {
 
 .hero {
     background: var(--blanc);
-    padding: 1.2rem 1.2rem 2rem;
+    padding: 2rem 1.4rem 2rem;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -458,12 +455,16 @@ h3 {
     border: 1.5px solid var(--violet);
     border-radius: 14px;
     padding: 1.4rem;
+
+     margin-bottom: flex;
     transition: box-shadow .2s;
     background: var(--blanc);
     display: flex;
     flex-direction: column;
-    height: 100%
+    height: auto
+ /* toutes les cartes ont la même hauteur dans une grille */
 }
+
 
 .card:hover {
     box-shadow: 0 6px 24px rgba(139, 95, 192, 0.15)
@@ -476,9 +477,9 @@ h3 {
 
 .card h3 {
     font-size: 1rem;
-    font-weight: 700;
+    font-weight: 800;
     color: var(--violet);
-    margin-bottom: .35rem
+    margin-bottom: .30rem
 }
 
 .card p {
@@ -490,7 +491,7 @@ h3 {
 }
 
 .card-detail {
-    margin-top: .8rem;
+    margin-top: auto;
     padding-top: .8rem;
     border-top: 1px solid var(--lilas-clair);
     font-size: .8rem;
@@ -755,14 +756,7 @@ table.tarifs tr:last-child td {
 #contact {
     background: var(--violet)
 }
-#contact a[href^="mailto:"] {
-  color: var(--gris);
-  text-decoration: none;
-}
-#contact a[href^="mailto:"]:hover {
-  -webkit-text-fill-color:  #9b79bd;
-  background: none;
-}
+
 #contact .section-label {
     color: var(--lilas-clair)
 }
@@ -810,7 +804,7 @@ table.tarifs tr:last-child td {
     padding: .5rem 1rem;
     border-radius: 999px;
     text-decoration: none;
-    transition: .2s, transform .1s, box-shadow .2s;
+    transition: background .2s, transform .1s, box-shadow .2s;
     font-size: .82rem;
     background: var(--lilas-clair);
     background-size: 200% auto;
@@ -938,8 +932,7 @@ table.tarifs tr:last-child td {
 #page-cgv,
 #page-tarifs-serrurerie,
 #page-tarifs-velo,
-#page-tarifs-pack,
-#page-politique {
+#page-tarifs-pack {
     display: none
 }
 
@@ -947,8 +940,7 @@ table.tarifs tr:last-child td {
 #page-cgv.active,
 #page-tarifs-serrurerie.active,
 #page-tarifs-velo.active,
-#page-tarifs-pack.active,
-#page-politique.active {
+#page-tarifs-pack.active {
     display: block
 }
 
@@ -1892,6 +1884,8 @@ table.tarifs td.prix-nuit {
   min-height: 0.8rem;
   display: block;
 }
+.form-feedback.erreur { color: #f0b0b0; font-size: 0.8rem; margin-top: 0.5rem; }
+.form-feedback.succes { color: #a8e6a3; font-size: 0.8rem; margin-top: 0.5rem; }
 
 .field-char-count {
   font-size: 0.65rem;
@@ -1937,27 +1931,62 @@ table.tarifs td.prix-nuit {
 .politique-content p {
   margin-bottom: 0.3rem; /* Au lieu de 0.5rem */
 }
+/* ===== MODALE POLITIQUE DE CONFIDENTIALITÉ ===== */
+.politique-overlay {
+  overflow-y: auto;
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  background: rgba(26, 10, 46, 0.92);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity .35s;
+  padding: 2rem;
+}
 
-.btn-retour {
-  background: none;
-  border: none;
-  color: var(--violet);
+.politique-overlay.open {
+  opacity: 1;
+  pointer-events: all;
+}
+
+.politique-inner {
+  background: var(--blanc);
+  border-radius: 20px;
+  padding: 2.5rem 2rem;
+  max-width: 600px;
+  width: 90%;
+  position: relative;
+  transform: translateY(20px);
+  transition: transform .35s;
+  overflow-y: auto;
+  max-height: 85vh;
+  box-shadow: 0 20px 60px rgba(107, 63, 160, 0.35);
+}
+
+.politique-overlay.open .politique-inner {
+  transform: translateY(0);
+}
+
+.politique-close {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  background: 0;
+  border: 0;
   cursor: pointer;
-  font-size: 0.9rem;
-  padding: 0;
-  margin-bottom: 1.5rem;
-  display: block;
+  font-size: 1.3rem;
+  color: var(--gris);
+  line-height: 1;
+  padding: .2rem .5rem;
+  border-radius: 50%;
+  transition: .15s;
 }
 
-.btn-retour:hover {
-  text-decoration: underline;
-}
-
-@media (max-width: 600px) {
-  #page-politique {
-    margin: 1rem;
-    padding: 1.5rem 1.1rem;
-  }
+.politique-close:hover {
+  background: var(--lilas-clair);
 }
 
 .politique-date {
@@ -2023,4 +2052,38 @@ table.tarifs td.prix-nuit {
 
 .link-modal:hover {
   color: var(--blanc);
+}
+
+.contact-tel-btn {
+background: var(--lilas-clair);
+    color: var(--violet);
+    background-size: 200% auto;
+   display: block;
+  width: fit-content;
+  margin: 0.8rem 0 1rem;
+  padding: 0.6rem 1.4rem;
+    text-decoration: none;
+    border: 0;
+    cursor: pointer;     
+  border-radius: 50px;
+  font-weight: 700;
+  font-size: 0.95rem;
+    font-family: 'Inter', sans-serif;
+    transition:.2s, transform .1s, box-shadow .2s
+}
+.contact-tel-btn:hover { background: linear-gradient(90deg, var(--lilas) 0, var(--violet) 50%, var(--lilas) 100%);
+    background-size: 200% auto;
+    animation: violet-shimmer 2s linear infinite;
+    transform: scale(1.05) translateY(-2px);
+    box-shadow: 0 6px 16px rgba(92, 46, 122, 0.35);
+    color: var(--blanc)}
+/*WHATSAPP*/
+    .contact-btns-row {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+  margin: 0.8rem 0 1rem;
+}
+.contact-btns-row .contact-tel-btn {
+  margin: 0;
 }

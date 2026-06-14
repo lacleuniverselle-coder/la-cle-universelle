@@ -60,9 +60,23 @@ function closeMenu() {
 // POLITIQUE DE CONFIDENTIALITÉ (MODALE)
 // =============================================
 
+function openPolitiqueConfidentialite() {
+  const overlay = document.getElementById('politique-overlay');
+  if (overlay) {
+    overlay.classList.add('open');
+    document.body.style.overflow = 'hidden';
+  }
+}
 
-
-
+function closePolitiqueConfidentialite(e) {
+  const overlay = document.getElementById('politique-overlay');
+  if (!e || e.target === overlay || (e.currentTarget && e.currentTarget.classList.contains('politique-close'))) {
+    if (overlay) {
+      overlay.classList.remove('open');
+      document.body.style.overflow = '';
+    }
+  }
+}
 
 // =============================================
 // LOGO STORY (OVERLAY)
@@ -199,7 +213,7 @@ function setupInternalLinks() {
         if (mainSite) {
           mainSite.style.display = 'block';
         }
-        const pages = ['page-mentions-legales', 'page-cgv', 'page-tarifs-serrurerie', 'page-tarifs-velo', 'page-tarifs-pack', 'page-politique'];
+        const pages = ['page-mentions-legales', 'page-cgv', 'page-tarifs-serrurerie', 'page-tarifs-velo', 'page-tarifs-pack'];
         pages.forEach(id => {
           const el = document.getElementById(id);
           if (el) el.classList.remove('active');
@@ -299,4 +313,116 @@ document.addEventListener('DOMContentLoaded', function () {
   if (toggleNuitVelo) toggleNuitVelo.addEventListener('click', function () { setPrixMode('nuit',    'velo'); });
   if (toggleFerVelo)  toggleFerVelo.addEventListener('click',  function () { setPrixMode('ferie',   'velo'); });
 
+});
+
+// =============================================
+// VALIDATION + ENVOI + FILTRAGE FORMULAIRE
+// =============================================
+
+document.addEventListener('DOMContentLoaded', function () {
+  const form = document.getElementById('contact-form');
+  if (!form) return;
+
+  const champs = {
+    nom: { el: document.getElementById('cf-nom'), err: document.getElementById('err-nom') },
+    prenom: { el: document.getElementById('cf-prenom'), err: document.getElementById('err-prenom') },
+    telephone: { el: document.getElementById('cf-tel'), err: document.getElementById('err-tel') },
+    email: { el: document.getElementById('cf-email'), err: document.getElementById('err-email') },
+    description: { el: document.getElementById('cf-description'), err: document.getElementById('err-description') },
+    rgpd: { el: document.getElementById('cf-rgpd'), err: document.getElementById('err-rgpd') }
+  };
+
+const description = document.getElementById('cf-description');
+const compteur = document.getElementById('count-description');
+if (description && compteur) {
+  description.addEventListener('input', () => {
+    compteur.textContent = description.value.length + ' / 180';
+  });
+}
+
+  const feedback = document.getElementById('form-feedback');
+
+  // Empêche la saisie de chiffres dans nom/prénom
+  [champs.nom.el, champs.prenom.el].forEach(input => {
+    input.addEventListener('input', () => {
+      input.value = input.value.replace(/[0-9]/g, '');
+    });
+  });
+
+  // Empêche la saisie de lettres dans téléphone
+  champs.telephone.el.addEventListener('input', () => {
+    champs.telephone.el.value = champs.telephone.el.value.replace(/[^0-9]/g, '');
+  });
+
+  form.addEventListener('submit', function (e) {
+    e.preventDefault();
+    let valide = true;
+    let toutVide = true;
+
+    Object.values(champs).forEach(c => { if (c.err) c.err.textContent = ''; });
+    feedback.textContent = '';
+    feedback.className = 'form-feedback';
+
+    Object.entries(champs).forEach(([key, c]) => {
+      if (key === 'rgpd') { if (c.el.checked) toutVide = false; return; }
+      if (c.el.value.trim() !== '') toutVide = false;
+    });
+
+    if (toutVide) {
+      feedback.textContent = 'Merci de remplir le formulaire avant d\'envoyer.';
+      feedback.className = 'form-feedback erreur';
+      return;
+    }
+
+    [['nom', 'Le nom'], ['prenom', 'Le prénom']].forEach(([key, label]) => {
+      const val = champs[key].el.value.trim();
+      if (val === '') { champs[key].err.textContent = label + ' est obligatoire.'; valide = false; }
+      else if (/[0-9]/.test(val)) { champs[key].err.textContent = 'Pas de chiffres autorisés.'; valide = false; }
+    });
+
+    const tel = champs.telephone.el.value.trim();
+    if (tel !== '' && !/^[0-9]{10}$/.test(tel)) {
+      champs.telephone.err.textContent = '10 chiffres, sans point ni espace.';
+      valide = false;
+    }
+
+    if (champs.email.el.value.trim() === '') {
+      champs.email.err.textContent = 'Email obligatoire.'; valide = false;
+    }
+
+    if (champs.description.el.value.trim() === '') {
+      champs.description.err.textContent = 'Description obligatoire (200 caractères max).'; valide = false;
+    }
+
+    if (!champs.rgpd.el.checked) {
+      champs.rgpd.err.textContent = 'Vous devez accepter la politique de confidentialité.'; valide = false;
+    }
+
+    if (!valide) {
+      feedback.textContent = 'Merci de corriger les champs en rouge.';
+      feedback.className = 'form-feedback erreur';
+      return;
+    }
+
+    fetch('https://api.web3forms.com/submit', {
+      method: 'POST',
+      headers: { 'Accept': 'application/json' },
+      body: new FormData(form)
+    })
+    .then(res => res.json())
+    .then(data => {
+      if (data.success) {
+        feedback.textContent = 'Votre demande a bien été envoyée.';
+        feedback.className = 'form-feedback succes';
+        form.reset();
+      } else {
+        feedback.textContent = 'Erreur lors de l\'envoi, réessayez.';
+        feedback.className = 'form-feedback erreur';
+      }
+    })
+    .catch(() => {
+      feedback.textContent = 'Erreur lors de l\'envoi, réessayez.';
+      feedback.className = 'form-feedback erreur';
+    });
+  });
 });
