@@ -196,7 +196,7 @@ nav {
 
 .hero {
     background: var(--blanc);
-    padding: 2rem 1.4rem 2rem;
+    padding: 1.2rem 1.4rem;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -476,6 +476,7 @@ h3 {
 }
 .card-icon {
   font-size: 1.3em;
+
   line-height: 1;
   display: inline-flex;
 }
@@ -1063,7 +1064,7 @@ footer span {
     display: flex;
     justify-content: center;
     margin: 0 auto .8rem;
-    padding: .8rem .8rem .4rem;
+    padding: .7rem .7rem .3rem;
     overflow: hidden;
     max-width: 100%;
     width: 100%
