@@ -469,11 +469,18 @@ h3 {
 .card:hover {
     box-shadow: 0 6px 24px rgba(139, 95, 192, 0.15)
 }
-
-.card-icon {
-    font-size: 1.3rem;
-    margin-bottom: .5rem
+.card-title-row {
+  display: flex;
+  align-items: top;
+  gap: 8px;
 }
+.card-icon {
+  font-size: 1.3em;
+
+  line-height: 1;
+  display: inline-flex;
+}
+
 
 .card h3 {
     font-size: 1rem;
