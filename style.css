@@ -1565,7 +1565,7 @@ footer span {
     border-radius: 9px;
     cursor: pointer;
     transition: border-color .18s, .18s;
-    font-size: 1.2rem;
+    font-size: 1rem;
     display: flex;
     align-items: center;
     justify-content: center;
