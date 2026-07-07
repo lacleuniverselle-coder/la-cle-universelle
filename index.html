@@ -4,8 +4,10 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
   <meta name="description"
-    content="La clé universElle — Serrurière et mécanicienne vélo à Toulouse. Interventions et réparations à domicile en urgence, à vélo cargo.réparateur, réparatrice vélos, Serrurier femme Toulouse centre, nord et est. Disponible juillet 2026.">
+  content="Serrurier femme à Toulouse : serrurerie dépannage, réparation vélo à domicile en urgence, à vélo cargo. Intervention rapide centre, nord et est Toulouse.">
+
   <meta property="og:type" content="website">
   <meta property="og:url" content="https://lacleuniverselle.fr">
   <meta property="og:title" content="La clé universElle — Serrurerie & Réparation Vélo à Toulouse">
@@ -18,12 +20,13 @@
   <meta name="twitter:description"
     content="Serrurière et mécanicienne vélo à Toulouse. Interventions à domicile en urgence, à vélo cargo. Toulouse centre, nord et est.">
   <meta name="twitter:image" content="https://lacleuniverselle.fr/og-image.jpg">
+
   <link rel="canonical" href="https://lacleuniverselle.fr">
   <meta name="theme-color" content="#482664">
   <meta name="robots" content="index, follow">
-  <link rel="icon" href="favicon.ico" type="image/x-icon">
+ 
   <link rel="stylesheet" href="leaflet.css" />
-  <link rel="stylesheet" href="styles.css" />
+  <link rel="stylesheet" href="style.css" />
   <link rel="icon" type="image/x-icon" href="favicon.ico">
 <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
 <link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png">
@@ -32,6 +35,28 @@
   <script src="leaflet.js" defer></script>
   <script src="script.js" defer></script>
   <title> La clé universElle — Serrurière & Mécanicienne Vélo à Toulouse</title>
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "LocalBusiness",
+  "name": "La clé universElle",
+  "image": "https://lacleuniverselle.fr/og-image.jpg",
+  "url": "https://lacleuniverselle.fr",
+  "description": "Serrurière femme et mécanicienne vélo à Toulouse, intervention à domicile à vélo cargo.",
+  "areaServed": ["Toulouse", "Toulouse Centre", "Toulouse Nord", "Toulouse Est"],
+  "address": {
+    "@type": "PostalAddress",
+    "addressLocality": "Toulouse",
+     "postalCode": "31200",
+    "addressRegion": "Occitanie",
+    "addressCountry": "FR"
+  },
+  "priceRange": "€€"
+}
+</script>
+
+
 </head>
 
 <body>
@@ -52,82 +77,102 @@
       <li><a href="#contact">Contact</a></li>
     </ul>
     <div style="display:flex; align-items:center; gap:0.6rem;">
+     
+       <a class="nav-whatsapp" href="https://wa.me/33743990437" target="_blank" rel="noopener" aria-label="Contacter sur WhatsApp">
+    <svg viewBox="0 0 24 24" width="20" height="20" fill="white"><path d="M17.6 6.32A8.86 8.86 0 0 0 12.04 4C7.5 4 3.78 7.72 3.78 12.26c0 1.5.4 2.92 1.1 4.16L4 20l3.7-.97a8.84 8.84 0 0 0 4.32 1.1h.01c4.54 0 8.26-3.72 8.26-8.26 0-2.21-.86-4.29-2.69-5.55zM12.04 18.6a6.9 6.9 0 0 1-3.5-.96l-.25-.15-2.6.68.7-2.53-.17-.26a6.86 6.86 0 0 1-1.05-3.65c0-3.8 3.09-6.9 6.9-6.9 1.84 0 3.57.72 4.87 2.02a6.84 6.84 0 0 1 2.02 4.87c0 3.8-3.1 6.9-6.92 6.9zm3.78-5.17c-.21-.1-1.22-.6-1.41-.67-.19-.07-.32-.1-.46.1-.13.2-.52.66-.64.8-.12.13-.24.15-.45.05-1.22-.61-2.02-1.08-2.83-2.46-.21-.37.21-.34.61-1.14.07-.13.03-.25-.03-.36-.06-.1-.46-1.1-.63-1.51-.16-.4-.33-.34-.46-.35-.12-.01-.26-.01-.4-.01-.13 0-.35.05-.54.25-.19.2-.71.7-.71 1.71 0 1 .73 1.97.83 2.1.1.13 1.4 2.14 3.4 2.92 1.7.67 2.05.54 2.42.51.37-.03 1.22-.5 1.39-.99.18-.49.18-.91.13-1-.05-.1-.18-.15-.39-.25z"/></svg>
+  </a>
+     
       <button class="hamburger" id="hamburger-btn" aria-label="Menu" onclick="toggleMenu()">
         <span></span><span></span><span></span>
       </button>
     </div>
     <div class="mobile-menu" id="mobile-menu">
-      <a href="#apropos" onclick="closeMenu()">À propos</a>
+      
       <a href="#services" onclick="closeMenu()">Services</a>
+      <a href="#zones" onclick="closeMenu()">Zones</a>
       <a href="#concept" onclick="closeMenu()">Le concept</a>
       <a href="#pourquoi" onclick="closeMenu()">Pourquoi moi</a>
-      <a href="#zones" onclick="closeMenu()">Zones</a>
+      
+      <a href="#apropos" onclick="closeMenu()">À propos</a>
       <a href="#contact" onclick="closeMenu()">Contact</a>
     </div>
   </nav>
 
+ 
+
   <!-- SITE PRINCIPAL -->
-  <div id="site-main" style="display: block;">
+<div id="site-main" style="display: block;">
 
     <!-- HERO -->
     <div class="hero" aria-label="Présentation">
       <div class="hero-logo-wrap">
-        <img src="Elle_Logo_complet_punchy.svg" alt="Elena Righettini EI, sous le nom commercial " La clé universElle""
-          style="height:130px;width:auto;display:block;">
+        <img src="Logocompletcentre.svg" alt="La clé universElle"
+          style="height:80%;width:400px;display:block;">
       </div>
       <div class="hero-text">
-        <p class="hero-line1">Serrurière &amp; Mécanicienne vélo<br>·</br>Toulouse</p>
-        <p class="hero-line3">Votre serrure résiste&nbsp;? Votre vélo rend l'âme&nbsp;?</p>
-        <p class="hero-line4">J'arrive, je répare et je repars.</p>
+        <p class="hero-line1">Artisane multi-services, interventions à domicile · Toulouse
+      
         <p class="hero-dispo">📅 Disponible à partir de juillet 2026</p>
       </div>
     </div>
-   <div class="h-px" style="background: linear-gradient(to right, var(--violet), var(--blanc))"></div>
-      <!-- SERVICES -->
+
+   
+  
+   
+   
+   <!-- SERVICES -->
     <section id="services">
       <div class="section-inner">
         <span class="section-label">Ce que je fais</span>
         <h2>Deux métiers, une seule personne.</h2>
-        <p class="section-desc">La plupart des artisans se spécialisent dans un domaine. Moi j'ai décidé d'en faire deux
-          — parce que la vie vous envoie rarement qu'un seul problème à la fois.</p>
+        <div class="section-desc">
+          <div>Eh oui, il m'arrive de réparer une serrure et un vélo lors de la même visite.</div>
+          <div>Dans les deux cas, le multi-tool c'est moi et le vélo cargo, mon atelier ambulant.</div>
+        </div>
         <div class="services-grid">
           <!-- SERRURERIE -->
           <div class="card">
-            <div class="card-icon">🗝</div>
-            <h3>Serrurerie</h3>
-            <p>Remplacement de serrures et cylindres, ouverture de porte claquée..je ne juge pas, ça m'est déjà arrivé
-              ;)</p>
+           <div class="card-title-row">
+  <span class="card-icon">🗝</span>
+  <h3>SERRURERIE</h3>
+</div>
+            <p>Remplacement de cylindres, installations de serrures multipoints, ouverture de porte claquée..
+              je ne juge pas, ça m'est déjà arrivé.       </p>
             <div class="card-detail">✓ Intervention d'urgence · ✓ Tous types de serrures</div>
-            <div class="card-detail">Tarifs à venir</div>
+           <button class="btn-tarifs" data-page="tarifs-serrurerie"
+          aria-label="Voir les tarifs serrurerie">Voir les tarifs →</button>
           </div>
+          
           <!-- MÉCANIQUE VÉLO -->
           <div class="card">
+            <div class="card-title-row">
             <div class="card-icon">🚲</div>
-            <h3>Mécanique vélo</h3>
+            <h3>MÉCANIQUE VÉLO</h3>
+          </div>
             <p>Service de dépannage : crevaison, dérailleur capricieux, frein qui grince, câblerie HS, roue qui vacille
               — J'irai où tu seras, qu'importe la place, qu'importe l'endroit ♬</p>
             <div class="card-detail">✓ À domicile / sur place · ✓ Tous types de vélo ou presque</div>
-            <div class="card-detail">Tarifs à venir</div>
-          </div>
+             <button class="btn-tarifs" data-page="tarifs-velo"
+          aria-label="Voir les tarifs mécanique vélo">Voir les tarifs →</button>
+             </div>
+          
           <!-- LE PACK -->
           <div class="card card-featured">
+            <div class="card-title-row">
             <div class="card-icon">🎭</div>
             <h3>Le pack "double <span class="mot-tooltip pene-irise">pêne<span class="tooltip-bulle">Le pêne est la
                   pièce métallique mobile d'une serrure. Il constitue l'élément essentiel du verrouillage, agissant
                   comme un crochet qui bloque l'ouverture — Ça valait la peine de l'expliquer&nbsp;;)</span></span>"
             </h3>
+            </div>
             <p>Oh non, vous avez crevé en rentrant du boulot et en plus votre porte ne s'ouvre plus? Pas de panique! Je
               règle les deux lors de la même intervention. C'est inclus dans ma philosophie — et dans mon devis :)</p>
             <div class="card-detail">✓ Service combiné · ✓ Tarif unique</div>
-            <div class="card-detail">Tarifs à venir</div>
-          </div>
-        </div>
-        <div class="highlight-box" style="margin-top:2rem;">
-          <strong>La clé universElle</strong><br>
-          <span style="font-size:0.95rem; opacity:0.9;">Eh oui, il m'arrive de réparer une serrure et un vélo lors de la
-            même visite. Dans les deux cas, le multi-tool c'est moi et le vélo cargo, mon atelier ambulant.</span>
-        </div>
-      </div>
+             <button class="btn-tarifs" data-page="tarifs-pack"
+          aria-label="Voir les tarifs pack double pêne">Voir les tarifs →</button>
+             </div>
+        </div><!-- /.services-grid -->
+              </div><!-- /.section-inner -->
     </section>
 
     <!-- ZONES -->
@@ -177,8 +222,7 @@
         <div class="concept-grid">
           <div class="concept-item">
             <h4>⚡ Rapide</h4>
-            <p>Pas de parking à chercher, pas d'embouteillages. Le vélo cargo passe partout où une voiture reste
-              coincée.</p>
+            <p>Le vélo cargo passe partout où une voiture reste coincée. Délai moyen d'intervention : 30 minutes.</p>
           </div>
           <div class="concept-item">
             <h4>☘️ Responsable</h4>
@@ -191,7 +235,7 @@
           </div>
           <div class="concept-item">
             <h4>🎯 Local</h4>
-            <p>Toulouse centre et nord. Je connais chaque rue, chaque impasse, chaque raccourci. Vous attendez moins, je
+            <p>Toulouse Nord, Centre et Est. Je connais chaque rue, chaque impasse, chaque raccourci. Vous attendez moins, je
               pédale mieux.</p>
           </div>
         </div>
@@ -236,75 +280,142 @@
       </div>
     </section>
   <!-- À PROPOS -->
-    <section id="apropos">
+
+   <section id="apropos">
       <div class="section-inner">
         <span class="section-label">Qui suis-je</span>
         <h2>Moi c'est Elena.</h2>
         <div class="apropos-content">
-          <div class="apropos-image">
-            <img src="velomoi.jpg" alt="Elena sur son vélo">
-          </div>
-          <div class="apropos-text">
-            <p> J'ai décroché un CQP Mécanicienne cycles en 2020, puis attirée par la complexité des systèmes de
+            <!-- Conteneur pour l'image -->
+            <div class="apropos-image">
+                <img src="velomoi.jpg" alt="Photo d'Elena">
+            </div>
+            <!-- Conteneur pour le texte -->
+            <div class="apropos-text">
+                <p>J'ai décroché un CQP Mécanicienne cycles en 2020, puis attirée par la complexité des systèmes de
               fermeture, j'ai obtenu la certification RNCP Niveau IV en serrurerie.</p>
                         <p>Je me déplace à vélo cargo, assemblé par moi-même, bien évidemment ! Un choix délibéré : rester en
               mouvement, réduire mon empreinte et être à votre porte rapidement, avec efficacité, professionnalisme et
               bonne humeur.</p>
-          </div>
+            </div>
         </div>
-      </div>
-    </section>
+    </div>
+</section>
+   <div class="custom-separator"></div>
 
     <!-- CONTACT -->
     <section id="contact">
       <div class="section-inner">
         <span class="section-label">Me contacter</span>
         <h2>Disponible à partir de juillet 2026.</h2>
-        <div style="text-align:center; padding: 2rem 0;">
-          <p style="font-size:1.1rem; font-weight:600; color:var(--blanc); margin-bottom:1.5rem;">Pour toute demande,
-            devis ou question :</p>
-          <a href="mailto:contact@lacleuniverselle.fr" class="btn-primary"
-            style="display:inline-block;">contact@lacleuniverselle.fr</a>
-          <div style="margin-top:1.5rem;">
-            <span class="zone-tag" style="font-size:0.72rem; padding:0.2rem 0.6rem;">Toulouse Nord</span>
-            <span class="zone-tag" style="font-size:0.72rem; padding:0.2rem 0.6rem;">Toulouse Centre</span>
-            <span class="zone-tag" style="font-size:0.72rem; padding:0.2rem 0.6rem;">Toulouse Est</span>
+
+    <div class="contact-btns-row">
+  <a class="contact-tel-btn" href="tel:0743990437">📞 07.43.99.04.37</a>
+  <a class="nav-whatsapp" href="https://wa.me/33743990437" target="_blank" rel="noopener" aria-label="Contacter sur WhatsApp">
+    <svg viewBox="0 0 24 24" width="20" height="20" fill="white"><path d="M17.6 6.32A8.86 8.86 0 0 0 12.04 4C7.5 4 3.78 7.72 3.78 12.26c0 1.5.4 2.92 1.1 4.16L4 20l3.7-.97a8.84 8.84 0 0 0 4.32 1.1h.01c4.54 0 8.26-3.72 8.26-8.26 0-2.21-.86-4.29-2.69-5.55zM12.04 18.6a6.9 6.9 0 0 1-3.5-.96l-.25-.15-2.6.68.7-2.53-.17-.26a6.86 6.86 0 0 1-1.05-3.65c0-3.8 3.09-6.9 6.9-6.9 1.84 0 3.57.72 4.87 2.02a6.84 6.84 0 0 1 2.02 4.87c0 3.8-3.1 6.9-6.92 6.9zm3.78-5.17c-.21-.1-1.22-.6-1.41-.67-.19-.07-.32-.1-.46.1-.13.2-.52.66-.64.8-.12.13-.24.15-.45.05-1.22-.61-2.02-1.08-2.83-2.46-.21-.37.21-.34.61-1.14.07-.13.03-.25-.03-.36-.06-.1-.46-1.1-.63-1.51-.16-.4-.33-.34-.46-.35-.12-.01-.26-.01-.4-.01-.13 0-.35.05-.54.25-.19.2-.71.7-.71 1.71 0 1 .73 1.97.83 2.1.1.13 1.4 2.14 3.4 2.92 1.7.67 2.05.54 2.42.51.37-.03 1.22-.5 1.39-.99.18-.49.18-.91.13-1-.05-.1-.18-.15-.39-.25z"/></svg>
+  </a>
+</div>
+        <p style="color:var(--lilas-clair); font-size:.95rem; margin-bottom:2rem;">Pour toute demande ou devis vous pouvez me contacter via le formulaire.<br>Pour l'envoye des photos de préférence Whatsapp Business (à partir de juillet).</p>
+
+        <form id="contact-form" class="contact-form-new" novalidate>
+          <input type="hidden" name="access_key" value="c3845fad-f632-4795-8646-3e796cc8ecfc">
+          <input type="hidden" name="subject" value="Nouvelle demande — La clé universElle">
+          <input type="hidden" name="from_name" value="La clé universElle">
+
+          <!-- Ligne 1 : Nom | Prénom -->
+          <div class="form-row">
+            <div class="form-field">
+              <label for="cf-nom">Nom <span class="required-star">*</span></label>
+              <input type="text" id="cf-nom" name="nom" maxlength="50" autocomplete="family-name" placeholder="Nom">
+              <span class="field-error" id="err-nom"></span>
+            </div>
+            <div class="form-field">
+              <label for="cf-prenom">Prénom <span class="required-star">*</span></label>
+              <input type="text" id="cf-prenom" name="prenom" maxlength="50" autocomplete="given-name" placeholder="Prénom">
+              <span class="field-error" id="err-prenom"></span>
+            </div>
           </div>
+
+          <!-- Ligne 2 : Téléphone | Email -->
+          <div class="form-row">
+            <div class="form-field">
+              <label for="cf-tel">Téléphone</label>
+              <input type="tel" id="cf-tel" name="telephone" maxlength="10" inputmode="numeric" pattern="[0-9]{10}" autocomplete="tel" placeholder="06xxxxxxxx">
+              <span class="rdv-field-hint">10 chiffres, sans point ni espace</span>
+              <span class="field-error" id="err-tel"></span>
+            </div>
+            <div class="form-field">
+              <label for="cf-email">Email <span class="required-star">*</span></label>
+              <input type="email" id="cf-email" name="email" autocomplete="email" placeholder="tap@exemple.fr">
+              <span class="field-error" id="err-email"></span>
+            </div>
+          </div>
+
+          <!-- Ligne 3 : Adresse -->
+          <div class="form-field">
+            <label for="cf-adresse">Adresse du lieu d'intervention</label>
+            <input type="text" id="cf-adresse" name="adresse" maxlength="130" autocomplete="street-address" placeholder="ex: 13 rue des Fleurs, Toulouse ou 31100">
+            <span class="field-error" id="err-adresse"></span>
+          </div>
+
+          <!-- Ligne 4 : Description -->
+          <div class="form-field">
+            <label for="cf-description">Description de votre situation <span class="required-star">*</span></label>
+            <textarea id="cf-description" name="description" maxlength="180" placeholder="Décrivez votre situation en deux lignes"></textarea>
+            <span class="field-char-count" id="count-description">0 / 180</span>
+            <span class="field-error" id="err-description"></span>
+          </div>
+
+          <!-- RGPD -->
+          <div class="form-rgpd">
+            <label class="rgpd-label">
+              <input type="checkbox" id="cf-rgpd" name="rgpd" required>
+              <span>J'accepte que mes données soient utilisées pour traiter ma demande, conformément à la <button type="button" class="link-modal" onclick="openPolitiqueConfidentialite()">politique de confidentialité</button>. <span class="required-star">*</span></span>
+            </label>
+            <span class="field-error" id="err-rgpd"></span>
+          </div>
+
+          <!-- Bouton + message retour -->
+          <div id="form-feedback" class="form-feedback" aria-live="polite"></div>
+          <button type="submit" class="btn-send" id="btn-submit">Envoyer ma demande</button>
+        </form>
+
+        <div style="margin-top:2rem; text-align:center;">
+          <span class="zone-tag" style="font-size:0.72rem; padding:0.2rem 0.6rem;">Toulouse Nord</span>
+          <span class="zone-tag" style="font-size:0.72rem; padding:0.2rem 0.6rem;">Toulouse Centre</span>
+          <span class="zone-tag" style="font-size:0.72rem; padding:0.2rem 0.6rem;">Toulouse Est</span>
         </div>
       </div>
     </section>
 
-    <!-- FOOTER -->
-    <footer>
-      <p>© 2026 <span>"La clé universElle"</span> — Serrurerie &amp; Mécanique vélo</p>
-      <p style="margin-top:0.4rem;">Fait avec 🌸 et un vélo cargo · Toulouse, Occitanie</p>
-      <div class="footer-links">
-        <a href="javascript:void(0)" onclick="showPage('mentions-legales')">Mentions légales</a>
-        <a href="javascript:void(0)" onclick="showPage('cgv')">CGV</a>
-      </div>
-    </footer>
 
-  </div><!-- /#site-main -->
+
+  </div>  <!-- /fin #site-main -->
 
   <!-- OVERLAY HISTOIRE DU LOGO -->
   <div class="logo-overlay" id="logo-overlay" onclick="closeLogoStory(event)">
     <div class="logo-overlay-inner">
       <div class="logo-overlay-logo"><img src="LOGO_seulpunchy.svg"
-          alt="Logo Elena Righettini EI, sous le nom commercial " La clé universElle""
+          alt="Logo Elena " La clé universElle
           style="height:72px;width:auto;display:block;"></div>
       <button class="logo-overlay-close" onclick="closeLogoStory()" aria-label="Fermer">✕</button>
       <h3>Pourquoi ce logo ?</h3>
-      <p>Ce logo définit mon amour pour les savoir-faire. Un galet de dérailleur coupé en deux pour vous
-      partager mes deux passions. Ces deux métiers qui semblent éloignés, mais qui révèlent une même philosophie : agir avec les mains,
-              résoudre des problèmes concrets, et voir le sourire des gens quand tout remarche.<br><br>
-      Ce même galet — sa forme et sa couleur — devrait vous rappeler… la violette! La fleur de la ville de
-      Toulouse.<br><br>
+      <div>Ce logo définit mon amour pour les savoir-faire.</div><div> Un galet de dérailleur coupé en deux pour vous
+      partager mes deux passions. </div>
+              <br>Deux métiers qui semblent éloignés, mais qui révèlent la même philosophie : agir avec les mains,
+              résoudre des problèmes concrets, et voir le sourire des gens quand tout remarche.<br>
+              <br>
+               Ce même galet — sa forme et sa couleur — devrait vous rappeler… la violette! La fleur de la ville de
+               Toulouse.
+              <br>
       La maison, avec un peu d'imagination, symbolise aussi une clé plate (de 15 plus précisément&nbsp;:P) très souvent
-      utilisée dans le vélo. La serrure, ben, pour vous faire sentir en sécurité.<br><br>
-      Et voici les clés de l'univers : <em>Elle</em>.</p>
+      utilisée dans le vélo. La serrure, ben, pour vous faire sentir en sécurité.
+      <br><br>Et voici les clés de l'univers : <em>Elle</em>.
     </div>
   </div>
 
+
+  
   <!-- PAGE : MENTIONS LÉGALES -->
   <div id="page-mentions-legales" style="display:none">
     <div class="page-content">
@@ -314,11 +425,11 @@
         2004-575 du 21 juin 2004 pour la confiance en l'économie numérique.</p>
       <h2>Éditeur du site</h2>
       <p>
-        <strong>Dénomination :</strong>Elena Righettini EI, sous le nom commercial "La clé universElle"<br>
+        <strong>Dénomination :</strong>"La clé universElle" nom commercial, Elena Righettini EI <br>
         <strong>Forme juridique :</strong> Micro-entreprise EI<br>
-        <strong>SIRET :</strong> 810023192<br>
+        <strong>SIRET :</strong> 81002319200026<br>
         <strong>Adresse :</strong> Toulouse, France<br>
-        <strong>Responsable de publication :</strong> Elena Righettini EI<br>
+        <strong>Responsable de publication :</strong> Elena Righettini<br>
         <strong>Email :</strong> contact@lacleuniverselle.fr
       </p>
       <h2>Hébergement</h2>
@@ -332,22 +443,22 @@
         sous le nom commercial "La clé universElle", sauf mention contraire. Toute reproduction, même partielle, est
         strictement interdite sans autorisation préalable écrite.</p>
       <h2>Données personnelles</h2>
-      <p>Ce site ne collecte aucune donnée personnelle via formulaire. Conformément au RGPD, pour toute question
-        relative à vos données, écrivez à : contact@lacleuniverselle.fr</p>
+      <p>Ce site collecte des données personnelles via son formulaire de contact (nom, prénom, email, téléphone, adresse, description). Ces données sont utilisées exclusivement pour traiter votre demande. Conformément au RGPD, pour toute question relative à vos données, écrivez à : contact@lacleuniverselle.fr — voir la <button class="link-modal" onclick="openPolitiqueConfidentialite()" style="font-size:inherit;">politique de confidentialité</button> pour plus de détails.</p>
       <h2>Cookies</h2>
       <p>Ce site n'utilise pas de cookies à des fins de traçage publicitaire ou commercial.</p>
       <h2>Responsabilité</h2>
       <p>Elena Righettini EI, sous le nom commercial "La clé universElle" ne saurait être tenue responsable des dommages
         directs ou indirects résultant de l'utilisation de ce site ou de l'impossibilité d'y accéder.</p>
     </div>
+
     <footer>
-      <p>© 2026 <span>"La clé universElle"</span></p>
-      <div class="footer-links">
-        <a href="javascript:void(0)" onclick="showPage('mentions-legales')">Mentions légales</a>
-        <a href="javascript:void(0)" onclick="showPage('cgv')">CGV</a>
-        <a href="javascript:void(0)" onclick="showPage('main')">← Retour au site</a>
-      </div>
-    </footer>
+  <p>© 2026 <span>La clé universElle</span></p>
+  <div class="footer-links">
+    <a href="javascript:void(0)" onclick="showPage('mentions-legales')">Mentions légales</a>
+    <a href="javascript:void(0)" onclick="showPage('cgv')">CGV</a>
+    <a href="javascript:void(0)" onclick="showPage('main')">← Retour au site</a>
+  </div>
+</footer>
   </div>
 
   <!-- PAGE : CGV -->
@@ -356,7 +467,7 @@
       <button class="back-btn" onclick="showPage('main')">← Retour au site</button>
       <h1>Conditions Générales de Vente</h1>
       <p style="color:var(--gris); font-size:0.85rem; margin-bottom:2rem;">En vigueur au 1er janvier 2026 — Elena
-        Righettini EI, sous le nom commercial "La clé universElle", SIRET 810023192 </p>
+        Righettini EI, sous le nom commercial "La clé universElle", SIRET 81002319200026 </p>
       <h2>Article 1 — Champ d'application</h2>
       <p>Les présentes CGV s'appliquent à toutes les prestations de services réalisées par Elena Righettini EI, sous le
         nom commercial "La clé universElle" (serrurerie, mécanique vélo, pack combiné) auprès de ses clients,
@@ -402,15 +513,462 @@
       <p>Les présentes CGV sont soumises au droit français. En cas de litige, une solution amiable sera recherchée en
         priorité. À défaut, les tribunaux compétents de Toulouse seront seuls compétents.</p>
     </div>
-    <footer>
-      <p>© 2026 <span>Elena Righettini EI, sous le nom commercial "La clé universElle"</span></p>
+     <footer>
+  <p>© 2026 <span>La clé universElle</span></p>
+  <div class="footer-links">
+    <a href="javascript:void(0)" onclick="showPage('mentions-legales')">Mentions légales</a>
+    <a href="javascript:void(0)" onclick="showPage('cgv')">CGV</a>
+    <a href="javascript:void(0)" onclick="showPage('main')">← Retour au site</a>
+  </div>
+</footer>
+  </div>
+
+<!-- PAGE : TARIFS SERRURERIE -->
+<div id="page-tarifs-serrurerie" style="display:none">
+  <div class="tarifs-page-wrapper">
+
+    <!-- Colonne contenu -->
+    <div class="page-content tarifs-main-col">
+      <button class="back-btn" onclick="showPage('main','services')">← Retour aux services</button>
+      <span class="section-label">Tarifs *</span>
+      <div class="tarif-titre-row">
+        <h1>Serrurerie</h1>
+        <div class="tarif-legende-inline">
+          <span>☀️ du Lundi au Vendredi 8h30–19h</span>
+          <span>☽ L-V soir 19h–22h</span>
+          <span>🌴 Weekend S-D</span>
+        </div>
+      </div>
+
+      <!-- Déplacement : prestation fixe, toujours visible, hors accordéon -->
+      <div class="tarif-fixe-label">Déplacement</div>
+      <table class="tarifs tarif-fixe">
+        <tbody>
+          <tr>
+            <td>Déplacement (rayon de 5 km)</td>
+            <td class="prix-semaine">15,00 €</td>
+            <td class="prix-nuit" style="display:none">19,00 €</td>
+            <td class="prix-ferie" style="display:none">25,00 €</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <button class="tarif-accordeon">Ouvertures <span class="accord-arrow">▸</span></button>
+      <div class="tarif-panel">
+        <table class="tarifs">
+          <tbody>
+            <tr>
+              <td>Ouverture porte claquée (ouverture fine)</td>
+              <td class="prix-semaine">80,00 €</td>
+              <td class="prix-nuit" style="display:none">100,00 €</td>
+              <td class="prix-ferie" style="display:none">144,00 €</td>
+            </tr>
+            <tr>
+              <td>Ouverture porte verrouillée standard</td>
+              <td class="prix-semaine">110,00 €</td>
+              <td class="prix-nuit" style="display:none">138,00 €</td>
+              <td class="prix-ferie" style="display:none">198,00 €</td>
+            </tr>
+            <tr>
+              <td>Ouverture porte verrouillée haute sécurité</td>
+              <td class="prix-semaine">140,00 €</td>
+              <td class="prix-nuit" style="display:none">175,00 €</td>
+              <td class="prix-ferie" style="display:none">252,00 €</td>
+            </tr>
+            <tr>
+              <td>Clé cassée dans la serrure</td>
+              <td class="prix-semaine">110,00 €</td>
+              <td class="prix-nuit" style="display:none">138,00 €</td>
+              <td class="prix-ferie" style="display:none">198,00 €</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <button class="tarif-accordeon">Installations <span class="accord-arrow">▸</span></button>
+      <div class="tarif-panel">
+        <table class="tarifs">
+          <tbody>
+            <tr>
+              <td>Cylindre classique</td>
+              <td class="prix-semaine">70,00 €</td>
+              <td class="prix-nuit" style="display:none">88,00 €</td>
+              <td class="prix-ferie" style="display:none">126,00 €</td>
+            </tr>
+            <tr>
+              <td>Cylindre renforcé</td>
+              <td class="prix-semaine">100,00 €</td>
+              <td class="prix-nuit" style="display:none">125,00 €</td>
+              <td class="prix-ferie" style="display:none">180,00 €</td>
+            </tr>
+            <tr>
+              <td>Serrure à larder simple monopoint</td>
+              <td class="prix-semaine">100,00 €</td>
+              <td class="prix-nuit" style="display:none">125,00 €</td>
+              <td class="prix-ferie" style="display:none">180,00 €</td>
+            </tr>
+            <tr>
+              <td>Serrure en applique standard (multipoints)</td>
+              <td class="prix-semaine">150,00 €</td>
+              <td class="prix-nuit na-tag" style="display:none">Non disponible</td>
+              <td class="prix-ferie" style="display:none">270,00 €</td>
+            </tr>
+            <tr>
+              <td>Serrure encastrable 3 points</td>
+              <td class="prix-semaine">190,00 €</td>
+              <td class="prix-nuit na-tag" style="display:none">Non disponible</td>
+              <td class="prix-ferie" style="display:none">342,00 €</td>
+            </tr>
+            <tr>
+              <td>Pose verrou simple</td>
+              <td class="prix-semaine">70,00 €</td>
+              <td class="prix-nuit" style="display:none">88,00 €</td>
+              <td class="prix-ferie" style="display:none">126,00 €</td>
+            </tr>
+            <tr>
+              <td>Pose d'une carénée</td>
+              <td class="prix-semaine">190,00 €</td>
+              <td class="prix-nuit na-tag" style="display:none">Non disponible</td>
+              <td class="prix-ferie" style="display:none">342,00 €</td>
+            </tr>
+            <tr>
+              <td>Main d'œuvre à l'heure **</td>
+              <td class="prix-semaine">65,00 €</td>
+              <td class="prix-nuit" style="display:none">82,00 €</td>
+              <td class="prix-ferie" style="display:none">117,00 €</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <p class="tarifs-note">* Pièces non incluses — tarifs comprenant la main d'œuvre uniquement.<br>
+        ** La main d'œuvre à l'heure s'applique aux interventions spécifiques hors grille tarifaire, sur devis préalable — ce n'est pas un supplément aux tarifs ci-dessus.<br>
+        TVA non applicable, art. 293 B du CGI — entreprise en régime micro-entrepreneur.<br>
+        <strong>Tous les prix affichés sont HT.</strong></p>
+    </div><!-- /.tarifs-main-col -->
+
+    <!-- Colonne sticky droite -->
+    <div class="tarifs-side-col">
+      <div class="prix-toggle-widget">
+        <button class="prix-toggle actif" id="toggle-sem-serr" aria-label="Tarifs semaine jour">☀️</button>
+        <button class="prix-toggle" id="toggle-nuit-serr" aria-label="Tarifs semaine nuit">☽</button>
+        <button class="prix-toggle" id="toggle-fer-serr" aria-label="Tarifs weekend">🌴</button>
+      </div>
+    </div><!-- /.tarifs-side-col -->
+
+  </div><!-- /.tarifs-page-wrapper -->
+
+  <footer>
+    <p>© 2026 <span>La clé universElle</span></p>
+    <div class="footer-links">
+      <a href="javascript:void(0)" onclick="showPage('mentions-legales')">Mentions légales</a>
+      <a href="javascript:void(0)" onclick="showPage('cgv')">CGV</a>
+      <a href="javascript:void(0)" onclick="showPage('main')">← Retour au site</a>
+    </div>
+  </footer>
+</div>
+
+<!-- PAGE : TARIFS MÉCANIQUE VÉLO -->
+<div id="page-tarifs-velo" style="display:none">
+  <div class="tarifs-page-wrapper">
+
+    <!-- Colonne contenu -->
+    <div class="page-content tarifs-main-col">
+      <button class="back-btn" onclick="showPage('main','services')">← Retour aux services</button>
+      <span class="section-label">Tarifs *</span>
+      <div class="tarif-titre-row">
+        <h1>Mécanique vélo</h1>
+        <div class="tarif-legende-inline">
+             <span>☀️ du Lundi au Vendredi 8h30–19h</span>
+          <span>☽ L-V soir 19h–22h</span>
+          <span>🌴 Weekend S-D</span>
+        </div>
+      </div>
+
+      <!-- Déplacement : prestation fixe, toujours visible, hors accordéon -->
+      <div class="tarif-fixe-label">Déplacement</div>
+      <table class="tarifs tarif-fixe">
+        <tbody>
+          <tr>
+            <td>Déplacement (rayon de 5 km)*</td>
+            <td class="prix-semaine">15,00 €</td>
+            <td class="prix-nuit" style="display:none">19,00 €</td>
+            <td class="prix-ferie" style="display:none">25,00 €</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <button class="tarif-accordeon">Roues <span class="accord-arrow">▸</span></button>
+      <div class="tarif-panel">
+        <table class="tarifs">
+          <tbody>
+            <tr>
+              <td>Changement de pneu ou chambre à air — 1 roue conventionnelle</td>
+              <td class="prix-semaine">15,00 €</td>
+              <td class="prix-nuit" style="display:none">19,00 €</td>
+              <td class="prix-ferie" style="display:none">27,00 €</td>
+            </tr>
+            <tr>
+              <td>Changement de pneu ou chambre à air — 2 roues conventionnelles</td>
+              <td class="prix-semaine">25,00 €</td>
+              <td class="prix-nuit" style="display:none">32,00 €</td>
+              <td class="prix-ferie" style="display:none">45,00 €</td>
+            </tr>
+            <tr>
+              <td>Changement de pneu sur roue spéciale moteur électrique</td>
+              <td class="prix-semaine na-tag">Non disponible</td>
+              <td class="prix-nuit na-tag" style="display:none">Non disponible</td>
+              <td class="prix-ferie na-tag" style="display:none">Non disponible</td>
+            </tr>
+            <tr>
+              <td>Dévoilage simple (sans changement de rayons)</td>
+              <td class="prix-semaine">18,00 €</td>
+              <td class="prix-nuit" style="display:none">23,00 €</td>
+              <td class="prix-ferie" style="display:none">33,00 €</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <button class="tarif-accordeon">Freins <span class="accord-arrow">▸</span></button>
+      <div class="tarif-panel">
+        <table class="tarifs">
+          <tbody>
+            <tr>
+              <td>Réglage 1 frein à patin</td>
+              <td class="prix-semaine">10,00 €</td>
+              <td class="prix-nuit" style="display:none">13,00 €</td>
+              <td class="prix-ferie" style="display:none">18,00 €</td>
+            </tr>
+            <tr>
+              <td>Réglage 1 frein à disque mécanique</td>
+              <td class="prix-semaine">13,00 €</td>
+              <td class="prix-nuit" style="display:none">17,00 €</td>
+              <td class="prix-ferie" style="display:none">24,00 €</td>
+            </tr>
+            <tr>
+              <td>Remplacement + réglage disque sur roue simple</td>
+              <td class="prix-semaine">15,00 €</td>
+              <td class="prix-nuit" style="display:none">19,00 €</td>
+              <td class="prix-ferie" style="display:none">27,00 €</td>
+            </tr>
+            <tr>
+              <td>Changement câble frein</td>
+              <td class="prix-semaine">12,00 €</td>
+              <td class="prix-nuit" style="display:none">14,00 €</td>
+              <td class="prix-ferie" style="display:none">18,00 €</td>
+            </tr>
+            <tr>
+              <td>Changement câble + gaine frein</td>
+              <td class="prix-semaine">18,00 €</td>
+              <td class="prix-nuit" style="display:none">23,00 €</td>
+              <td class="prix-ferie" style="display:none">33,00 €</td>
+            </tr>
+            <tr>
+              <td>Réglage une paire de patins</td>
+              <td class="prix-semaine">15,00 €</td>
+              <td class="prix-nuit" style="display:none">19,00 €</td>
+              <td class="prix-ferie" style="display:none">27,00 €</td>
+            </tr>
+            <tr>
+              <td>Changement une paire de patins</td>
+              <td class="prix-semaine">15,00 €</td>
+              <td class="prix-nuit" style="display:none">19,00 €</td>
+              <td class="prix-ferie" style="display:none">27,00 €</td>
+            </tr>
+            <tr>
+              <td>Changement une paire de plaquettes</td>
+              <td class="prix-semaine">15,00 €</td>
+              <td class="prix-nuit" style="display:none">19,00 €</td>
+              <td class="prix-ferie" style="display:none">27,00 €</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <button class="tarif-accordeon">Dérailleurs <span class="accord-arrow">▸</span></button>
+      <div class="tarif-panel">
+        <table class="tarifs">
+          <tbody>
+            <tr>
+              <td>Réglage dérailleur (si pas de choc)</td>
+              <td class="prix-semaine">12,00 €</td>
+              <td class="prix-nuit" style="display:none">15,00 €</td>
+              <td class="prix-ferie" style="display:none">22,00 €</td>
+            </tr>
+            <tr>
+              <td>Changement câble + réglage dérailleur</td>
+              <td class="prix-semaine">18,00 €</td>
+              <td class="prix-nuit" style="display:none">23,00 €</td>
+              <td class="prix-ferie" style="display:none">33,00 €</td>
+            </tr>
+            <tr>
+              <td>Changement câble + gaine + réglage dérailleur</td>
+              <td class="prix-semaine">25,00 €</td>
+              <td class="prix-nuit" style="display:none">32,00 €</td>
+              <td class="prix-ferie" style="display:none">45,00 €</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <button class="tarif-accordeon">Autres installations <span class="accord-arrow">▸</span></button>
+      <div class="tarif-panel">
+        <table class="tarifs">
+          <tbody>
+            <tr>
+              <td>Réglage jeu de direction + graissage (JDD)</td>
+              <td class="prix-semaine">15,00 €</td>
+              <td class="prix-nuit" style="display:none">19,00 €</td>
+              <td class="prix-ferie" style="display:none">27,00 €</td>
+            </tr>
+            <tr>
+              <td>Changement de pédales</td>
+              <td class="prix-semaine">8,00 €</td>
+              <td class="prix-nuit" style="display:none">10,00 €</td>
+              <td class="prix-ferie" style="display:none">9,00 €</td>
+            </tr>
+            <tr>
+              <td>Sonnette</td>
+              <td class="prix-semaine">Offert 🎁</td>
+              <td class="prix-ferie" style="display:none">Offert 🎁</td>
+            </tr>
+            <tr>
+              <td>Porte-bidon</td>
+              <td class="prix-semaine">Offert 🎁</td>
+              <td class="prix-ferie" style="display:none">Offert 🎁</td>
+            </tr>
+            <tr>
+              <td>Selle / Collier de selle / Tige de selle</td>
+              <td class="prix-semaine">8,00 €</td>
+              <td class="prix-nuit" style="display:none">10,00 €</td>
+              <td class="prix-ferie" style="display:none">15,00 €</td>
+            </tr>
+            <tr>
+              <td>Béquille</td>
+              <td class="prix-semaine">8,00 €</td>
+              <td class="prix-nuit" style="display:none">10,00 €</td>
+              <td class="prix-ferie" style="display:none">15,00 €</td>
+            </tr>
+            <tr>
+              <td>Chaîne cassée à riveter (pas de changement possible)</td>
+              <td class="prix-semaine">10,00 €</td>
+              <td class="prix-nuit" style="display:none">13,00 €</td>
+              <td class="prix-ferie" style="display:none">18,00 €</td>
+            </tr>
+            <tr>
+              <td>Chaîne neuve</td>
+              <td class="prix-semaine">12,00 €</td>
+              <td class="prix-nuit" style="display:none">15,00 €</td>
+              <td class="prix-ferie" style="display:none">22,00 €</td>
+            </tr>
+            <tr>
+              <td>Porte-bagages arrière ou avant</td>
+              <td class="prix-semaine">25,00 €</td>
+              <td class="prix-nuit" style="display:none">32,00 €</td>
+              <td class="prix-ferie" style="display:none">45,00 €</td>
+            </tr>
+            <tr>
+              <td>Découpe d'antivol (sur présentation d'un justificatif de propriété)</td>
+              <td class="prix-semaine">15,00 €</td>
+              <td class="prix-nuit" style="display:none">19,00 €</td>
+              <td class="prix-ferie" style="display:none">27,00 €</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <p class="tarifs-note">* Pièces non incluses — tarifs comprenant la main d'œuvre uniquement.<br>
+        TVA non applicable, art. 293 B du CGI — entreprise en régime micro-entrepreneur.<br>
+        <strong>Tous les prix affichés sont HT.</strong></p>
+    </div><!-- /.tarifs-main-col -->
+
+    <!-- Colonne sticky droite -->
+    <div class="tarifs-side-col">
+      <div class="prix-toggle-widget">
+        <button class="prix-toggle actif" id="toggle-sem-velo" aria-label="Tarifs semaine jour">☀️</button>
+        <button class="prix-toggle" id="toggle-nuit-velo" aria-label="Tarifs semaine nuit">☽</button>
+        <button class="prix-toggle" id="toggle-fer-velo" aria-label="Tarifs weekend">🌴</button>
+      </div>
+    </div><!-- /.tarifs-side-col -->
+
+  </div><!-- /.tarifs-page-wrapper -->
+
+  <footer>
+    <p>© 2026 <span>La clé universElle</span></p>
+    <div class="footer-links">
+      <a href="javascript:void(0)" onclick="showPage('mentions-legales')">Mentions légales</a>
+      <a href="javascript:void(0)" onclick="showPage('cgv')">CGV</a>
+      <a href="javascript:void(0)" onclick="showPage('main')">← Retour au site</a>
+    </div>
+  </footer>
+</div>
+<!-- PAGE : TARIFS PACK DOUBLE PÊNE -->
+<div id="page-tarifs-pack" style="display:none">
+  <div class="page-content">
+    <button class="back-btn" onclick="showPage('main','services')">← Retour aux services</button>
+    <span class="section-label">Tarifs *</span>
+    <h1>Le pack "double pêne"</h1>
+    <p class="tarifs-category">Pack combiné</p>
+    <table class="tarifs">
+      <tbody>
+        <tr><td>Pack double pêne (serrurerie + vélo, même intervention)</td><td>- 10% sur le prix des prestations</td></tr>
+      </tbody>
+    </table>
+    <p class="tarifs-note">* Pièces non incluses — tarifs comprenant la main d'œuvre uniquement.<br>
+      TVA non applicable, art. 293 B du CGI — entreprise en régime micro-entrepreneur.<br>
+      <strong>Tous les prix affichés sont HT.</strong></p>
+  </div>
+  <footer>
+               <p>© 2026 <span>La clé universElle</span></p>
+               <div class="footer-links"> <a href="javascript:void(0)" onclick="showPage('mentions-legales')">Mentions
+                         légales</a> <a href="javascript:void(0)" onclick="showPage('cgv')">CGV</a> <a
+                         href="javascript:void(0)" onclick="showPage('main')">← Retour au site</a> </div>
+          </footer>
+</div>
+
+
+
+   <!-- FOOTER -->
+         <footer id="footer-main">
+      <p>© 2026 <span>"La clé universElle"</span> — Serrurerie &amp; Mécanique vélo</p>
+      <p style="margin-top:0.4rem;">Fait avec 🌸 et un vélo cargo · Toulouse, Occitanie</p>
       <div class="footer-links">
+        <a href="javascript:void(0)" onclick="showPage('main')">← Retour au site</a>
         <a href="javascript:void(0)" onclick="showPage('mentions-legales')">Mentions légales</a>
         <a href="javascript:void(0)" onclick="showPage('cgv')">CGV</a>
-        <a href="javascript:void(0)" onclick="showPage('main')">← Retour au site</a>
+        <a href="javascript:void(0)" onclick="openPolitiqueConfidentialite()">Politique de confidentialité</a>
       </div>
-    </footer>
+   </footer>
+
+  <!-- MODALE : POLITIQUE DE CONFIDENTIALITÉ -->
+  <div class="politique-overlay" id="politique-overlay" onclick="closePolitiqueConfidentialite(event)" aria-modal="true" role="dialog" aria-label="Politique de confidentialité">
+    <div class="politique-inner">
+      <button class="politique-close" onclick="closePolitiqueConfidentialite()" aria-label="Fermer">✕</button>
+      <div class="politique-content">
+        <h2>Politique de Confidentialité</h2>
+        <p class="politique-date">Dernière mise à jour : juin 2026</p>
+        <p>La présente politique vous informe sur la façon dont <strong>La clé universElle</strong> collecte, utilise et protège vos données personnelles, conformément au <strong>RGPD</strong>.</p>
+        <h3>1. Responsable du traitement</h3>
+        <p><strong>La clé universElle</strong> — Elena Righettini EI<br>Toulouse, France<br>Email : <a href="mailto:contact@lacleuniverselle.fr">contact@lacleuniverselle.fr</a></p>
+        <h3>2. Données collectées</h3>
+        <p>Nom, prénom, email, téléphone, adresse postale, description de votre situation. Aucune donnée bancaire ni sensible n'est demandée.</p>
+        <h3>3. Finalité</h3>
+        <p>Vos données sont utilisées exclusivement pour traiter votre demande et vous contacter (email ou WhatsApp Business). Elles ne sont jamais transmises à des tiers à des fins commerciales.</p>
+        <h3>4. Service tiers — Web3Forms</h3>
+        <p>Le formulaire transite via <strong>Web3Forms</strong>, qui achemine vos données vers notre email professionnel sans les conserver au-delà de 30 jours.</p>
+        <h3>5. Durée de conservation</h3>
+        <p>Vos données sont conservées le temps nécessaire à votre demande, et au maximum <strong>3 ans</strong> après notre dernier échange.</p>
+        <h3>6. Sécurité</h3>
+        <p>Les échanges sont sécurisés par <strong>HTTPS</strong>. Les échanges WhatsApp bénéficient du chiffrement de bout en bout.</p>
+        <h3>7. Vos droits (RGPD)</h3>
+        <p>Accès, rectification, effacement, opposition, portabilité. Pour exercer vos droits : <a href="mailto:contact@lacleuniverselle.fr">contact@lacleuniverselle.fr</a> — réponse sous 30 jours. Recours possible auprès de la <a href="https://www.cnil.fr" target="_blank" rel="noopener">CNIL</a>.</p>
+        <h3>8. Cookies</h3>
+        <p>Aucun cookie de traçage publicitaire n'est déposé sur ce site.</p>
+      </div>
+    </div>
   </div>
+
 
 </body>
 
