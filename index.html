@@ -337,6 +337,7 @@
 
         <form id="contact-form" class="contact-form-new" novalidate>
           <input type="hidden" name="access_key" value="c3845fad-f632-4795-8646-3e796cc8ecfc">
+          <input type="checkbox" name="botcheck" class="hidden" style="display: none;">
           <input type="hidden" name="subject" value="Nouvelle demande — La clé universElle">
           <input type="hidden" name="from_name" value="La clé universElle">
 
@@ -1003,15 +1004,11 @@
 
         <details class="faq-item">
           <summary>Puis-je changer un cylindre moi-même sans professionnel·le ?</summary>
-          <p>C'est possible, mais déconseillé sans expérience : un mauvais dimensionnement ou une pose incorrecte peut fragiliser votre sécurité.</p>
+          <p>Déconseillé sans expérience : un mauvais dimensionnement ou une pose incorrecte peut fragiliser la sécurité. Sur certaines serrures, le cylindre 
+             intègre un délateur (pare-attaque) : toute manipulation inadaptée peut le déclencher et bloquer définitivement le mécanisme, imposant alors le remplacement complet de la serrure.</p>
         </details>
 
-        <details class="faq-item">
-          <summary>Combien de temps prend un changement de cylindre ?</summary>
-          <p>Environ 10 à 20 minutes pour un·e professionnel·le équipé·e.</p>
-        </details>
-
-        <details class="faq-item">
+            <details class="faq-item">
           <summary>Quelle est la différence entre changer le cylindre et changer toute la serrure ?</summary>
           <p>Le cylindre change les clés sans toucher au mécanisme ; la serrure complète se change si le mécanisme est endommagé.</p>
         </details>
@@ -1033,7 +1030,7 @@
 
         <details class="faq-item">
           <summary>Qu'est-ce que la certification A2P et pourquoi est-elle importante ?</summary>
-          <p>C'est un label de résistance à l'effraction (crochetage, perçage, bumping), souvent exigé par les assurances.</p>
+          <p>Assurance Prévention Protection: c'est un label de résistance à l'effraction (crochetage, perçage, bumping), souvent exigé par les assurances.</p>
         </details>
 
         <details class="faq-item">
@@ -1063,7 +1060,8 @@
 
         <details class="faq-item">
           <summary>Comment reconnaître un·e serrurier·ère fiable ?</summary>
-          <p>Vérifiez les avis, l'immatriculation professionnelle et l'établissement d'un devis écrit avant travaux.</p>
+          <p>Consultez les avis clients, vérifiez son implantation locale et demandez un devis avant le début des travaux .
+            Un·e serrurier·ère sérieux·se vous expliquera ses services, discutera des tarifs et répondra honnêtement à vos questions.</p>
         </details>
 
         <details class="faq-item">
@@ -1077,8 +1075,9 @@
         </details>
 
         <details class="faq-item">
-          <summary>Faut-il changer sa serrure en emménageant dans un nouveau logement ?</summary>
-          <p>Oui : vous ne savez jamais combien de doubles de clés circulent encore.</p>
+          <summary>On peut changer de serrure/cylindre en emménageant dans un nouveau logement ?</summary>
+          <p>Si vous êtes locataire, oui, à condition de remettre l’installation d’origine en place lors de votre départ, sauf accord contraire avec le propriétaire.
+          Si vous êtes propriétaire, oui, c’est même fortement recommandé.</p>
         </details>
 
         <details class="faq-item">
@@ -1093,12 +1092,12 @@
 
         <details class="faq-item">
           <summary>Comment entretenir son cylindre pour éviter les pannes ?</summary>
-          <p>Lubrifiez-le tous les six mois et testez régulièrement vos clés pour détecter l'usure.</p>
+          <p>Lubrifiez-le tous les six mois (absolument pas avec du WD-40) et testez/verifiez régulièrement vos clés pour détecter l'usure.</p>
         </details>
 
         <details class="faq-item">
           <summary>Combien coûte en moyenne un changement de cylindre / serrure complète ?</summary>
-          <p>Entre 80 et 250 € pour un cylindre, et 300 à 800 € pour une serrure complète, pose comprise.</p>
+          <p>Entre 80 et 250 € pour un cylindre, et 300 à 800 € pour une serrure complète, pièces parfois non comprises.</p>
         </details>
 
         <details class="faq-item">
@@ -1108,17 +1107,32 @@
 
       </section>
 
+ <!-- FAQ vélo -->
+  
       <section class="faq-velo">
         <h2>FAQ Mécanique Vélo</h2>
 
-        <details class="faq-item">
-          <summary>Puis-je réparer une crevaison moi-même ?</summary>
-          <p>Oui, c'est une réparation simple et accessible avec un kit de rustines ou une chambre à air de rechange.</p>
+ <details class="faq-item">
+          <summary>Le WD-40 est un lubrifiant / nettoyant ? </summary>
+          <p>Non, c'est un dégrippant. Vaut mieux eviter toute utilisation inadaptée et demander conseil à un·e mécanicien·ne (moi ^^) </p>
         </details>
 
         <details class="faq-item">
+          <summary>Puis-je réparer une crevaison moi-même ?</summary>
+          <p>Oui, c'est une réparation accessible (mais risque de pincement) avec un kit de rustines ou une chambre à air de rechange.
+            Le changement de chambre à air est recommandé.</p>
+        </details>
+
+         <details class="faq-item">
+          <summary>Comment éviter les crevaisons à vélo ?</summary>
+          <p>La bonne pression. Un pneu sous-gonflé ou sur-gonflé est également plus vulnérable à la perforation sur la surface de roulement, aussi bien que sur les flancs.
+            Attention : la règle de 10 % (en bars) du poids du cycliste n'est pas fiable (surtout si votre voisin vous l'a dit) car ça depend des caractéristiques du pneu. 
+          </p>
+        </details>
+      
+        <details class="faq-item">
           <summary>À quelle fréquence dois-je lubrifier ma chaîne ?</summary>
-          <p>Toutes les 1 à 2 semaines en usage régulier, ou après chaque sortie sous la pluie.</p>
+          <p>Toutes les 2 semaines en usage régulier, ou après chaque sortie sous la pluie idealement.</p>
         </details>
 
         <details class="faq-item">
@@ -1128,22 +1142,22 @@
 
         <details class="faq-item">
           <summary>Faut-il nettoyer son vélo régulièrement, même s'il roule bien ?</summary>
-          <p>Oui, toutes les deux semaines environ : la saleté use prématurément la transmission.</p>
+          <p>Oui, s'il est sale, la saleté use prématurément la transmission. Evitez les nettoyeurs haute pression</p>
         </details>
 
         <details class="faq-item">
           <summary>Puis-je utiliser n'importe quelle huile pour lubrifier la chaîne ?</summary>
-          <p>Non, utilisez un lubrifiant spécifique vélo — l'huile d'olive ou un produit non adapté attire la saleté et abîme la chaîne.</p>
+          <p>Non, utilisez un lubrifiant spécifique vélo — l'huile d'olive ou un produit non adapté attire la saleté et abîme la chaîne. Ne pas trop lubrifier, une fine couche suffit.</p>
         </details>
 
         <details class="faq-item">
           <summary>Comment savoir si mes plaquettes/patins de frein sont usés ?</summary>
-          <p>Vérifiez les rainures : si elles ont disparu ou que l'épaisseur est inférieure à 1 mm (freins à disque), il faut les remplacer.</p>
+          <p>On peut voir l'epaisseur des patins. Xoncernant les plaquettes, le diagnostique est plus difficile . Demandez conseil à un·e technicien·ne (toujours moi ^^) </p>
         </details>
 
         <details class="faq-item">
-          <summary>Puis-je changer mes plaquettes de frein moi-même ?</summary>
-          <p>Oui, c'est accessible aux débutant·es avec les bons outils, mais un mauvais réglage peut affecter la sécurité.</p>
+          <summary>Puis-je changer mes plaquettes/patins de frein moi-même ?</summary>
+          <p>Oui, c'est une opération accessible avec les bons outils, mais un mauvais réglage peut affecter la sécurité et l'usure.</p>
         </details>
 
         <details class="faq-item">
@@ -1158,42 +1172,37 @@
 
         <details class="faq-item">
           <summary>Puis-je dévoiler ma roue moi-même ?</summary>
-          <p>C'est possible avec un pied de centrage, mais cette opération demande patience et savoir-faire — un·e technicien·ne est recommandé·e en cas de doute.</p>
+          <p>C'est faisable avec un pied de centrage, mais cette opération demande patience, technique et savoir-faire.</p>
         </details>
 
         <details class="faq-item">
           <summary>Quand faut-il changer un pneu de vélo ?</summary>
-          <p>Quand les rainures ont disparu, que le flanc est fissuré ou détérioré, ou que la chambre à air devient visible.</p>
+          <p>Quand les rainures ont disparu, que le flanc est fissuré ou détérioré, ou que la chambre à air devient visible (très dangereux).</p>
         </details>
 
         <details class="faq-item">
           <summary>Pourquoi je crève souvent avec le même vélo ?</summary>
-          <p>Souvent une pression trop basse, un pneu usé, ou des débris (gravillons, verre) mal évacués.</p>
+          <p>Souvent une mauvaise pression , un pneu usé, ou des débris (gravillons, verre) mal évacués.</p>
         </details>
 
         <details class="faq-item">
           <summary>Pourquoi mes vitesses sautent ou craquent-elles ?</summary>
-          <p>C'est généralement un dérailleur mal réglé ou un câble détendu.</p>
+          <p>C'est généralement un dérailleur mal réglé ou un câble dérailleur détendu ou encore la gaine abîmée.</p>
         </details>
 
         <details class="faq-item">
           <summary>Puis-je régler mon dérailleur moi-même ?</summary>
-          <p>Oui, avec un guide pas à pas et un tournevis adapté, c'est une opération accessible.</p>
+          <p>Deconseillé, c'est une opération qui demande technique et savoir-faire... même le voisin a perdu tout espoir. </p>
         </details>
 
         <details class="faq-item">
           <summary>Que faire si ma chaîne casse en pleine route ?</summary>
-          <p>Un dérive-chaîne et un maillon rapide dans votre kit permettent une réparation express sur place.</p>
+          <p>Attention niveau très technique. Un dérive-chaîne et un maillon rapide dans votre kit permettent une réparation express sur place faite par mes soins. </p>
         </details>
 
         <details class="faq-item">
           <summary>Mon guidon ou ma selle a du jeu, c'est grave ?</summary>
           <p>Oui, cela peut venir d'un serrage insuffisant ou d'un roulement usé — à faire vérifier rapidement pour votre sécurité.</p>
-        </details>
-
-        <details class="faq-item">
-          <summary>Quand dois-je changer mon casque même s'il paraît en bon état ?</summary>
-          <p>Tous les 3 à 5 ans : les matériaux vieillissent et perdent leurs propriétés protectrices.</p>
         </details>
 
         <details class="faq-item">
@@ -1208,12 +1217,12 @@
 
         <details class="faq-item">
           <summary>Combien de temps prend une réparation vélo classique ?</summary>
-          <p>Les réparations rapides (crevaison, réglages) se font souvent en journée ; les révisions complètes prennent 24 à 48h.</p>
+          <p>Les réparations rapides (crevaison, réglages) se font souvent en journée rapidement; les révisions complètes avec remplacement de pièces prennent 24 à 48h.</p>
         </details>
 
         <details class="faq-item">
           <summary>Quel budget prévoir pour une révision complète ?</summary>
-          <p>Comptez généralement entre 40 et 100 € selon l'ampleur des travaux et le type de vélo.</p>
+          <p>Comptez généralement entre 50 et 100 € selon l'ampleur des travaux et le type de vélo. Plus si changement de pièces.</p>
         </details>
 
       </section>

@@ -92,15 +92,17 @@ nav {
 
 .nav-links {
     display: flex;
-    gap: 1.5rem;
+    flex-wrap: nowrap;
+    gap: clamp(.6rem, 2vw, 1.5rem);
     list-style: none
 }
 
 .nav-links a {
     text-decoration: none;
     color: var(--gris);
-    font-size: .90rem;
+    font-size: clamp(.72rem, 1.6vw, .90rem);
     font-weight: 500;
+    white-space: nowrap;
     transition: color .2s
 }
 
@@ -356,7 +358,8 @@ nav {
   cursor: pointer;
   border: 0;
   transition: .2s, transform .1s, box-shadow .2s;
-  animation: pulse 1.8s ease-in-out infinite
+  animation: pulse 1.3s ease-in-out infinite;
+  box-shadow: 0 8px 20px rgba(92, 46, 122, 0.08);
 }
 
 .btn-primary:hover {
@@ -2254,15 +2257,63 @@ background: var(--lilas-clair);
 /* FAQ */
 .faq-serrurerie,
 .faq-velo {
-  margin-top: 2rem;
+  background: var(--lilas-pale);
+  border: 1.5px solid var(--lilas-clair);
+  border-radius: 16px;
+  padding: 1.3rem 1.5rem 1.6rem;
+  box-shadow: 0 4px 14px rgba(92, 46, 122, .06);
+}
+
+.faq-serrurerie {
+  margin-top: 1rem;
+}
+
+.faq-velo {
+  margin-top: 1.8rem;
+  background: var(--violet);
+  border-color: var(--violet);
+}
+
+.faq-velo h2 {
+  color: var(--blanc);
+  border-bottom: 2px solid rgba(255, 255, 255, .25);
+}
+
+.faq-velo .faq-item {
+  border-bottom-color: rgba(255, 255, 255, .18);
+}
+
+.faq-velo .faq-item summary {
+  color: var(--lilas-clair);
+}
+
+.faq-velo .faq-item summary:hover {
+  color: var(--blanc);
+}
+
+.faq-velo .faq-item[open] summary::after {
+  color: var(--blanc);
+}
+
+.faq-velo .faq-item summary::after {
+  color: var(--lilas-clair);
+}
+
+.faq-velo .faq-item p {
+  color: var(--lilas-pale);
+}
+
+.faq-serrurerie h2 {
+  border-bottom: 2px solid var(--lilas-clair);
+  color: var(--violet);
 }
 
 .faq-serrurerie h2,
 .faq-velo h2 {
-  color: var(--violet);
   font-family: 'Inter', sans-serif;
-  font-size: 1.3rem;
-  margin-bottom: 1rem;
+  font-size: 1.15rem;
+  margin-bottom: .8rem;
+  padding-bottom: .6rem;
 }
 
 .faq-item {
