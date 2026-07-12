@@ -2255,9 +2255,17 @@ background: var(--lilas-clair);
   margin: 0;
 }
 /* FAQ */
-.faq-serrurerie,
-.faq-velo {
+.faq-serrurerie
+{
   background: var(--lilas-pale);
+  border: 1.5px solid var(--lilas-clair);
+  border-radius: 16px;
+  padding: 1.3rem 1.5rem 1.6rem;
+  box-shadow: 0 4px 14px rgba(92, 46, 122, .06);
+}
+
+.faq-velo {
+  background: #7c47a8;
   border: 1.5px solid var(--lilas-clair);
   border-radius: 16px;
   padding: 1.3rem 1.5rem 1.6rem;
@@ -2270,50 +2278,24 @@ background: var(--lilas-clair);
 
 .faq-velo {
   margin-top: 1.8rem;
-  background: var(--violet);
-  border-color: var(--violet);
-}
-
-.faq-velo h2 {
-  color: var(--blanc);
-  border-bottom: 2px solid rgba(255, 255, 255, .25);
-}
-
-.faq-velo .faq-item {
-  border-bottom-color: rgba(255, 255, 255, .18);
-}
-
-.faq-velo .faq-item summary {
-  color: var(--lilas-clair);
-}
-
-.faq-velo .faq-item summary:hover {
-  color: var(--blanc);
-}
-
-.faq-velo .faq-item[open] summary::after {
-  color: var(--blanc);
-}
-
-.faq-velo .faq-item summary::after {
-  color: var(--lilas-clair);
-}
-
-.faq-velo .faq-item p {
-  color: var(--lilas-pale);
 }
 
 .faq-serrurerie h2 {
-  border-bottom: 2px solid var(--lilas-clair);
   color: var(--violet);
-}
-
-.faq-serrurerie h2,
-.faq-velo h2 {
   font-family: 'Inter', sans-serif;
   font-size: 1.15rem;
   margin-bottom: .8rem;
   padding-bottom: .6rem;
+  border-bottom: 2px solid var(--lilas-clair);
+}
+
+.faq-velo h2 {
+  color: var(--lilas-clair);
+  font-family: 'Inter', sans-serif;
+  font-size: 1.15rem;
+  margin-bottom: .8rem;
+  padding-bottom: .6rem;
+  border-bottom: 2px solid var(--lilas-clair);
 }
 
 .faq-item {

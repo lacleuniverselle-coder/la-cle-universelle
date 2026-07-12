@@ -2,7 +2,7 @@
 // NAVIGATION & PAGES
 // =============================================
 
-const allPages = ['site-main', 'page-mentions-legales', 'page-cgv', 'page-tarifs-serrurerie', 'page-tarifs-velo', 'page-tarifs-pack'];
+const allPages = ['site-main', 'page-mentions-legales', 'page-cgv', 'page-tarifs-serrurerie', 'page-tarifs-velo', 'page-tarifs-pack','page-faq'];
 
 function showPage(page, anchor) {
   allPages.forEach(id => {
@@ -54,6 +54,21 @@ function closeMenu() {
   const menu = document.getElementById('mobile-menu');
   btn.classList.remove('open');
   menu.classList.remove('open');
+
+  // Referme aussi l'accordéon Services quand on ferme le menu mobile
+  document.querySelectorAll('.mobile-accordion-toggle.open').forEach(t => t.classList.remove('open'));
+  document.querySelectorAll('.mobile-accordion-panel.open').forEach(p => p.classList.remove('open'));
+}
+
+// =============================================
+// ACCORDÉON "SERVICES" DANS LE MENU MOBILE
+// =============================================
+
+function toggleMobileAccordion(btn) {
+  const panel = btn.closest('.mobile-accordion').querySelector('.mobile-accordion-panel');
+  const estOuvert = btn.classList.contains('open');
+  btn.classList.toggle('open', !estOuvert);
+  panel.classList.toggle('open', !estOuvert);
 }
 
 // =============================================
