@@ -25,14 +25,37 @@
   <meta name="theme-color" content="#482664">
   <meta name="robots" content="index, follow">
  
-  <link rel="stylesheet" href="leaflet.css" />
-  <link rel="stylesheet" href="style.css" />
+  <!-- Polices : préconnexion + feuille dédiée (au lieu du @import imbriqué dans style.css) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap">
+
+  <!-- CSS critique (nav + hero) inline pour un premier affichage immédiat -->
+  <style>
+    :root{--violet:#5c2e7a;--lilas:#b8a0c8;--lilas-clair:#e8d0f0;--lilas-pale:#f5ebf9;--blanc:#fff;--texte:#1a0a2e;--gris:#2a1040}
+    *{margin:0;padding:0;box-sizing:border-box}
+    body{font-family:'Inter',sans-serif;background:var(--blanc);color:var(--texte);font-size:1.05rem;line-height:1.7;font-weight:400}
+    nav{position:sticky;top:0;z-index:100;background:var(--blanc);border-bottom:1px solid var(--lilas-clair);display:flex;align-items:center;justify-content:space-between;padding:.5rem 2rem}
+    .nav-logo{display:flex;align-items:center;gap:clamp(.4rem,2vw,.7rem);text-decoration:none}
+    .nav-logo-svg-wrap{background:var(--blanc);border-radius:10px;box-shadow:0 1px 6px rgba(76,20,132,.13);padding:clamp(3px,1vw,4px) clamp(4px,1.5vw,6px);display:flex;align-items:center;justify-content:center;flex-shrink:0}
+    .hero{background:var(--blanc);padding:1.2rem 1.4rem;display:flex;flex-direction:column;align-items:center;border-radius:16px;max-width:900px;margin:1.2rem auto 0;box-shadow:0 8px 32px rgba(72,38,100,.18);position:relative;border:1.5px solid var(--lilas-clair)}
+    .hero-logo-wrap{display:flex;justify-content:center;margin:0 auto .8rem;padding:.7rem .7rem .3rem;overflow:hidden;max-width:100%;width:100%}
+    .hero-logo-wrap img{height:110px;width:auto;max-width:100%;display:block}
+    .hero-text{display:flex;flex-direction:column;align-items:center;gap:.6rem;text-align:center}
+    .hero-line1{font-family:'Monitorica','Inter',sans-serif;font-size:clamp(1rem,2vw,1.2rem);font-weight:400;color:var(--texte);text-align:center;letter-spacing:.01em;margin:0 0 .25rem;line-height:1}
+    .btn-primary{display:inline-block;background:var(--lilas-clair);color:var(--violet);padding:clamp(.5rem,2vw,.6rem) clamp(.7rem,3vw,.9rem);border-radius:10px;text-decoration:none;font-weight:600;font-size:clamp(.85rem,3vw,1rem);white-space:nowrap;border:0}
+  </style>
+
+  <!-- CSS principal chargé de façon non-bloquante -->
+  <link rel="preload" href="style.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+  <noscript><link rel="stylesheet" href="style.css"></noscript>
+  <!-- leaflet.css n'est plus chargé ici : injecté uniquement quand la carte des zones approche à l'écran (voir script.js) -->
   <link rel="icon" type="image/x-icon" href="favicon.ico">
 <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
 <link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png">
 <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
 <link rel="manifest" href="site.webmanifest">
-  <script src="leaflet.js" defer></script>
+  <!-- leaflet.js n'est plus chargé ici : injecté uniquement quand la carte des zones approche à l'écran (voir script.js) -->
   <script src="script.js" defer></script>
   <title> La clé universElle — Serrurière & Mécanicienne Vélo à Toulouse</title>
 
@@ -65,7 +88,7 @@
   <nav id="main-nav">
     <button class="nav-logo" onclick="openLogoStory()" aria-label="Découvrir l'histoire du logo" type="button">
       <div class="nav-logo-svg-wrap"><img src="LOGO_seulpunchy.svg" alt="Logo La clé universElle"
-          style="height:48px;width:auto;display:block;"></div>
+          width="49" height="48" style="height:48px;width:auto;display:block;"></div>
     </button>
     <ul class="nav-links">
      
@@ -126,7 +149,7 @@
     <div class="hero" aria-label="Présentation">
       <div class="hero-logo-wrap">
         <img src="Logocompletcentre.svg" alt="La clé universElle"
-          style="height:80%;width:400px;display:block;">
+          width="400" height="233" style="height:80%;width:400px;display:block;">
       </div>
       <div class="hero-text">
         <p class="hero-line1">Artisane multi-services, interventions à domicile · Toulouse</p>
@@ -306,7 +329,10 @@
         <div class="apropos-content">
             <!-- Conteneur pour l'image -->
             <div class="apropos-image">
-                <img src="velomoi.jpg" alt="Photo d'Elena">
+                <picture>
+                    <source srcset="velomoi.webp" type="image/webp">
+                    <img src="velomoi.jpg" alt="Photo d'Elena" width="560" height="420" loading="lazy" decoding="async">
+                </picture>
             </div>
             <!-- Conteneur pour le texte -->
             <div class="apropos-text">
@@ -414,7 +440,7 @@
   <div class="logo-overlay" id="logo-overlay" onclick="closeLogoStory(event)">
     <div class="logo-overlay-inner">
       <div class="logo-overlay-logo"><img src="LOGO_seulpunchy.svg"
-          alt="Logo Elena " La clé universElle
+          alt="Logo Elena - La clé universElle" width="73" height="72"
           style="height:72px;width:auto;display:block;"></div>
       <button class="logo-overlay-close" onclick="closeLogoStory()" aria-label="Fermer">✕</button>
       <h3>Pourquoi ce logo ?</h3>

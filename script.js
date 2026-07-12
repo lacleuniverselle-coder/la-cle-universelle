@@ -199,10 +199,44 @@ function initMap() {
   L.marker([centerLat, centerLng], { icon }).addTo(map);
 }
 
-// Initialise la carte quand la page est chargée
+// =============================================
+// CHARGEMENT PARESSEUX DE LEAFLET (carte + CSS ~160 Ko)
+// Ne charge leaflet.css / leaflet.js que quand la section
+// "Zones" approche du viewport, au lieu de bloquer le rendu initial.
+// =============================================
+
+function loadLeafletAndInitMap() {
+  if (window.__leafletLoading) return;
+  window.__leafletLoading = true;
+
+  const cssLink = document.createElement('link');
+  cssLink.rel = 'stylesheet';
+  cssLink.href = 'leaflet.css';
+  document.head.appendChild(cssLink);
+
+  const script = document.createElement('script');
+  script.src = 'leaflet.js';
+  script.onload = initMap;
+  document.body.appendChild(script);
+}
+
 document.addEventListener('DOMContentLoaded', () => {
-  if (document.getElementById('map-zones')) {
-    initMap();
+  const mapEl = document.getElementById('map-zones');
+  if (!mapEl) return;
+
+  if ('IntersectionObserver' in window) {
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          loadLeafletAndInitMap();
+          observer.disconnect();
+        }
+      });
+    }, { rootMargin: '400px 0px' }); // démarre le chargement un peu avant que la carte soit visible
+    observer.observe(mapEl);
+  } else {
+    // Navigateur sans IntersectionObserver : on charge normalement
+    loadLeafletAndInitMap();
   }
 });
 
