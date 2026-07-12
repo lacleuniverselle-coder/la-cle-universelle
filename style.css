@@ -1,4 +1,4 @@
-/* Police Inter chargée via <link> dans le <head> d'index.html (plus rapide qu'un @import imbriqué) */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
 
 @font-face {
     font-family: 'Monitorica';
