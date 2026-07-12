@@ -56,8 +56,8 @@ nav {
 .nav-logo {
     display: flex;
     align-items: center;
-    gap: .7rem;
-       text-decoration: none;
+    gap: clamp(.4rem, 2vw, .7rem);
+    text-decoration: none;
     background: 0;
     border: 0;
     padding: 0
@@ -67,19 +67,24 @@ nav {
     background: var(--blanc);
     border-radius: 10px;
     box-shadow: 0 1px 6px rgba(76, 20, 132, 0.13);
-    padding: 4px 6px;
+    padding: clamp(3px, 1vw, 4px) clamp(4px, 1.5vw, 6px);
     display: flex;
     align-items: center;
     justify-content: center;
     flex-shrink: 0
-    
 }
 
 .nav-logo-svg-wrap svg {
-    height: 55px;
+    height: clamp(36px, 8vw, 55px);
     width: auto;
     display: block
 }
+@media (max-width: 380px) {
+  .nav-logo-svg-wrap svg {
+    height: 32px;
+  }
+}
+
 
 .nav-logo:hover .nav-logo-svg-wrap {
     box-shadow: 0 2px 12px rgba(76, 20, 132, 0.22)
@@ -101,6 +106,69 @@ nav {
 
 .nav-links a:hover {
     color: var(--lilas)
+}
+
+/* ===== DROPDOWN "SERVICES" (DESKTOP) ===== */
+.nav-dropdown {
+    position: relative
+}
+
+.nav-dropdown-toggle {
+    display: inline-flex;
+    align-items: baseline
+}
+
+.nav-dropdown-arrow {
+    font-size: .7rem;
+    margin-left: .25rem;
+    transition: transform .2s;
+    display: inline-block
+}
+
+.nav-dropdown:hover .nav-dropdown-arrow {
+    transform: rotate(180deg)
+}
+
+.nav-dropdown-menu {
+    list-style: none;
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    transform: translateX(-50%) translateY(6px);
+    background: var(--blanc);
+    border: 1px solid var(--lilas-clair);
+    border-radius: 12px;
+    box-shadow: 0 10px 28px rgba(76, 20, 132, 0.18);
+    min-width: 190px;
+    padding: .4rem;
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+    transition: opacity .18s ease, transform .18s ease;
+    z-index: 200
+}
+
+.nav-dropdown:hover .nav-dropdown-menu,
+.nav-dropdown:focus-within .nav-dropdown-menu {
+    opacity: 1;
+    visibility: visible;
+    pointer-events: auto;
+    transform: translateX(-50%) translateY(2px)
+}
+
+.nav-dropdown-menu li a {
+    display: block;
+    padding: .6rem .8rem;
+    border-radius: 8px;
+    font-size: .90rem;
+    font-weight: 500;
+    white-space: nowrap;
+    color: var(--gris)
+}
+
+.nav-dropdown-menu li a:hover {
+    background: var(--lilas-pale);
+    color: var(--violet)
 }
 
 .nav-whatsapp {
@@ -194,6 +262,73 @@ nav {
     color: var(--violet)
 }
 
+/* ===== ACCORDÉON "SERVICES" (MOBILE) ===== */
+.mobile-accordion {
+    border-bottom: 1px solid var(--lilas-clair)
+}
+
+.mobile-accordion-row {
+    display: flex;
+    align-items: stretch
+}
+
+.mobile-accordion-link {
+    flex: 1;
+    border-bottom: 0 !important
+}
+
+.mobile-accordion-toggle {
+    background: 0;
+    border: 0;
+    border-left: 1px solid var(--lilas-clair);
+    padding: 0 1.2rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center
+}
+
+.accordion-arrow {
+    font-size: .8rem;
+    color: var(--violet);
+    transition: transform .25s ease
+}
+
+.mobile-accordion-toggle.open .accordion-arrow {
+    transform: rotate(180deg)
+}
+
+.mobile-accordion-panel {
+    max-height: 0;
+    overflow: hidden;
+    background: var(--lilas-pale);
+    transition: max-height .3s ease
+}
+
+.mobile-accordion-panel.open {
+    max-height: 160px
+}
+
+.mobile-accordion-panel a {
+    display: block;
+    padding: .75rem 1.5rem .75rem 2.5rem;
+    text-decoration: none;
+    color: var(--texte);
+    font-size: .92rem;
+    font-weight: 500;
+    border-bottom: 1px solid var(--lilas-clair);
+    transition: background .15s, color .15s
+}
+
+.mobile-accordion-panel a:last-child {
+    border-bottom: 0
+}
+
+.mobile-accordion-panel a:hover {
+    background: var(--blanc);
+    color: var(--violet)
+}
+
 .hero {
     background: var(--blanc);
     padding: 1.2rem 1.4rem;
@@ -210,23 +345,29 @@ nav {
 
 .btn-primary {
     display: inline-block;
-    background: var(--violet);
-    color: var(--blanc);
-    padding: .5rem 1rem;
-    border-radius: 10px;
-    text-decoration: none;
-    font-weight: 700;
-    font-size: .8rem;
-    transition: .2s, transform .1s, box-shadow .2s;
-    box-shadow: 0 6px 20px rgba(255, 255, 255, 0.35);
-    cursor: pointer;
-    border: 0
+  background: var(--lilas-clair);
+  color: var(--violet);
+  padding: clamp(.5rem, 2vw, .6rem) clamp(.7rem, 3vw, .9rem);
+  border-radius: 10px;
+  text-decoration: none;
+  font-weight: 600;
+  font-size: clamp(.85rem, 3vw, 1rem);
+  white-space: nowrap;
+  cursor: pointer;
+  border: 0;
+  transition: .2s, transform .1s, box-shadow .2s;
+  animation: pulse 1.8s ease-in-out infinite
 }
 
 .btn-primary:hover {
-    background: #4a2366;
+    background: #fac517;
     transform: translateY(-2px);
-    box-shadow: 0 8px 28px rgba(133, 76, 172, 0.45)
+}
+@media (max-width: 400px) {
+  .btn-primary {
+    font-size: .8rem;
+    padding: .5rem .7rem;
+  }
 }
 
 .card .btn-primary {
@@ -455,14 +596,12 @@ h3 {
     border: 1.5px solid var(--violet);
     border-radius: 14px;
     padding: 1.4rem;
-
-     margin-bottom: flex;
     transition: box-shadow .2s;
     background: var(--blanc);
     display: flex;
     flex-direction: column;
-    height: auto
- /* toutes les cartes ont la même hauteur dans une grille */
+    height: 100%
+    /* toutes les cartes ont la même hauteur dans une grille */
 }
 
 
@@ -471,14 +610,17 @@ h3 {
 }
 .card-title-row {
   display: flex;
-  align-items: top;
+  align-items: center;
   gap: 8px;
 }
 .card-icon {
   font-size: 1.3em;
-
   line-height: 1;
+  width: 1.4em;
+  flex-shrink: 0;
   display: inline-flex;
+  align-items: center;
+  justify-content: center;
 }
 
 
@@ -494,7 +636,8 @@ h3 {
     color: var(--gris);
     line-height: 1.65;
     flex: 1;
-    min-height: 5.5rem
+    min-height: 5.5rem;
+    margin-bottom: .8rem
 }
 
 .card-detail {
@@ -1131,6 +1274,8 @@ footer span {
     margin-top: 1rem
 }
 
+
+
 .hero-dispo {
     margin-top: 1rem;
     font-weight: 700;
@@ -1211,11 +1356,15 @@ footer span {
 
     .nav-logo-svg-wrap {
         max-width: 36px;
-        padding: 3px 4px
-    }
-
-    .nav-logo-svg-wrap svg {
-        height: 28px
+        padding: 3px 4px;
+ display: flex;
+  align-items: center;
+  gap: .7rem;
+  cursor: pointer;
+  text-decoration: none;
+  background: 0;
+  border: 0;
+  padding: 0;
     }
 
     .nav-whatsapp {
@@ -1406,47 +1555,6 @@ footer span {
     color: var(--lilas-clair)
 }
 
-/* Style pour le conteneur des cartes */
-.services-grid {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 20px;
-  justify-content: center;
-  width: 100%;
-}
-
-/* Style pour chaque carte */
-.card {
-
-  min-height: 200px; /* Hauteur minimale identique pour toutes les cartes */
-
-  flex: 1 1 300px; /* Largeur minimale de 300px, flexible */
-  max-width: 100%;
-  background: white;
-  border: 1px solid #e0e0e0;
-  border-radius: 8px;
-  padding: 20px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  display: flex; /* Active flexbox pour la carte */
-  flex-direction: column; /* Organise le contenu en colonne */
-}
-
-/* Uniformise la hauteur des cartes */
-.card {
-  height: 100%; /* Prend toute la hauteur disponible */
-}
-
-/* Force le contenu à remplir l'espace vertical */
-.card h3, .card p, .card .card-detail {
-  margin-bottom: 10px;
-}
-
-.card p {
-  flex-grow: 1; /* Permet au paragraphe de s'étirer pour uniformiser la hauteur */
-}
-
-
-
 /* Adaptation pour mobile */
 @media (max-width: 768px) {
   .services-grid {
@@ -1510,18 +1618,18 @@ footer span {
     padding-top: 6rem;
 }
 
-/* Widget sticky */
+/* Widget sticky — plus de bloc conteneur, juste les ronds qui flottent */
 .prix-toggle-widget {
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: .2rem;
-    background: var(--blanc);
-    border: 1.5px solid var(--lilas-clair);
-    border-radius: 14px;
-    padding: .25rem .3rem;
-    box-shadow: 0 2px 9px rgba(92,46,122,0.10);
-    width: 50px;
+    gap: .6rem;
+    background: none;
+    border: 0;
+    border-radius: 0;
+    padding: 0;
+    box-shadow: none;
+    width: auto;
 }
 
 /* Légende texte simple, au-dessus des boutons */
@@ -1540,7 +1648,7 @@ footer span {
     flex-direction: column;
     align-items: center;
     gap: .1rem;
-    font-size: .78rem;
+    font-size: .58rem;
     font-weight: 500;
     color: var(--lilas);
     line-height: 1.2;
@@ -1556,33 +1664,36 @@ footer span {
     color: var(--lilas);
 }
 
-/* Boutons — minimalistes */
+/* Boutons — ronds, bien visibles, bordure épaisse + couleurs vives */
 .prix-toggle {
-    width: 40px;
-    height: 40px;
-    background: transparent;
-    border: 1.5px solid var(--lilas-clair);
-    border-radius: 9px;
+    width: 42px;
+    height: 42px;
+    background: var(--lilas-pale);
+    border: 2.5px solid var(--lilas);
+    border-radius: 50%;
     cursor: pointer;
-    transition: border-color .18s, .18s;
-    font-size: 1rem;
+    transition: border-color .18s, background .18s, transform .12s;
+    font-size: 1.1rem;
     display: flex;
     align-items: center;
     justify-content: center;
-    color: var(--lilas);
+    color: var(--violet);
     font-weight: 700;
     letter-spacing: .02em;
+    box-shadow: 0 2px 8px rgba(92,46,122,0.15);
 }
 
 .prix-toggle:hover {
-    border-color: var(--lilas);
-    background: var(--lilas-pale);
+    border-color: var(--violet);
+    background: var(--lilas-clair);
+    transform: translateY(-1px);
 }
 
 .prix-toggle.actif {
     border-color: var(--violet);
-    background: var(--lilas-pale);
-    color: var(--violet);
+    background: var(--violet);
+    color: var(--blanc);
+    box-shadow: 0 2px 8px rgba(92,46,122,0.35);
 }
 
 /* ─── Mobile : widget vertical sticky, colonne droite fine ─── */
@@ -1606,10 +1717,7 @@ footer span {
 
     .prix-toggle-widget {
         flex-direction: column;
-        width: 38px;
-        padding: .2rem .2rem;
-        gap: .15rem;
-        border-radius: 10px;
+        gap: .4rem;
     }
 
     .prix-toggle-legend {
@@ -1638,10 +1746,11 @@ footer span {
     }
 
     .prix-toggle {
-        width: 30px;
-        height: 30px;
-        font-size: .68rem;
-        border-radius: 7px;
+        width: 32px;
+        height: 32px;
+        font-size: .85rem;
+        border-radius: 50%;
+        border-width: 2px;
     }
 }
 
@@ -1771,8 +1880,8 @@ table.tarifs td.prix-ferie {
 .prix-toggle-legend-ext {
     display: flex;
     flex-direction: row;
-    gap: 1rem;
-    margin-bottom: .6rem;
+    gap: 0.5rem;
+    margin-bottom: .5rem;
     flex-wrap: wrap;
 }
 
@@ -1780,15 +1889,27 @@ table.tarifs td.prix-ferie {
     display: flex;
     flex-direction: row;
     align-items: center;
-    gap: .3rem;
-    font-size: .72rem;
+    gap: .25rem;
+    font-size: .62rem;
     font-weight: 500;
     color: var(--lilas);
-    white-space: nowrap;
+    white-space: normal;
+    line-height: 1.2;
 }
 
 .prix-toggle-legend-ext .legend-icon {
-    font-size: .95rem;
+    font-size: .8rem;
+    flex-shrink: 0;
+}
+
+/* Adaptation écrans étroits */
+@media (max-width: 480px) {
+    .prix-toggle-legend-ext {
+        gap: 0.4rem;
+    }
+    .prix-toggle-legend-ext .prix-toggle-legend-item {
+        font-size: .58rem;
+    }
 }
 
 /* CSS manquant pour colonne nuit */
@@ -1825,6 +1946,42 @@ table.tarifs td.prix-nuit {
     color: var(--lilas);
     font-weight: 500;
     align-items: center;
+}
+
+/* ===== BANDEAU LÉGENDE (sous le titre, Serrurerie & Mécanique vélo) ===== */
+.tarif-legende-bandeau {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: .35rem .6rem;
+    background: var(--lilas-clair);
+    color: var(--violet);
+    font-size: .72rem;
+    font-weight: 600;
+    padding: .5rem .8rem;
+    border-radius: 12px;
+    margin: .5rem 0 1rem;
+}
+
+.tarif-legende-bandeau .legende-icone {
+    font-size: .85rem;
+    margin-right: .15rem;
+}
+
+.tarif-legende-bandeau .legende-sep {
+    color: var(--lilas);
+    font-weight: 400;
+}
+
+@media (max-width: 640px) {
+    .tarif-legende-bandeau {
+        font-size: .68rem;
+        padding: .45rem .7rem;
+        gap: .3rem .5rem;
+    }
+    .tarif-legende-bandeau .legende-sep {
+        display: none;
+    }
 }
 
 /* Nettoyer le widget — plus de légende dedans */
@@ -2093,4 +2250,63 @@ background: var(--lilas-clair);
 }
 .contact-btns-row .contact-tel-btn {
   margin: 0;
+}
+/* FAQ */
+.faq-serrurerie,
+.faq-velo {
+  margin-top: 2rem;
+}
+
+.faq-serrurerie h2,
+.faq-velo h2 {
+  color: var(--violet);
+  font-family: 'Inter', sans-serif;
+  font-size: 1.3rem;
+  margin-bottom: 1rem;
+}
+
+.faq-item {
+  border-bottom: 1.5px solid var(--lilas-clair);
+  padding: .5rem 0;
+}
+
+.faq-item summary {
+  font-family: 'Inter', sans-serif;
+  font-size: .95rem;
+  font-weight: 700;
+  color: var(--violet);
+  cursor: pointer;
+  padding: .5rem .2rem;
+  list-style: none;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.faq-item summary::-webkit-details-marker {
+  display: none;
+}
+
+.faq-item summary::after {
+  content: '▾';
+  font-size: .85rem;
+  color: var(--lilas);
+  transition: transform .25s;
+  margin-left: 1rem;
+}
+
+.faq-item[open] summary::after {
+  transform: rotate(180deg);
+  color: var(--violet);
+}
+
+.faq-item summary:hover {
+  color: var(--violet);
+}
+
+.faq-item p {
+  color: var(--texte);
+  font-size: .9rem;
+  padding: .5rem .2rem 1rem;
+  line-height: 1.6;
 }

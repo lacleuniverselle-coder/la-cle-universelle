@@ -69,12 +69,19 @@
     </button>
     <ul class="nav-links">
      
-      <li><a href="#services">Services</a></li>
+      <li class="nav-dropdown">
+        <a href="#services" class="nav-dropdown-toggle">Services <span class="nav-dropdown-arrow">▾</span></a>
+        <ul class="nav-dropdown-menu">
+          <li><a href="#" onclick="showPage('tarifs-serrurerie'); return false;">Serrurerie</a></li>
+          <li><a href="#" onclick="showPage('tarifs-velo'); return false;">Mécanique vélo</a></li>
+        </ul>
+      </li>
       <li><a href="#zones">Zones</a></li>
       <li><a href="#concept">Le concept</a></li>
       <li><a href="#pourquoi">Pourquoi moi</a></li>
       <li><a href="#apropos">À propos</a></li>
       <li><a href="#contact">Contact</a></li>
+      <li><a href="#" onclick="showPage('faq'); return false;">FAQ</a></li>
     </ul>
     <div style="display:flex; align-items:center; gap:0.6rem;">
      
@@ -88,13 +95,25 @@
     </div>
     <div class="mobile-menu" id="mobile-menu">
       
-      <a href="#services" onclick="closeMenu()">Services</a>
+      <div class="mobile-accordion">
+        <div class="mobile-accordion-row">
+          <a href="#services" class="mobile-accordion-link" onclick="closeMenu()">Services</a>
+          <button class="mobile-accordion-toggle" aria-label="Sous-menu Services" onclick="toggleMobileAccordion(this)" type="button">
+            <span class="accordion-arrow">▾</span>
+          </button>
+        </div>
+        <div class="mobile-accordion-panel">
+          <a href="#" onclick="showPage('tarifs-serrurerie'); closeMenu(); return false;">Serrurerie</a>
+          <a href="#" onclick="showPage('tarifs-velo'); closeMenu(); return false;">Mécanique vélo</a>
+        </div>
+      </div>
       <a href="#zones" onclick="closeMenu()">Zones</a>
       <a href="#concept" onclick="closeMenu()">Le concept</a>
       <a href="#pourquoi" onclick="closeMenu()">Pourquoi moi</a>
       
       <a href="#apropos" onclick="closeMenu()">À propos</a>
       <a href="#contact" onclick="closeMenu()">Contact</a>
+      <a href="#" onclick="showPage('faq'); closeMenu(); return false;">FAQ</a>
     </div>
   </nav>
 
@@ -112,7 +131,8 @@
       <div class="hero-text">
         <p class="hero-line1">Artisane multi-services, interventions à domicile · Toulouse
       
-        <p class="hero-dispo">📅 Disponible à partir de juillet 2026</p>
+
+      <p href="tel:+33743990437" class="btn-primary">Appeler maintenant</p>
       </div>
     </div>
 
@@ -136,7 +156,7 @@
   <span class="card-icon">🗝</span>
   <h3>SERRURERIE</h3>
 </div>
-            <p>Remplacement de cylindres, installations de serrures multipoints, ouverture de porte claquée..
+            <p>Service de dépannage : remplacement de cylindres, installations de serrures multipoints, ouverture de porte claquée..
               je ne juge pas, ça m'est déjà arrivé.       </p>
             <div class="card-detail">✓ Intervention d'urgence · ✓ Tous types de serrures</div>
            <button class="btn-tarifs" data-page="tarifs-serrurerie"
@@ -150,7 +170,7 @@
             <h3>MÉCANIQUE VÉLO</h3>
           </div>
             <p>Service de dépannage : crevaison, dérailleur capricieux, frein qui grince, câblerie HS, roue qui vacille
-              — J'irai où tu seras, qu'importe la place, qu'importe l'endroit ♬</p>
+              — ♬ J'irai où tu seras, qu'importe la place, qu'importe l'endroit ♬</p>
             <div class="card-detail">✓ À domicile / sur place · ✓ Tous types de vélo ou presque</div>
              <button class="btn-tarifs" data-page="tarifs-velo"
           aria-label="Voir les tarifs mécanique vélo">Voir les tarifs →</button>
@@ -165,8 +185,7 @@
                   comme un crochet qui bloque l'ouverture — Ça valait la peine de l'expliquer&nbsp;;)</span></span>"
             </h3>
             </div>
-            <p>Oh non, vous avez crevé en rentrant du boulot et en plus votre porte ne s'ouvre plus? Pas de panique! Je
-              règle les deux lors de la même intervention. C'est inclus dans ma philosophie — et dans mon devis :)</p>
+            <p>Votre serrure résiste et votre vélo a rendu l'âme ? La clé universElle règle tout en une seule visite.</p>
             <div class="card-detail">✓ Service combiné · ✓ Tarif unique</div>
              <button class="btn-tarifs" data-page="tarifs-pack"
           aria-label="Voir les tarifs pack double pêne">Voir les tarifs →</button>
@@ -307,7 +326,7 @@
     <section id="contact">
       <div class="section-inner">
         <span class="section-label">Me contacter</span>
-        <h2>Disponible à partir de juillet 2026.</h2>
+        <h2>Pronto ? ... Elle est dejà en route.</h2>
 
     <div class="contact-btns-row">
   <a class="contact-tel-btn" href="tel:0743990437">📞 07.43.99.04.37</a>
@@ -533,11 +552,13 @@
       <span class="section-label">Tarifs *</span>
       <div class="tarif-titre-row">
         <h1>Serrurerie</h1>
-        <div class="tarif-legende-inline">
-          <span>☀️ du Lundi au Vendredi 8h30–19h</span>
-          <span>☽ L-V soir 19h–22h</span>
-          <span>🌴 Weekend S-D</span>
-        </div>
+      </div>
+      <div class="tarif-legende-bandeau">
+        <span><span class="legende-icone">☀️</span> du Lundi au Vendredi 8h30–19h</span>
+        <span class="legende-sep">·</span>
+        <span><span class="legende-icone">☽</span> L-V soir 19h–22h</span>
+        <span class="legende-sep">·</span>
+        <span><span class="legende-icone">🌴</span> Weekend S-D</span>
       </div>
 
       <!-- Déplacement : prestation fixe, toujours visible, hors accordéon -->
@@ -678,11 +699,13 @@
       <span class="section-label">Tarifs *</span>
       <div class="tarif-titre-row">
         <h1>Mécanique vélo</h1>
-        <div class="tarif-legende-inline">
-             <span>☀️ du Lundi au Vendredi 8h30–19h</span>
-          <span>☽ L-V soir 19h–22h</span>
-          <span>🌴 Weekend S-D</span>
-        </div>
+      </div>
+      <div class="tarif-legende-bandeau">
+        <span><span class="legende-icone">☀️</span> du Lundi au Vendredi 8h30–19h</span>
+        <span class="legende-sep">·</span>
+        <span><span class="legende-icone">☽</span> L-V soir 19h–22h</span>
+        <span class="legende-sep">·</span>
+        <span><span class="legende-icone">🌴</span> Weekend S-D</span>
       </div>
 
       <!-- Déplacement : prestation fixe, toujours visible, hors accordéon -->
@@ -969,6 +992,234 @@
     </div>
   </div>
 
+
+  <!-- PAGE : FAQ -->
+  <div id="page-faq" style="display:none">
+    <div class="page-content">
+      <button class="back-btn" onclick="showPage('main')">← Retour au site</button>
+      <h1>Foire aux questions</h1>
+
+      <section class="faq-serrurerie">
+        <h2>FAQ Serrurerie</h2>
+
+        <details class="faq-item">
+          <summary>Puis-je changer un cylindre moi-même sans professionnel·le ?</summary>
+          <p>C'est possible, mais déconseillé sans expérience : un mauvais dimensionnement ou une pose incorrecte peut fragiliser votre sécurité.</p>
+        </details>
+
+        <details class="faq-item">
+          <summary>Combien de temps prend un changement de cylindre ?</summary>
+          <p>Environ 10 à 20 minutes pour un·e professionnel·le équipé·e.</p>
+        </details>
+
+        <details class="faq-item">
+          <summary>Quelle est la différence entre changer le cylindre et changer toute la serrure ?</summary>
+          <p>Le cylindre change les clés sans toucher au mécanisme ; la serrure complète se change si le mécanisme est endommagé.</p>
+        </details>
+
+        <details class="faq-item">
+          <summary>Comment savoir si mon cylindre ou ma serrure complète est en cause ?</summary>
+          <p>Si la clé tourne dans le vide ou accroche, c'est souvent le cylindre. Si le pêne ou le boîtier est bloqué, c'est la serrure.</p>
+        </details>
+
+        <details class="faq-item">
+          <summary>Quelles erreurs de mesure faut-il éviter avant d'acheter un cylindre ?</summary>
+          <p>Un cylindre trop court ne fonctionne pas, un cylindre trop long dépasse et devient vulnérable : mesurez précisément.</p>
+        </details>
+
+        <details class="faq-item">
+          <summary>Que risque-t-on en forçant un cylindre mal inséré ?</summary>
+          <p>Cela peut tordre le mécanisme interne et endommager toute la serrure, entraînant un remplacement complet coûteux.</p>
+        </details>
+
+        <details class="faq-item">
+          <summary>Qu'est-ce que la certification A2P et pourquoi est-elle importante ?</summary>
+          <p>C'est un label de résistance à l'effraction (crochetage, perçage, bumping), souvent exigé par les assurances.</p>
+        </details>
+
+        <details class="faq-item">
+          <summary>Un cylindre "adaptable" moins cher, bonne ou mauvaise idée ?</summary>
+          <p>Mauvaise idée : il fait perdre la certification A2P et peut annuler votre couverture assurance vol.</p>
+        </details>
+
+        <details class="faq-item">
+          <summary>Quels sont les niveaux de sécurité disponibles pour un cylindre ?</summary>
+          <p>Standard, renforcé, et haute sûreté (clé protégée, carte de propriété).</p>
+        </details>
+
+        <details class="faq-item">
+          <summary>Mon assurance habitation exige-t-elle une serrure certifiée ?</summary>
+          <p>Souvent oui : sans certification A2P, certaines polices ne couvrent pas le vol.</p>
+        </details>
+
+        <details class="faq-item">
+          <summary>Que faire en cas de porte claquée ?</summary>
+          <p>Pas besoin de changer le cylindre : un·e serrurier·ère peut généralement rouvrir la porte sans dégât.</p>
+        </details>
+
+        <details class="faq-item">
+          <summary>Comment éviter les arnaques lors d'un dépannage en urgence ?</summary>
+          <p>Demandez un devis avant intervention et méfiez-vous des prix anormalement bas ou des remplacements non justifiés.</p>
+        </details>
+
+        <details class="faq-item">
+          <summary>Comment reconnaître un·e serrurier·ère fiable ?</summary>
+          <p>Vérifiez les avis, l'immatriculation professionnelle et l'établissement d'un devis écrit avant travaux.</p>
+        </details>
+
+        <details class="faq-item">
+          <summary>Un·e serrurier·ère peut-il/elle ouvrir n'importe quelle porte légalement ?</summary>
+          <p>Oui, mais uniquement avec votre présence et une preuve de domicile ou de propriété.</p>
+        </details>
+
+        <details class="faq-item">
+          <summary>Faut-il changer sa serrure après une perte ou un vol de clés ?</summary>
+          <p>Oui, c'est fortement recommandé pour éviter tout accès non autorisé.</p>
+        </details>
+
+        <details class="faq-item">
+          <summary>Faut-il changer sa serrure en emménageant dans un nouveau logement ?</summary>
+          <p>Oui : vous ne savez jamais combien de doubles de clés circulent encore.</p>
+        </details>
+
+        <details class="faq-item">
+          <summary>Qui paie le changement de serrure : locataire ou propriétaire ?</summary>
+          <p>Le·la propriétaire paie en cas de vétusté, le·la locataire paie en cas de perte de clés.</p>
+        </details>
+
+        <details class="faq-item">
+          <summary>Faut-il changer sa serrure après un cambriolage ?</summary>
+          <p>Oui, c'est indispensable et généralement pris en charge par votre assurance habitation.</p>
+        </details>
+
+        <details class="faq-item">
+          <summary>Comment entretenir son cylindre pour éviter les pannes ?</summary>
+          <p>Lubrifiez-le tous les six mois et testez régulièrement vos clés pour détecter l'usure.</p>
+        </details>
+
+        <details class="faq-item">
+          <summary>Combien coûte en moyenne un changement de cylindre / serrure complète ?</summary>
+          <p>Entre 80 et 250 € pour un cylindre, et 300 à 800 € pour une serrure complète, pose comprise.</p>
+        </details>
+
+        <details class="faq-item">
+          <summary>Mon assurance carte bancaire peut-elle couvrir un dépannage serrurerie ?</summary>
+          <p>Oui, certaines cartes (Visa Premier, Gold Mastercard, etc.) incluent une assistance ou un remboursement — vérifiez vos garanties.</p>
+        </details>
+
+      </section>
+
+      <section class="faq-velo">
+        <h2>FAQ Mécanique Vélo</h2>
+
+        <details class="faq-item">
+          <summary>Puis-je réparer une crevaison moi-même ?</summary>
+          <p>Oui, c'est une réparation simple et accessible avec un kit de rustines ou une chambre à air de rechange.</p>
+        </details>
+
+        <details class="faq-item">
+          <summary>À quelle fréquence dois-je lubrifier ma chaîne ?</summary>
+          <p>Toutes les 1 à 2 semaines en usage régulier, ou après chaque sortie sous la pluie.</p>
+        </details>
+
+        <details class="faq-item">
+          <summary>Comment savoir si ma chaîne est usée et doit être changée ?</summary>
+          <p>Un atelier peut mesurer son allongement en quelques secondes avec un outil dédié ; à l'œil, si les vitesses sautent, c'est un signe.</p>
+        </details>
+
+        <details class="faq-item">
+          <summary>Faut-il nettoyer son vélo régulièrement, même s'il roule bien ?</summary>
+          <p>Oui, toutes les deux semaines environ : la saleté use prématurément la transmission.</p>
+        </details>
+
+        <details class="faq-item">
+          <summary>Puis-je utiliser n'importe quelle huile pour lubrifier la chaîne ?</summary>
+          <p>Non, utilisez un lubrifiant spécifique vélo — l'huile d'olive ou un produit non adapté attire la saleté et abîme la chaîne.</p>
+        </details>
+
+        <details class="faq-item">
+          <summary>Comment savoir si mes plaquettes/patins de frein sont usés ?</summary>
+          <p>Vérifiez les rainures : si elles ont disparu ou que l'épaisseur est inférieure à 1 mm (freins à disque), il faut les remplacer.</p>
+        </details>
+
+        <details class="faq-item">
+          <summary>Puis-je changer mes plaquettes de frein moi-même ?</summary>
+          <p>Oui, c'est accessible aux débutant·es avec les bons outils, mais un mauvais réglage peut affecter la sécurité.</p>
+        </details>
+
+        <details class="faq-item">
+          <summary>Pourquoi mes freins couinent-ils ou frottent-ils ?</summary>
+          <p>Souvent un mauvais alignement, de la saleté ou une usure des patins/plaquettes.</p>
+        </details>
+
+        <details class="faq-item">
+          <summary>Comment savoir si ma roue est voilée ?</summary>
+          <p>Si la jante oscille latéralement en tournant la roue, elle est voilée.</p>
+        </details>
+
+        <details class="faq-item">
+          <summary>Puis-je dévoiler ma roue moi-même ?</summary>
+          <p>C'est possible avec un pied de centrage, mais cette opération demande patience et savoir-faire — un·e technicien·ne est recommandé·e en cas de doute.</p>
+        </details>
+
+        <details class="faq-item">
+          <summary>Quand faut-il changer un pneu de vélo ?</summary>
+          <p>Quand les rainures ont disparu, que le flanc est fissuré ou détérioré, ou que la chambre à air devient visible.</p>
+        </details>
+
+        <details class="faq-item">
+          <summary>Pourquoi je crève souvent avec le même vélo ?</summary>
+          <p>Souvent une pression trop basse, un pneu usé, ou des débris (gravillons, verre) mal évacués.</p>
+        </details>
+
+        <details class="faq-item">
+          <summary>Pourquoi mes vitesses sautent ou craquent-elles ?</summary>
+          <p>C'est généralement un dérailleur mal réglé ou un câble détendu.</p>
+        </details>
+
+        <details class="faq-item">
+          <summary>Puis-je régler mon dérailleur moi-même ?</summary>
+          <p>Oui, avec un guide pas à pas et un tournevis adapté, c'est une opération accessible.</p>
+        </details>
+
+        <details class="faq-item">
+          <summary>Que faire si ma chaîne casse en pleine route ?</summary>
+          <p>Un dérive-chaîne et un maillon rapide dans votre kit permettent une réparation express sur place.</p>
+        </details>
+
+        <details class="faq-item">
+          <summary>Mon guidon ou ma selle a du jeu, c'est grave ?</summary>
+          <p>Oui, cela peut venir d'un serrage insuffisant ou d'un roulement usé — à faire vérifier rapidement pour votre sécurité.</p>
+        </details>
+
+        <details class="faq-item">
+          <summary>Quand dois-je changer mon casque même s'il paraît en bon état ?</summary>
+          <p>Tous les 3 à 5 ans : les matériaux vieillissent et perdent leurs propriétés protectrices.</p>
+        </details>
+
+        <details class="faq-item">
+          <summary>Mon vélo "claque" ou grince, dois-je m'inquiéter ?</summary>
+          <p>Oui, cela peut signaler un manque de serrage ou une pièce usée — mieux vaut faire vérifier avant que ça s'aggrave.</p>
+        </details>
+
+        <details class="faq-item">
+          <summary>L'entretien d'un vélo électrique diffère-t-il d'un vélo classique ?</summary>
+          <p>Oui, un VAE nécessite un entretien plus fréquent : le moteur accélère l'usure de la transmission et de la cassette.</p>
+        </details>
+
+        <details class="faq-item">
+          <summary>Combien de temps prend une réparation vélo classique ?</summary>
+          <p>Les réparations rapides (crevaison, réglages) se font souvent en journée ; les révisions complètes prennent 24 à 48h.</p>
+        </details>
+
+        <details class="faq-item">
+          <summary>Quel budget prévoir pour une révision complète ?</summary>
+          <p>Comptez généralement entre 40 et 100 € selon l'ampleur des travaux et le type de vélo.</p>
+        </details>
+
+      </section>
+    </div>
+  </div>
 
 </body>
 
