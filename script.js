@@ -441,3 +441,22 @@ if (description && compteur) {
     });
   });
 });
+
+// =============================================
+// HORAIRES — surbrillance du jour en cours
+// =============================================
+
+document.addEventListener('DOMContentLoaded', function () {
+  var rows = document.querySelectorAll('#hours-list .hours-row');
+  if (!rows.length) return;
+
+  // getDay() : 0 = dimanche ... 6 = samedi -> on le convertit en 1 = lundi ... 7 = dimanche
+  var jsDay = new Date().getDay();
+  var todayIndex = jsDay === 0 ? 7 : jsDay;
+
+  rows.forEach(function (row) {
+    if (parseInt(row.dataset.day, 10) === todayIndex) {
+      row.classList.add('is-today');
+    }
+  });
+});

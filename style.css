@@ -1062,14 +1062,16 @@ table.tarifs tr:last-child td {
     background: var(--lilas-clair);
     color: var(--violet);
     background-size: 200% auto;
-    padding: .85rem;
+    padding: .6rem 1.6rem;
     border-radius: 10px;
     border: 0;
     cursor: pointer;
     font-weight: 700;
-    font-size: 1rem;
+    font-size: 0.9rem;
     font-family: 'Inter', sans-serif;
-    transition:.2s, transform .1s, box-shadow .2s
+    transition:.2s, transform .1s, box-shadow .2s;
+    align-self: center;
+    width: fit-content;
 }
 
 .btn-send:hover {
@@ -2070,6 +2072,168 @@ table.tarifs td.prix-nuit {
     max-width: 90%;
   }
 }
+
+/* ===== HORAIRES + GOOGLE BUSINESS ===== */
+.contact-columns {
+  display: grid;
+  grid-template-columns: 400px 1fr;
+  gap: 1.5rem;
+  justify-content: start;
+  align-items: stretch;
+}
+
+.contact-columns .contact-form-new {
+  max-width: 400px;
+  width: 100%;
+  margin: 0 0 0 auto;
+  gap: 0.45rem;
+}
+
+.hours-card {
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  border-radius: 14px;
+  padding: 1.5rem 1.5rem 1.4rem;
+  backdrop-filter: blur(2px);
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  box-sizing: border-box;
+}
+
+.hours-card-title {
+  display: flex;
+  align-items: center;
+  gap: 0.55rem;
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--blanc);
+  margin: 0 0 1.1rem;
+  letter-spacing: 0.01em;
+}
+
+.hours-card-title svg {
+  color: var(--lilas-clair);
+  flex-shrink: 0;
+}
+
+.hours-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.hours-row {
+  display: flex;
+  justify-content: space-between;
+  gap: 0.6rem;
+  padding: 0.62rem 0.15rem;
+  border-bottom: 1px dashed rgba(255, 255, 255, 0.16);
+  font-size: 0.88rem;
+  color: var(--lilas-clair);
+}
+
+.hours-row:last-child {
+  border-bottom: none;
+}
+
+.hours-row span:first-child {
+  font-weight: 600;
+  color: var(--blanc);
+}
+
+.hours-row.is-today {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 7px;
+  padding-left: 0.6rem;
+  padding-right: 0.6rem;
+  margin: 0 -0.15rem;
+}
+
+.hours-row.is-today span:first-child {
+  color: var(--lilas-clair);
+}
+
+.hours-row.is-today span:last-child {
+  color: var(--blanc);
+  font-weight: 700;
+}
+
+.hours-bottom {
+  margin-top: auto;
+}
+
+.hours-note {
+  font-size: 0.7rem;
+  color: rgba(255, 255, 255, 0.45);
+  font-style: italic;
+  margin: 1.1rem 0 1rem;
+  line-height: 1.4;
+}
+
+.gbp-link {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.55rem;
+  width: 100%;
+  padding: 0.55rem 1rem;
+  border-radius: 999px;
+  background: var(--lilas-clair);
+  background-size: 200% auto;
+  border: 0;
+  color: var(--violet);
+  font-size: 0.8rem;
+  font-weight: 700;
+  font-family: 'Inter', sans-serif;
+  text-decoration: none;
+  transition: .2s, transform .1s, box-shadow .2s;
+  box-sizing: border-box;
+  cursor: pointer;
+}
+
+.gbp-badge {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: var(--blanc);
+  flex-shrink: 0;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.15);
+}
+
+.gbp-link:hover {
+  background: linear-gradient(90deg, var(--lilas) 0, var(--violet) 50%, var(--lilas) 100%);
+  background-size: 200% auto;
+  animation: violet-shimmer 2s linear infinite;
+  transform: scale(1.04) translateY(-2px);
+  box-shadow: 0 6px 16px rgba(92, 46, 122, 0.35);
+  color: var(--blanc);
+}
+
+@media (max-width: 860px) {
+  .contact-columns {
+    grid-template-columns: 1fr;
+    max-width: 500px;
+    margin: 0 auto;
+    justify-content: stretch;
+  }
+  .hours-card {
+    max-width: 500px;
+    margin: 0 auto;
+    width: 100%;
+    box-sizing: border-box;
+    height: auto;
+  }
+  .contact-columns .contact-form-new {
+    max-width: 500px;
+    width: 100%;
+    margin: 0 auto;
+  }
+}
+
 @media (max-width: 600px) {
   .mot-tooltip .tooltip-bulle {
     width: 180px;
