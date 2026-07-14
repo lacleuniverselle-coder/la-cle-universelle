@@ -1217,7 +1217,7 @@ footer span {
 
 .hero-logo-wrap img,
 .logo-overlay-logo svg {
-    height: 72px;
+    height: 90px;
     width: auto;
     display: block
 }
@@ -1396,7 +1396,7 @@ footer span {
     }
 
     .hero-logo-wrap img {
-        height: 90px;
+        height: 130px;
         width: auto;
         max-width: 100%;
         display: block;
@@ -1423,7 +1423,7 @@ footer span {
 
 @media (max-width:360px) {
     .hero-logo-wrap img {
-        height: 72px;
+        height: 130px;
         width: auto;
         max-width: 100%;
         display: block;
