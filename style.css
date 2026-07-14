@@ -14,36 +14,7 @@
     }
 }
 
-@keyframes pulse {
 
-    0%,
-    to {
-        transform: scale(1);
-        opacity: 1
-    }
-
-    50% {
-        transform: scale(1.06);
-        opacity: .85
-    }
-}
-
-@keyframes zoom-roue {
-    0% {
-        transform: scale(.3);
-        opacity: 0
-    }
-
-    60% {
-        transform: scale(1.08);
-        opacity: 1
-    }
-
-    to {
-        transform: scale(1);
-        opacity: 1
-    }
-}
 
 :root {
     --violet: #5c2e7a;
@@ -1215,9 +1186,9 @@ footer span {
     margin: 0 auto 1.2rem
 }
 
-.hero-logo-wrap img,
+.hero-logo-wrap svg,
 .logo-overlay-logo svg {
-    height: 90px;
+    height: 130px;
     width: auto;
     display: block
 }
@@ -1230,8 +1201,9 @@ footer span {
     width: 100%
 }
 
-.hero-logo-wrap img {
-    height: 180px;
+.hero-logo-wrap svg {
+    height: 190px;
+    width: auto;
     max-width: 100%;
     overflow: hidden
 }
@@ -1283,16 +1255,47 @@ footer span {
     animation: pulse 1.5s ease-in-out infinite
 }
 
-#roue {
-    transform-origin: 235px 235px;
-    transform-box: fill-box;
-    animation: none;
-    transition: transform .6s ease
+@keyframes roue-rotation {
+    from {
+        transform: rotate(0deg)
+    }
+
+    to {
+        transform: rotate(360deg)
+    }
 }
 
+@keyframes roue-rotation-hover {
+    from {
+        transform: rotate(0deg)
+    }
+
+    to {
+        transform: rotate(360deg)
+    }
+}
+
+
+#roue {
+    transform-origin: 50% 50%;
+    transform-box: fill-box;
+    animation: roue-rotation 3.4s ease-out
+}
+
+.hero-logo-wrap:hover #roue,
 .hero-logo-wrap:focus #roue,
-.hero-logo-wrap:hover #roue {
-    animation: zoom-roue 1.2s ease forwards
+.hero-logo-wrap:active #roue {
+    animation: roue-rotation-hover 3.4s ease-out
+}
+
+@media (prefers-reduced-motion: reduce) {
+
+    #roue,
+    .hero-logo-wrap:hover #roue,
+    .hero-logo-wrap:focus #roue,
+    .hero-logo-wrap:active #roue {
+        animation: none
+    }
 }
 
 .gradient-separator {
@@ -1355,14 +1358,12 @@ footer span {
         margin: .8rem auto 0
     }
 
-    .hero-logo-wrap img {
-        height: 180px;
-        width: auto;
-        max-width: 100%;
-        display: block;
-        overflow: hidden
-    }
-
+    .hero-logo-wrap svg {
+    height: 190px;
+    width: auto;
+    max-width: 100%;
+    overflow: hidden
+}
     .hero-dispo {
         font-size: .95rem
     }
@@ -1395,7 +1396,7 @@ footer span {
         padding: 1.4rem .7rem
     }
 
-    .hero-logo-wrap img {
+    .hero-logo-wrap svg {
         height: 130px;
         width: auto;
         max-width: 100%;
@@ -1422,7 +1423,7 @@ footer span {
 }
 
 @media (max-width:360px) {
-    .hero-logo-wrap img {
+    .hero-logo-wrap svg {
         height: 130px;
         width: auto;
         max-width: 100%;
