@@ -1067,16 +1067,12 @@ table.tarifs tr:last-child td {
 
 #page-mentions-legales,
 #page-cgv,
-#page-tarifs-serrurerie,
-#page-tarifs-velo,
 #page-tarifs-pack {
     display: none
 }
 
 #page-mentions-legales.active,
 #page-cgv.active,
-#page-tarifs-serrurerie.active,
-#page-tarifs-velo.active,
 #page-tarifs-pack.active {
     display: block
 }
