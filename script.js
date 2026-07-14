@@ -499,6 +499,20 @@ document.addEventListener('DOMContentLoaded', function () {
   var roue = document.getElementById('roue');
   if (!logoWrap || !roue) return;
 
+  // Certains navigateurs mobiles gèrent mal "transform-box: fill-box" sur
+  // les <g> SVG (la roue ne tourne pas visuellement). On calcule donc le
+  // centre réel de la roue en JS et on l'utilise comme point de pivot,
+  // en unités locales du SVG — beaucoup plus fiable.
+  try {
+    var bbox = roue.getBBox();
+    var cx = bbox.x + bbox.width / 2;
+    var cy = bbox.y + bbox.height / 2;
+    roue.style.transformOrigin = cx + 'px ' + cy + 'px';
+  } catch (e) {
+    // getBBox peut échouer si l'élément n'est pas encore rendu : on garde
+    // alors le transform-origin: 50% 50% défini en CSS
+  }
+
   function playRoue() {
     roue.classList.remove('roue-replay');
     void roue.offsetWidth; // force le navigateur à relire le style (redémarre l'animation)

@@ -1288,18 +1288,17 @@ footer span {
 
 #roue {
     transform-origin: 50% 50%;
-    transform-box: fill-box;
-    animation: roue-rotation 4.8s ease-out
+    animation: roue-rotation 3.4s ease-out
 }
 
 .hero-logo-wrap svg:hover #roue,
 .hero-logo-wrap svg:focus #roue,
 .hero-logo-wrap svg:active #roue {
-    animation: roue-rotation-hover 4.8s ease-out
+    animation: roue-rotation-hover 3.4s ease-out
 }
 
 #roue.roue-replay {
-    animation: roue-rotation-hover 4.8s ease-out
+    animation: roue-rotation-hover 3.4s ease-out
 }
 
 @media (prefers-reduced-motion: reduce) {
