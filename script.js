@@ -210,10 +210,24 @@ function initMap() {
   L.marker([centerLat, centerLng], { icon }).addTo(map);
 }
 
-// Initialise la carte quand la page est chargée
+// Initialise la carte seulement quand elle entre dans le viewport
+// (évite le reflow forcé de Leaflet -fitBounds/getBounds- pendant le chargement initial)
 document.addEventListener('DOMContentLoaded', () => {
-  if (document.getElementById('map-zones')) {
-    initMap();
+  const mapEl = document.getElementById('map-zones');
+  if (!mapEl) return;
+
+  if ('IntersectionObserver' in window) {
+    const observer = new IntersectionObserver((entries, obs) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          initMap();
+          obs.disconnect();
+        }
+      });
+    }, { rootMargin: '200px' });
+    observer.observe(mapEl);
+  } else {
+    initMap(); // fallback navigateurs anciens
   }
 });
 
@@ -470,4 +484,35 @@ document.addEventListener('DOMContentLoaded', function () {
       row.classList.add('is-today');
     }
   });
+});
+
+// =============================================
+// ANIMATION ROUE DU LOGO — au chargement + retour en haut
+// =============================================
+// En plus du hover (géré en CSS), on relance l'animation de la roue à
+// l'ouverture de la page et à chaque retour en haut (scroll) : utile sur
+// mobile où le hover n'existe pas et où le déclenchement CSS automatique
+// est parfois capricieux selon le navigateur.
+
+document.addEventListener('DOMContentLoaded', function () {
+  var logoWrap = document.querySelector('.hero-logo-wrap');
+  var roue = document.getElementById('roue');
+  if (!logoWrap || !roue) return;
+
+  function playRoue() {
+    roue.classList.remove('roue-replay');
+    void roue.offsetWidth; // force le navigateur à relire le style (redémarre l'animation)
+    roue.classList.add('roue-replay');
+  }
+
+  // Déclenchement au chargement de la page
+  playRoue();
+
+  var observer = new IntersectionObserver(function (entries) {
+    entries.forEach(function (entry) {
+      if (entry.isIntersecting) playRoue();
+    });
+  }, { threshold: 0.5 });
+
+  observer.observe(logoWrap);
 });
