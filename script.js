@@ -2,7 +2,7 @@
 // NAVIGATION & PAGES
 // =============================================
 
-const allPages = ['site-main', 'page-mentions-legales', 'page-cgv', 'page-tarifs-serrurerie', 'page-tarifs-velo', 'page-tarifs-pack','page-faq'];
+const allPages = ['site-main', 'page-mentions-legales', 'page-cgv', 'page-tarifs-pack', 'page-faq'];
 
 function showPage(page, anchor) {
   allPages.forEach(id => {
@@ -37,6 +37,17 @@ function showPage(page, anchor) {
     window.scrollTo(0, 0);
   }
 }
+
+// Ouverture directe d'une sous-page via l'URL (ex: index.html#mentions-legales
+// utilisé depuis serrurerie.html / mecanique-velo.html). Ignoré si l'ancre ne
+// correspond à aucune sous-page (ex: #services), showPage() gère déjà ce cas.
+document.addEventListener('DOMContentLoaded', function () {
+  var hash = window.location.hash.replace('#', '');
+  var sousPages = ['mentions-legales', 'cgv', 'tarifs-pack', 'faq'];
+  if (sousPages.indexOf(hash) !== -1) {
+    showPage(hash);
+  }
+});
 
 // =============================================
 // MENU MOBILE
