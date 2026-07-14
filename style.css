@@ -4,6 +4,16 @@
     }
 }
 
+@keyframes pulse {
+    0%, 100% {
+        transform: scale(1)
+    }
+
+    50% {
+        transform: scale(1.04)
+    }
+}
+
 @keyframes violet-shimmer {
     0% {
         background-position: -100%center
@@ -349,8 +359,8 @@ table.tarifs tr:last-child td {
 
 .btn-primary {
     display: inline-block;
-    background: var(--lilas-clair);
-    color: var(--violet);
+    background: #8d68b1;
+    color: var(--blanc);
     padding: clamp(.5rem, 2vw, .6rem) clamp(.7rem, 3vw, .9rem);
     border-radius: 10px;
     text-decoration: none;
@@ -1279,21 +1289,26 @@ footer span {
 #roue {
     transform-origin: 50% 50%;
     transform-box: fill-box;
-    animation: roue-rotation 3.4s ease-out
+    animation: roue-rotation 4.8s ease-out
 }
 
-.hero-logo-wrap:hover #roue,
-.hero-logo-wrap:focus #roue,
-.hero-logo-wrap:active #roue {
-    animation: roue-rotation-hover 3.4s ease-out
+.hero-logo-wrap svg:hover #roue,
+.hero-logo-wrap svg:focus #roue,
+.hero-logo-wrap svg:active #roue {
+    animation: roue-rotation-hover 4.8s ease-out
+}
+
+#roue.roue-replay {
+    animation: roue-rotation-hover 4.8s ease-out
 }
 
 @media (prefers-reduced-motion: reduce) {
 
     #roue,
-    .hero-logo-wrap:hover #roue,
-    .hero-logo-wrap:focus #roue,
-    .hero-logo-wrap:active #roue {
+    .hero-logo-wrap svg:hover #roue,
+    .hero-logo-wrap svg:focus #roue,
+    .hero-logo-wrap svg:active #roue,
+    #roue.roue-replay {
         animation: none
     }
 }

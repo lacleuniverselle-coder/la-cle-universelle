@@ -1400,6 +1400,36 @@
     </div>
   </div>
 
+  <script>
+    // Relance l'animation de la roue chaque fois qu'on revient en haut
+    // (scroll ou reload), y compris sur mobile où il n'y a pas de :hover.
+    document.addEventListener('DOMContentLoaded', function () {
+      var logoWrap = document.querySelector('.hero-logo-wrap');
+      var roue = document.getElementById('roue');
+      if (!logoWrap || !roue) return;
+
+      var firstTrigger = true;
+
+      var observer = new IntersectionObserver(function (entries) {
+        entries.forEach(function (entry) {
+          if (!entry.isIntersecting) return;
+
+          if (firstTrigger) {
+            // L'animation d'entrée CSS joue déjà toute seule au chargement
+            firstTrigger = false;
+            return;
+          }
+
+          roue.classList.remove('roue-replay');
+          void roue.offsetWidth; // force le navigateur à relire le style (redémarre l'animation)
+          roue.classList.add('roue-replay');
+        });
+      }, { threshold: 0.5 });
+
+      observer.observe(logoWrap);
+    });
+  </script>
+
 </body>
 
 </html>
