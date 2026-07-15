@@ -173,7 +173,7 @@ function initMap() {
     color: 'transparent',
     weight: 0,
     fillColor: '#8d68b1',
-    fillOpacity: 0.30
+    fillOpacity: 0.18
   }).addTo(map);
 
   // Contour blanc (halo)
@@ -190,7 +190,7 @@ function initMap() {
   // Contour violet
   const layer = L.geoJSON(geojsonData, {
     style: () => ({
-      color: 'rgba(130, 31, 160, 1)',
+      color: 'rgba(107, 63, 160, 1)',
       weight: 5,
       opacity: 1,
       lineCap: 'round',
