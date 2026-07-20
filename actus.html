@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <meta name="description"
+  content="Actus et dernières interventions serrurerie & vélo à Toulouse, à retrouver aussi sur Instagram.">
+
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://lacleuniverselle.fr/actus.html">
+  <meta property="og:title" content="Actus — La clé universElle">
+  <meta property="og:description"
+    content="Les dernières interventions et coulisses de La clé universElle, en direct d'Instagram.">
+  <meta property="og:image" content="https://lacleuniverselle.fr/og-image.jpg">
+  <meta property="og:locale" content="fr_FR">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Actus — La clé universElle">
+  <meta name="twitter:description"
+    content="Les dernières interventions et coulisses de La clé universElle, en direct d'Instagram.">
+  <meta name="twitter:image" content="https://lacleuniverselle.fr/og-image.jpg">
+
+  <link rel="canonical" href="https://lacleuniverselle.fr/actus.html">
+  <meta name="theme-color" content="#482664">
+  <meta name="robots" content="index, follow">
+
+  <link rel="stylesheet" href="style.css" />
+  <link rel="icon" type="image/x-icon" href="favicon.ico">
+  <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
+  <link rel="manifest" href="site.webmanifest">
+  <script src="script.js" defer></script>
+  <title>Actus — La clé universElle</title>
+</head>
+
+<body>
+
+  <!-- NAV -->
+  <nav id="main-nav">
+    <a class="nav-logo" href="index.html" aria-label="Retour à l'accueil">
+      <div class="nav-logo-svg-wrap"><img src="LOGO_seulpunchy.svg" alt="Logo La clé universElle"
+          style="height:48px;width:auto;display:block;"></div>
+    </a>
+    <ul class="nav-links">
+      <li class="nav-dropdown">
+        <a href="index.html#services" class="nav-dropdown-toggle">Services <span class="nav-dropdown-arrow">▾</span></a>
+        <ul class="nav-dropdown-menu">
+          <li><a href="serrurerie.html">Serrurerie</a></li>
+          <li><a href="mecanique-velo.html">Mécanique vélo</a></li>
+        </ul>
+      </li>
+      <li><a href="index.html#zones">Zones</a></li>
+      <li><a href="index.html#concept">Le concept</a></li>
+      <li><a href="index.html#pourquoi">Pourquoi moi</a></li>
+     
+      <li><a href="index.html#apropos">À propos</a></li>
+      <li><a href="index.html#contact">Contact</a></li>
+       <li><a href="actus.html">Actus</a></li>
+      <li><a href="index.html#faq">FAQ</a></li>
+    </ul>
+    <div style="display:flex; align-items:center; gap:0.6rem;">
+       <a class="nav-whatsapp" href="https://wa.me/33743990437" target="_blank" rel="noopener" aria-label="Contacter sur WhatsApp">
+    <svg viewBox="0 0 24 24" width="20" height="20" fill="white"><path d="M17.6 6.32A8.86 8.86 0 0 0 12.04 4C7.5 4 3.78 7.72 3.78 12.26c0 1.5.4 2.92 1.1 4.16L4 20l3.7-.97a8.84 8.84 0 0 0 4.32 1.1h.01c4.54 0 8.26-3.72 8.26-8.26 0-2.21-.86-4.29-2.69-5.55zM12.04 18.6a6.9 6.9 0 0 1-3.5-.96l-.25-.15-2.6.68.7-2.53-.17-.26a6.86 6.86 0 0 1-1.05-3.65c0-3.8 3.09-6.9 6.9-6.9 1.84 0 3.57.72 4.87 2.02a6.84 6.84 0 0 1 2.02 4.87c0 3.8-3.1 6.9-6.92 6.9zm3.78-5.17c-.21-.1-1.22-.6-1.41-.67-.19-.07-.32-.1-.46.1-.13.2-.52.66-.64.8-.12.13-.24.15-.45.05-1.22-.61-2.02-1.08-2.83-2.46-.21-.37.21-.34.61-1.14.07-.13.03-.25-.03-.36-.06-.1-.46-1.1-.63-1.51-.16-.4-.33-.34-.46-.35-.12-.01-.26-.01-.4-.01-.13 0-.35.05-.54.25-.19.2-.71.7-.71 1.71 0 1 .73 1.97.83 2.1.1.13 1.4 2.14 3.4 2.92 1.7.67 2.05.54 2.42.51.37-.03 1.22-.5 1.39-.99.18-.49.18-.91.13-1-.05-.1-.18-.15-.39-.25z"/></svg>
+  </a>
+      <button class="hamburger" id="hamburger-btn" aria-label="Menu" onclick="toggleMenu()">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+    <div class="mobile-menu" id="mobile-menu">
+      <div class="mobile-accordion">
+        <div class="mobile-accordion-row">
+          <a href="index.html#services" class="mobile-accordion-link" onclick="closeMenu()">Services</a>
+          <button class="mobile-accordion-toggle" aria-label="Sous-menu Services" onclick="toggleMobileAccordion(this)" type="button">
+            <span class="accordion-arrow">▾</span>
+          </button>
+        </div>
+        <div class="mobile-accordion-panel">
+          <a href="serrurerie.html">Serrurerie</a>
+          <a href="mecanique-velo.html">Mécanique vélo</a>
+        </div>
+      </div>
+      <a href="index.html#zones" onclick="closeMenu()">Zones</a>
+      <a href="index.html#concept" onclick="closeMenu()">Le concept</a>
+      <a href="index.html#pourquoi" onclick="closeMenu()">Pourquoi moi</a>
+     
+      <a href="index.html#apropos" onclick="closeMenu()">À propos</a>
+      <a href="index.html#contact" onclick="closeMenu()">Contact</a>
+       <a href="actus.html" onclick="closeMenu()">Actus</a>
+      <a href="index.html#faq" onclick="closeMenu()">FAQ</a>
+    </div>
+  </nav>
+
+  <div id="page-actus">
+    <div class="page-content" style="max-width:700px; margin:0 auto; padding:3rem 1.2rem 2rem;">
+      <a class="back-btn" href="index.html">← Retour au site</a>
+      <span class="section-label">Actus</span>
+      <h1>Les derniers posts Insta *</h1>
+      <p style="font-size:clamp(.78rem, 3.3vw, .95rem);">Chantiers, galères de cylindres, crevaisons du dimanche :<br>le direct des interventions, disponible ici 👀</p>
+
+      <!-- Widget Instagram — SnapWidget (version gratuite) -->
+      <iframe src="https://snapwidget.com/embed/1127359"
+        class="snapwidget-widget"
+        allowtransparency="true"
+        frameborder="0"
+        scrolling="no"
+        style="border:none; overflow:hidden; width:100%; margin-top:2rem; min-height:500px; pointer-events:none;"
+        title="Posts from Instagram">
+      </iframe>
+
+      <div style="text-align:center; margin-top:1.5rem;">
+        <p style="font-size:0.9rem; margin-bottom:0.5rem;">Suis-moi sur Instagram 👇</p>
+        <a href="https://www.instagram.com/lacleuniverselle/" target="_blank" rel="noopener">
+          <img src="lacleuniverselle_qr.png" alt="QR code Instagram La clé universElle" style="width:160px; height:auto;">
+        </a>
+      </div>
+
+      <p style="margin-top:1.5rem; font-size:0.95rem; opacity:0.8;">* Si je poste pas tous les jours, c'est surtout que j'ai les gants — la sicurezza prima di tutto — donc pas moyen de sortir le téléphone pour chercher le bon filtre 😉📸</p>
+
+    </div>
+  </div>
+
+  <footer>
+    <p>© 2026 <span>La clé universElle</span></p>
+    <div class="footer-links">
+      <a href="index.html#mentions-legales">Mentions légales</a>
+      <a href="index.html#cgv">CGV</a>
+      <a href="index.html">← Retour au site</a>
+    </div>
+  </footer>
+
+</body>
+</html>

@@ -2,7 +2,7 @@
 // NAVIGATION & PAGES
 // =============================================
 
-const allPages = ['site-main', 'page-mentions-legales', 'page-cgv', 'page-tarifs-serrurerie', 'page-tarifs-velo', 'page-tarifs-pack','page-faq'];
+const allPages = ['site-main', 'page-mentions-legales', 'page-cgv', 'page-tarifs-pack', 'page-faq'];
 
 function showPage(page, anchor) {
   allPages.forEach(id => {
@@ -37,6 +37,17 @@ function showPage(page, anchor) {
     window.scrollTo(0, 0);
   }
 }
+
+// Ouverture directe d'une sous-page via l'URL (ex: index.html#mentions-legales
+// utilisé depuis serrurerie.html / mecanique-velo.html). Ignoré si l'ancre ne
+// correspond à aucune sous-page (ex: #services), showPage() gère déjà ce cas.
+document.addEventListener('DOMContentLoaded', function () {
+  var hash = window.location.hash.replace('#', '');
+  var sousPages = ['mentions-legales', 'cgv', 'tarifs-pack', 'faq'];
+  if (sousPages.indexOf(hash) !== -1) {
+    showPage(hash);
+  }
+});
 
 // =============================================
 // MENU MOBILE
@@ -162,7 +173,7 @@ function initMap() {
     color: 'transparent',
     weight: 0,
     fillColor: '#8d68b1',
-    fillOpacity: 0.30
+    fillOpacity: 0.18
   }).addTo(map);
 
   // Contour blanc (halo)
@@ -179,7 +190,7 @@ function initMap() {
   // Contour violet
   const layer = L.geoJSON(geojsonData, {
     style: () => ({
-      color: 'rgba(130, 31, 160, 1)',
+      color: 'rgba(107, 63, 160, 1)',
       weight: 5,
       opacity: 1,
       lineCap: 'round',
@@ -199,10 +210,24 @@ function initMap() {
   L.marker([centerLat, centerLng], { icon }).addTo(map);
 }
 
-// Initialise la carte quand la page est chargée
+// Initialise la carte seulement quand elle entre dans le viewport
+// (évite le reflow forcé de Leaflet -fitBounds/getBounds- pendant le chargement initial)
 document.addEventListener('DOMContentLoaded', () => {
-  if (document.getElementById('map-zones')) {
-    initMap();
+  const mapEl = document.getElementById('map-zones');
+  if (!mapEl) return;
+
+  if ('IntersectionObserver' in window) {
+    const observer = new IntersectionObserver((entries, obs) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          initMap();
+          obs.disconnect();
+        }
+      });
+    }, { rootMargin: '200px' });
+    observer.observe(mapEl);
+  } else {
+    initMap(); // fallback navigateurs anciens
   }
 });
 
@@ -440,4 +465,68 @@ if (description && compteur) {
       feedback.className = 'form-feedback erreur';
     });
   });
+});
+
+// =============================================
+// HORAIRES — surbrillance du jour en cours
+// =============================================
+
+document.addEventListener('DOMContentLoaded', function () {
+  var rows = document.querySelectorAll('#hours-list .hours-row');
+  if (!rows.length) return;
+
+  // getDay() : 0 = dimanche ... 6 = samedi -> on le convertit en 1 = lundi ... 7 = dimanche
+  var jsDay = new Date().getDay();
+  var todayIndex = jsDay === 0 ? 7 : jsDay;
+
+  rows.forEach(function (row) {
+    if (parseInt(row.dataset.day, 10) === todayIndex) {
+      row.classList.add('is-today');
+    }
+  });
+});
+
+// =============================================
+// ANIMATION ROUE DU LOGO — au chargement + retour en haut
+// =============================================
+// En plus du hover (géré en CSS), on relance l'animation de la roue à
+// l'ouverture de la page et à chaque retour en haut (scroll) : utile sur
+// mobile où le hover n'existe pas et où le déclenchement CSS automatique
+// est parfois capricieux selon le navigateur.
+
+document.addEventListener('DOMContentLoaded', function () {
+  var logoWrap = document.querySelector('.hero-logo-wrap');
+  var roue = document.getElementById('roue');
+  if (!logoWrap || !roue) return;
+
+  // Certains navigateurs mobiles gèrent mal "transform-box: fill-box" sur
+  // les <g> SVG (la roue ne tourne pas visuellement). On calcule donc le
+  // centre réel de la roue en JS et on l'utilise comme point de pivot,
+  // en unités locales du SVG — beaucoup plus fiable.
+  try {
+    var bbox = roue.getBBox();
+    var cx = bbox.x + bbox.width / 2;
+    var cy = bbox.y + bbox.height / 2;
+    roue.style.transformOrigin = cx + 'px ' + cy + 'px';
+  } catch (e) {
+    // getBBox peut échouer si l'élément n'est pas encore rendu : on garde
+    // alors le transform-origin: 50% 50% défini en CSS
+  }
+
+  function playRoue() {
+    roue.classList.remove('roue-replay');
+    void roue.offsetWidth; // force le navigateur à relire le style (redémarre l'animation)
+    roue.classList.add('roue-replay');
+  }
+
+  // Déclenchement au chargement de la page
+  playRoue();
+
+  var observer = new IntersectionObserver(function (entries) {
+    entries.forEach(function (entry) {
+      if (entry.isIntersecting) playRoue();
+    });
+  }, { threshold: 0.5 });
+
+  observer.observe(logoWrap);
 });
