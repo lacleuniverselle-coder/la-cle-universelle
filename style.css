@@ -695,7 +695,7 @@ h3 {
 
 @media (min-width:861px) {
     .card-title-row {
-        margin-bottom: auto
+        margin-bottom: 1.8rem
     }
 
     .card p {
@@ -708,7 +708,6 @@ h3 {
         margin-top: 0
     }
 }
-
 .tarifs-category {
     font-size: .72rem;
     font-weight: 700;
