@@ -2,7 +2,7 @@
 // NAVIGATION & PAGES
 // =============================================
 
-const allPages = ['site-main', 'page-mentions-legales', 'page-cgv', 'page-tarifs-pack', 'page-faq'];
+const allPages = ['site-main', 'page-mentions-legales', 'page-cgv', 'page-tarifs-pack'];
 
 function showPage(page, anchor) {
   allPages.forEach(id => {
@@ -43,7 +43,7 @@ function showPage(page, anchor) {
 // correspond à aucune sous-page (ex: #services), showPage() gère déjà ce cas.
 document.addEventListener('DOMContentLoaded', function () {
   var hash = window.location.hash.replace('#', '');
-  var sousPages = ['mentions-legales', 'cgv', 'tarifs-pack', 'faq'];
+  var sousPages = ['mentions-legales', 'cgv', 'tarifs-pack'];
   if (sousPages.indexOf(hash) !== -1) {
     showPage(hash);
   }
