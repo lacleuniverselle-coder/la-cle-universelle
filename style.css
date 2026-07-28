@@ -759,7 +759,7 @@ table.tarifs td:last-child {
 
 .tarifs-note {
     margin-top: 1.5rem;
-    font-size: .85rem;
+    font-size: .40rem;
     color: var(--gris);
     font-style: italic;
     padding-top: 1rem;
