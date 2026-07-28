@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <meta name="description"
+  content="Zones d'intervention de La clé universElle à vélo cargo : Toulouse Nord (Minimes, Borderouge, L'Union), Centre (Capitole, Saint-Aubin, Purpan) et Est (Bonnefoy, Roseraie, Balma). Délai moyen 30 min.">
+
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://lacleuniverselle.fr/zones.html">
+  <meta property="og:title" content="Zones d'intervention — La clé universElle">
+  <meta property="og:description"
+    content="Serrurerie et mécanique vélo à domicile, à vélo cargo, sur Toulouse Nord, Centre et Est. Quartiers desservis et carte d'intervention.">
+  <meta property="og:image" content="https://lacleuniverselle.fr/og-image.jpg">
+  <meta property="og:locale" content="fr_FR">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Zones d'intervention — La clé universElle">
+  <meta name="twitter:description"
+    content="Serrurerie et mécanique vélo à domicile, à vélo cargo, sur Toulouse Nord, Centre et Est.">
+  <meta name="twitter:image" content="https://lacleuniverselle.fr/og-image.jpg">
+
+  <link rel="canonical" href="https://lacleuniverselle.fr/zones.html">
+  <meta name="theme-color" content="#482664">
+  <meta name="robots" content="index, follow">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet"
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap">
+  <link rel="stylesheet" href="leaflet.css" />
+  <link rel="stylesheet" href="style.css" />
+  <link rel="icon" type="image/x-icon" href="favicon.ico">
+  <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
+  <link rel="manifest" href="site.webmanifest">
+  <script src="leaflet.js" defer></script>
+  <script src="script.js" defer></script>
+  <title>Zones d'intervention Toulouse Nord, Centre & Est | La clé universElle</title>
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebPage",
+    "url": "https://lacleuniverselle.fr/zones.html",
+    "name": "Zones d'intervention — La clé universElle",
+    "isPartOf": {
+      "@type": "WebSite",
+      "url": "https://lacleuniverselle.fr",
+      "name": "La clé universElle"
+    },
+    "about": {
+      "@type": "LocalBusiness",
+      "name": "La clé universElle",
+      "url": "https://lacleuniverselle.fr",
+      "areaServed": [
+        "Toulouse", "Toulouse Centre", "Toulouse Nord", "Toulouse Est", "L'Union", "Balma"
+      ]
+    }
+  }
+  </script>
+
+</head>
+
+<body>
+
+  <!-- NAV -->
+  <nav id="main-nav">
+    <button class="nav-logo" onclick="openLogoStory()" aria-label="Découvrir l'histoire du logo" type="button">
+      <div class="nav-logo-svg-wrap"><img src="LOGO_seulpunchy.svg" alt="Logo La clé universElle"
+          width="48" height="48" style="height:48px;width:auto;display:block;"></div>
+    </button>
+    <ul class="nav-links">
+      <li class="nav-dropdown">
+        <a href="index.html#services" class="nav-dropdown-toggle">Services <span class="nav-dropdown-arrow">▾</span></a>
+        <ul class="nav-dropdown-menu">
+          <li><a href="serrurerie.html">Serrurerie</a></li>
+          <li><a href="mecanique-velo.html">Mécanique vélo</a></li>
+        </ul>
+      </li>
+      <li><a href="index.html#zones">Zones</a></li>
+      <li><a href="index.html#concept">Le concept</a></li>
+      <li><a href="index.html#pourquoi">Pourquoi moi</a></li>
+      <li><a href="index.html#apropos">À propos</a></li>
+      <li><a href="index.html#contact">Contact</a></li>
+      <li><a href="actus.html">Actus</a></li>
+      <li><a href="index.html#faq">FAQ</a></li>
+    </ul>
+    <div style="display:flex; align-items:center; gap:0.6rem;">
+       <a class="nav-whatsapp" href="https://wa.me/33743990437" target="_blank" rel="noopener" aria-label="Contacter sur WhatsApp">
+    <svg viewBox="0 0 24 24" width="20" height="20" fill="white"><path d="M17.6 6.32A8.86 8.86 0 0 0 12.04 4C7.5 4 3.78 7.72 3.78 12.26c0 1.5.4 2.92 1.1 4.16L4 20l3.7-.97a8.84 8.84 0 0 0 4.32 1.1h.01c4.54 0 8.26-3.72 8.26-8.26 0-2.21-.86-4.29-2.69-5.55zM12.04 18.6a6.9 6.9 0 0 1-3.5-.96l-.25-.15-2.6.68.7-2.53-.17-.26a6.86 6.86 0 0 1-1.05-3.65c0-3.8 3.09-6.9 6.9-6.9 1.84 0 3.57.72 4.87 2.02a6.84 6.84 0 0 1 2.02 4.87c0 3.8-3.1 6.9-6.92 6.9zm3.78-5.17c-.21-.1-1.22-.6-1.41-.67-.19-.07-.32-.1-.46.1-.13.2-.52.66-.64.8-.12.13-.24.15-.45.05-1.22-.61-2.02-1.08-2.83-2.46-.21-.37.21-.34.61-1.14.07-.13.03-.25-.03-.36-.06-.1-.46-1.1-.63-1.51-.16-.4-.33-.34-.46-.35-.12-.01-.26-.01-.4-.01-.13 0-.35.05-.54.25-.19.2-.71.7-.71 1.71 0 1 .73 1.97.83 2.1.1.13 1.4 2.14 3.4 2.92 1.7.67 2.05.54 2.42.51.37-.03 1.22-.5 1.39-.99.18-.49.18-.91.13-1-.05-.1-.18-.15-.39-.25z"/></svg>
+  </a>
+      <button class="hamburger" id="hamburger-btn" aria-label="Menu" onclick="toggleMenu()">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+    <div class="mobile-menu" id="mobile-menu">
+      <div class="mobile-accordion">
+        <div class="mobile-accordion-row">
+          <a href="index.html#services" class="mobile-accordion-link" onclick="closeMenu()">Services</a>
+          <button class="mobile-accordion-toggle" aria-label="Sous-menu Services" onclick="toggleMobileAccordion(this)" type="button">
+            <span class="accordion-arrow">▾</span>
+          </button>
+        </div>
+        <div class="mobile-accordion-panel">
+          <a href="serrurerie.html">Serrurerie</a>
+          <a href="mecanique-velo.html">Mécanique vélo</a>
+        </div>
+      </div>
+      <a href="index.html#zones" onclick="closeMenu()">Zones</a>
+      <a href="index.html#concept" onclick="closeMenu()">Le concept</a>
+      <a href="index.html#pourquoi" onclick="closeMenu()">Pourquoi moi</a>
+      <a href="index.html#apropos" onclick="closeMenu()">À propos</a>
+      <a href="index.html#contact" onclick="closeMenu()">Contact</a>
+      <a href="actus.html" onclick="closeMenu()">Actus</a>
+      <a href="index.html#faq" onclick="closeMenu()">FAQ</a>
+    </div>
+  </nav>
+
+  <!-- ZONES — page dédiée -->
+  <div style="padding-top:1.5rem;">
+
+    <section id="zones" style="background:var(--blanc); padding:2rem 2.5rem;">
+      <div class="section-inner">
+        <span class="section-label">Où j'interviens</span>
+        <h1 style="margin-bottom:0.4rem; font-size:1.6rem; color:var(--violet); font-weight:800;">Toulouse Nord, Centre &amp; Est</h1>
+        <p style="font-size:0.92rem; color:var(--gris); line-height:1.75; max-width:640px; margin-bottom:1.8rem;">
+          Toutes mes interventions — serrurerie comme mécanique vélo — se font à domicile, à vélo cargo. Ce mode de déplacement me permet de circuler rapidement dans les rues étroites du centre-ville comme dans les quartiers résidentiels, avec un délai moyen d'intervention d'environ 30 minutes sur l'ensemble de ces secteurs.
+        </p>
+
+        <div style="display:grid; grid-template-columns:1fr 1.4fr; gap:2rem; align-items:start;">
+          <div>
+            <p
+              style="font-size:0.72rem; font-weight:700; text-transform:uppercase; letter-spacing:2px; color:var(--violet); margin-bottom:0.4rem;">
+              Toulouse Nord *</p>
+            <p style="font-size:0.82rem; color:var(--gris); line-height:2;">Minimes – Barrière de Paris &nbsp;·&nbsp;
+              Sept Deniers – Ginestous &nbsp;·&nbsp; Lalande – Grand Selve &nbsp;·&nbsp; Izards – Borderouge – Croix
+              Daurade</p>
+            <p style="font-size:0.78rem; color:var(--violet); font-style:italic; font-weight:700; margin-bottom:1rem;">*
+              L'Union</p>
+            <p
+              style="font-size:0.72rem; font-weight:700; text-transform:uppercase; letter-spacing:2px; color:var(--violet); margin-bottom:0.4rem;">
+              Toulouse Centre *</p>
+            <p style="font-size:0.82rem; color:var(--gris); line-height:2;">Capitole – Chalet – Saint-Aubin – Matabiau –
+              Saint-Étienne &nbsp;·&nbsp; Amidonniers – Caffarelli</p>
+            <p style="font-size:0.78rem; color:var(--violet); font-style:italic; font-weight:700; margin-bottom:1rem;">*
+              Arènes Romaines – Ancely – Purpan – Cartoucherie</p>
+            <p
+              style="font-size:0.72rem; font-weight:700; text-transform:uppercase; letter-spacing:2px; color:var(--violet); margin-bottom:0.4rem;">
+              Toulouse Est *</p>
+            <p style="font-size:0.82rem; color:var(--gris); line-height:2;">Bonnefoy – Roseraie – Gramont &nbsp;·&nbsp;
+              Jolimont – Soupetard – Bonhoure &nbsp;·&nbsp; Côte Pavée – Château de l'Hers – La Terrasse</p>
+            <p style="font-size:0.78rem; color:var(--violet); font-style:italic; font-weight:700; margin-bottom:0;">*
+              Balma</p>
+          </div>
+          <div>
+            <div id="map-zones"
+              style="border-radius:14px; overflow:hidden; border:1.5px solid var(--lilas-clair); box-shadow:0 4px 20px rgba(139,95,192,0.1); height:280px;">
+            </div>
+          </div>
+        </div>
+
+        <p style="font-size:0.85rem; color:var(--gris); line-height:1.75; margin-top:2rem;">
+          Une adresse en dehors de ce périmètre&nbsp;? Contactez-moi quand même : selon les disponibilités, une intervention hors zone reste parfois possible, avec un léger supplément de déplacement.
+        </p>
+
+        <div class="contact-btns-row" style="margin-top:1rem;">
+          <a class="contact-tel-btn" href="sms:+33743990437" aria-label="Envoyer un SMS">💬 SMS</a>
+          <a class="contact-tel-btn" href="tel:0743990437">📞 07.43.99.04.37</a>
+        </div>
+      </div>
+    </section>
+
+  </div>
+
+  <!-- FOOTER -->
+  <footer id="footer-main">
+    <p>© 2026 <span>"La clé universElle"</span> — Serrurerie &amp; Mécanique vélo</p>
+    <p style="margin-top:0.4rem;">Fait avec 🌸 et un vélo cargo · Toulouse, Occitanie</p>
+    <div class="footer-links">
+      <a href="index.html">← Retour au site</a>
+      <a href="index.html#mentions-legales">Mentions légales</a>
+      <a href="index.html#cgv">CGV</a>
+      <a href="javascript:void(0)" onclick="openPolitiqueConfidentialite()">Politique de confidentialité</a>
+    </div>
+  </footer>
+
+  <!-- OVERLAY HISTOIRE DU LOGO -->
+  <div class="logo-overlay" id="logo-overlay" onclick="closeLogoStory(event)">
+    <div class="logo-overlay-inner">
+      <div class="logo-overlay-logo"><img src="LOGO_seulpunchy.svg"
+          alt="Logo Elena La clé universElle"
+          width="72" height="72" style="height:72px;width:auto;display:block;"></div>
+      <button class="logo-overlay-close" onclick="closeLogoStory()" aria-label="Fermer">✕</button>
+      <h3>Pourquoi ce logo ?</h3>
+      <div>Ce logo définit mon amour pour les savoir-faire.</div><div> Un galet de dérailleur coupé en deux pour vous
+      partager mes deux passions. </div>
+              <br>Deux métiers qui semblent éloignés, mais qui révèlent la même philosophie : agir avec les mains,
+              résoudre des problèmes concrets, et voir le sourire des gens quand tout remarche.<br>
+              <br>
+               Ce même galet — sa forme et sa couleur — devrait vous rappeler… la violette! La fleur de la ville de
+               Toulouse.
+              <br>
+      La maison, avec un peu d'imagination, symbolise aussi une clé plate (de 15 plus précisément&nbsp;:P) très souvent
+      utilisée dans le vélo. La serrure, ben, pour vous faire sentir en sécurité.
+      <br><br>Et voici les clés de l'univers : <em>Elle</em>.
+    </div>
+  </div>
+
+  <!-- MODALE : POLITIQUE DE CONFIDENTIALITÉ -->
+  <div class="politique-overlay" id="politique-overlay" onclick="closePolitiqueConfidentialite(event)" aria-modal="true" role="dialog" aria-label="Politique de confidentialité">
+    <div class="politique-inner">
+      <button class="politique-close" onclick="closePolitiqueConfidentialite()" aria-label="Fermer">✕</button>
+      <div class="politique-content">
+        <h2>Politique de Confidentialité</h2>
+        <p class="politique-date">Dernière mise à jour : juin 2026</p>
+        <p>La présente politique vous informe sur la façon dont <strong>La clé universElle</strong> collecte, utilise et protège vos données personnelles, conformément au <strong>RGPD</strong>.</p>
+        <h3>1. Responsable du traitement</h3>
+        <p><strong>La clé universElle</strong> — Elena Righettini EI<br>Toulouse, France<br>Email : <a href="mailto:contact@lacleuniverselle.fr">contact@lacleuniverselle.fr</a></p>
+        <h3>2. Données collectées</h3>
+        <p>Nom, prénom, email, téléphone, adresse postale, description de votre situation. Aucune donnée bancaire ni sensible n'est demandée.</p>
+        <h3>3. Finalité</h3>
+        <p>Vos données sont utilisées exclusivement pour traiter votre demande et vous contacter (email ou WhatsApp Business). Elles ne sont jamais transmises à des tiers à des fins commerciales.</p>
+        <h3>4. Service tiers — Web3Forms</h3>
+        <p>Le formulaire transite via <strong>Web3Forms</strong>, qui achemine vos données vers notre email professionnel sans les conserver au-delà de 30 jours.</p>
+        <h3>5. Durée de conservation</h3>
+        <p>Vos données sont conservées le temps nécessaire à votre demande, et au maximum <strong>3 ans</strong> après notre dernier échange.</p>
+        <h3>6. Sécurité</h3>
+        <p>Les échanges sont sécurisés par <strong>HTTPS</strong>. Les échanges WhatsApp bénéficient du chiffrement de bout en bout.</p>
+        <h3>7. Vos droits (RGPD)</h3>
+        <p>Accès, rectification, effacement, opposition, portabilité. Pour exercer vos droits : <a href="mailto:contact@lacleuniverselle.fr">contact@lacleuniverselle.fr</a> — réponse sous 30 jours. Recours possible auprès de la <a href="https://www.cnil.fr" target="_blank" rel="noopener">CNIL</a>.</p>
+        <h3>8. Cookies</h3>
+        <p>Aucun cookie de traçage publicitaire n'est déposé sur ce site.</p>
+      </div>
+    </div>
+  </div>
+
+</body>
+
+</html>
