@@ -766,6 +766,19 @@ table.tarifs td:last-child {
     border-top: 1px solid var(--lilas-clair)
 }
 
+.tarifs-note-legal {
+    margin-top: 0.5rem;
+    font-size: .40rem;
+    color: var(--gris);
+    font-style: italic;
+    line-height: 1.5;
+}
+
+.tarifs-note-legal a {
+    color: var(--violet);
+    font-weight: 600;
+}
+
 .na-tag {
     color: var(--gris);
     font-weight: 400;

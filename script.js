@@ -2,7 +2,7 @@
 // NAVIGATION & PAGES
 // =============================================
 
-const allPages = ['site-main', 'page-mentions-legales', 'page-cgv', 'page-tarifs-pack'];
+const allPages = ['site-main', 'page-tarifs-pack'];
 
 function showPage(page, anchor) {
   allPages.forEach(id => {
@@ -43,7 +43,7 @@ function showPage(page, anchor) {
 // correspond à aucune sous-page (ex: #services), showPage() gère déjà ce cas.
 document.addEventListener('DOMContentLoaded', function () {
   var hash = window.location.hash.replace('#', '');
-  var sousPages = ['mentions-legales', 'cgv', 'tarifs-pack'];
+  var sousPages = ['tarifs-pack'];
   if (sousPages.indexOf(hash) !== -1) {
     showPage(hash);
   }
@@ -253,7 +253,7 @@ function setupInternalLinks() {
         if (mainSite) {
           mainSite.style.display = 'block';
         }
-        const pages = ['page-mentions-legales', 'page-cgv', 'page-tarifs-serrurerie', 'page-tarifs-velo', 'page-tarifs-pack'];
+        const pages = ['page-tarifs-serrurerie', 'page-tarifs-velo', 'page-tarifs-pack'];
         pages.forEach(id => {
           const el = document.getElementById(id);
           if (el) el.classList.remove('active');
