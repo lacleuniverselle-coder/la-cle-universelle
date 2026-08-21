@@ -570,12 +570,12 @@ section {
 .card h3,
 h2,
 h3 {
-    font-weight: 700;
+    font-weight: 500;
     color: var(--violet)
 }
 
 h2 {
-    font-size: clamp(1.4rem, 2.1vw, 2rem);
+    font-size: clamp(1rem, 2.1vw, 2rem);
     margin-bottom: .7rem;
     letter-spacing: -.5px;
     line-height: 1.2
@@ -583,15 +583,15 @@ h2 {
 
 .card h3,
 h3 {
-    font-size: 1.2rem
+    font-size: 1rem
 }
 
 .section-desc {
     color: var(--blanc);
     max-width: 540px;
-    font-size: .95rem;
+    font-size: .85rem;
     line-height: 1.65;
-    margin-bottom: 0
+    margin-bottom: 2mm
 }
 
 #concept,
@@ -631,7 +631,7 @@ h3 {
     align-items: center;
     justify-content: center;
     gap: 10px;
-    margin-bottom: 1rem
+    margin-bottom: 0.5rem
 }
 
 .card-icon {
@@ -695,11 +695,13 @@ h3 {
 
 @media (min-width:861px) {
     .card-title-row {
-        margin-bottom: 1.8rem
+         text-align: center;
+        margin-bottom: 1rem
     }
 
     .card p {
-        flex: none;
+        flex: content;
+        text-align: left;
         min-height: 0
     }
 
@@ -767,6 +769,14 @@ table.tarifs td:last-child {
 }
 
 .page-content p.tarifs-note-legal {
+    margin-top: 0.5rem;
+    font-size: .6rem;
+    color: var(--gris);
+    font-style: italic;
+    line-height: 1;
+}
+
+.p.tarifs-note-legal {
     margin-top: 0.5rem;
     font-size: .6rem;
     color: var(--gris);
@@ -851,20 +861,24 @@ table.tarifs td:last-child {
 #concept .section-desc,
 #concept h2,
 #contact h2 {
+       font-size: clamp(1.4rem, 2.1vw, 2rem);
+    margin-bottom: .5rem;
+    letter-spacing: -.5px;
+    line-height: 1.2;
     color: var(--blanc)
 }
 
 .concept-grid {
     display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 1rem;
-    margin-top: 1.5rem
+    grid-template-columns: repeat(1, 4fr);
+    gap: 0.6rem;
+    margin-top: 1rem
 }
 
 .concept-item {
     background: var(--blanc);
     border-radius: 12px;
-    padding: 1.1rem;
+    padding: 1rem;
     border-left: 4px solid var(--lilas)
 }
 
@@ -2478,3 +2492,203 @@ table.tarifs td.prix-semaine {
     padding: .5rem .2rem 1rem;
     line-height: 1.6
 }
+/* === PRESTATIONS SERRURERIE (page explicative) — version sobre/pro === */
+.prestations-main-col {
+    max-width: 960px;
+    margin: 0 auto;
+    padding: 1.2rem 1.2rem 4rem;
+}
+
+.prestations-main-col h1 {
+    margin-top: 0.2rem;
+    font-size: 1.6rem;
+}
+
+.tarifs-main-col h1 {
+    font-size: 1.6rem;
+}
+
+/* cette page a un fond blanc : le style par défaut de .section-desc/.section-label
+   (pensé pour un fond violet) est illisible ici, on le corrige localement */
+.prestations-main-col .section-label {
+    color: var(--lilas);
+}
+
+.prestations-main-col .section-desc {
+    color: var(--gris);
+}
+
+.prest-cat-title {
+    margin-top: 1.2rem;
+    margin-bottom: 0.7rem;
+    color: var(--gris);
+    font-size: 1.05rem;
+    letter-spacing: -.2px;
+    display: flex;
+    align-items: center;
+    gap: .55rem;
+}
+
+.prest-comment {
+    margin-top: 1.2rem;
+    margin-bottom: 1rem;
+    color: var(--gris);
+   
+    letter-spacing: -.2px;
+    text-align: center;
+    gap: .55rem;
+}
+
+.prestations-main-col > .prest-cat-title:first-of-type {
+    margin-top: 0.4rem;
+}
+
+/* icône de catégorie : discrète, pas "clipart" */
+.prest-cat-title::before {
+    
+    display: inline-block;
+    width: 4px;
+    height: 1.1rem;
+    background: var(--gris);
+    border-radius: 2px;
+}
+
+.prest-grid {
+    grid-template-columns: 1fr;
+    max-width: none;
+    width: 100%;
+    margin-left: 1.9rem;
+    margin-right: 0;
+    gap: 12px;
+    margin-top: 0.5rem;
+}
+
+.prest-card {
+    
+    text-decoration: none;
+    cursor: pointer;
+    background: var(--blanc);
+    border: 1px solid #e4dcee;
+    border-radius: 10px;
+    padding: 0.2rem;
+    box-shadow: 0 1px 3px rgba(47, 26, 72, .05);
+    transition: border-color .2s, box-shadow .2s, transform .15s;
+}
+
+.prest-card:hover {
+    border-color: var(--lilas);
+    box-shadow: 0 4px 16px rgba(47, 26, 72, .12);
+    transform: translateY(-2px);
+}
+
+/* icônes desaturées, plus discrètes qu'un emoji brut */
+.prest-card .card-icon {
+    font-size: 1.1em;
+    filter: grayscale(.55) opacity(.8);
+}
+
+.prest-card .card-title-row {
+    margin-bottom: .6rem;
+    justify-content: flex-start;
+    gap: 8px;
+}
+
+/* titre net et sombre, texte plus neutre : contraste clair */
+.prest-card h3 {
+    font-size: .95rem;
+    font-weight: 700;
+    color: var(--gris);
+    letter-spacing: -.1px;
+}
+
+.prest-card p {
+    font-size: .82rem;
+    color: #6b6577;
+    line-height: 1.55;
+    min-height: 2.6rem;
+    margin-bottom: .3rem;
+    flex: 1;
+}
+
+.prest-price {
+    color: #6b6577;
+    font-weight: 600;
+    font-size: .78rem;
+    letter-spacing: .2px;
+    border-top: 1px solid #ece6f3;
+    padding-top: .6rem;
+    margin-top: auto;
+}
+
+.prest-steps {
+    margin-top: 1.2rem;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 14px;
+      
+}
+
+.prest-steps .card {
+    text-decoration: none;
+    background: var(--blanc);
+    border: 1px solid #e4dcee;
+    border-radius: 10px;
+    padding: 1rem;
+    box-shadow: 0 1px 3px rgba(47, 26, 72, .05);
+    transition: border-color .2s, box-shadow .2s, transform .15s;
+    text-align: center;
+    position: relative;
+}
+.prest-steps .card-icon {
+    position:absolute;
+     top: -18px;
+    left: middle;
+    width: 2.3rem;
+    height: 2.3rem;
+    font-size: 1rem;
+    background: var(--blanc);
+    border: 1px solid #e5c9ee;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 2px 6px rgba(47, 26, 72, .15);
+}
+
+.prest-steps .card:hover {
+    border-color: var(--lilas);
+    box-shadow: 0 4px 16px rgba(47, 26, 72, .12);
+    transform: translateY(-2px);
+}
+
+.prest-steps .card-title-row {
+    justify-content: center;
+}
+
+.prest-steps .card p {
+        text-align: center;
+    color: #6b6577;
+}
+
+@media (max-width: 700px) {
+    .prest-steps {
+        grid-template-columns: 1fr;
+    }
+}
+
+.prest-cta {
+    display: inline-block;
+    margin-top: 2.5rem;
+    border-top: none;
+    background: var(--gris);
+    color: var(--blanc);
+    padding: 0.8rem 1.4rem;
+    border-radius: 8px;
+    font-weight: 600;
+}
+
+.prest-cta:hover {
+    color: var(--blanc);
+    opacity: 0.9;
+}
+

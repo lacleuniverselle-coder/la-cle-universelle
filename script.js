@@ -337,6 +337,21 @@ document.addEventListener('DOMContentLoaded', function () {
     });
   });
 
+  // Ouvre l'accordéon correspondant à l'ancre de l'URL (venant de prestations-serrurerie.html)
+  var ancreTarif = window.location.hash.replace('#', '');
+  var btnAncre = document.getElementById(ancreTarif);
+  if (btnAncre && btnAncre.classList.contains('tarif-accordeon')) {
+    document.querySelectorAll('.tarif-accordeon').forEach(function (b) {
+      var p = b.nextElementSibling;
+      b.classList.remove('ouvert');
+      if (p) p.classList.remove('ouvert');
+    });
+    btnAncre.classList.add('ouvert');
+    var panelAncre = btnAncre.nextElementSibling;
+    if (panelAncre) panelAncre.classList.add('ouvert');
+    setTimeout(function () { btnAncre.scrollIntoView({ behavior: 'smooth', block: 'start' }); }, 50);
+  }
+
   // Toggle prix — serrurerie
   var toggleSemSerr  = document.getElementById('toggle-sem-serr');
   var toggleNuitSerr = document.getElementById('toggle-nuit-serr');
