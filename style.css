@@ -360,7 +360,7 @@ table.tarifs tr:last-child td {
 
 .btn-primary {
     display: inline-block;
-    background: #8d68b1;
+    background: #61388a;
     color: var(--blanc);
     padding: clamp(.5rem, 2vw, .6rem) clamp(.7rem, 3vw, .9rem);
     border-radius: 10px;
@@ -371,7 +371,7 @@ table.tarifs tr:last-child td {
     cursor: pointer;
     border: 0;
     transition: .2s, transform .1s, box-shadow .2s;
-    animation: pulse 1.4s ease-in-out infinite;
+    animation: none;
     box-shadow: 0 8px 20px rgba(72, 38, 100, .08)
 }
 
@@ -1361,7 +1361,7 @@ footer span {
     .hero-logo-wrap svg:focus #roue,
     .hero-logo-wrap svg:active #roue,
     #roue.roue-replay {
-        animation: normal;
+        animation: auto;
     }
 }
 
