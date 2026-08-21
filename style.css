@@ -1341,17 +1341,17 @@ footer span {
 
 #roue {
     transform-origin: 50% 50%;
-    animation: roue-rotation 3.6s ease-out
+    animation: roue-rotation 3.5s ease-out
 }
 
 .hero-logo-wrap svg:hover #roue,
 .hero-logo-wrap svg:focus #roue,
 .hero-logo-wrap svg:active #roue {
-    animation: roue-rotation-hover 3.4s ease-out
+    animation: roue-rotation-hover 3.5s ease-out
 }
 
 #roue.roue-replay {
-    animation: roue-rotation-hover 3.4s ease-out
+    animation: roue-rotation-hover 3.5s ease-out
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -2705,7 +2705,7 @@ table.tarifs td.prix-semaine {
 
 .marquee-track {
     display: inline-flex;
-    animation: marquee-scroll 43s linear infinite;
+    animation: marquee-scroll 40s linear infinite;
 }
 
 .marquee-content {
@@ -2745,7 +2745,7 @@ table.tarifs td.prix-semaine {
         font-size: 0.7rem;
     }
     .marquee-track {
-        animation-duration: 20s;
+        animation-duration: 25s;
     }
     .marquee-item::after {
         padding: 0 1rem;
