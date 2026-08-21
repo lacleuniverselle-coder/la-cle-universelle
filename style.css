@@ -1361,7 +1361,7 @@ footer span {
     .hero-logo-wrap svg:focus #roue,
     .hero-logo-wrap svg:active #roue,
     #roue.roue-replay {
-        animation: auto;
+        animation: infinite;
     }
 }
 
@@ -2754,7 +2754,7 @@ table.tarifs td.prix-semaine {
 
 @media (prefers-reduced-motion:reduce) {
     .marquee-track {
-        animation: none;
+        animation: infinite;
     }
     .marquee-band {
         overflow-x: auto;
