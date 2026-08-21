@@ -2705,7 +2705,7 @@ table.tarifs td.prix-semaine {
 
 .marquee-track {
     display: inline-flex;
-    animation: marquee-scroll 28s linear infinite;
+    animation: marquee-scroll 43s linear infinite;
 }
 
 .marquee-content {
@@ -2745,14 +2745,14 @@ table.tarifs td.prix-semaine {
         font-size: 0.7rem;
     }
     .marquee-track {
-        animation-duration: 15s;
+        animation-duration: 20s;
     }
     .marquee-item::after {
         padding: 0 1rem;
     }
 }
 
-@media (prefers-reduced-motion:no-preference) {
+@media (prefers-reduced-motion:reduce) {
     .marquee-track {
         animation: none;
     }
