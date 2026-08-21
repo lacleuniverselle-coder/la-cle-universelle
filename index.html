@@ -632,6 +632,9 @@
             <span class="field-error" id="err-rgpd"></span>
           </div>
 
+          <!-- Anti-spam hCaptcha (Web3Forms) -->
+          <div class="h-captcha" data-captcha="true"></div>
+
           <!-- Bouton + message retour -->
           <div id="form-feedback" class="form-feedback" aria-live="polite"></div>
           <button type="submit" class="btn-send" id="btn-submit">Envoyer ma demande</button>
@@ -771,6 +774,9 @@
       observer.observe(logoWrap);
     });
   </script>
+
+  <!-- Web3Forms - requis pour hCaptcha -->
+  <script src="https://web3forms.com/client/script.js" async defer></script>
 
 </body>
 
