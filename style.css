@@ -1361,7 +1361,7 @@ footer span {
     .hero-logo-wrap svg:focus #roue,
     .hero-logo-wrap svg:active #roue,
     #roue.roue-replay {
-        animation: none
+        animation:normal
     }
 }
 
@@ -2705,14 +2705,14 @@ table.tarifs td.prix-semaine {
 
 .marquee-track {
     display: inline-flex;
-    animation: marquee-scroll 24s linear infinite;
+    animation: marquee-scroll 28s linear infinite;
 }
 
 .marquee-content {
     display: inline-block;
     font-size: 0.85rem;
     font-weight: 700;
-    letter-spacing: 0.02em;
+    letter-spacing: 0.03em;
     color: var(--texte);
     white-space: nowrap;
 }
@@ -2752,9 +2752,9 @@ table.tarifs td.prix-semaine {
     }
 }
 
-@media (prefers-reduced-motion: reduce) {
+@media (prefers-reduced-motion:no-preference) {
     .marquee-track {
-        animation: none;
+        animation:infinite;
     }
     .marquee-band {
         overflow-x: auto;
