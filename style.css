@@ -2692,3 +2692,71 @@ table.tarifs td.prix-semaine {
     opacity: 0.9;
 }
 
+
+/* ===== BANDEAU DÉFILANT (marquee) ===== */
+.marquee-band {
+    -webkit-mask-image: linear-gradient(to right, transparent 0, #000 8%, #000 92%, transparent 100%);
+    mask-image: linear-gradient(to right, transparent 0, #000 8%, #000 92%, transparent 100%);
+    background: #e7bb2b;
+    overflow: hidden;
+    white-space: nowrap;
+    padding: 0.55rem 0;
+}
+
+.marquee-track {
+    display: inline-flex;
+    animation: marquee-scroll 24s linear infinite;
+}
+
+.marquee-content {
+    display: inline-block;
+    font-size: 0.85rem;
+    font-weight: 700;
+    letter-spacing: 0.02em;
+    color: var(--texte);
+    white-space: nowrap;
+}
+
+.marquee-item {
+    display: inline-block;
+}
+
+.marquee-item::after {
+    content: "•";
+    padding: 0 1.5rem;
+    opacity: 0.6;
+    font-size: 1.2em;
+}
+
+@keyframes marquee-scroll {
+    from { transform: translateX(0); }
+    to { transform: translateX(-50%); }
+}
+
+.marquee-band:hover .marquee-track {
+    animation-play-state: paused;
+}
+
+@media (max-width:640px) {
+    .marquee-band {
+        padding: 0.4rem 0;
+    }
+    .marquee-content {
+        font-size: 0.7rem;
+    }
+    .marquee-track {
+        animation-duration: 15s;
+    }
+    .marquee-item::after {
+        padding: 0 1rem;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .marquee-track {
+        animation: none;
+    }
+    .marquee-band {
+        overflow-x: auto;
+    }
+}
