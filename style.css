@@ -2754,7 +2754,7 @@ table.tarifs td.prix-semaine {
 
 @media (prefers-reduced-motion:no-preference) {
     .marquee-track {
-        animation: infinite;
+        animation: none;
     }
     .marquee-band {
         overflow-x: auto;
