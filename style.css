@@ -371,7 +371,7 @@ table.tarifs tr:last-child td {
     cursor: pointer;
     border: 0;
     transition: .2s, transform .1s, box-shadow .2s;
-    animation: pulse 1.3s ease-in-out infinite;
+    animation: pulse 1.4s ease-in-out infinite;
     box-shadow: 0 8px 20px rgba(72, 38, 100, .08)
 }
 
@@ -1341,7 +1341,7 @@ footer span {
 
 #roue {
     transform-origin: 50% 50%;
-    animation: roue-rotation 3.4s ease-out
+    animation: roue-rotation 3.6s ease-out
 }
 
 .hero-logo-wrap svg:hover #roue,
