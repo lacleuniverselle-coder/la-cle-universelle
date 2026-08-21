@@ -2557,7 +2557,7 @@ table.tarifs td.prix-semaine {
     grid-template-columns: 1fr;
     max-width: none;
     width: 100%;
-    margin-left: 1.9rem;
+    margin-left: 1.5rem;
     margin-right: 0;
     gap: 12px;
     margin-top: 0.5rem;
