@@ -2389,7 +2389,7 @@ table.tarifs td.prix-semaine {
     text-decoration: none;
     border-radius: 50px;
     font-weight: 700;
-    font-size: .95rem;
+    font-size: .90rem;
     box-shadow: 0 2px 10px rgba(36, 18, 56, .25);
     transition: .2s, transform .1s, box-shadow .2s
 }
