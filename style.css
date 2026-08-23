@@ -639,7 +639,8 @@ h3 {
     align-items: center;
     justify-content: center;
     gap: 10px;
-    margin-bottom: 0.5rem
+    margin-bottom: 0.5rem;
+  
 }
 
 .card-icon {
@@ -650,13 +651,15 @@ h3 {
     flex-shrink: 0;
     display: inline-flex;
     align-items: center;
-    justify-content: center
+    justify-content: center;
+     margin-left: 0.5rem;
 }
 
 .card h3 {
     font-size: 1rem;
     font-weight: 800;
     margin-bottom: 0
+
 }
 
 .card p {
@@ -665,8 +668,9 @@ h3 {
     line-height: 1.65;
     flex: 1;
     min-height: 5.5rem;
-    margin-bottom: 1.5rem
-}
+    margin-bottom: 1.5rem;
+     margin-left: 1rem;
+     }
 
 .btn-tarifs,
 .card-detail {
@@ -2616,7 +2620,7 @@ table.tarifs td.prix-semaine {
 .prest-card .card-title-row {
     margin-bottom: .6rem;
     justify-content: flex-start;
-    gap: 8px;
+    gap: 6px;
 }
 
 /* titre net et sombre, texte plus neutre : contraste clair */
@@ -2632,8 +2636,9 @@ table.tarifs td.prix-semaine {
     color: #6b6577;
     line-height: 1.55;
     min-height: 2.6rem;
-    margin-bottom: .3rem;
+    margin-bottom: .2rem;
     flex: 1;
+     margin-left: 2.5rem;
 }
 
 .prest-price {
