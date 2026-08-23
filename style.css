@@ -365,8 +365,8 @@ table.tarifs tr:last-child td {
     padding: clamp(.5rem, 2vw, .6rem) clamp(.7rem, 3vw, .9rem);
     border-radius: 10px;
     text-decoration: none;
-    font-weight: 600;
-    font-size: clamp(.85rem, 3vw, 1rem);
+    font-weight: 700;
+    font-size: clamp(.95rem, 3vw, 1rem);
     white-space: nowrap;
     cursor: pointer;
     border: 0;
@@ -2399,7 +2399,7 @@ table.tarifs td.prix-semaine {
     color: var(--blanc)
 }
 
-.contact-btns-row {
+.contact-btns-rowcont {
     display: flex;
     align-items: center;
     gap: .8rem;
@@ -2419,8 +2419,12 @@ table.tarifs td.prix-semaine {
     margin: 0 2px
 }
 
-.contact-btns-row .contact-tel-btn {
-    margin: 0
+.contact-btns-row {
+    display: flex;
+    align-items: center;
+    justify-content: center;   /* ← ajout : centre horizontalement */
+    gap: .9rem;
+    margin: .8rem 0 .5rem
 }
 
 .faq-serrurerie,
