@@ -2523,6 +2523,17 @@ table.tarifs td.prix-semaine {
     line-height: 1.6
 }
 /* === PRESTATIONS SERRURERIE (page explicative) — version sobre/pro === */
+.prest-cat-title 
+{ 
+    display: flex; align-items: center; gap: 8px;
+ }
+
+.prest-icon { 
+    display: inline-block; 
+    vertical-align: middle; 
+    flex-shrink: 0; 
+     width: 40px; height: 45px;
+}
 .prestations-main-col {
     max-width: 960px;
     margin: 0 auto;
@@ -2591,6 +2602,8 @@ table.tarifs td.prix-semaine {
     margin-right: 0;
     gap: 12px;
     margin-top: 0.5rem;
+     margin-left: 45px;
+    width: calc(100% - 45px);
 }
 
 .prest-card {
@@ -2613,7 +2626,8 @@ table.tarifs td.prix-semaine {
 
 /* icônes desaturées, plus discrètes qu'un emoji brut */
 .prest-card .card-icon {
-    font-size: 1.1em;
+    
+    font-size: 2em;
     filter: grayscale(.55) opacity(.8);
 }
 
@@ -2629,6 +2643,7 @@ table.tarifs td.prix-semaine {
     font-weight: 700;
     color: var(--gris);
     letter-spacing: -.1px;
+  margin-left: .2rem;
 }
 
 .prest-card p {
@@ -2637,8 +2652,8 @@ table.tarifs td.prix-semaine {
     line-height: 1.55;
     min-height: 2.6rem;
     margin-bottom: .2rem;
-    flex: 1;
-     margin-left: 2.5rem;
+    flex: 1; margin-left: .2rem;
+    
 }
 
 .prest-price {
