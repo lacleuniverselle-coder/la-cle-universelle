@@ -397,6 +397,22 @@ table.tarifs tr:last-child td {
     background: #4a2366;
     box-shadow: 0 8px 28px rgba(72, 38, 100, .45)
 }
+.card-links-stack {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+  margin-left: 2rem;
+}
+
+.card-links-stack a:first-child {
+  color: #482664; /* violet foncé */
+  padding-bottom: 0.6rem;
+  border-bottom: 1px solid rgba(72,38,100,0.15);
+}
+
+.card-links-stack a:last-child {
+  color: #e7bb2b; /* gold */
+}
 
 .hero-line1 {
     font-family: "Inter", sans-serif;
@@ -1483,7 +1499,12 @@ footer span {
     h2 {
         font-size: clamp(1.2rem, 2vw, 1.6rem)
     }
+   
+  .card-links-stack {
+    margin-left: 0.5rem;
+  }
 }
+
 
 @media (max-width:360px) {
     .hero-logo-wrap svg {
