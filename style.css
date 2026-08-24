@@ -1945,7 +1945,8 @@ table.tarifs td.prix-semaine {
 
 .tarif-legende-bandeau {
     gap: .35rem .6rem;
-    background: var(--lilas-clair);
+   background: #ffffff;
+    border: 1px solid var(--lilas);
     color: var(--violet);
     font-weight: 600;
     padding: .5rem .8rem;
