@@ -399,15 +399,19 @@ table.tarifs tr:last-child td {
 }
 .card-links-stack {
   display: flex;
-  flex-direction: column;
-  gap: 0.6rem;
+  flex-direction: row;
+  gap: 1.2rem;
   margin-left: 2rem;
+}
+
+.card-links-stack a {
+  flex: 1;
 }
 
 .card-links-stack a:first-child {
   color: #482664; /* violet foncé */
-  padding-bottom: 0.6rem;
-  border-bottom: 1px solid rgba(72,38,100,0.15);
+  padding-right: 1.2rem;
+  border-right: 1px solid rgba(72,38,100,0.15);
 }
 
 .card-links-stack a:last-child {
@@ -618,6 +622,16 @@ h3 {
     margin-right: auto
 }
 
+@media (min-width:640px) {
+    .services-grid {
+        grid-template-columns: 1fr 1fr
+    }
+
+    .card-serrurerie-main {
+        grid-column: 1 / -1
+    }
+}
+
 .card {
     border: 1.5px solid var(--violet);
     border-radius: 14px;
@@ -674,6 +688,7 @@ h3 {
 
 .btn-tarifs,
 .card-detail {
+     text-align: center;
     margin-top: auto;
     border-top: 1px solid var(--lilas-clair);
     font-weight: 600
@@ -683,6 +698,61 @@ h3 {
     padding-top: 1.3rem;
     font-size: .8rem;
     color: var(--gris)
+}
+
+.card-serrurerie-main {
+    padding: 1.8rem
+}
+
+.card-serrurerie-main .card-icon {
+    font-size: 1.9em
+}
+
+.card-serrurerie-main h3 {
+    font-size: 1.3rem
+}
+
+.card-serrurerie-main p {
+    font-size: 0.9rem
+}
+
+.card-serrurerie-main .card-detail {
+      text-align: center;
+    font-size: .88rem
+}
+
+.card-secondary {
+    background: rgba(255, 255, 255, .04);
+    border: 1.5px solid var(--lilas-clair)
+}
+
+.card-secondary h3,
+.card-secondary p,
+.card-secondary .card-detail,
+.card-secondary .btn-tarifs {
+     text-align: center;
+    color: var(--blanc)
+}
+
+.card-secondary .card-icon {
+    font-size: 1.05em
+}
+
+.card-secondary h3 {
+    font-size: .85rem
+}
+
+.card-secondary p {
+    font-size: .82rem
+}
+
+.card-secondary .card-detail,
+.card-secondary .btn-tarifs {
+    border-top: 1px solid rgba(255, 255, 255, .3)
+}
+
+.card-secondary .btn-tarifs:hover {
+    color: var(--lilas-pale)
 }
 
 .btn-tarifs {
@@ -1278,15 +1348,15 @@ footer span {
 }
 
 .hero-logo-wrap {
-    margin: 0 auto .8rem;
-    padding: .7rem .7rem .3rem;
+    margin: 0 auto .15rem;
+    padding: .7rem .7rem 0;
     overflow: hidden;
     max-width: 100%;
     width: 100%
 }
 
 .hero-logo-wrap svg {
-    height: 190px;
+    height: 230px;
     width: auto;
     max-width: 100%;
     overflow: hidden
@@ -1313,6 +1383,10 @@ footer span {
 #services h2,
 .apropos-text p {
     color: var(--blanc)
+}
+
+#services .section-desc {
+    max-width: 700px
 }
 
 #apropos .apropos-text strong {
@@ -1443,7 +1517,7 @@ footer span {
     }
 
     .hero-logo-wrap svg {
-    height: 190px;
+    height: 230px;
     width: auto;
     max-width: 100%;
     overflow: hidden
@@ -1481,7 +1555,7 @@ footer span {
     }
 
     .hero-logo-wrap svg {
-        height: 130px;
+        height: 160px;
         width: auto;
         max-width: 100%;
         display: block;
@@ -1512,7 +1586,7 @@ footer span {
 
 @media (max-width:360px) {
     .hero-logo-wrap svg {
-        height: 130px;
+        height: 150px;
         width: auto;
         max-width: 100%;
         display: block;
