@@ -2260,7 +2260,7 @@ table.tarifs td.prix-semaine {
     background: var(white);
     background-size: auto;
     border: 0;
-    font-size: .8rem;
+    font-size: .7rem;
     font-family: "Inter", sans-serif;
     text-decoration: none;
     margin-top: 5mm;
@@ -2269,8 +2269,8 @@ table.tarifs td.prix-semaine {
 }
 
 .gbp-badge {
-    width: 22px;
-    height: 22px;
+    width: 25px;
+    height: 25px;
     border-radius: 50%;
     background: var(--blanc);
     flex-shrink: 0;
@@ -2279,7 +2279,7 @@ table.tarifs td.prix-semaine {
 
 .gbp-link:hover {
     background: linear-gradient(90deg, var(--lilas)0, var(--violet) 50%, var(--lilas) 100%);
-    background-size: 200%auto;
+    background-size: auto;
     animation: violet-shimmer 2s linear infinite;
     transform: scale(1.04) translateY(-2px);
     box-shadow: 0 6px 16px rgba(72, 38, 100, .35);
@@ -2880,4 +2880,21 @@ table.tarifs td.prix-semaine {
     .marquee-band {
         overflow-x: auto;
     }
+}
+
+/* === Widget google === */
+
+.elfsight-app-f77472b4-ad9b-4e1a-95d0-6b09e7424665 {
+  transform: scale(0.8);
+  transform-origin: top center;
+
+  margin: 0 auto;
+  margin-bottom: -5rem;
+}
+
+@media (max-width: 768px) {
+  .elfsight-app-f77472b4-ad9b-4e1a-95d0-6b09e7424665 {
+    transform: scale(0.85);
+    transform-origin: top center;
+  }
 }
