@@ -2240,7 +2240,6 @@ table.tarifs td.prix-semaine {
     line-height: 1.4
 }
 
-.gbp-link,
 .politique-content h3 {
     font-weight: 700;
     color: var(--violet)
@@ -2255,16 +2254,16 @@ table.tarifs td.prix-semaine {
 
 .gbp-link {
     gap: .55rem;
-    width: 100%;
+    width: 50%;
     padding: .55rem 1rem;
     border-radius: 999px;
-    background: var(--lilas-clair);
-    background-size: 200%auto;
+    background: var(white);
+    background-size: auto;
     border: 0;
     font-size: .8rem;
     font-family: "Inter", sans-serif;
     text-decoration: none;
-    transition: .2s, transform .1s, box-shadow .2s;
+    margin-top: 5mm;
     box-sizing: border-box;
     cursor: pointer
 }
