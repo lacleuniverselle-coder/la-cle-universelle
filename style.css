@@ -1333,7 +1333,7 @@ footer span {
 }
 
 .hero-logo-wrap svg {
-    height: 130px;
+    height: 120px;
     width: auto;
     display: block
 }
@@ -1357,7 +1357,7 @@ footer span {
 }
 
 .hero-logo-wrap svg {
-    height: 230px;
+    height: 220px;
     width: auto;
     max-width: 100%;
     overflow: hidden
@@ -1518,7 +1518,7 @@ footer span {
     }
 
     .hero-logo-wrap svg {
-    height: 230px;
+    height: 220px;
     width: auto;
     max-width: 100%;
     overflow: hidden
@@ -1556,7 +1556,7 @@ footer span {
     }
 
     .hero-logo-wrap svg {
-        height: 160px;
+        height: 150px;
         width: auto;
         max-width: 100%;
         display: block;
@@ -1587,7 +1587,7 @@ footer span {
 
 @media (max-width:360px) {
     .hero-logo-wrap svg {
-        height: 150px;
+        height: 140px;
         width: auto;
         max-width: 100%;
         display: block;
@@ -2896,5 +2896,29 @@ table.tarifs td.prix-semaine {
   .elfsight-app-f77472b4-ad9b-4e1a-95d0-6b09e7424665 {
     transform: scale(0.85);
     transform-origin: top center;
+  }
+}
+
+.dispo-bandeau {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.3rem;
+  margin-top: 0.2rem;
+  margin-bottom: -0.9rem;
+  flex-wrap: wrap;
+}
+
+.dispo-bandeau img {
+  height: 70px;
+  width: auto;
+}
+
+
+
+@media (max-width: 400px) {
+  
+  .dispo-bandeau img {
+    height: 35px;
   }
 }
