@@ -2904,13 +2904,13 @@ table.tarifs td.prix-semaine {
   align-items: center;
   justify-content: center;
   gap: 0.3rem;
-  margin-top: 0.2rem;
-  margin-bottom: -0.9rem;
+  
+  margin-bottom: -1rem;
   flex-wrap: wrap;
 }
 
 .dispo-bandeau img {
-  height: 70px;
+  height: 68px;
   width: auto;
 }
 
