@@ -2937,28 +2937,28 @@ table.tarifs td.prix-semaine {
 
 /* Très petits écrans (vieux iPhone SE, petits Android) */
 @media (max-width: 359px) {
-  .dispo-bandeau img { height: 16px; }
+  .dispo-bandeau img { height: 64px; }
   .dispo-bandeau p {
-    font-size: 0.62rem;
+    font-size: 2.48rem;
     white-space: normal;
     text-align: center;
   }
 }
 
-/* Écrans smartphone standards (la majorité, dont Motorola G Pro ~393px) */
+/* Écrans smartphone standards (dont Motorola G Pro ~393px) */
 @media (min-width: 360px) and (max-width: 480px) {
-  .dispo-bandeau img { height: 20px; }
-  .dispo-bandeau p { font-size: 0.72rem; }
+  .dispo-bandeau img { height: 80px; }
+  .dispo-bandeau p { font-size: 2.88rem; }
 }
 
 /* Tablettes portrait */
 @media (min-width: 481px) and (max-width: 768px) {
-  .dispo-bandeau img { height: 24px; }
-  .dispo-bandeau p { font-size: 0.82rem; }
+  .dispo-bandeau img { height: 96px; }
+  .dispo-bandeau p { font-size: 3.28rem; }
 }
 
 /* Desktop / tablette large */
 @media (min-width: 769px) {
-  .dispo-bandeau img { height: 28px; }
-  .dispo-bandeau p { font-size: 0.9rem; }
+  .dispo-bandeau img { height: 112px; }
+  .dispo-bandeau p { font-size: 3.6rem; }
 }
