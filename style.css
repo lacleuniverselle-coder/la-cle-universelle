@@ -353,6 +353,7 @@ table.tarifs tr:last-child td {
     align-items: center;
     border-radius: 16px;
     max-width: 900px;
+    max-height: 540px;
     margin: 1.2rem auto 0;
     position: relative;
     border: 1.5px solid var(--lilas-clair)
@@ -365,14 +366,15 @@ table.tarifs tr:last-child td {
     padding: clamp(.5rem, 2vw, .6rem) clamp(.7rem, 3vw, .9rem);
     border-radius: 10px;
     text-decoration: none;
-    font-weight: 700;
+    font-weight: 600;
     font-size: clamp(.95rem, 3vw, 1rem);
     white-space: nowrap;
     cursor: pointer;
     border: 0;
     transition: .2s, transform .1s, box-shadow .2s;
     animation: none;
-    box-shadow: 0 8px 20px rgba(72, 38, 100, .08)
+    box-shadow: 0 8px 20px rgba(72, 38, 100, .08);
+    margin-bottom: -20px;
 }
 
 .btn-primary:hover {
