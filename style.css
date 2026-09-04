@@ -425,8 +425,8 @@ table.tarifs tr:last-child td {
 
 .hero-line1 {
     font-family: "Inter", sans-serif;
-    font-size: clamp(.95rem, 2vw, 1.2rem);
-    font-weight: 500;
+    font-size: clamp(.85rem, 2vw, 1.2rem);
+    font-weight: 400;
     color: var(--texte);
     text-align: center;
     letter-spacing: .01em;
@@ -1569,7 +1569,7 @@ footer span {
 
      .hero-line1 {
     flex-wrap: nowrap;
-    font-size: 4vw;
+    font-size: 3vw;
     }
     .hero-logo-wrap svg {
         height: 150px;
@@ -1621,7 +1621,7 @@ footer span {
 
      .hero-line1 {
     flex-wrap: nowrap;
-    font-size: 3.2vw;
+    font-size: 2.9vw;
     line-height: 1.4;
     padding: 0 .5rem
   }
