@@ -1569,7 +1569,7 @@ footer span {
 
      .hero-line1 {
     flex-wrap: nowrap;
-    font-size: 3vw;
+    font-size: 4vw;
     }
     .hero-logo-wrap svg {
         height: 150px;
@@ -1621,7 +1621,7 @@ footer span {
 
      .hero-line1 {
     flex-wrap: nowrap;
-    font-size: 2.9vw;
+    font-size: 3.2vw;
     line-height: 1.4;
     padding: 0 .5rem
   }
