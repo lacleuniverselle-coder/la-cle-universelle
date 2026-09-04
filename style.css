@@ -353,28 +353,29 @@ table.tarifs tr:last-child td {
     align-items: center;
     border-radius: 16px;
     max-width: 900px;
-    max-height: 540px;
-    margin: 1.2rem auto 0;
+    max-height: 600px;
+    margin: 1.2rem auto -2rem;
     position: relative;
     border: 1.5px solid var(--lilas-clair)
 }
 
 .btn-primary {
     display: inline-block;
-    background: #61388a;
+    background: #4e2a72;
     color: var(--blanc);
-    padding: clamp(.5rem, 2vw, .6rem) clamp(.7rem, 3vw, .9rem);
+    padding: clamp(.5rem, 2vw, .6rem) clamp(.7rem, 3vw, 1.2rem);
     border-radius: 10px;
     text-decoration: none;
-    font-weight: 600;
-    font-size: clamp(.95rem, 3vw, 1rem);
+    font-weight: 700;
+    font-size: clamp(1.2rem, 3vw, 1rem);
     white-space: nowrap;
     cursor: pointer;
     border: 0;
     transition: .2s, transform .1s, box-shadow .2s;
     animation: none;
-    box-shadow: 0 8px 20px rgba(72, 38, 100, .08);
-    margin-bottom: -20px;
+    box-shadow: 0 8px 20px rgba(84, 44, 116, 0.08);
+    margin-bottom: -5px;
+    margin-top: 1.2rem;
 }
 
 .btn-primary:hover {
@@ -424,13 +425,19 @@ table.tarifs tr:last-child td {
 
 .hero-line1 {
     font-family: "Inter", sans-serif;
-    font-size: clamp(.85rem, 2vw, 1rem);
-    font-weight: 400;
+    font-size: clamp(.95rem, 2vw, 1.2rem);
+    font-weight: 500;
     color: var(--texte);
     text-align: center;
     letter-spacing: .01em;
-    margin: 0 0 .25rem;
-    line-height: 1.4
+    margin: 0 0 .20rem;
+    line-height: 1.4;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    row-gap: .3rem;
+    column-gap: .5rem;   /* ajouté : sépare les ♀ du texte */
 }
 
 .hero-line1 strong {
@@ -438,8 +445,10 @@ table.tarifs tr:last-child td {
 }
 
 .hero-toulouse {
-    font-size: 1.4em;
-    color: var(--violet)
+    font-size: 1.3em;
+    color: var(--violet);
+    margin-top: .2rem;
+    display: inline-block;
 }
 
 .hero-line2 {
@@ -459,8 +468,9 @@ table.tarifs tr:last-child td {
 
 .hero-text {
     flex-direction: column;
-    gap: .6rem;
-    text-align: center
+    gap: .3rem;
+    text-align: center;
+    margin-top: -1rem;
 }
 
 .logo-overlay {
@@ -1557,6 +1567,10 @@ footer span {
         padding: 1.4rem .7rem
     }
 
+     .hero-line1 {
+    flex-wrap: nowrap;
+    font-size: 3vw;
+    }
     .hero-logo-wrap svg {
         height: 150px;
         width: auto;
@@ -1601,15 +1615,21 @@ footer span {
         margin: .6rem auto 0
     }
 
-    .hero-line1 {
-        font-size: clamp(.78rem, 3.2vw, 1rem);
-        line-height: 1.4;
-        padding: 0 .5rem
-    }
-
     .section-label {
         font-size: .6rem
     }
+
+     .hero-line1 {
+    flex-wrap: nowrap;
+    font-size: 2.9vw;
+    line-height: 1.4;
+    padding: 0 .5rem
+  }
+  .symbole {
+    height: 3.1vw;
+    min-height: 11px;
+  }
+
 }
 
 @media (min-width:641px) {
@@ -2901,41 +2921,65 @@ table.tarifs td.prix-semaine {
   }
 }
 
-.dispo-bandeau {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 0.3rem;
-  
-  margin-bottom: -1rem;
-  flex-wrap: wrap;
-}
+
 
 .dispo-bandeau img {
-  height: 68px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+    height: 20px;
   width: auto;
+  flex-shrink: 0;
+  margin-left: -0.4rem;
 }
 
 
 .dispo-bandeau {
-  display: flex;
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
   align-items: center;
-  justify-content: center;
-  gap: 0.4rem;
-  margin-top: 0.5rem;
-  flex-wrap: wrap;
-  max-width: 100%;
+  max-width: 400px;
+  margin: 0 auto;
   padding: 0 0.5rem;
   box-sizing: border-box;
 }
 
-.dispo-bandeau img {
-  height: 22px;
-  width: auto;
-  flex-shrink: 0;
+.dispo-bandeau strong:first-child {
+    display: flex;
+     font-size: clamp(.75rem, 3.5vw, 1.05rem);
+  justify-self: end;
+  margin-right: 0.7rem;
+   transform: translateY(-20px);
 }
 
+.dispo-bandeau img {
+  justify-self: center;
+}
 
+.dispo-bandeau span {
+  display: none;
+}
+
+.dispo-bandeau strong:last-child {
+    display: flex;
+     font-size: clamp(.75rem, 3.5vw, 1.05rem);
+  justify-self: start;
+  margin-left: -0.5rem;
+  transform: translateY(-20px);
+}
+
+.symbole {
+  display: inline;
+   
+  width: auto;
+    justify-content: center;
+     flex-wrap: wrap; 
+      height: 3.2vw;
+    min-height: 12px;
+   
+
+}
 
 /* Très petits écrans (vieux iPhone SE, petits Android) */
 @media (max-width: 359px) {

@@ -3,12 +3,12 @@
 
 <svg
    width="63.099628mm"
-   height="35.32362mm"
-   viewBox="0 0 63.099628 35.32362"
+   height="12.26362mm"
+   viewBox="0 0 63.099628 12.26362"
    version="1.1"
    id="svg1"
    inkscape:version="1.4.4 (dcaf3e7, 2026-05-05)"
-   sodipodi:docname="LogoSerru.svg"
+   sodipodi:docname="Logolacle.svg"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
    xmlns:xlink="http://www.w3.org/1999/xlink"
@@ -28,13 +28,13 @@
      borderlayer="false"
      inkscape:zoom="1.7923962"
      inkscape:cx="107.67709"
-     inkscape:cy="46.02777"
+     inkscape:cy="-41.006559"
      inkscape:window-width="1366"
      inkscape:window-height="705"
      inkscape:window-x="-8"
      inkscape:window-y="-8"
      inkscape:window-maximized="1"
-     inkscape:current-layer="g40" />
+     inkscape:current-layer="g11" />
   <defs
      id="defs1">
     <path
@@ -104,7 +104,7 @@
      inkscape:label="Calque 1"
      inkscape:groupmode="layer"
      id="layer1"
-     transform="translate(-98.417551,-134.28955)">
+     transform="translate(-98.417551,-157.34955)">
     <g
        id="g9">
       <g
@@ -200,48 +200,6 @@
                id="text6"
                style="writing-mode:lr-tb;direction:ltr;white-space:pre;shape-inside:url(#rect6);display:inline;fill:none;fill-opacity:0.0120967;stroke:none;stroke-width:21.7292;stroke-dasharray:none"
                transform="translate(-0.00316211,-0.00955646)" />
-            <g
-               id="g40"
-               transform="matrix(1.1291648,0,0,1.1291648,767.94526,-500.51753)"
-               style="stroke:none;stroke-width:19.2436;stroke-dasharray:none">
-              <g
-                 id="g37"
-                 style="stroke:none;stroke-width:19.2436;stroke-dasharray:none">
-                <g
-                   id="g1"
-                   style="stroke:none;stroke-width:19.2436;stroke-dasharray:none" />
-              </g>
-              <g
-                 id="g39"
-                 style="stroke:none;stroke-width:19.2436;stroke-dasharray:none">
-                <g
-                   id="g93"
-                   style="stroke:none;stroke-width:19.2436;stroke-dasharray:none">
-                  <path
-                     id="path36"
-                     class="cls-2"
-                     d="M 235.9668,0.01171875 C 231.28242,-0.010625 226.70281,0.136875 222.32031,0.609375 c -32.5,3.51 -27.15039,46.020234 -33.90039,68.740234 l -30.83984,13.451172 c -2.6,0.36 -6.62102,-3.230312 -9.04102,-4.820312 C 133.18906,67.890469 117.00055,52.49 101.56055,43.75 100.28055,43.02 99.169141,41.969922 97.619141,42.919922 81.099141,63.809922 41.05,84.020391 54.75,115.65039 l 28.339844,39.7793 -12.830078,33.05078 -69.2402348,11.58008 c 0.5200001,6.47 -0.83914058,13.54953 -0.86914058,19.76953 -0.07,13.72 -1.49031252,42.14961 6.17968748,52.84961 4.8599999,6.78 13.9694529,11.02992 21.9394529,12.66992 l 106.291019,14.84961 c -2.94,-8.43 -7.86125,-15.92992 -10.78125,-24.41992 C 90.279297,178.1993 185.33,86.470078 282,122.33008 c 17.94,6.66 30.48937,17.17062 45.35938,28.64062 l 78.11132,-6.58008 32.28907,-45.330073 -1.12891,-2.419922 c -15.24,-11.78 -34.66148,-42.580078 -54.52148,-44.580078 -22.53,-2.27 -39.49985,21.749609 -58.33985,30.849609 L 291.12891,69.671875 281.24023,2.5800781 278.42969,0.609375 C 265.01219,1.674375 250.01992,0.07875 235.9668,0.01171875 Z M 29.683594,217.02539 l 23.763672,0.0645 11.482422,21.02539 -12.28125,20.96094 -23.763672,-0.0644 -11.482422,-21.02539 z"
-                     style="fill:#482664;fill-opacity:1;stroke:none;stroke-width:19.2436;stroke-dasharray:none"
-                     transform="translate(1.1389267e-6)" />
-                  <path
-                     id="path37"
-                     class="cls-3"
-                     d="m 343.55078,171.01953 c 2.94,8.43 7.8593,15.92992 10.7793,24.41992 33.5,97.58 -61.5507,189.31118 -158.2207,153.45117 C 178.16937,342.23063 165.62,331.72 150.75,320.25 l -78.109375,6.58008 -32.291016,45.33008 1.13086,2.41992 c 15.24,11.78 34.659531,42.58008 54.519531,44.58008 22.53,2.27 39.49984,-21.74961 58.33984,-30.84961 l 32.66407,13.24804 9.88671,67.07227 2.8086,1.96875 c 17.89,-1.42 38.58133,1.89 56.11133,0 32.5,-3.51 27.15039,-46.02024 33.90039,-68.74023 l 30.83984,-13.44922 c 2.6,-0.36 6.61906,3.23031 9.03906,4.82031 15.35,10.09 31.54047,25.49047 46.98047,34.23047 1.28,0.73 2.38946,1.77812 3.93946,0.82812 16.52,-20.89 56.57109,-41.09851 42.87109,-72.72851 l -28.3418,-39.78125 12.83008,-33.04883 69.24024,-11.58008 c -0.52001,-6.47 0.84109,-13.54953 0.87109,-19.76953 0.06,-13.72 1.47883,-42.1418 -6.20117,-52.8418 -4.86,-6.78 -13.96946,-11.02992 -21.93946,-12.66992 z m 83.91406,42.4707 23.76172,0.31836 11.25586,21.14844 -12.5039,20.82617 -23.76368,-0.31836 -11.25586,-21.14648 z"
-                     style="fill:#8f63ba;fill-opacity:1;stroke:none;stroke-width:19.2436;stroke-dasharray:none"
-                     transform="translate(1.1389267e-6)" />
-                  <path
-                     class="cls-2"
-                     d="m 295.08,298.49 v -92.82 l -55.34,-36.4 -55.5,36.51 v 92.82 h -7.16 c -3.96,0 -7.16,-3.2 -7.16,-7.16 v -89.52 c 0,-2.41 1.21,-4.66 3.23,-5.98 l 60.77,-39.98 c 1.72,-2.09 4.54,-3.08 7.28,-2.39 l 0.42,0.1 c 1.27,0.32 2.39,0.97 3.29,1.86 l 61.26,40.3 c 2.01,1.32 3.23,3.57 3.23,5.98 v 89.52 c 0,3.96 -3.2,7.16 -7.16,7.16 z"
-                     id="path38"
-                     style="fill:#482664;fill-opacity:1;stroke:none;stroke-width:19.2436;stroke-dasharray:none" />
-                  <path
-                     class="cls-2"
-                     d="m 208.65,295.77 17.29,-43.89 -1.57,-1.31 c -5.42,-4.54 -8.53,-11.19 -8.53,-18.24 0,-13.13 10.69,-23.82 23.82,-23.82 13.13,0 23.82,10.69 23.82,23.82 0,7.05 -3.11,13.7 -8.53,18.24 l -1.57,1.31 17.29,43.89 h -62.03 z"
-                     id="path39"
-                     style="fill:#482664;fill-opacity:1;stroke:none;stroke-width:19.2436;stroke-dasharray:none" />
-                </g>
-              </g>
-            </g>
             <text
                xml:space="preserve"
                style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:133.333px;font-family:Astonpoliz;-inkscape-font-specification:'Astonpoliz, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;writing-mode:lr-tb;direction:ltr;fill:#ff9955;fill-opacity:1;stroke:none;stroke-width:21.7292;stroke-dasharray:none"
