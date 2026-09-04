@@ -425,7 +425,7 @@ table.tarifs tr:last-child td {
 
 .hero-line1 {
     font-family: "Inter", sans-serif;
-    font-size: clamp(.85rem, 2vw, 1.2rem);
+    font-size: clamp(.85rem, 2vw, 1rem);
     font-weight: 400;
     color: var(--texte);
     text-align: center;
@@ -445,7 +445,7 @@ table.tarifs tr:last-child td {
 }
 
 .hero-toulouse {
-    font-size: 1.3em;
+    font-size: 1.4em;
     color: var(--violet);
     margin-top: .2rem;
     display: inline-block;
