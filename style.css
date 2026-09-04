@@ -1626,7 +1626,7 @@ footer span {
     padding: 0 .5rem
   }
   .symbole {
-    height: 3.1vw;
+    height: 2.4vw;
     min-height: 11px;
   }
 
@@ -2629,7 +2629,7 @@ table.tarifs td.prix-semaine {
     display: inline-block; 
     vertical-align: middle; 
     flex-shrink: 0; 
-     width: 45px; height: 50px;
+     width: 46px; height: 51px;
 }
 .prestations-main-col {
     max-width: 960px;
@@ -2928,7 +2928,7 @@ table.tarifs td.prix-semaine {
   display: flex;
   align-items: center;
   justify-content: center;
-    height: 20px;
+    height: 15px;
   width: auto;
   flex-shrink: 0;
   margin-left: -0.4rem;
@@ -2939,7 +2939,7 @@ table.tarifs td.prix-semaine {
   display: grid;
   grid-template-columns: 1fr auto 1fr;
   align-items: center;
-  max-width: 400px;
+  max-width: 500px;
   margin: 0 auto;
   padding: 0 0.5rem;
   box-sizing: border-box;
@@ -2975,7 +2975,7 @@ table.tarifs td.prix-semaine {
   width: auto;
     justify-content: center;
      flex-wrap: wrap; 
-      height: 3.2vw;
+      height: 1.5vw;
     min-height: 12px;
    
 
