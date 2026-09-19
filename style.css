@@ -2911,13 +2911,14 @@ table.tarifs td.prix-semaine {
   transform-origin: top center;
 
   margin: 0 auto;
-  margin-bottom: -5rem;
+  margin-bottom: 2rem;
 }
 
 @media (max-width: 768px) {
   .elfsight-app-f77472b4-ad9b-4e1a-95d0-6b09e7424665 {
     transform: scale(0.85);
     transform-origin: top center;
+    margin-bottom: 3rem;
   }
 }
 
