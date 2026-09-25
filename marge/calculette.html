@@ -1,0 +1,1330 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Net par devis — La Clé Universelle</title>
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#4C3468">
+<link rel="icon" href="icon-192.png">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Net Devis">
+<meta name="robots" content="noindex, nofollow">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#EDEFEF; --surface:#FFFFFF; --line:#D8DBDB;
+  --ink:#1E2328; --ink-soft:#5B6266;
+  --violet:#4C3468; --violet-deep:#382450;
+  --steel:#43616B;
+  --net-pos:#2E6B4C; --net-bg:#E7F1EA;
+  --net-neg:#A23B3B; --net-neg-bg:#F4E6E6;
+  --danger:#A23B3B;
+  box-sizing:border-box;
+  padding-top:env(safe-area-inset-top,0px);
+  padding-bottom:env(safe-area-inset-bottom,0px);
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#181B1D; --surface:#22262A; --line:#33383C;
+    --ink:#EDEFEF; --ink-soft:#9AA3A7;
+    --net-bg:#1E2E24; --net-neg-bg:#2E1E1E;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#181B1D; --surface:#22262A; --line:#33383C;
+  --ink:#EDEFEF; --ink-soft:#9AA3A7;
+  --net-bg:#1E2E24; --net-neg-bg:#2E1E1E;
+}
+*{box-sizing:border-box;}
+html,body{height:100%;}
+html{scroll-padding-top:env(safe-area-inset-top,0px);}
+body{
+  margin:0; background:var(--bg); color:var(--ink);
+  font-family:'Inter',system-ui,-apple-system,sans-serif;
+  -webkit-font-smoothing:antialiased;
+}
+.wrap{max-width:640px; margin:0 auto; padding:20px 16px 40px;}
+h1{
+  font-family:'Fraunces',serif; font-weight:600; font-size:1.5rem;
+  margin:0 0 2px; letter-spacing:-0.01em;
+}
+.sub{color:var(--ink-soft); font-size:0.85rem; margin:0 0 16px;}
+h2.section-title{
+  font-family:'Fraunces',serif; font-weight:600; font-size:1rem;
+  margin:20px 0 3px; letter-spacing:-0.01em;
+}
+.section-sub{color:var(--ink-soft); font-size:0.76rem; margin:0 0 8px;}
+
+.panel{
+  background:var(--surface); border:1px solid var(--line); border-radius:10px;
+  padding:12px; margin-bottom:12px;
+}
+.panel h2{font-size:0.8rem; font-weight:600; margin:0 0 8px; color:var(--ink-soft); text-transform:none;}
+
+.settings-row{display:flex; gap:10px; flex-wrap:wrap; align-items:flex-end;}
+.field{display:flex; flex-direction:column; gap:4px; flex:1; min-width:120px;}
+.field label{font-size:0.74rem; color:var(--ink-soft);}
+.field input, .field select{
+  border:1px solid var(--line); border-radius:7px; padding:7px 8px;
+  font-size:0.9rem; background:var(--bg); color:var(--ink); font-family:inherit;
+  font-variant-numeric:tabular-nums; width:100%;
+}
+.toggle{display:flex; border:1px solid var(--line); border-radius:7px; overflow:hidden;}
+.toggle button{
+  flex:1; padding:7px 6px; border:none; background:var(--bg); color:var(--ink-soft);
+  font-size:0.82rem; cursor:pointer; font-family:inherit;
+}
+.toggle button.active{background:var(--violet); color:#fff; font-weight:600;}
+
+.toggle-rates button{padding:6px 8px; line-height:1.3;}
+.toggle-rates button span{display:block; font-size:0.85rem; font-weight:600;}
+.toggle-rates button small{display:block; font-size:0.66rem; font-weight:400; opacity:0.8; margin-top:1px;}
+.toggle-rates button.active small{opacity:0.9;}
+
+.mat-serv-grid{display:grid; grid-template-columns:1fr 1fr; gap:14px;}
+.mat-serv-col .section-title{margin:0 0 2px;}
+.mat-serv-col .section-sub{margin:0 0 8px;}
+@media (max-width:520px){
+  .mat-serv-grid{grid-template-columns:1fr;}
+}
+
+.daycost-banner{
+  background:var(--surface); border:1px solid var(--line); border-radius:10px;
+  padding:10px 12px; margin-bottom:12px; display:flex; justify-content:space-between; align-items:center;
+}
+.daycost-banner .lbl{font-size:0.78rem; color:var(--ink-soft);}
+.daycost-banner .lbl small{display:block; font-size:0.68rem; margin-top:1px;}
+.daycost-banner .val{font-family:'Fraunces',serif; font-size:1.1rem; font-weight:600; color:var(--steel); font-variant-numeric:tabular-nums;}
+
+.article{
+  background:var(--surface); border:1px solid var(--line); border-radius:9px;
+  padding:9px 10px; margin-bottom:7px; position:relative;
+}
+.article-top{display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;}
+.type-toggle{display:flex; border:1px solid var(--line); border-radius:7px; overflow:hidden;}
+.type-toggle button{
+  padding:6px 12px; border:none; background:var(--bg); color:var(--ink-soft);
+  font-size:0.8rem; cursor:pointer; font-family:inherit;
+}
+.type-toggle button.active.mat{background:var(--steel); color:#fff;}
+.type-toggle button.active.serv{background:var(--violet); color:#fff;}
+.remove-btn{
+  background:none; border:none; color:var(--ink-soft); cursor:pointer; font-size:1.1rem;
+  padding:2px 6px; line-height:1;
+}
+.article-fields{display:flex; gap:7px;}
+.article-fields .field{min-width:0; gap:2px;}
+.article-net{
+  margin-top:6px; padding-top:6px; border-top:1px dashed var(--line);
+  display:flex; justify-content:space-between; font-size:0.78rem; color:var(--ink-soft);
+}
+.article-net b{color:var(--ink); font-variant-numeric:tabular-nums;}
+
+.add-btn{
+  width:100%; padding:8px; border:1.5px dashed var(--line); border-radius:9px;
+  background:none; color:var(--ink-soft); font-size:0.8rem; cursor:pointer;
+  font-family:inherit; margin-bottom:12px;
+}
+.add-btn:active{background:var(--surface);}
+
+.summary{
+  background:var(--surface); border:1px solid var(--line); border-radius:11px; padding:12px;
+}
+.summary-row{
+  display:flex; justify-content:space-between; padding:3px 0; font-size:0.82rem; color:var(--ink-soft);
+}
+.summary-row span:last-child{font-variant-numeric:tabular-nums; color:var(--ink);}
+.summary-final{
+  margin-top:6px; padding-top:10px; border-top:1px solid var(--line);
+  background:var(--net-bg); margin-left:-12px; margin-right:-12px; margin-bottom:-12px;
+  padding:10px 12px; border-radius:0 0 11px 11px;
+  display:flex; justify-content:space-between; align-items:baseline;
+}
+.summary-final.neg{background:var(--net-neg-bg);}
+.summary-final .label{font-size:0.88rem; font-weight:600;}
+.summary-final .amount{
+  font-family:'Fraunces',serif; font-size:1.15rem; font-weight:600; color:var(--net-pos);
+  font-variant-numeric:tabular-nums;
+}
+.summary-final.neg .amount{color:var(--net-neg);}
+
+.private-grid{display:flex; flex-direction:column; gap:5px;}
+.private-row{display:flex; justify-content:space-between; align-items:center; gap:8px;}
+.private-row label{font-size:0.82rem; flex:1;}
+.private-row input{
+  width:90px; text-align:right; border:1px solid var(--line); border-radius:7px;
+  padding:5px 7px; font-size:0.85rem; background:var(--bg); color:var(--ink);
+  font-family:inherit; font-variant-numeric:tabular-nums;
+}
+.private-total{
+  display:flex; justify-content:space-between; padding-top:6px; margin-top:2px;
+  border-top:1px dashed var(--line); font-size:0.82rem; color:var(--ink-soft);
+}
+.private-total b{color:var(--ink); font-variant-numeric:tabular-nums;}
+
+.private-custom-row{display:flex; align-items:center; gap:6px;}
+.private-custom-row input[type="text"]{
+  flex:1; border:1px solid var(--line); border-radius:7px; padding:5px 7px;
+  font-size:0.8rem; background:var(--bg); color:var(--ink); font-family:inherit; min-width:0;
+}
+.private-custom-row input[type="number"]{
+  width:90px; text-align:right; border:1px solid var(--line); border-radius:7px;
+  padding:5px 7px; font-size:0.85rem; background:var(--bg); color:var(--ink);
+  font-family:inherit; font-variant-numeric:tabular-nums;
+}
+.private-custom-row .remove-btn{flex:none;}
+.private-custom-sep{border-top:1px dashed var(--line); margin:2px 0 1px; padding-top:6px;}
+.add-private-btn{
+  width:100%; padding:6px; border:1.5px dashed var(--line); border-radius:8px;
+  background:none; color:var(--ink-soft); font-size:0.78rem; cursor:pointer;
+  font-family:inherit; margin-top:2px;
+}
+.add-private-btn:active{background:var(--bg);}
+
+/* Pastille régime dans l'historique */
+.regime-pill{
+  display:inline-block; padding:3px 8px; border-radius:5px; font-size:0.72rem; font-weight:600;
+  cursor:pointer; border:1px solid var(--line); background:var(--bg); color:var(--ink-soft);
+  white-space:nowrap;
+}
+.regime-pill.acre{color:var(--steel); border-color:var(--steel);}
+.regime-pill.plein{color:var(--violet-deep); border-color:var(--violet);}
+.regime-pill.na{cursor:default; opacity:0.5;}
+.history-table th.regime, .history-table td.regime{text-align:right;}
+
+.edit-stack{display:flex; flex-direction:column; gap:3px;}
+.edit-mini{
+  width:100%; border:1px solid var(--line); border-radius:6px; padding:5px 6px;
+  font-size:0.78rem; background:var(--bg); color:var(--ink); font-family:inherit;
+  font-variant-numeric:tabular-nums;
+}
+.edit-net-preview{
+  display:block; margin-top:2px; font-size:0.8rem; color:var(--ink);
+  font-variant-numeric:tabular-nums;
+}
+
+footer{text-align:center; color:var(--ink-soft); font-size:0.75rem; margin-top:22px;}
+.note{font-size:0.75rem; color:var(--ink-soft); margin-top:10px; line-height:1.4;}
+
+/* Styles pour client + enregistrement */
+.client-save-row{display:flex; gap:10px; flex-wrap:wrap; align-items:flex-end; margin-bottom:20px; margin-top:20px;}
+.client-save-row .field{flex:1; min-width:150px;}
+.save-btn{
+  padding:10px 16px; background:var(--steel); color:#fff; border:none; border-radius:7px;
+  font-size:0.9rem; cursor:pointer; font-family:inherit; font-weight:500; 
+  min-width:140px; transition:background 0.2s;
+}
+.save-btn:hover{background:var(--violet);}
+.save-btn:active{opacity:0.8;}
+
+/* Styles pour le tableau d'historique */
+.history-panel{
+  background:var(--surface); border:1px solid var(--line); border-radius:10px;
+  padding:16px; margin-bottom:16px;
+}
+.history-panel h2{font-size:0.85rem; font-weight:600; margin:0 0 12px; color:var(--ink-soft);}
+.history-month{font-size:0.75rem; color:var(--ink-soft); margin-bottom:12px;}
+.history-month strong{color:var(--ink);}
+
+.month-nav{display:flex; align-items:center; gap:8px; margin-bottom:10px;}
+.month-nav-btn{
+  border:1px solid var(--line); border-radius:7px; background:var(--bg); color:var(--ink);
+  width:36px; height:36px; flex:none; font-size:1rem; cursor:pointer; font-family:inherit;
+}
+.month-nav-btn:active{background:var(--surface);}
+.month-nav select{
+  flex:1; border:1px solid var(--line); border-radius:7px; padding:8px 10px;
+  font-size:0.9rem; background:var(--bg); color:var(--ink); font-family:inherit;
+  font-weight:600; text-align:center; text-align-last:center;
+}
+
+.history-table{width:100%; border-collapse:collapse; font-size:0.9rem; margin-bottom:12px;}
+.history-table th{
+  text-align:left; padding:8px 6px; border-bottom:1px solid var(--line);
+  font-size:0.75rem; color:var(--ink-soft); font-weight:600; text-transform:uppercase;
+}
+.history-table td{
+  padding:8px 6px; border-bottom:1px solid var(--line);
+}
+.history-table td:last-child, .history-table th:last-child{text-align:right; font-variant-numeric:tabular-nums;}
+.history-table tbody tr:last-child td{border-bottom:none;}
+.history-table td.del-col, .history-table th.del-col{width:1%; padding-right:0; text-align:left;}
+.history-table td.del-col .row-btn{padding:3px 4px 3px 0;}
+
+.history-totals{
+  display:flex; justify-content:space-between; align-items:center;
+  padding-top:8px; border-top:1px solid var(--line); font-size:0.82rem;
+}
+.history-totals .stat{display:flex; gap:3px; flex-direction:column;}
+.history-totals .stat .label{font-size:0.68rem; color:var(--ink-soft);}
+.history-totals .stat .value{font-weight:600; color:var(--ink); font-variant-numeric:tabular-nums; font-size:0.88rem;}
+
+.new-month-btn{
+  width:100%; padding:10px; background:var(--violet); color:#fff; border:none; 
+  border-radius:7px; font-size:0.9rem; cursor:pointer; font-family:inherit; 
+  font-weight:500; margin-top:12px; transition:background 0.2s;
+}
+.new-month-btn:hover{background:var(--violet-deep);}
+.new-month-btn:active{opacity:0.8;}
+
+.empty-state{
+  text-align:center; padding:20px; color:var(--ink-soft); font-size:0.9rem;
+}
+
+/* Seuil de rentabilité */
+.seuil-row{display:flex; justify-content:space-between; align-items:center; gap:10px; margin-bottom:12px; padding-bottom:12px; border-bottom:1px solid var(--line);}
+.seuil-row label{font-size:0.85rem; color:var(--ink-soft); flex:1;}
+.seuil-row input{
+  width:70px; text-align:right; border:1px solid var(--line); border-radius:7px;
+  padding:7px 8px; font-size:0.9rem; background:var(--bg); color:var(--ink);
+  font-family:inherit; font-variant-numeric:tabular-nums;
+}
+.ceiling-note{font-size:0.72rem; color:var(--ink-soft); line-height:1.4; margin-bottom:14px;}
+
+/* Colonne % et badges dans l'historique */
+.history-table td.pct, .history-table th.pct{text-align:right;}
+.pct-badge{
+  display:inline-block; padding:2px 7px; border-radius:5px; font-weight:600;
+  font-variant-numeric:tabular-nums; font-size:0.85rem;
+}
+.pct-good{background:var(--net-bg); color:var(--net-pos);}
+.pct-bad{background:var(--net-neg-bg); color:var(--net-neg);}
+.pct-na{color:var(--ink-soft);}
+
+/* Actions (modifier / supprimer) */
+.history-table td.actions{text-align:right; white-space:nowrap;}
+.row-btn{
+  background:none; border:none; cursor:pointer; font-size:0.95rem; padding:3px 5px;
+  color:var(--ink-soft); line-height:1;
+}
+.row-btn:hover{color:var(--steel);}
+.row-btn.del:hover{color:var(--net-neg);}
+.row-btn:disabled{opacity:0.25; cursor:default;}
+.row-btn:disabled:hover{color:var(--ink-soft);}
+
+/* Ligne en édition */
+.edit-input{
+  width:100%; border:1px solid var(--violet); border-radius:5px; padding:5px 6px;
+  font-size:0.85rem; background:var(--bg); color:var(--ink); font-family:inherit;
+  font-variant-numeric:tabular-nums;
+}
+.edit-input.client-input{text-align:left;}
+.edit-actions{display:flex; gap:4px; justify-content:flex-end;}
+.print-area{display:none;}
+@media print{
+  body.printing{background:#fff;}
+  body.printing .wrap > *:not(#printArea){display:none !important;}
+  body.printing #printArea{
+    display:block !important; color:#1E2328; font-family:'Inter',system-ui,sans-serif;
+  }
+  .print-header h1{font-family:'Fraunces',serif; font-size:1.4rem; margin:0 0 2px;}
+  .print-header .print-sub{color:#5B6266; font-size:0.85rem; margin:0 0 16px;}
+  .print-meta{display:flex; justify-content:space-between; font-size:0.9rem; margin-bottom:14px; padding-bottom:10px; border-bottom:1px solid #ccc;}
+  .print-table{width:100%; border-collapse:collapse; margin-bottom:16px; font-size:0.88rem;}
+  .print-table th, .print-table td{text-align:left; padding:5px 4px; border-bottom:1px solid #ddd;}
+  .print-table th:not(:first-child), .print-table td:not(:first-child){text-align:right;}
+  .print-summary{max-width:320px; margin-left:auto; font-size:0.9rem;}
+  .print-summary > div{display:flex; justify-content:space-between; padding:3px 0;}
+  .print-summary .print-net{border-top:1px solid #1E2328; margin-top:6px; padding-top:8px; font-size:1.05rem; font-weight:600;}
+}
+
+/* Écran de verrouillage */
+#lockScreen{
+  position:fixed; inset:0; background:var(--bg); z-index:9999;
+  display:flex; align-items:center; justify-content:center; padding:20px;
+}
+#lockScreen.hidden{display:none;}
+.lock-box{
+  background:var(--surface); border:1px solid var(--line); border-radius:14px;
+  padding:28px 24px; max-width:300px; width:100%; text-align:center;
+}
+.lock-box h2{font-family:'Fraunces',serif; font-size:1.15rem; margin:0 0 4px;}
+.lock-box p{color:var(--ink-soft); font-size:0.8rem; margin:0 0 18px;}
+#lockInput{
+  width:100%; text-align:center; letter-spacing:0.5em; font-size:1.4rem;
+  border:1px solid var(--line); border-radius:9px; padding:10px 8px;
+  background:var(--bg); color:var(--ink); font-family:inherit;
+  font-variant-numeric:tabular-nums;
+}
+#lockError{color:var(--danger); font-size:0.78rem; margin-top:8px; min-height:1em;}
+#lockSubmit{
+  width:100%; margin-top:14px; padding:10px; border:none; border-radius:9px;
+  background:var(--violet); color:#fff; font-weight:600; font-size:0.9rem; cursor:pointer;
+}
+body.locked > .wrap{display:none;}
+</style>
+</head>
+<body class="locked">
+<div id="lockScreen">
+  <div class="lock-box">
+    <h2>Net par devis</h2>
+    <p>Code d'accès</p>
+    <input type="tel" inputmode="numeric" pattern="[0-9]*" maxlength="4" id="lockInput" autocomplete="off" placeholder="••••">
+    <div id="lockError"></div>
+    <button id="lockSubmit">Valider</button>
+  </div>
+</div>
+<div class="wrap">
+  <div id="printArea" class="print-area"></div>
+  <h1>Net par devis</h1>
+  <p class="sub">La Clé Universelle — calcul du gain net après charges URSSAF</p>
+
+  <div class="mat-serv-grid">
+    <div class="mat-serv-col">
+      <h2 class="section-title" style="margin-top:0;">Matériel</h2>
+      <p class="section-sub">Achat revendu + posé.</p>
+      <div id="articlesMat"></div>
+      <button class="add-btn" id="addArticleMat">+ Ajouter un article matériel</button>
+    </div>
+    <div class="mat-serv-col">
+      <h2 class="section-title" style="margin-top:0;">Service</h2>
+      <p class="section-sub">Main d'œuvre seule.</p>
+      <div id="articlesServ"></div>
+      <button class="add-btn" id="addArticleServ">+ Ajouter un article service</button>
+    </div>
+  </div>
+
+  <div class="summary">
+    <div class="summary-row"><span>Total vente</span><span id="sVente">0,00 €</span></div>
+    <div class="summary-row"><span>Total achat matériel</span><span id="sAchat">0,00 €</span></div>
+    <div class="summary-row"><span>Marge brute</span><span id="sMarge">0,00 €</span></div>
+    <div class="summary-row"><span>Charges URSSAF + CFP</span><span id="sCharges">0,00 €</span></div>
+    <div class="summary-row"><span>Coût fixe du jour</span><span id="sFixe">0,00 €</span></div>
+    <div class="summary-final" id="summaryFinal">
+      <span class="label">Net pour vous<small id="sNetPct" style="display:block; font-weight:400; font-size:0.75rem; margin-top:2px; opacity:0.8;">0,0 % du total vente</small></span>
+      <span class="amount" id="sNet">0,00 €</span>
+    </div>
+  </div>
+
+  <!-- Client + Enregistrement -->
+  <div class="client-save-row">
+    <div class="field">
+      <label>Nom du client</label>
+      <input type="text" id="clientName" placeholder="Mme Dupont, Entreprise X...">
+    </div>
+    <button class="save-btn" id="saveQuoteBtn">Enregistrer ce devis</button>
+  </div>
+  <button class="save-btn" id="exportPdfBtn" style="width:100%; background:var(--steel); margin-bottom:20px;">🖨 Exporter ce devis en PDF</button>
+
+  <!-- Historique du mois -->
+  <div class="history-panel">
+    <h2>Historique du mois</h2>
+    <div class="month-nav">
+      <button class="month-nav-btn" id="prevMonthBtn" title="Mois précédent">←</button>
+      <select id="monthSelect"></select>
+      <button class="month-nav-btn" id="nextMonthBtn" title="Mois suivant">→</button>
+    </div>
+    <div class="history-month">Mois consulté : <strong id="monthDisplay"></strong></div>
+    <div id="historyTotals"></div>
+    <button class="new-month-btn" id="newMonthBtn">Nouveau mois</button>
+    <div class="seuil-row">
+      <label>Seuil de rentabilité mini (% net/vente)</label>
+      <input type="number" id="seuilRenta" value="40" min="0" max="100" step="1">
+    </div>
+    <div id="historyContent"></div>
+  </div>
+
+  <div class="panel">
+    <h2>Sauvegarde de vos données</h2>
+    <div class="client-save-row" style="margin-top:0;">
+      <button class="save-btn" id="exportBtn" style="flex:1;">⬇ Exporter mes données</button>
+      <button class="save-btn" id="importBtn" style="flex:1; background:var(--violet);">⬆ Importer une sauvegarde</button>
+      <input type="file" id="importFile" accept="application/json" style="display:none;">
+    </div>
+  </div>
+
+  <h2 class="section-title">Bilan mensuel privé</h2>
+  <p class="section-sub">Séparé du calcul d'activité — pour voir ce qu'il vous reste une fois vos charges de vie déduites.</p>
+
+  <div class="panel">
+    <div class="field" style="margin-bottom:8px;">
+      <label>Revenu net du mois (rempli automatiquement : Total net estimé du mois en cours)</label>
+      <input type="number" id="revenuMois" value="" min="0" step="0.01" placeholder="0,00" readonly style="opacity:0.7; cursor:not-allowed;">
+    </div>
+    <div class="private-grid">
+      <div class="private-row"><label>Loyer</label><input type="number" id="pLoyer" value="680" step="0.01"></div>
+      <div class="private-row"><label>Téléphone</label><input type="number" id="pTel" value="7" step="0.01"></div>
+      <div class="private-row"><label>Courses</label><input type="number" id="pCourses" value="100" step="0.01"></div>
+      <div class="private-row"><label>Assurance habitation</label><input type="number" id="pAssurHab" value="12" step="0.01"></div>
+      <div class="private-row"><label>Assurance moto</label><input type="number" id="pAssurMoto" value="17" step="0.01"></div>
+      <div id="privateCustomRows" class="private-custom-sep"></div>
+    </div>
+    <button class="add-private-btn" id="addPrivateCustom">+ Ajouter un coût (vacances, imprévu...)</button>
+    <div class="private-total"><span>Total charges privées</span><b id="pTotal">0,00 €</b></div>
+  </div>
+
+  <div class="summary">
+    <div class="summary-final" id="privateFinal">
+      <span class="label">Reste à la fin du mois</span>
+      <span class="amount" id="pNet">0,00 €</span>
+    </div>
+  </div>
+
+  <div class="panel">
+    <h2>Réglages</h2>
+    <div class="settings-row">
+      <div class="field">
+        <label>Régime de charges</label>
+        <div class="toggle toggle-rates">
+          <button id="btnAcre" class="active"><span>ACRE</span><small>vente 6,2 % / serv. 10,75 %</small></button>
+          <button id="btnPlein"><span>Taux plein</span><small>vente 12,4 % / serv. 21,5 %</small></button>
+        </div>
+      </div>
+      <div class="field">
+        <label>Jours travaillés / an</label>
+        <input type="number" id="joursAn" value="330" min="1" step="1">
+      </div>
+      <div class="field">
+        <label>CFE annuelle</label>
+        <input type="number" id="cfeAn" value="0" min="0" step="1">
+      </div>
+      <div class="field">
+        <label>Coût fixe du jour<small style="display:block; font-size:0.66rem; margin-top:1px;">frais fixes annuels ÷ jours travaillés</small></label>
+        <div class="val" id="dayCost" style="font-family:'Fraunces',serif; font-size:1.05rem; font-weight:600; color:var(--steel); font-variant-numeric:tabular-nums; padding:7px 0 0;">0,00 €</div>
+      </div>
+    </div>
+  </div>
+
+  <footer>Assurance 240 € + logiciel 200 € + tél. 108 €/an + élec. 60 €/an (+ CFE) répartis par jour travaillé · pas de TVA (franchise)</footer>
+
+</div>
+
+<script>
+/* Verrou d'accès */
+const LOCK_HASH = '594686bcfe8a1c52aa5c6ab2feadeac31c7fbc9815ad68487b60d946a12e4765';
+
+async function sha256Hex(str){
+  const enc = new TextEncoder().encode(str);
+  const buf = await crypto.subtle.digest('SHA-256', enc);
+  return Array.from(new Uint8Array(buf)).map(b=>b.toString(16).padStart(2,'0')).join('');
+}
+
+function unlockApp(){
+  document.body.classList.remove('locked');
+  document.getElementById('lockScreen').classList.add('hidden');
+}
+
+function showLockError(msg){
+  document.getElementById('lockError').textContent = msg;
+}
+
+async function checkCode(){
+  const val = document.getElementById('lockInput').value.trim();
+  if(val.length !== 4){ showLockError('Entrez les 4 chiffres'); return; }
+  try{
+    const hash = await sha256Hex(val);
+    if(hash === LOCK_HASH){
+      localStorage.setItem('devisCalcUnlocked', 'true');
+      unlockApp();
+    } else {
+      showLockError('Code incorrect');
+      document.getElementById('lockInput').value = '';
+      document.getElementById('lockInput').focus();
+    }
+  }catch(e){
+    showLockError('Le verrou nécessite une connexion sécurisée (https).');
+  }
+}
+
+if(localStorage.getItem('devisCalcUnlocked') === 'true'){
+  unlockApp();
+} else {
+  document.getElementById('lockSubmit').onclick = checkCode;
+  document.getElementById('lockInput').addEventListener('keydown', (e)=>{
+    if(e.key === 'Enter') checkCode();
+  });
+  document.getElementById('lockInput').addEventListener('input', ()=> showLockError(''));
+  setTimeout(()=> document.getElementById('lockInput').focus(), 50);
+}
+
+const RATES = {
+  acre:  { mat: 0.062,  serv: 0.1075 },
+  plein: { mat: 0.123 + 0.001, serv: 0.212 + 0.003 }
+};
+const FRAIS_FIXES_BASE = 240 + 200 + (9*12) + (5*12);
+
+let regime = 'acre';
+let articlesMat = [];
+let articlesServ = [];
+let pCustom = [];
+let pCustomIdSeq = 0;
+let idSeq = 0;
+let currentMonth = getMonthKey();
+let editingDevisId = null;
+
+// Données reprises de votre historique déjà saisi (septembre 2026).
+// Si vous ouvrez cette page sur un appareil où vous avez déjà enregistré
+// des devis via localStorage, ces valeurs par défaut seront ignorées
+// (vos données sauvegardées prennent le dessus, voir loadSettings()).
+let devisHistory = {
+  '2026-09': [
+    { id:'h0',  client:'Desbordes portail métal',    vente:860.00, net:597.33, date:'', paye:true },
+    { id:'h1',  client:'Melody velo decath',          vente:170.00, net:137.62, date:'', paye:true },
+    { id:'h2',  client:'Mathilde vélo',                vente:185.00, net:98.73,  date:'', paye:true },
+    { id:'h3',  client:'lucie cadenas',                vente:40.00,  net:33.86,  date:'', paye:true },
+    { id:'h4',  client:'longtail crevaison',           vente:35.00,  net:29.40,  date:'', paye:true },
+    { id:'h5',  client:'boss guillemette',             vente:81.00,  net:67.18,  date:'', paye:true },
+    { id:'h6',  client:'florian nul',                  vente:15.00,  net:11.55,  date:'', paye:true },
+    { id:'h7',  client:'adda BAL',                     vente:90.00,  net:78.48,  date:'', paye:true },
+    { id:'h8',  client:'Badge+clé',                    vente:89.90,  net:49.80,  date:'', paye:true },
+    { id:'h9',  client:'BAL PTT',                      vente:90.00,  net:59.67,  date:'', paye:true },
+    { id:'h10', client:'CALISSA IMMO',                 vente:747.00, net:510.88, date:'', paye:true },
+    { id:'h11', client:'BAL bonnefoy crochetage',      vente:100.00, net:72.59,  date:'', paye:true },
+    { id:'h12', client:'Pedrosa clé tubulaire',        vente:75.00,  net:65.10,  date:'', paye:true },
+    { id:'h13', client:'LEO clé vigie picard',         vente:223.20, net:108.02, date:'', paye:true },
+    { id:'h14', client:'Serrure cave lidl',            vente:183.90, net:144.47, date:'', paye:true },
+    { id:'h15', client:'crevaison velo bleu',          vente:47.50,  net:37.89,  date:'', paye:true },
+    { id:'h16', client:'crevaison fat bike',           vente:54.80,  net:41.97,  date:'', paye:true }
+  ]
+};
+let devisIdSeq = 17;
+
+function getMonthKey(){
+  const now = new Date();
+  return now.getFullYear() + '-' + String(now.getMonth()+1).padStart(2,'0');
+}
+
+function monthLabel(key){
+  const [year, month] = key.split('-');
+  const monthNames = ['Jan','Fév','Mar','Avr','Mai','Jun','Jul','Aoû','Sep','Oct','Nov','Déc'];
+  return monthNames[parseInt(month)-1] + ' ' + year;
+}
+
+function getMonthLabel(){
+  return monthLabel(currentMonth);
+}
+
+function prevMonthKeyOf(key){
+  const [year, month] = key.split('-').map(Number);
+  let y = year, m = month - 1;
+  if(m < 1){ m = 12; y -= 1; }
+  return y + '-' + String(m).padStart(2,'0');
+}
+
+// Liste déroulante des mois : tous les mois ayant des données + le mois actuellement consulté.
+function populateMonthSelect(){
+  const sel = document.getElementById('monthSelect');
+  if(!sel) return;
+  const months = Array.from(new Set([...Object.keys(devisHistory), currentMonth])).sort();
+  sel.innerHTML = months.map(k =>
+    `<option value="${k}" ${k===currentMonth ? 'selected' : ''}>${monthLabel(k)}</option>`
+  ).join('');
+}
+
+function goToMonth(key){
+  currentMonth = key;
+  editingDevisId = null;
+  renderHistory();
+  saveSettings();
+}
+
+function loadSettings(){
+  try{
+    const s = JSON.parse(localStorage.getItem('devisCalcSettings')||'{}');
+    if(s.regime) regime = s.regime;
+    if(s.joursAn) document.getElementById('joursAn').value = s.joursAn;
+    if(s.cfeAn!==undefined) document.getElementById('cfeAn').value = s.cfeAn;
+    if(s.revenuMois!==undefined) document.getElementById('revenuMois').value = s.revenuMois;
+    if(s.pLoyer!==undefined) document.getElementById('pLoyer').value = s.pLoyer;
+    if(s.pTel!==undefined) document.getElementById('pTel').value = s.pTel;
+    if(s.pCourses!==undefined) document.getElementById('pCourses').value = s.pCourses;
+    if(s.pAssurHab!==undefined) document.getElementById('pAssurHab').value = s.pAssurHab;
+    if(s.pAssurMoto!==undefined) document.getElementById('pAssurMoto').value = s.pAssurMoto;
+    if(s.currentMonth) currentMonth = s.currentMonth;
+    if(s.devisHistory) devisHistory = s.devisHistory;
+    if(s.articlesMat) articlesMat = s.articlesMat;
+    if(s.articlesServ) articlesServ = s.articlesServ;
+    if(s.idSeq) idSeq = s.idSeq;
+    if(s.devisIdSeq) devisIdSeq = s.devisIdSeq;
+    if(s.seuilRenta!==undefined) document.getElementById('seuilRenta').value = s.seuilRenta;
+    if(s.pCustom) pCustom = s.pCustom;
+    if(s.pCustomIdSeq) pCustomIdSeq = s.pCustomIdSeq;
+  }catch(e){}
+}
+
+function saveSettings(){
+  try{
+    localStorage.setItem('devisCalcSettings', JSON.stringify({
+      regime,
+      joursAn: document.getElementById('joursAn').value,
+      cfeAn: document.getElementById('cfeAn').value,
+      revenuMois: document.getElementById('revenuMois').value,
+      pLoyer: document.getElementById('pLoyer').value,
+      pTel: document.getElementById('pTel').value,
+      pCourses: document.getElementById('pCourses').value,
+      pAssurHab: document.getElementById('pAssurHab').value,
+      pAssurMoto: document.getElementById('pAssurMoto').value,
+      currentMonth,
+      devisHistory,
+      articlesMat,
+      articlesServ,
+      idSeq,
+      devisIdSeq,
+      seuilRenta: document.getElementById('seuilRenta').value,
+      pCustom,
+      pCustomIdSeq
+    }));
+  }catch(e){}
+}
+
+// Plafond théorique = ce que laisserait un devis 100% service ou 100% matériel
+// UNIQUEMENT après charges URSSAF/CFP, sans le coût fixe du jour ni l'achat matière.
+// C'est un maximum indépassable dans ce régime, pas un seuil à atteindre.
+function updateCeilingNote(){
+  // Texte de repère retiré de l'affichage à la demande de l'utilisatrice.
+}
+
+function addArticleMat(){
+  articlesMat.push({ id: 'm'+(idSeq++), achat: '', vente: '' });
+  renderMat();
+}
+
+function addArticleServ(){
+  articlesServ.push({ id: 's'+(idSeq++), vente: '' });
+  renderServ();
+}
+
+function removeArticleMat(id){
+  articlesMat = articlesMat.filter(a=>a.id!==id);
+  renderMat();
+}
+
+function removeArticleServ(id){
+  articlesServ = articlesServ.filter(a=>a.id!==id);
+  renderServ();
+}
+
+function updateArticleMat(id, field, value){
+  const a = articlesMat.find(a=>a.id===id);
+  if(a) a[field] = value;
+  compute();
+}
+
+function updateArticleServ(id, value){
+  const a = articlesServ.find(a=>a.id===id);
+  if(a) a.vente = value;
+  compute();
+}
+
+function fmt(n){
+  const sign = n<0 ? '-' : '';
+  return sign + Math.abs(n).toLocaleString('fr-FR', {minimumFractionDigits:2, maximumFractionDigits:2}) + ' €';
+}
+
+function renderMat(){
+  const cont = document.getElementById('articlesMat');
+  cont.innerHTML = '';
+  articlesMat.forEach(a=>{
+    const div = document.createElement('div');
+    div.className = 'article';
+    div.innerHTML = `
+      <div class="article-top">
+        <span style="font-size:0.8rem; color:var(--steel); font-weight:600;">Matériel</span>
+        <button class="remove-btn" data-removemat="${a.id}">✕</button>
+      </div>
+      <div class="article-fields">
+        <div class="field"><label>Achat TTC</label><input type="number" inputmode="decimal" step="0.01" id="mat-${a.id}-achat" data-mat="${a.id}" data-f="achat" value="${a.achat}" placeholder="0,00"></div>
+        <div class="field"><label>Vente TTC</label><input type="number" inputmode="decimal" step="0.01" id="mat-${a.id}-vente" data-mat="${a.id}" data-f="vente" value="${a.vente}" placeholder="0,00"></div>
+      </div>
+      <div class="article-net"><span>Net ligne</span><b id="net-${a.id}">0,00 €</b></div>
+    `;
+    cont.appendChild(div);
+  });
+  attachHandlersMat();
+  compute();
+}
+
+function renderServ(){
+  const cont = document.getElementById('articlesServ');
+  cont.innerHTML = '';
+  articlesServ.forEach(a=>{
+    const div = document.createElement('div');
+    div.className = 'article';
+    div.innerHTML = `
+      <div class="article-top">
+        <span style="font-size:0.8rem; color:var(--violet-deep); font-weight:600;">Service</span>
+        <button class="remove-btn" data-removeserv="${a.id}">✕</button>
+      </div>
+      <div class="article-fields">
+        <div class="field"><label>Vente TTC</label><input type="number" inputmode="decimal" step="0.01" id="serv-${a.id}-vente" data-serv="${a.id}" value="${a.vente}" placeholder="0,00"></div>
+      </div>
+      <div class="article-net"><span>Net ligne</span><b id="net-${a.id}">0,00 €</b></div>
+    `;
+    cont.appendChild(div);
+  });
+  attachHandlersServ();
+  compute();
+}
+
+function attachHandlersMat(){
+  document.querySelectorAll('[data-removemat]').forEach(btn=>{
+    btn.onclick = ()=> removeArticleMat(btn.dataset.removemat);
+  });
+  document.querySelectorAll('[data-mat]').forEach(inp=>{
+    inp.oninput = ()=> updateArticleMat(inp.dataset.mat, inp.dataset.f, inp.value);
+  });
+}
+
+function attachHandlersServ(){
+  document.querySelectorAll('[data-removeserv]').forEach(btn=>{
+    btn.onclick = ()=> removeArticleServ(btn.dataset.removeserv);
+  });
+  document.querySelectorAll('[data-serv]').forEach(inp=>{
+    inp.oninput = ()=> updateArticleServ(inp.dataset.serv, inp.value);
+  });
+}
+
+function computeDayCost(){
+  const joursAn = Math.max(1, Number(document.getElementById('joursAn').value)||330);
+  const cfeAn = Math.max(0, Number(document.getElementById('cfeAn').value)||0);
+  const fraisFixesAn = FRAIS_FIXES_BASE + cfeAn;
+  return fraisFixesAn / joursAn;
+}
+
+function compute(){
+  const rates = RATES[regime];
+  const dayCost = computeDayCost();
+  document.getElementById('dayCost').textContent = fmt(dayCost);
+
+  let totalVente=0, totalAchat=0, totalCharges=0, totalMarge=0;
+
+  articlesMat.forEach(a=>{
+    const vente = Number(a.vente)||0;
+    const achat = Number(a.achat)||0;
+    const charges = vente*rates.mat;
+    const marge = vente - achat;
+    const net = marge - charges;
+
+    totalVente += vente; totalAchat += achat; totalCharges += charges; totalMarge += marge;
+    const el = document.getElementById('net-'+a.id);
+    if(el) el.textContent = fmt(net);
+  });
+
+  articlesServ.forEach(a=>{
+    const vente = Number(a.vente)||0;
+    const charges = vente*rates.serv;
+    const marge = vente;
+    const net = marge - charges;
+
+    totalVente += vente; totalCharges += charges; totalMarge += marge;
+    const el = document.getElementById('net-'+a.id);
+    if(el) el.textContent = fmt(net);
+  });
+
+  const netFinal = totalMarge - totalCharges - dayCost;
+
+  document.getElementById('sVente').textContent = fmt(totalVente);
+  document.getElementById('sAchat').textContent = fmt(totalAchat);
+  document.getElementById('sMarge').textContent = fmt(totalMarge);
+  document.getElementById('sCharges').textContent = fmt(totalCharges);
+  document.getElementById('sFixe').textContent = fmt(dayCost);
+  document.getElementById('sNet').textContent = fmt(netFinal);
+  document.getElementById('summaryFinal').classList.toggle('neg', netFinal < 0);
+  const pct = totalVente > 0 ? (netFinal/totalVente*100) : 0;
+  document.getElementById('sNetPct').textContent = totalVente > 0
+    ? pct.toLocaleString('fr-FR',{minimumFractionDigits:1, maximumFractionDigits:1}) + ' % du total vente'
+    : '0,0 % du total vente';
+
+  computePrivate();
+  updateCeilingNote();
+  saveSettings();
+}
+
+function computePrivate(){
+  const revenu = Number(document.getElementById('revenuMois').value)||0;
+  const loyer = Number(document.getElementById('pLoyer').value)||0;
+  const tel = Number(document.getElementById('pTel').value)||0;
+  const courses = Number(document.getElementById('pCourses').value)||0;
+  const assurHab = Number(document.getElementById('pAssurHab').value)||0;
+  const assurMoto = Number(document.getElementById('pAssurMoto').value)||0;
+  const totalCustom = pCustom.reduce((s,c)=> s + (Number(c.amount)||0), 0);
+  const totalPrive = loyer+tel+courses+assurHab+assurMoto+totalCustom;
+  const reste = revenu - totalPrive;
+
+  document.getElementById('pTotal').textContent = fmt(totalPrive);
+  document.getElementById('pNet').textContent = fmt(reste);
+  document.getElementById('privateFinal').classList.toggle('neg', reste < 0);
+}
+
+function renderPrivateCustom(){
+  const cont = document.getElementById('privateCustomRows');
+  cont.innerHTML = '';
+  pCustom.forEach(c=>{
+    const div = document.createElement('div');
+    div.className = 'private-custom-row';
+    div.innerHTML = `
+      <input type="text" placeholder="Vacances, réparation vélo..." data-customlabel="${c.id}" value="${escapeHtml(c.label)}">
+      <input type="number" step="0.01" placeholder="0,00" data-customamount="${c.id}" value="${c.amount}">
+      <button class="remove-btn" data-removecustom="${c.id}" title="Supprimer">✕</button>
+    `;
+    cont.appendChild(div);
+  });
+  cont.querySelectorAll('[data-customlabel]').forEach(inp=>{
+    inp.oninput = ()=> updatePrivateCustom(inp.dataset.customlabel, 'label', inp.value);
+  });
+  cont.querySelectorAll('[data-customamount]').forEach(inp=>{
+    inp.oninput = ()=> updatePrivateCustom(inp.dataset.customamount, 'amount', inp.value);
+  });
+  cont.querySelectorAll('[data-removecustom]').forEach(btn=>{
+    btn.onclick = ()=> removePrivateCustom(btn.dataset.removecustom);
+  });
+}
+
+function addPrivateCustom(){
+  pCustom.push({ id: 'pc'+(pCustomIdSeq++), label: '', amount: '' });
+  renderPrivateCustom();
+  compute();
+}
+
+function removePrivateCustom(id){
+  pCustom = pCustom.filter(c=>c.id!==id);
+  renderPrivateCustom();
+  compute();
+}
+
+function updatePrivateCustom(id, field, value){
+  const c = pCustom.find(c=>c.id===id);
+  if(c) c[field] = value;
+  compute();
+}
+
+function exportPdf(){
+  const client = document.getElementById('clientName').value.trim() || 'Client non renseigné';
+  const dateStr = new Date().toLocaleDateString('fr-FR');
+
+  let rows = '';
+  articlesMat.forEach((a, i)=>{
+    const achat = Number(a.achat)||0, vente = Number(a.vente)||0;
+    if(achat===0 && vente===0) return;
+    rows += `<tr><td>Matériel ${i+1}</td><td>${fmt(achat)}</td><td>${fmt(vente)}</td></tr>`;
+  });
+  articlesServ.forEach((a, i)=>{
+    const vente = Number(a.vente)||0;
+    if(vente===0) return;
+    rows += `<tr><td>Service ${i+1}</td><td>—</td><td>${fmt(vente)}</td></tr>`;
+  });
+  if(!rows) rows = '<tr><td colspan="3">Aucun article renseigné</td></tr>';
+
+  const get = (id)=> (document.getElementById(id)||{}).textContent || '0,00 €';
+
+  document.getElementById('printArea').innerHTML = `
+    <div class="print-header">
+      <h1>La Clé Universelle</h1>
+      <div class="print-sub">Dépannage serrurerie — Toulouse / Occitanie</div>
+    </div>
+    <div class="print-meta">
+      <div><strong>Client :</strong> ${escapeHtml(client)}</div>
+      <div><strong>Date :</strong> ${dateStr}</div>
+    </div>
+    <table class="print-table">
+      <thead><tr><th>Ligne</th><th>Achat</th><th>Vente</th></tr></thead>
+      <tbody>${rows}</tbody>
+    </table>
+    <div class="print-summary">
+      <div><span>Total vente</span><b>${get('sVente')}</b></div>
+      <div><span>Total achat matériel</span><b>${get('sAchat')}</b></div>
+      <div><span>Marge brute</span><b>${get('sMarge')}</b></div>
+      <div><span>Charges URSSAF + CFP</span><b>${get('sCharges')}</b></div>
+      <div><span>Coût fixe du jour</span><b>${get('sFixe')}</b></div>
+      <div class="print-net"><span>Net pour vous</span><b>${get('sNet')}</b></div>
+    </div>
+  `;
+  document.body.classList.add('printing');
+  window.print();
+}
+window.addEventListener('afterprint', ()=> document.body.classList.remove('printing'));
+
+function saveQuote(){
+  const clientName = document.getElementById('clientName').value.trim();
+  if(!clientName){
+    alert('Veuillez entrer le nom du client');
+    return;
+  }
+
+  const rates = RATES[regime];
+  let totalVente=0, totalAchat=0, totalCharges=0, totalMarge=0;
+  let venteMat=0, achatMat=0, venteServ=0;
+
+  articlesMat.forEach(a=>{
+    const vente = Number(a.vente)||0;
+    const achat = Number(a.achat)||0;
+    const charges = vente*rates.mat;
+    totalVente += vente; totalAchat += achat; totalCharges += charges; totalMarge += vente-achat;
+    venteMat += vente; achatMat += achat;
+  });
+
+  articlesServ.forEach(a=>{
+    const vente = Number(a.vente)||0;
+    const charges = vente*rates.serv;
+    totalVente += vente; totalCharges += charges; totalMarge += vente;
+    venteServ += vente;
+  });
+
+  const dayCost = computeDayCost();
+  const netFinal = totalMarge - totalCharges - dayCost;
+
+  if(!devisHistory[currentMonth]) devisHistory[currentMonth] = [];
+  devisHistory[currentMonth].unshift({
+    id: 'h'+(devisIdSeq++),
+    client: clientName,
+    vente: totalVente,
+    net: netFinal,
+    date: new Date().toLocaleDateString('fr-FR'),
+    regime: regime,
+    paye: true,
+    breakdown: { venteMat, achatMat, venteServ, dayCost }
+  });
+
+  document.getElementById('clientName').value = '';
+  renderHistory();
+  saveSettings();
+}
+
+function escapeHtml(s){
+  return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+function pctBadge(vente, net){
+  if(!vente || vente<=0) return '<span class="pct-na">—</span>';
+  const seuil = Number(document.getElementById('seuilRenta').value)||0;
+  const pct = (net/vente)*100;
+  const cls = pct >= seuil ? 'pct-good' : 'pct-bad';
+  return `<span class="pct-badge ${cls}">${pct.toLocaleString('fr-FR',{minimumFractionDigits:1,maximumFractionDigits:1})} %</span>`;
+}
+
+function regimePill(d){
+  if(!d.breakdown){
+    return '<span class="regime-pill na" title="Devis antérieur à la mise à jour : pas de détail matériel/service enregistré, recalcul impossible">—</span>';
+  }
+  const label = d.regime === 'plein' ? 'Plein' : 'ACRE';
+  const cls = d.regime === 'plein' ? 'plein' : 'acre';
+  return `<span class="regime-pill ${cls}" data-toggleregime="${d.id}" title="Cliquer pour recalculer le net avec l'autre régime">${label}</span>`;
+}
+
+function recomputeDevisNet(d){
+  const b = d.breakdown;
+  const r = RATES[d.regime];
+  const netMat = (b.venteMat - b.achatMat) - (b.venteMat * r.mat);
+  const netServ = b.venteServ - (b.venteServ * r.serv);
+  d.net = netMat + netServ - b.dayCost;
+}
+
+function syncRevenuMois(totalNet){
+  const el = document.getElementById('revenuMois');
+  if(!el) return;
+  el.value = totalNet.toFixed(2);
+  computePrivate();
+}
+
+function renderHistory(){
+  const cont = document.getElementById('historyContent');
+  document.getElementById('monthDisplay').textContent = getMonthLabel();
+  populateMonthSelect();
+  updateCeilingNote();
+
+  const totalsCont = document.getElementById('historyTotals');
+  if(!devisHistory[currentMonth] || devisHistory[currentMonth].length === 0){
+    cont.innerHTML = '<div class="empty-state">Aucun devis enregistré pour ce mois</div>';
+    if(totalsCont) totalsCont.innerHTML = '';
+    syncRevenuMois(0);
+    return;
+  }
+
+  const devis = devisHistory[currentMonth];
+  let html = '<table class="history-table"><thead><tr><th class="del-col"></th><th>Client</th><th>Vente</th><th>Net</th><th class="pct">%</th><th class="regime">Régime</th><th class="paye">Payé</th><th></th></tr></thead><tbody>';
+
+  let totalVente = 0, totalNet = 0;
+  let totalAchatMat = 0;
+  let venteEncaisse = 0, netEncaisse = 0, venteAttente = 0, netAttente = 0;
+  devis.forEach((d, idx)=>{
+    totalVente += d.vente;
+    totalNet += d.net;
+    if(d.breakdown) totalAchatMat += Number(d.breakdown.achatMat)||0;
+    const estPaye = d.paye !== false;
+    if(estPaye){ venteEncaisse += d.vente; netEncaisse += d.net; }
+    else { venteAttente += d.vente; netAttente += d.net; }
+
+    const payeCheckbox = `<input type="checkbox" class="paye-check" data-payedevis="${d.id}" ${estPaye ? 'checked' : ''} title="Facture payée">`;
+
+    if(editingDevisId === d.id){
+      const b = d.breakdown || { achatMat:0, venteMat:0, venteServ:d.vente };
+      html += `<tr>
+        <td class="del-col"></td>
+        <td><input type="text" class="edit-input client-input" id="edit-client-${d.id}" value="${escapeHtml(d.client)}"></td>
+        <td><div class="edit-stack">
+          <input type="number" step="0.01" class="edit-mini" id="edit-achatMat-${d.id}" value="${b.achatMat}" placeholder="Achat mat." title="Achat matériel TTC">
+          <input type="number" step="0.01" class="edit-mini" id="edit-venteMat-${d.id}" value="${b.venteMat}" placeholder="Vente mat." title="Vente matériel TTC">
+        </div></td>
+        <td><div class="edit-stack">
+          <input type="number" step="0.01" class="edit-mini" id="edit-venteServ-${d.id}" value="${b.venteServ}" placeholder="Vente serv." title="Vente service TTC">
+          <b class="edit-net-preview" id="edit-netpreview-${d.id}">${fmt(d.net)}</b>
+        </div></td>
+        <td class="pct pct-na">—</td>
+        <td class="regime pct-na">—</td>
+        <td class="paye">${payeCheckbox}</td>
+        <td class="actions"><div class="edit-actions">
+          <button class="row-btn" title="Enregistrer" data-savedevis="${d.id}">✓</button>
+          <button class="row-btn del" title="Annuler" data-canceldevis="${d.id}">✕</button>
+        </div></td>
+      </tr>`;
+    } else {
+      html += `<tr>
+        <td class="del-col"><button class="row-btn del" title="Supprimer" data-deldevis="${d.id}">🗑</button></td>
+        <td>${escapeHtml(d.client)}</td>
+        <td>${fmt(d.vente)}</td>
+        <td>${fmt(d.net)}</td>
+        <td class="pct">${pctBadge(d.vente, d.net)}</td>
+        <td class="regime">${regimePill(d)}</td>
+        <td class="paye">${payeCheckbox}</td>
+        <td class="actions">
+          <button class="row-btn" title="Monter" data-moveup="${d.id}" ${idx===0 ? 'disabled' : ''}>↑</button>
+          <button class="row-btn" title="Descendre" data-movedown="${d.id}" ${idx===devis.length-1 ? 'disabled' : ''}>↓</button>
+          <button class="row-btn" title="Modifier" data-editdevis="${d.id}">✎</button>
+        </td>
+      </tr>`;
+    }
+  });
+
+  html += '</tbody></table>';
+  syncRevenuMois(netEncaisse);
+  const moyennePct = totalVente > 0 ? (totalNet/totalVente*100) : 0;
+  const totalsHtml = `<div class="history-totals">
+    <div class="stat"><span class="label">Devis</span><span class="value">${devis.length}</span></div>
+    <div class="stat"><span class="label">Total vente</span><span class="value">${fmt(totalVente)}</span></div>
+    <div class="stat"><span class="label">Total net estimé</span><span class="value">${fmt(totalNet)}</span></div>
+    <div class="stat"><span class="label">Total achat matériel</span><span class="value">${fmt(totalAchatMat)}</span></div>
+    <div class="stat"><span class="label">Moyenne %</span><span class="value">${moyennePct.toLocaleString('fr-FR',{minimumFractionDigits:1,maximumFractionDigits:1})} %</span></div>
+  </div>
+  <div class="history-totals" style="margin-top:8px; border-top:1px dashed var(--line); padding-top:10px;">
+    <div class="stat"><span class="label">Encaissé (net / vente)</span><span class="value">${fmt(netEncaisse)} / ${fmt(venteEncaisse)}</span></div>
+    <div class="stat"><span class="label">En attente (net / vente)</span><span class="value">${fmt(netAttente)} / ${fmt(venteAttente)}</span></div>
+  </div>`;
+
+  if(totalsCont) totalsCont.innerHTML = totalsHtml;
+  cont.innerHTML = html;
+  attachHistoryHandlers();
+}
+
+function attachEditBreakdownHandlers(d){
+  const dayCost = (d.breakdown && d.breakdown.dayCost !== undefined) ? d.breakdown.dayCost : computeDayCost();
+  const recalc = ()=>{
+    const achatMat = Number((document.getElementById('edit-achatMat-'+d.id)||{}).value)||0;
+    const venteMat = Number((document.getElementById('edit-venteMat-'+d.id)||{}).value)||0;
+    const venteServ = Number((document.getElementById('edit-venteServ-'+d.id)||{}).value)||0;
+    const r = RATES[d.regime] || RATES.acre;
+    const netMat = (venteMat - achatMat) - (venteMat * r.mat);
+    const netServ = venteServ - (venteServ * r.serv);
+    const net = netMat + netServ - dayCost;
+    const el = document.getElementById('edit-netpreview-'+d.id);
+    if(el) el.textContent = fmt(net);
+  };
+  ['edit-achatMat-'+d.id,'edit-venteMat-'+d.id,'edit-venteServ-'+d.id].forEach(id=>{
+    const inp = document.getElementById(id);
+    if(inp) inp.oninput = recalc;
+  });
+  recalc();
+}
+
+function attachHistoryHandlers(){
+  if(editingDevisId && devisHistory[currentMonth]){
+    const d = devisHistory[currentMonth].find(x=>x.id===editingDevisId);
+    if(d) attachEditBreakdownHandlers(d);
+  }
+  document.querySelectorAll('[data-editdevis]').forEach(btn=>{
+    btn.onclick = ()=>{ editingDevisId = btn.dataset.editdevis; renderHistory(); };
+  });
+  document.querySelectorAll('[data-canceldevis]').forEach(btn=>{
+    btn.onclick = ()=>{ editingDevisId = null; renderHistory(); };
+  });
+  document.querySelectorAll('[data-moveup]').forEach(btn=>{
+    btn.onclick = ()=>{
+      const id = btn.dataset.moveup;
+      const arr = devisHistory[currentMonth];
+      const i = arr.findIndex(d=>d.id===id);
+      if(i > 0){
+        [arr[i-1], arr[i]] = [arr[i], arr[i-1]];
+        saveSettings();
+        renderHistory();
+      }
+    };
+  });
+  document.querySelectorAll('[data-movedown]').forEach(btn=>{
+    btn.onclick = ()=>{
+      const id = btn.dataset.movedown;
+      const arr = devisHistory[currentMonth];
+      const i = arr.findIndex(d=>d.id===id);
+      if(i > -1 && i < arr.length-1){
+        [arr[i+1], arr[i]] = [arr[i], arr[i+1]];
+        saveSettings();
+        renderHistory();
+      }
+    };
+  });
+  document.querySelectorAll('[data-deldevis]').forEach(btn=>{
+    btn.onclick = ()=>{
+      const id = btn.dataset.deldevis;
+      if(!confirm('Supprimer ce devis de l\'historique ?')) return;
+      devisHistory[currentMonth] = devisHistory[currentMonth].filter(d=>d.id!==id);
+      saveSettings();
+      renderHistory();
+    };
+  });
+  document.querySelectorAll('[data-payedevis]').forEach(chk=>{
+    chk.onchange = ()=>{
+      const id = chk.dataset.payedevis;
+      const d = devisHistory[currentMonth].find(x=>x.id===id);
+      if(!d) return;
+      d.paye = chk.checked;
+      saveSettings();
+      renderHistory();
+    };
+  });
+  document.querySelectorAll('[data-toggleregime]').forEach(pill=>{
+    pill.onclick = ()=>{
+      const id = pill.dataset.toggleregime;
+      const d = devisHistory[currentMonth].find(x=>x.id===id);
+      if(!d || !d.breakdown) return;
+      d.regime = (d.regime === 'plein') ? 'acre' : 'plein';
+      recomputeDevisNet(d);
+      saveSettings();
+      renderHistory();
+    };
+  });
+  document.querySelectorAll('[data-savedevis]').forEach(btn=>{
+    btn.onclick = ()=>{
+      const id = btn.dataset.savedevis;
+      const d = devisHistory[currentMonth].find(x=>x.id===id);
+      if(!d) return;
+      const client = document.getElementById('edit-client-'+id).value.trim();
+      const achatMat = Number(document.getElementById('edit-achatMat-'+id).value)||0;
+      const venteMat = Number(document.getElementById('edit-venteMat-'+id).value)||0;
+      const venteServ = Number(document.getElementById('edit-venteServ-'+id).value)||0;
+      if(!client){ alert('Le nom du client ne peut pas être vide'); return; }
+      const regimeToUse = d.regime || 'acre';
+      const dayCost = (d.breakdown && d.breakdown.dayCost !== undefined) ? d.breakdown.dayCost : computeDayCost();
+      const r = RATES[regimeToUse];
+      const netMat = (venteMat - achatMat) - (venteMat * r.mat);
+      const netServ = venteServ - (venteServ * r.serv);
+      d.client = client;
+      d.vente = venteMat + venteServ;
+      d.net = netMat + netServ - dayCost;
+      d.regime = regimeToUse;
+      d.breakdown = { venteMat, achatMat, venteServ, dayCost };
+      editingDevisId = null;
+      saveSettings();
+      renderHistory();
+    };
+  });
+}
+
+function nextMonthKey(key){
+  const [year, month] = key.split('-').map(Number);
+  let y = year, m = month + 1;
+  if(m > 12){ m = 1; y += 1; }
+  return y + '-' + String(m).padStart(2,'0');
+}
+
+function exportData(){
+  let raw = {};
+  try{ raw = JSON.parse(localStorage.getItem('devisCalcSettings')||'{}'); }catch(e){}
+  const blob = new Blob([JSON.stringify(raw, null, 2)], {type:'application/json'});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  const dateStr = new Date().toISOString().slice(0,10);
+  a.href = url;
+  a.download = 'sauvegarde-calculette-'+dateStr+'.json';
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+}
+
+function importDataFile(file){
+  const reader = new FileReader();
+  reader.onload = (e)=>{
+    try{
+      const data = JSON.parse(e.target.result);
+      if(!confirm('Importer cette sauvegarde ? Cela remplacera toutes les données actuellement affichées dans ce navigateur.')) return;
+      localStorage.setItem('devisCalcSettings', JSON.stringify(data));
+      location.reload();
+    }catch(err){
+      alert('Fichier invalide, impossible de lire cette sauvegarde.');
+    }
+  };
+  reader.readAsText(file);
+}
+
+function newMonth(){
+  if(devisHistory[currentMonth] && devisHistory[currentMonth].length > 0){
+    if(!confirm('Passer au mois suivant (' + nextMonthKey(currentMonth) + ') ? Le mois actuel restera consultable dans l\'historique.')) return;
+  }
+  currentMonth = nextMonthKey(currentMonth);
+  if(!devisHistory[currentMonth]) devisHistory[currentMonth] = [];
+  renderHistory();
+  saveSettings();
+}
+
+document.getElementById('btnAcre').onclick = ()=>{
+  regime='acre';
+  document.getElementById('btnAcre').classList.add('active');
+  document.getElementById('btnPlein').classList.remove('active');
+  compute();
+};
+
+document.getElementById('btnPlein').onclick = ()=>{
+  regime='plein';
+  document.getElementById('btnPlein').classList.add('active');
+  document.getElementById('btnAcre').classList.remove('active');
+  compute();
+};
+
+document.getElementById('joursAn').oninput = compute;
+document.getElementById('cfeAn').oninput = compute;
+document.getElementById('addArticleMat').onclick = addArticleMat;
+document.getElementById('addArticleServ').onclick = addArticleServ;
+document.getElementById('saveQuoteBtn').onclick = saveQuote;
+document.getElementById('exportPdfBtn').onclick = exportPdf;
+document.getElementById('newMonthBtn').onclick = newMonth;
+document.getElementById('monthSelect').onchange = (e)=> goToMonth(e.target.value);
+document.getElementById('prevMonthBtn').onclick = ()=> goToMonth(prevMonthKeyOf(currentMonth));
+document.getElementById('nextMonthBtn').onclick = ()=> goToMonth(nextMonthKey(currentMonth));
+document.getElementById('exportBtn').onclick = exportData;
+document.getElementById('importBtn').onclick = ()=> document.getElementById('importFile').click();
+document.getElementById('importFile').onchange = (e)=>{
+  if(e.target.files && e.target.files[0]) importDataFile(e.target.files[0]);
+  e.target.value = '';
+};
+
+['pLoyer','pTel','pCourses','pAssurHab','pAssurMoto'].forEach(id=>{
+  document.getElementById(id).oninput = compute;
+});
+
+document.getElementById('seuilRenta').oninput = ()=>{ renderHistory(); saveSettings(); };
+document.getElementById('addPrivateCustom').onclick = addPrivateCustom;
+
+loadSettings();
+if(regime==='plein'){
+  document.getElementById('btnPlein').classList.add('active');
+  document.getElementById('btnAcre').classList.remove('active');
+}
+if(articlesMat.length === 0) articlesMat.push({ id:'m'+(idSeq++), achat:'', vente:'' });
+if(articlesServ.length === 0) articlesServ.push({ id:'s'+(idSeq++), vente:'' });
+renderMat();
+renderServ();
+renderPrivateCustom();
+renderHistory();
+compute();
+
+if('serviceWorker' in navigator){
+  window.addEventListener('load', ()=>{
+    navigator.serviceWorker.register('sw.js').catch(()=>{});
+  });
+}
+</script>
+</body>
+</html>
