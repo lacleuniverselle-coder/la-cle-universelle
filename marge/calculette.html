@@ -1624,8 +1624,9 @@ function parseDevisLines(lines){
 
   const headerRe = /^(Service|Matériel|Remise globale)\s+Qté\.?\s+PU\s*HT/i;
   let currentSection = null;
-  let servTotal = 0, matTotal = 0, remiseTotal = 0;
-  let servCount = 0, matCount = 0;
+  let servTotal = 0, remiseTotal = 0;
+  let servCount = 0;
+  const matRows = [];
 
   for(let idx=0; idx<lines.length; idx++){
     const line = lines[idx].trim();
@@ -1644,12 +1645,12 @@ function parseDevisLines(lines){
     const row = pdfTryParseRow(line, currentSection.hasRemise);
     if(row){
       if(currentSection.type === 'service'){ servTotal += row.totalHt; servCount++; }
-      else if(currentSection.type === 'materiel'){ matTotal += row.totalHt; matCount++; }
+      else if(currentSection.type === 'materiel'){ matRows.push(row.totalHt); }
       else if(currentSection.type === 'remise'){ remiseTotal += row.totalHt; }
     }
   }
 
-  return { client, servTotal, matTotal, remiseTotal, servCount, matCount, netAPayer };
+  return { client, servTotal, matRows, remiseTotal, servCount, matCount: matRows.length, netAPayer };
 }
 
 document.getElementById('importPdfFile').onchange = async (e)=>{
@@ -1670,24 +1671,29 @@ document.getElementById('importPdfFile').onchange = async (e)=>{
     if(!confirm('Remplacer les lignes matériel/service actuelles par celles importées du PDF (' + (r.client||'client non trouvé') + ') ?')) return;
 
     // Répartition proportionnelle de la remise globale (si présente)
-    let servFinal = r.servTotal, matFinal = r.matTotal;
-    const brut = r.servTotal + r.matTotal;
+    const matTotal = r.matRows.reduce((a,b)=>a+b, 0);
+    const brut = r.servTotal + matTotal;
+    let servFinal = r.servTotal;
+    let matRowsFinal = r.matRows.slice();
     if(r.remiseTotal !== 0 && brut > 0){
-      const ratioMat = r.matTotal / brut;
-      matFinal = r.matTotal + r.remiseTotal * ratioMat;
+      const ratioMat = matTotal / brut;
+      const matRemisePart = r.remiseTotal * ratioMat;
       servFinal = r.servTotal + r.remiseTotal * (1 - ratioMat);
+      matRowsFinal = matTotal > 0
+        ? r.matRows.map(v => v + matRemisePart * (v / matTotal))
+        : r.matRows;
     }
 
     articlesServ = r.servCount > 0 ? [{ id:'s'+(idSeq++), vente: servFinal.toFixed(2) }] : [];
-    articlesMat = r.matCount > 0 ? [{ id:'m'+(idSeq++), achat:'', vente: matFinal.toFixed(2), categorie:'autre' }] : [];
+    articlesMat = matRowsFinal.map(v => ({ id:'m'+(idSeq++), achat:'', vente: v.toFixed(2), categorie:'autre' }));
     if(articlesServ.length === 0) articlesServ.push({ id:'s'+(idSeq++), vente:'' });
     if(articlesMat.length === 0) articlesMat.push({ id:'m'+(idSeq++), achat:'', vente:'', categorie:'autre' });
     document.getElementById('clientName').value = r.client;
     renderMat();
     renderServ();
 
-    const computedTotal = servFinal + matFinal;
-    let msg = 'Importé : ' + (r.client||'client inconnu') + ' — ' + r.matCount + ' ligne(s) matériel regroupée(s), ' + r.servCount + ' ligne(s) service regroupée(s).';
+    const computedTotal = servFinal + matRowsFinal.reduce((a,b)=>a+b, 0);
+    let msg = 'Importé : ' + (r.client||'client inconnu') + ' — ' + r.matCount + ' ligne(s) matériel, ' + r.servCount + ' ligne(s) service regroupée(s). Pense à choisir la catégorie de chaque ligne matériel et à saisir son achat.';
     if(r.netAPayer !== null){
       const ecart = Math.abs(computedTotal - r.netAPayer);
       if(ecart > 0.02){
