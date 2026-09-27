@@ -191,7 +191,8 @@ body.locked > .wrap{display:none;}
   <div class="panel">
     <div class="tool-add-row">
       <div class="field"><label>Catégorie</label><select id="manualCatSelect"></select></div>
-      <div class="field" style="max-width:110px;"><label>Acheté</label><input type="number" step="0.01" min="0" id="manualCatAchat" placeholder="0,00"></div>
+      <div class="field" style="max-width:110px;"><label>Acheté HT</label><input type="number" step="0.01" min="0" id="manualCatAchatHt" placeholder="0,00"></div>
+      <div class="field" style="max-width:110px;"><label>Acheté TTC</label><input type="number" step="0.01" min="0" id="manualCatAchat" placeholder="0,00"></div>
       <div class="field" style="max-width:110px;"><label>Vendu</label><input type="number" step="0.01" min="0" id="manualCatVente" placeholder="0,00"></div>
       <div class="field" style="max-width:170px;">
         <label>Mois (optionnel)</label>
@@ -235,6 +236,7 @@ const BASE_CATEGORIES = [
   { id:'poignees', label:'Poignées' }
 ];
 const CAT_AUTRE = { id:'autre', label:'Autre' };
+const TVA_COEF = 1.2; // TVA 20% pour conversion HT <-> TTC des achats matériel
 function loadCustomCategories(){
   try{
     const s = JSON.parse(localStorage.getItem('devisCalcSettings')||'{}');
@@ -464,6 +466,15 @@ function renderManualCatList(){
   });
 }
 
+document.getElementById('manualCatAchatHt').addEventListener('input', ()=>{
+  const ht = Number(document.getElementById('manualCatAchatHt').value)||0;
+  document.getElementById('manualCatAchat').value = ht ? (ht*TVA_COEF).toFixed(2) : '';
+});
+document.getElementById('manualCatAchat').addEventListener('input', ()=>{
+  const ttc = Number(document.getElementById('manualCatAchat').value)||0;
+  document.getElementById('manualCatAchatHt').value = ttc ? (ttc/TVA_COEF).toFixed(2) : '';
+});
+
 document.getElementById('addManualCatBtn').onclick = ()=>{
   const categorie = document.getElementById('manualCatSelect').value;
   const achat = Number(document.getElementById('manualCatAchat').value)||0;
@@ -476,6 +487,7 @@ document.getElementById('addManualCatBtn').onclick = ()=>{
   list.push({ id: 'mc'+Date.now(), categorie, achat, vente, dateISO });
   saveManualCat(list);
   document.getElementById('manualCatAchat').value = '';
+  document.getElementById('manualCatAchatHt').value = '';
   document.getElementById('manualCatVente').value = '';
   document.getElementById('manualCatMonth').value = '';
   renderManualCatList();

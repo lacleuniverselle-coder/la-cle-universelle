@@ -668,6 +668,7 @@ function addCustomCategory(){
   renderMat();
 }
 const FRAIS_FIXES_BASE = 240 + 200 + (9*12) + (5*12);
+const TVA_COEF = 1.2; // TVA 20% pour conversion HT <-> TTC des achats matériel
 
 let regime = 'acre';
 let articlesMat = [];
@@ -854,7 +855,10 @@ function renderMat(){
         <button class="remove-btn" data-removemat="${a.id}">✕</button>
       </div>
       <div class="article-fields">
+        <div class="field"><label>Achat HT</label><input type="number" inputmode="decimal" step="0.01" id="mat-${a.id}-achatht" data-matht="${a.id}" value="${a.achat ? (Number(a.achat)/TVA_COEF).toFixed(2) : ''}" placeholder="0,00"></div>
         <div class="field"><label>Achat TTC</label><input type="number" inputmode="decimal" step="0.01" id="mat-${a.id}-achat" data-mat="${a.id}" data-f="achat" value="${a.achat}" placeholder="0,00"></div>
+      </div>
+      <div class="article-fields" style="margin-top:6px;">
         <div class="field"><label>Vente TTC</label><input type="number" inputmode="decimal" step="0.01" id="mat-${a.id}-vente" data-mat="${a.id}" data-f="vente" value="${a.vente}" placeholder="0,00"></div>
       </div>
       <div class="field" style="margin-top:6px;"><label>Catégorie</label><select id="mat-${a.id}-cat" data-mat="${a.id}" data-f="categorie">${categorieOptions(a.categorie||'autre')}</select></div>
@@ -896,7 +900,27 @@ function attachHandlersMat(){
     btn.onclick = ()=> removeArticleMat(btn.dataset.removemat);
   });
   document.querySelectorAll('[data-mat]').forEach(inp=>{
-    const handler = ()=> updateArticleMat(inp.dataset.mat, inp.dataset.f, inp.value);
+    const handler = ()=>{
+      updateArticleMat(inp.dataset.mat, inp.dataset.f, inp.value);
+      if(inp.dataset.f === 'achat'){
+        const htInp = document.getElementById('mat-'+inp.dataset.mat+'-achatht');
+        if(htInp){
+          const ttc = Number(inp.value)||0;
+          htInp.value = ttc ? (ttc/TVA_COEF).toFixed(2) : '';
+        }
+      }
+    };
+    inp.oninput = handler;
+    inp.onchange = handler;
+  });
+  document.querySelectorAll('[data-matht]').forEach(inp=>{
+    const handler = ()=>{
+      const ht = Number(inp.value)||0;
+      const ttcVal = ht ? (ht*TVA_COEF).toFixed(2) : '';
+      const ttcInp = document.getElementById('mat-'+inp.dataset.matht+'-achat');
+      if(ttcInp) ttcInp.value = ttcVal;
+      updateArticleMat(inp.dataset.matht, 'achat', ttcVal);
+    };
     inp.oninput = handler;
     inp.onchange = handler;
   });
