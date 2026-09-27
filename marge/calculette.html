@@ -99,7 +99,7 @@ h2.section-title{
 }
 .daycost-banner .lbl{font-size:0.78rem; color:var(--ink-soft);}
 .daycost-banner .lbl small{display:block; font-size:0.68rem; margin-top:1px;}
-.daycost-banner .val{font-family:'Fraunces',serif; font-size:1.1rem; font-weight:600; color:var(--steel); font-variant-numeric:tabular-nums;}
+.daycost-banner .val{font-family:'Inter',system-ui,-apple-system,sans-serif; font-size:1.1rem; font-weight:600; color:var(--steel); font-variant-numeric:tabular-nums;}
 
 .article{
   background:var(--surface); border:1px solid var(--line); border-radius:9px;
@@ -121,9 +121,10 @@ h2.section-title{
 .article-fields .field{min-width:0; gap:2px;}
 .article-net{
   margin-top:6px; padding-top:6px; border-top:1px dashed var(--line);
-  display:flex; justify-content:space-between; font-size:0.78rem; color:var(--ink-soft);
+  display:flex; justify-content:space-between; gap:8px; font-size:0.78rem; color:var(--ink-soft);
 }
 .article-net b{color:var(--ink); font-variant-numeric:tabular-nums;}
+.article-net span{white-space:nowrap;}
 
 .add-btn{
   width:100%; padding:8px; border:1.5px dashed var(--line); border-radius:9px;
@@ -148,7 +149,7 @@ h2.section-title{
 .summary-final.neg{background:var(--net-neg-bg);}
 .summary-final .label{font-size:0.88rem; font-weight:600;}
 .summary-final .amount{
-  font-family:'Fraunces',serif; font-size:1.15rem; font-weight:600; color:var(--net-pos);
+  font-family:'Inter',system-ui,-apple-system,sans-serif; font-size:1.15rem; font-weight:600; color:var(--net-pos);
   font-variant-numeric:tabular-nums;
 }
 .summary-final.neg .amount{color:var(--net-neg);}
@@ -264,6 +265,51 @@ footer{text-align:center; color:var(--ink-soft); font-size:0.75rem; margin-top:2
 .history-totals .stat .label{font-size:0.68rem; color:var(--ink-soft);}
 .history-totals .stat .value{font-weight:600; color:var(--ink); font-variant-numeric:tabular-nums; font-size:0.88rem;}
 
+/* Badge nombre de devis, à côté du titre */
+.history-panel h2{display:flex; align-items:center; gap:8px; flex-wrap:wrap;}
+.count-badge{
+  font-size:0.68rem; font-weight:600; color:var(--ink-soft); background:var(--bg);
+  border:1px solid var(--line); padding:2px 9px; border-radius:20px; text-transform:none;
+}
+
+/* Bloc A — chiffres clés mis en avant */
+.totals-main{
+  display:grid; grid-template-columns:repeat(3,1fr); gap:6px;
+  text-align:center; padding:2px 0 12px;
+}
+.totals-main .stat{display:flex; flex-direction:column; gap:2px; min-width:0;}
+.totals-main .stat .label{
+  font-size:0.66rem; color:var(--ink-soft); text-transform:uppercase; letter-spacing:0.02em;
+}
+.totals-main .stat .value{
+  font-family:'Inter',system-ui,-apple-system,sans-serif; font-weight:600; font-size:1.05rem; color:var(--ink);
+  font-variant-numeric:tabular-nums; overflow-wrap:break-word;
+}
+.totals-main .stat.net .value{color:var(--net-pos);}
+.totals-main .stat.pct .value{color:var(--steel);}
+
+/* Bloc B — info secondaire discrète */
+.totals-secondary{
+  display:flex; justify-content:space-between; align-items:center;
+  padding:8px 0; border-top:1px dashed var(--line);
+  font-size:0.78rem; color:var(--ink-soft);
+}
+.totals-secondary b{color:var(--ink); font-variant-numeric:tabular-nums; font-weight:600;}
+
+/* Bloc C — statut paiement en chips */
+.totals-status{display:grid; grid-template-columns:1fr 1fr; gap:8px; margin-top:2px;}
+.totals-status .chip{
+  background:var(--bg); border:1px solid var(--line); border-radius:8px;
+  padding:8px 6px; text-align:center; min-width:0;
+}
+.totals-status .chip .label{
+  display:block; font-size:0.66rem; color:var(--ink-soft); margin-bottom:3px;
+}
+.totals-status .chip .value{
+  font-size:0.85rem; font-weight:600; color:var(--ink);
+  font-variant-numeric:tabular-nums; overflow-wrap:break-word;
+}
+
 .new-month-btn{
   width:100%; padding:10px; background:var(--violet); color:#fff; border:none; 
   border-radius:7px; font-size:0.9rem; cursor:pointer; font-family:inherit; 
@@ -373,6 +419,9 @@ body.locked > .wrap{display:none;}
   <div id="printArea" class="print-area"></div>
   <h1>Net par devis</h1>
   <p class="sub">La Clé Universelle — calcul du gain net après charges URSSAF</p>
+  <div style="display:flex; justify-content:flex-end; margin:-8px 0 14px;">
+    <a href="treso.html" style="font-size:0.78rem; color:var(--ink-soft); text-decoration:none; border:1px solid var(--line); border-radius:7px; padding:6px 10px; background:var(--surface); font-weight:500;">🏦 Trésorerie</a>
+  </div>
 
   <div class="mat-serv-grid">
     <div class="mat-serv-col">
@@ -413,7 +462,7 @@ body.locked > .wrap{display:none;}
 
   <!-- Historique du mois -->
   <div class="history-panel">
-    <h2>Historique du mois</h2>
+    <h2>Historique du mois <span class="count-badge" id="devisCountBadge"></span></h2>
     <div class="month-nav">
       <button class="month-nav-btn" id="prevMonthBtn" title="Mois précédent">←</button>
       <select id="monthSelect"></select>
@@ -485,7 +534,7 @@ body.locked > .wrap{display:none;}
       </div>
       <div class="field">
         <label>Coût fixe du jour<small style="display:block; font-size:0.66rem; margin-top:1px;">frais fixes annuels ÷ jours travaillés</small></label>
-        <div class="val" id="dayCost" style="font-family:'Fraunces',serif; font-size:1.05rem; font-weight:600; color:var(--steel); font-variant-numeric:tabular-nums; padding:7px 0 0;">0,00 €</div>
+        <div class="val" id="dayCost" style="font-family:'Inter',system-ui,-apple-system,sans-serif; font-size:1.05rem; font-weight:600; color:var(--steel); font-variant-numeric:tabular-nums; padding:7px 0 0;">0,00 €</div>
       </div>
     </div>
   </div>
@@ -546,6 +595,17 @@ const RATES = {
   acre:  { mat: 0.062,  serv: 0.1075 },
   plein: { mat: 0.123 + 0.001, serv: 0.212 + 0.003 }
 };
+const CATEGORIES = [
+  { id:'cremone',  label:'Crémone' },
+  { id:'larder',   label:'Serrure encastrée (larder)' },
+  { id:'applique', label:'Serrure en applique' },
+  { id:'cylindre', label:'Cylindre' },
+  { id:'poignees', label:'Poignées' },
+  { id:'autre',    label:'Autre' }
+];
+function categorieOptions(selected){
+  return CATEGORIES.map(c=>`<option value="${c.id}" ${c.id===selected?'selected':''}>${c.label}</option>`).join('');
+}
 const FRAIS_FIXES_BASE = 240 + 200 + (9*12) + (5*12);
 
 let regime = 'acre';
@@ -637,7 +697,10 @@ function loadSettings(){
     if(s.pAssurMoto!==undefined) document.getElementById('pAssurMoto').value = s.pAssurMoto;
     if(s.currentMonth) currentMonth = s.currentMonth;
     if(s.devisHistory) devisHistory = s.devisHistory;
-    if(s.articlesMat) articlesMat = s.articlesMat;
+    if(s.articlesMat){
+      articlesMat = s.articlesMat;
+      articlesMat.forEach(a=>{ if(!a.categorie) a.categorie = 'autre'; });
+    }
     if(s.articlesServ) articlesServ = s.articlesServ;
     if(s.idSeq) idSeq = s.idSeq;
     if(s.devisIdSeq) devisIdSeq = s.devisIdSeq;
@@ -649,7 +712,9 @@ function loadSettings(){
 
 function saveSettings(){
   try{
-    localStorage.setItem('devisCalcSettings', JSON.stringify({
+    let existing = {};
+    try{ existing = JSON.parse(localStorage.getItem('devisCalcSettings')||'{}'); }catch(e){}
+    localStorage.setItem('devisCalcSettings', JSON.stringify(Object.assign({}, existing, {
       regime,
       joursAn: document.getElementById('joursAn').value,
       cfeAn: document.getElementById('cfeAn').value,
@@ -668,7 +733,7 @@ function saveSettings(){
       seuilRenta: document.getElementById('seuilRenta').value,
       pCustom,
       pCustomIdSeq
-    }));
+    })));
   }catch(e){}
 }
 
@@ -680,7 +745,7 @@ function updateCeilingNote(){
 }
 
 function addArticleMat(){
-  articlesMat.push({ id: 'm'+(idSeq++), achat: '', vente: '' });
+  articlesMat.push({ id: 'm'+(idSeq++), achat: '', vente: '', categorie: 'autre' });
   renderMat();
 }
 
@@ -731,7 +796,11 @@ function renderMat(){
         <div class="field"><label>Achat TTC</label><input type="number" inputmode="decimal" step="0.01" id="mat-${a.id}-achat" data-mat="${a.id}" data-f="achat" value="${a.achat}" placeholder="0,00"></div>
         <div class="field"><label>Vente TTC</label><input type="number" inputmode="decimal" step="0.01" id="mat-${a.id}-vente" data-mat="${a.id}" data-f="vente" value="${a.vente}" placeholder="0,00"></div>
       </div>
-      <div class="article-net"><span>Net ligne</span><b id="net-${a.id}">0,00 €</b></div>
+      <div class="field" style="margin-top:6px;"><label>Catégorie</label><select id="mat-${a.id}-cat" data-mat="${a.id}" data-f="categorie">${categorieOptions(a.categorie||'autre')}</select></div>
+      <div class="article-net">
+        <span>Net ligne <b id="net-${a.id}">0,00 €</b></span>
+        <span>Coef <b id="coef-${a.id}">—</b></span>
+      </div>
     `;
     cont.appendChild(div);
   });
@@ -766,7 +835,9 @@ function attachHandlersMat(){
     btn.onclick = ()=> removeArticleMat(btn.dataset.removemat);
   });
   document.querySelectorAll('[data-mat]').forEach(inp=>{
-    inp.oninput = ()=> updateArticleMat(inp.dataset.mat, inp.dataset.f, inp.value);
+    const handler = ()=> updateArticleMat(inp.dataset.mat, inp.dataset.f, inp.value);
+    inp.oninput = handler;
+    inp.onchange = handler;
   });
 }
 
@@ -803,6 +874,12 @@ function compute(){
     totalVente += vente; totalAchat += achat; totalCharges += charges; totalMarge += marge;
     const el = document.getElementById('net-'+a.id);
     if(el) el.textContent = fmt(net);
+    const coefEl = document.getElementById('coef-'+a.id);
+    if(coefEl){
+      coefEl.textContent = achat > 0
+        ? (vente/achat).toLocaleString('fr-FR', {minimumFractionDigits:2, maximumFractionDigits:2}) + '×'
+        : '—';
+    }
   });
 
   articlesServ.forEach(a=>{
@@ -950,12 +1027,16 @@ function saveQuote(){
   let totalVente=0, totalAchat=0, totalCharges=0, totalMarge=0;
   let venteMat=0, achatMat=0, venteServ=0;
 
+  const matLines = [];
   articlesMat.forEach(a=>{
     const vente = Number(a.vente)||0;
     const achat = Number(a.achat)||0;
     const charges = vente*rates.mat;
     totalVente += vente; totalAchat += achat; totalCharges += charges; totalMarge += vente-achat;
     venteMat += vente; achatMat += achat;
+    if(achat!==0 || vente!==0){
+      matLines.push({ achat, vente, categorie: a.categorie || 'autre' });
+    }
   });
 
   articlesServ.forEach(a=>{
@@ -975,9 +1056,10 @@ function saveQuote(){
     vente: totalVente,
     net: netFinal,
     date: new Date().toLocaleDateString('fr-FR'),
+    dateISO: new Date().toISOString().slice(0,10),
     regime: regime,
     paye: true,
-    breakdown: { venteMat, achatMat, venteServ, dayCost }
+    breakdown: { venteMat, achatMat, venteServ, dayCost, matLines }
   });
 
   document.getElementById('clientName').value = '';
@@ -1028,9 +1110,11 @@ function renderHistory(){
   updateCeilingNote();
 
   const totalsCont = document.getElementById('historyTotals');
+  const badge = document.getElementById('devisCountBadge');
   if(!devisHistory[currentMonth] || devisHistory[currentMonth].length === 0){
     cont.innerHTML = '<div class="empty-state">Aucun devis enregistré pour ce mois</div>';
     if(totalsCont) totalsCont.innerHTML = '';
+    if(badge) badge.textContent = '';
     syncRevenuMois(0);
     return;
   }
@@ -1093,16 +1177,19 @@ function renderHistory(){
   html += '</tbody></table>';
   syncRevenuMois(netEncaisse);
   const moyennePct = totalVente > 0 ? (totalNet/totalVente*100) : 0;
-  const totalsHtml = `<div class="history-totals">
-    <div class="stat"><span class="label">Devis</span><span class="value">${devis.length}</span></div>
-    <div class="stat"><span class="label">Total vente</span><span class="value">${fmt(totalVente)}</span></div>
-    <div class="stat"><span class="label">Total net estimé</span><span class="value">${fmt(totalNet)}</span></div>
-    <div class="stat"><span class="label">Total achat matériel</span><span class="value">${fmt(totalAchatMat)}</span></div>
-    <div class="stat"><span class="label">Moyenne %</span><span class="value">${moyennePct.toLocaleString('fr-FR',{minimumFractionDigits:1,maximumFractionDigits:1})} %</span></div>
+  if(badge) badge.textContent = devis.length + ' devis';
+  const totalsHtml = `
+  <div class="totals-main">
+    <div class="stat vente"><span class="label">Total vente</span><span class="value">${fmt(totalVente)}</span></div>
+    <div class="stat net"><span class="label">Total net estimé</span><span class="value">${fmt(totalNet)}</span></div>
+    <div class="stat pct"><span class="label">Moyenne %</span><span class="value">${moyennePct.toLocaleString('fr-FR',{minimumFractionDigits:1,maximumFractionDigits:1})} %</span></div>
   </div>
-  <div class="history-totals" style="margin-top:8px; border-top:1px dashed var(--line); padding-top:10px;">
-    <div class="stat"><span class="label">Encaissé (net / vente)</span><span class="value">${fmt(netEncaisse)} / ${fmt(venteEncaisse)}</span></div>
-    <div class="stat"><span class="label">En attente (net / vente)</span><span class="value">${fmt(netAttente)} / ${fmt(venteAttente)}</span></div>
+  <div class="totals-secondary">
+    <span>Total achat matériel</span><b>${fmt(totalAchatMat)}</b>
+  </div>
+  <div class="totals-status">
+    <div class="chip"><span class="label">Encaissé (net / vente)</span><span class="value">${fmt(netEncaisse)} / ${fmt(venteEncaisse)}</span></div>
+    <div class="chip"><span class="label">En attente (net / vente)</span><span class="value">${fmt(netAttente)} / ${fmt(venteAttente)}</span></div>
   </div>`;
 
   if(totalsCont) totalsCont.innerHTML = totalsHtml;
