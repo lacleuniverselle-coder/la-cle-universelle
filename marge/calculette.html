@@ -1668,7 +1668,6 @@ document.getElementById('importPdfFile').onchange = async (e)=>{
       statusEl.textContent = "Je n'ai trouvé aucune ligne service/matériel reconnaissable dans ce PDF. Rien n'a été modifié.";
       return;
     }
-    if(!confirm('Remplacer les lignes matériel/service actuelles par celles importées du PDF (' + (r.client||'client non trouvé') + ') ?')) return;
 
     // Répartition proportionnelle de la remise globale (si présente)
     const matTotal = r.matRows.reduce((a,b)=>a+b, 0);
