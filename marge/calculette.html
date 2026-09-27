@@ -15,6 +15,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
 <style>
 :root{
   --bg:#EDEFEF; --surface:#FFFFFF; --line:#D8DBDB;
@@ -430,6 +431,13 @@ body.locked > .wrap{display:none;}
       <button class="save-btn" id="addCatBtn" style="min-width:auto; padding:7px 12px;">+ Ajouter</button>
     </div>
     <div id="catManagerList" style="margin-top:6px;"></div>
+  </div>
+
+  <div class="panel">
+    <h2>Importer un devis/facture (PDF)</h2>
+    <p class="section-sub" style="margin:0 0 8px;">Pré-remplit le client + les lignes matériel/service ci-dessous à partir du PDF exporté par ton logiciel. L'achat matériel n'est jamais dedans : reste à saisir à la main. Vérifie toujours avant d'enregistrer.</p>
+    <input type="file" id="importPdfFile" accept="application/pdf">
+    <div id="importPdfStatus" style="font-size:0.78rem; color:var(--ink-soft); margin-top:6px;"></div>
   </div>
 
   <div class="mat-serv-grid">
@@ -1524,6 +1532,175 @@ document.getElementById('addPrivateCustom').onclick = addPrivateCustom;
 document.getElementById('addCatBtn').onclick = addCustomCategory;
 document.getElementById('newCatName').addEventListener('keydown', (e)=>{ if(e.key==='Enter') addCustomCategory(); });
 renderCatManager();
+
+// ===== Import PDF devis/facture (Khosmos) =====
+if(window.pdfjsLib){
+  pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+}
+
+function pdfParseNumber(s){
+  if(s==null) return 0;
+  return parseFloat(String(s).replace(/\s/g,'').replace(',', '.')) || 0;
+}
+
+async function extractPdfLines(arrayBuffer){
+  const pdf = await pdfjsLib.getDocument({data: arrayBuffer}).promise;
+  const lines = [];
+  for(let p=1; p<=pdf.numPages; p++){
+    const page = await pdf.getPage(p);
+    const content = await page.getTextContent();
+    let current = '';
+    content.items.forEach(item=>{
+      current += item.str;
+      if(item.hasEOL){
+        if(current.trim()) lines.push(current.trim());
+        current = '';
+      } else {
+        current += ' ';
+      }
+    });
+    if(current.trim()) lines.push(current.trim());
+  }
+  return lines;
+}
+
+function pdfTryParseRow(line, hasRemise){
+  const tokens = line.trim().split(/\s+/);
+  let i = tokens.length - 1;
+  if(i < 0) return null;
+
+  // TVA (pourcentage ou "-")
+  if(tokens[i] === '-'){ i--; }
+  else if(tokens[i] === '%'){ i--; if(i<0) return null; i--; }
+  else return null;
+  if(i < 0) return null;
+
+  // Total HT (montant ou "-")
+  let totalHt;
+  if(tokens[i] === '-'){ totalHt = 0; i--; }
+  else if(tokens[i] === '€'){
+    i--; if(i<0) return null;
+    totalHt = pdfParseNumber(tokens[i]); i--;
+  } else return null;
+  if(i < 0) return null;
+
+  // Remise (colonne optionnelle)
+  if(hasRemise){
+    if(tokens[i] === '-'){ i--; }
+    else if(tokens[i] === '€' || tokens[i] === '%'){ i--; if(i<0) return null; i--; }
+    else return null;
+    if(i < 0) return null;
+  }
+
+  // PU HT (montant ou "-")
+  let puHt;
+  if(tokens[i] === '-'){ puHt = 0; i--; }
+  else if(tokens[i] === '€'){
+    i--; if(i<0) return null;
+    puHt = pdfParseNumber(tokens[i]); i--;
+  } else return null;
+  if(i < 0) return null;
+
+  // Quantité
+  if(!/^\d+$/.test(tokens[i])) return null;
+  const qty = parseInt(tokens[i],10);
+
+  return { qty, puHt, totalHt };
+}
+
+function parseDevisLines(lines){
+  let client = '';
+  const adrIdx = lines.findIndex(l=>l.trim().startsWith('Adressé à'));
+  if(adrIdx !== -1 && lines[adrIdx+1]) client = lines[adrIdx+1].trim();
+
+  let netAPayer = null;
+  for(let i=0;i<lines.length;i++){
+    const t = lines[i].trim();
+    if((t === 'Net à payer' || t === 'Total TTC') && lines[i+1]){
+      const m = lines[i+1].match(/([\d\s.,-]+)\s*€/);
+      if(m){ netAPayer = pdfParseNumber(m[1]); break; }
+    }
+  }
+
+  const headerRe = /^(Service|Matériel|Remise globale)\s+Qté\.?\s+PU\s*HT/i;
+  let currentSection = null;
+  let servTotal = 0, matTotal = 0, remiseTotal = 0;
+  let servCount = 0, matCount = 0;
+
+  for(let idx=0; idx<lines.length; idx++){
+    const line = lines[idx].trim();
+    if(!line) continue;
+    if(line.startsWith('Coordonnées bancaires')) break;
+    const hm = line.match(headerRe);
+    if(hm){
+      const residual = line.slice(hm[1].length);
+      const hasRemise = /Remise/i.test(residual);
+      const nameLc = hm[1].toLowerCase();
+      const type = nameLc.startsWith('service') ? 'service' : (nameLc.startsWith('remise') ? 'remise' : 'materiel');
+      currentSection = { type, hasRemise };
+      continue;
+    }
+    if(!currentSection) continue;
+    const row = pdfTryParseRow(line, currentSection.hasRemise);
+    if(row){
+      if(currentSection.type === 'service'){ servTotal += row.totalHt; servCount++; }
+      else if(currentSection.type === 'materiel'){ matTotal += row.totalHt; matCount++; }
+      else if(currentSection.type === 'remise'){ remiseTotal += row.totalHt; }
+    }
+  }
+
+  return { client, servTotal, matTotal, remiseTotal, servCount, matCount, netAPayer };
+}
+
+document.getElementById('importPdfFile').onchange = async (e)=>{
+  const file = e.target.files[0];
+  e.target.value = '';
+  if(!file) return;
+  const statusEl = document.getElementById('importPdfStatus');
+  statusEl.textContent = 'Lecture du PDF…';
+  try{
+    const buf = await file.arrayBuffer();
+    const lines = await extractPdfLines(buf);
+    const r = parseDevisLines(lines);
+
+    if(r.servCount === 0 && r.matCount === 0){
+      statusEl.textContent = "Je n'ai trouvé aucune ligne service/matériel reconnaissable dans ce PDF. Rien n'a été modifié.";
+      return;
+    }
+    if(!confirm('Remplacer les lignes matériel/service actuelles par celles importées du PDF (' + (r.client||'client non trouvé') + ') ?')) return;
+
+    // Répartition proportionnelle de la remise globale (si présente)
+    let servFinal = r.servTotal, matFinal = r.matTotal;
+    const brut = r.servTotal + r.matTotal;
+    if(r.remiseTotal !== 0 && brut > 0){
+      const ratioMat = r.matTotal / brut;
+      matFinal = r.matTotal + r.remiseTotal * ratioMat;
+      servFinal = r.servTotal + r.remiseTotal * (1 - ratioMat);
+    }
+
+    articlesServ = r.servCount > 0 ? [{ id:'s'+(idSeq++), vente: servFinal.toFixed(2) }] : [];
+    articlesMat = r.matCount > 0 ? [{ id:'m'+(idSeq++), achat:'', vente: matFinal.toFixed(2), categorie:'autre' }] : [];
+    if(articlesServ.length === 0) articlesServ.push({ id:'s'+(idSeq++), vente:'' });
+    if(articlesMat.length === 0) articlesMat.push({ id:'m'+(idSeq++), achat:'', vente:'', categorie:'autre' });
+    document.getElementById('clientName').value = r.client;
+    renderMat();
+    renderServ();
+
+    const computedTotal = servFinal + matFinal;
+    let msg = 'Importé : ' + (r.client||'client inconnu') + ' — ' + r.matCount + ' ligne(s) matériel regroupée(s), ' + r.servCount + ' ligne(s) service regroupée(s).';
+    if(r.netAPayer !== null){
+      const ecart = Math.abs(computedTotal - r.netAPayer);
+      if(ecart > 0.02){
+        msg += ' ⚠️ Le total recalculé (' + computedTotal.toFixed(2) + ' €) ne correspond pas au "Net à payer" du PDF (' + r.netAPayer.toFixed(2) + ' €) : vérifie les montants à la main.';
+      } else {
+        msg += ' Total vérifié OK (' + computedTotal.toFixed(2) + ' €).';
+      }
+    }
+    statusEl.textContent = msg;
+  }catch(err){
+    statusEl.textContent = "Erreur de lecture du PDF (fichier abîmé, ou format inattendu) : " + err.message;
+  }
+};
 
 loadSettings();
 if(regime==='plein'){
