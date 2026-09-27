@@ -171,12 +171,23 @@ body.locked > .wrap{display:none;}
   <div class="panel" id="catPanel"></div>
   <p class="note" id="catNote"></p>
 
+  <h2 class="section-title">Gérer les catégories</h2>
+  <p class="section-sub">Ajoutez vos propres catégories (partagées avec la calculette).</p>
+  <div class="panel">
+    <div class="tool-add-row">
+      <div class="field"><label>Nouvelle catégorie</label><input type="text" id="newCatName" placeholder="ex. Verrou 3 points"></div>
+      <button class="add-btn" id="addCatBtn">+ Ajouter</button>
+    </div>
+    <div id="catManagerList"></div>
+  </div>
+
   <h2 class="section-title">Rattrapage manuel</h2>
-  <p class="section-sub">Pour ajouter un montant acheté directement dans une catégorie, sans passer par un devis — pratique pour vos achats déjà faits avant cette mise à jour. Ce montant s'ajoute au total "Acheté" ci-dessus.</p>
+  <p class="section-sub">Pour ajouter un montant acheté ET vendu directement dans une catégorie, sans passer par un devis — pratique pour vos anciens devis ou vos achats déjà faits avant cette mise à jour. Ces montants s'ajoutent aux totaux "Acheté"/"Vendu" ci-dessus.</p>
   <div class="panel">
     <div class="tool-add-row">
       <div class="field"><label>Catégorie</label><select id="manualCatSelect"></select></div>
-      <div class="field" style="max-width:110px;"><label>Montant</label><input type="number" step="0.01" min="0" id="manualCatMontant" placeholder="0,00"></div>
+      <div class="field" style="max-width:110px;"><label>Acheté</label><input type="number" step="0.01" min="0" id="manualCatAchat" placeholder="0,00"></div>
+      <div class="field" style="max-width:110px;"><label>Vendu</label><input type="number" step="0.01" min="0" id="manualCatVente" placeholder="0,00"></div>
       <button class="add-btn" id="addManualCatBtn">+ Ajouter</button>
     </div>
     <div id="manualCatList"></div>
@@ -204,14 +215,68 @@ body.locked > .wrap{display:none;}
 </div>
 
 <script>
-const CATEGORIES = [
+const BASE_CATEGORIES = [
   { id:'cremone',  label:'Crémone' },
   { id:'larder',   label:'Serrure encastrée (larder)' },
   { id:'applique', label:'Serrure en applique' },
   { id:'cylindre', label:'Cylindre' },
-  { id:'poignees', label:'Poignées' },
-  { id:'autre',    label:'Autre' }
+  { id:'poignees', label:'Poignées' }
 ];
+const CAT_AUTRE = { id:'autre', label:'Autre' };
+function loadCustomCategories(){
+  try{
+    const s = JSON.parse(localStorage.getItem('devisCalcSettings')||'{}');
+    return s.customCategories || [];
+  }catch(e){ return []; }
+}
+function saveCustomCategories(list){
+  try{
+    let existing = {};
+    try{ existing = JSON.parse(localStorage.getItem('devisCalcSettings')||'{}'); }catch(e){}
+    existing.customCategories = list;
+    localStorage.setItem('devisCalcSettings', JSON.stringify(existing));
+  }catch(e){}
+}
+function allCategories(){
+  return BASE_CATEGORIES.concat(loadCustomCategories(), [CAT_AUTRE]);
+}
+function renderCatManager(){
+  const cont = document.getElementById('catManagerList');
+  if(!cont) return;
+  const customs = loadCustomCategories();
+  if(customs.length===0){ cont.innerHTML = '<p class="section-sub" style="margin:4px 0 0;">Aucune catégorie personnalisée pour l\'instant.</p>'; return; }
+  cont.innerHTML = customs.map(c=>`
+    <div class="manual-entry"><span class="cat">${escapeHtml(c.label)}</span><button class="tool-remove" data-delcat="${c.id}" title="Supprimer">✕</button></div>
+  `).join('');
+  cont.querySelectorAll('[data-delcat]').forEach(btn=>{
+    btn.onclick = ()=>{
+      if(!confirm('Supprimer cette catégorie ? Les montants déjà classés dedans garderont cette valeur, mais elle n\'apparaîtra plus dans la liste.')) return;
+      const list = loadCustomCategories().filter(c=>c.id!==btn.dataset.delcat);
+      saveCustomCategories(list);
+      renderCatManager();
+      renderManualCatSelect();
+      renderCategories();
+    };
+  });
+}
+function addCustomCategory(){
+  const input = document.getElementById('newCatName');
+  const label = input.value.trim();
+  if(!label){ return; }
+  const existing = allCategories();
+  if(existing.some(c=>c.label.toLowerCase()===label.toLowerCase())){
+    alert('Cette catégorie existe déjà.');
+    return;
+  }
+  const id = 'c'+Date.now();
+  const list = loadCustomCategories();
+  list.push({ id, label });
+  saveCustomCategories(list);
+  input.value = '';
+  renderCatManager();
+  renderManualCatSelect();
+  renderCategories();
+}
 
 /* Verrou d'accès — même code que la calculette */
 const LOCK_HASH = '594686bcfe8a1c52aa5c6ab2feadeac31c7fbc9815ad68487b60d946a12e4765';
@@ -291,9 +356,10 @@ function allDevis(){
 }
 
 function renderCategories(){
+  const cats = allCategories();
   const devis = allDevis();
   const totals = {};
-  CATEGORIES.forEach(c=> totals[c.id] = { achat:0, vente:0 });
+  cats.forEach(c=> totals[c.id] = { achat:0, vente:0 });
   let anyLine = false;
   let excludedCount = 0;
   devis.forEach(d=>{
@@ -307,12 +373,17 @@ function renderCategories(){
     });
   });
 
+  // Rattrapage manuel : chaque entrée porte un montant acheté ET un montant vendu
+  // (les anciennes entrées n'avaient qu'un "montant", compté ici comme achat, pour ne rien perdre).
   const manualList = loadManualCat();
   const manualTotals = {};
-  CATEGORIES.forEach(c=> manualTotals[c.id] = 0);
+  cats.forEach(c=> manualTotals[c.id] = { achat:0, vente:0 });
   manualList.forEach(m=>{
     const catId = manualTotals[m.categorie] !== undefined ? m.categorie : 'autre';
-    manualTotals[catId] += Number(m.montant)||0;
+    const achat = m.achat !== undefined ? Number(m.achat)||0 : Number(m.montant)||0;
+    const vente = Number(m.vente)||0;
+    manualTotals[catId].achat += achat;
+    manualTotals[catId].vente += vente;
   });
   const anyManual = manualList.length > 0;
 
@@ -320,14 +391,18 @@ function renderCategories(){
   if(!anyLine && !anyManual){
     panel.innerHTML = '<div class="empty-state">Aucun montant enregistré pour l\'instant — via un devis catégorisé, ou via le rattrapage manuel ci-dessous.</div>';
   } else {
-    let totalAchat=0, totalVente=0, totalManuel=0;
-    let rows = CATEGORIES.map(c=>{
+    let totalAchat=0, totalVente=0;
+    let rows = cats.map(c=>{
       const t = totals[c.id];
       const manuel = manualTotals[c.id];
-      const achatCombine = t.achat + manuel;
-      totalAchat += achatCombine; totalVente += t.vente; totalManuel += manuel;
-      const manuelNote = manuel > 0 ? `<br><small style="color:var(--ink-soft); font-weight:400;">dont ${fmt(manuel)} à la main</small>` : '';
-      return `<tr><td>${c.label}</td><td>${fmt(achatCombine)}${manuelNote}</td><td>${fmt(t.vente)}</td><td>${fmt(t.vente - achatCombine)}</td></tr>`;
+      const achatCombine = t.achat + manuel.achat;
+      const venteCombine = t.vente + manuel.vente;
+      totalAchat += achatCombine; totalVente += venteCombine;
+      const manuelBits = [];
+      if(manuel.achat > 0) manuelBits.push('acheté ' + fmt(manuel.achat) + ' à la main');
+      if(manuel.vente > 0) manuelBits.push('vendu ' + fmt(manuel.vente) + ' à la main');
+      const manuelNote = manuelBits.length ? `<br><small style="color:var(--ink-soft); font-weight:400;">dont ${manuelBits.join(', ')}</small>` : '';
+      return `<tr><td>${c.label}</td><td>${fmt(achatCombine)}${manuelNote}</td><td>${fmt(venteCombine)}</td><td>${fmt(venteCombine - achatCombine)}</td></tr>`;
     }).join('');
     panel.innerHTML = `<table class="cat-table">
       <thead><tr><th>Catégorie</th><th>Acheté</th><th>Vendu</th><th>Marge</th></tr></thead>
@@ -337,7 +412,7 @@ function renderCategories(){
   }
   const noteEl = document.getElementById('catNote');
   noteEl.textContent = excludedCount > 0
-    ? excludedCount + ' devis antérieur(s) à cette mise à jour n\'ont pas de détail par ligne et ne sont pas comptés ici (colonne Vendu/Marge). Utilisez le rattrapage manuel pour au moins récupérer leur montant acheté.'
+    ? excludedCount + ' devis antérieur(s) à cette mise à jour n\'ont pas de détail par ligne et ne sont pas comptés ici (colonne Vendu/Marge). Utilisez le rattrapage manuel pour au moins récupérer leur montant acheté et vendu.'
     : '';
 }
 
@@ -347,20 +422,24 @@ function loadManualCat(){
 
 function renderManualCatSelect(){
   const sel = document.getElementById('manualCatSelect');
-  sel.innerHTML = CATEGORIES.map(c=>`<option value="${c.id}">${c.label}</option>`).join('');
+  sel.innerHTML = allCategories().map(c=>`<option value="${c.id}">${c.label}</option>`).join('');
 }
 
 function renderManualCatList(){
   const list = loadManualCat();
   const cont = document.getElementById('manualCatList');
   if(list.length === 0){ cont.innerHTML = ''; return; }
-  const catLabel = id => (CATEGORIES.find(c=>c.id===id)||{}).label || id;
-  cont.innerHTML = list.slice().reverse().map(m=>`
+  const catLabel = id => (allCategories().find(c=>c.id===id)||{}).label || id;
+  cont.innerHTML = list.slice().reverse().map(m=>{
+    const achat = m.achat !== undefined ? Number(m.achat)||0 : Number(m.montant)||0;
+    const vente = Number(m.vente)||0;
+    return `
     <div class="manual-entry">
       <span class="cat">${escapeHtml(catLabel(m.categorie))}</span>
-      <span class="amt">${fmt(Number(m.montant)||0)}</span>
+      <span class="amt">achat ${fmt(achat)} · vente ${fmt(vente)}</span>
       <button class="tool-remove" data-delmanual="${m.id}" title="Supprimer">✕</button>
-    </div>`).join('');
+    </div>`;
+  }).join('');
   cont.querySelectorAll('[data-delmanual]').forEach(btn=>{
     btn.onclick = ()=>{
       const list2 = loadManualCat().filter(m=>m.id!==btn.dataset.delmanual);
@@ -373,12 +452,14 @@ function renderManualCatList(){
 
 document.getElementById('addManualCatBtn').onclick = ()=>{
   const categorie = document.getElementById('manualCatSelect').value;
-  const montant = Number(document.getElementById('manualCatMontant').value)||0;
-  if(montant <= 0){ alert('Entrez un montant supérieur à 0'); return; }
+  const achat = Number(document.getElementById('manualCatAchat').value)||0;
+  const vente = Number(document.getElementById('manualCatVente').value)||0;
+  if(achat <= 0 && vente <= 0){ alert('Entrez un montant acheté et/ou vendu supérieur à 0'); return; }
   const list = loadManualCat();
-  list.push({ id: 'mc'+Date.now(), categorie, montant });
+  list.push({ id: 'mc'+Date.now(), categorie, achat, vente });
   saveManualCat(list);
-  document.getElementById('manualCatMontant').value = '';
+  document.getElementById('manualCatAchat').value = '';
+  document.getElementById('manualCatVente').value = '';
   renderManualCatList();
   renderCategories();
 };
@@ -477,7 +558,11 @@ document.getElementById('addToolBtn').onclick = ()=>{
 
 populateMonthYearSelects();
 
+document.getElementById('addCatBtn').onclick = addCustomCategory;
+document.getElementById('newCatName').addEventListener('keydown', (e)=>{ if(e.key==='Enter') addCustomCategory(); });
+
 function init(){
+  renderCatManager();
   renderCategories();
   renderManualCatList();
   renderTools();

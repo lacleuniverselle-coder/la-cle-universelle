@@ -423,6 +423,15 @@ body.locked > .wrap{display:none;}
     <a href="treso.html" style="font-size:0.78rem; color:var(--ink-soft); text-decoration:none; border:1px solid var(--line); border-radius:7px; padding:6px 10px; background:var(--surface); font-weight:500;">🏦 Trésorerie</a>
   </div>
 
+  <div class="panel">
+    <h2>Catégories de matériel</h2>
+    <div class="private-custom-row">
+      <input type="text" id="newCatName" placeholder="Nouvelle catégorie (ex. Verrou 3 points)">
+      <button class="save-btn" id="addCatBtn" style="min-width:auto; padding:7px 12px;">+ Ajouter</button>
+    </div>
+    <div id="catManagerList" style="margin-top:6px;"></div>
+  </div>
+
   <div class="mat-serv-grid">
     <div class="mat-serv-col">
       <h2 class="section-title" style="margin-top:0;">Matériel</h2>
@@ -595,16 +604,68 @@ const RATES = {
   acre:  { mat: 0.062,  serv: 0.1075 },
   plein: { mat: 0.123 + 0.001, serv: 0.212 + 0.003 }
 };
-const CATEGORIES = [
+const BASE_CATEGORIES = [
   { id:'cremone',  label:'Crémone' },
   { id:'larder',   label:'Serrure encastrée (larder)' },
   { id:'applique', label:'Serrure en applique' },
   { id:'cylindre', label:'Cylindre' },
-  { id:'poignees', label:'Poignées' },
-  { id:'autre',    label:'Autre' }
+  { id:'poignees', label:'Poignées' }
 ];
+const CAT_AUTRE = { id:'autre', label:'Autre' };
+function loadCustomCategories(){
+  try{
+    const s = JSON.parse(localStorage.getItem('devisCalcSettings')||'{}');
+    return s.customCategories || [];
+  }catch(e){ return []; }
+}
+function saveCustomCategories(list){
+  try{
+    let existing = {};
+    try{ existing = JSON.parse(localStorage.getItem('devisCalcSettings')||'{}'); }catch(e){}
+    existing.customCategories = list;
+    localStorage.setItem('devisCalcSettings', JSON.stringify(existing));
+  }catch(e){}
+}
+function allCategories(){
+  return BASE_CATEGORIES.concat(loadCustomCategories(), [CAT_AUTRE]);
+}
 function categorieOptions(selected){
-  return CATEGORIES.map(c=>`<option value="${c.id}" ${c.id===selected?'selected':''}>${c.label}</option>`).join('');
+  return allCategories().map(c=>`<option value="${c.id}" ${c.id===selected?'selected':''}>${c.label}</option>`).join('');
+}
+function renderCatManager(){
+  const cont = document.getElementById('catManagerList');
+  if(!cont) return;
+  const customs = loadCustomCategories();
+  if(customs.length===0){ cont.innerHTML = '<p class="section-sub" style="margin:4px 0 0;">Aucune catégorie personnalisée pour l\'instant.</p>'; return; }
+  cont.innerHTML = customs.map(c=>`
+    <div class="private-row"><label>${c.label}</label><button class="remove-btn" data-delcat="${c.id}" title="Supprimer">✕</button></div>
+  `).join('');
+  cont.querySelectorAll('[data-delcat]').forEach(btn=>{
+    btn.onclick = ()=>{
+      if(!confirm('Supprimer cette catégorie ? Les articles déjà classés dedans garderont cette valeur, mais elle n\'apparaîtra plus dans la liste.')) return;
+      const list = loadCustomCategories().filter(c=>c.id!==btn.dataset.delcat);
+      saveCustomCategories(list);
+      renderCatManager();
+      renderMat();
+    };
+  });
+}
+function addCustomCategory(){
+  const input = document.getElementById('newCatName');
+  const label = input.value.trim();
+  if(!label){ return; }
+  const existing = allCategories();
+  if(existing.some(c=>c.label.toLowerCase()===label.toLowerCase())){
+    alert('Cette catégorie existe déjà.');
+    return;
+  }
+  const id = 'c'+Date.now();
+  const list = loadCustomCategories();
+  list.push({ id, label });
+  saveCustomCategories(list);
+  input.value = '';
+  renderCatManager();
+  renderMat();
 }
 const FRAIS_FIXES_BASE = 240 + 200 + (9*12) + (5*12);
 
@@ -1125,6 +1186,7 @@ function renderHistory(){
   let totalVente = 0, totalNet = 0;
   let totalAchatMat = 0;
   let venteEncaisse = 0, netEncaisse = 0, venteAttente = 0, netAttente = 0;
+  let totalCotisations = 0, cotisApprox = false;
   devis.forEach((d, idx)=>{
     totalVente += d.vente;
     totalNet += d.net;
@@ -1132,6 +1194,16 @@ function renderHistory(){
     const estPaye = d.paye !== false;
     if(estPaye){ venteEncaisse += d.vente; netEncaisse += d.net; }
     else { venteAttente += d.vente; netAttente += d.net; }
+
+    // Cotisations réelles = % sur vente matériel + % sur vente service (pas d'impact de l'achat matériel ni du coût fixe du jour).
+    if(d.breakdown && d.breakdown.venteMat !== undefined && d.breakdown.venteServ !== undefined){
+      const r = RATES[d.regime] || RATES.acre;
+      totalCotisations += (Number(d.breakdown.venteMat)||0)*r.mat + (Number(d.breakdown.venteServ)||0)*r.serv;
+    } else {
+      // Devis antérieur à la mise à jour : pas de détail mat/serv, on approxime avec vente-net.
+      totalCotisations += (d.vente - d.net);
+      cotisApprox = true;
+    }
 
     const payeCheckbox = `<input type="checkbox" class="paye-check" data-payedevis="${d.id}" ${estPaye ? 'checked' : ''} title="Facture payée">`;
 
@@ -1190,6 +1262,9 @@ function renderHistory(){
   <div class="totals-status">
     <div class="chip"><span class="label">Encaissé (net / vente)</span><span class="value">${fmt(netEncaisse)} / ${fmt(venteEncaisse)}</span></div>
     <div class="chip"><span class="label">En attente (net / vente)</span><span class="value">${fmt(netAttente)} / ${fmt(venteAttente)}</span></div>
+  </div>
+  <div class="totals-secondary" style="border-top:1px dashed var(--line);">
+    <span>Cotisations URSSAF totales${cotisApprox ? ' <small style="opacity:0.7;">(estimation pour les devis anciens sans détail)</small>' : ''}</span><b>${fmt(totalCotisations)}</b>
   </div>`;
 
   if(totalsCont) totalsCont.innerHTML = totalsHtml;
@@ -1393,6 +1468,9 @@ document.getElementById('importFile').onchange = (e)=>{
 
 document.getElementById('seuilRenta').oninput = ()=>{ renderHistory(); saveSettings(); };
 document.getElementById('addPrivateCustom').onclick = addPrivateCustom;
+document.getElementById('addCatBtn').onclick = addCustomCategory;
+document.getElementById('newCatName').addEventListener('keydown', (e)=>{ if(e.key==='Enter') addCustomCategory(); });
+renderCatManager();
 
 loadSettings();
 if(regime==='plein'){
