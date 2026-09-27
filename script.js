@@ -459,6 +459,21 @@ if (description && compteur) {
       return;
     }
 
+    // Le hCaptcha invisible doit être déclenché manuellement puisque le
+    // formulaire n'est pas envoyé nativement (voir envoyerFormulaire ci-dessous).
+    if (window.hcaptcha) {
+      hcaptcha.execute();
+    } else {
+      envoyerFormulaire();
+    }
+  });
+
+  // Callback appelé par hCaptcha une fois le token obtenu (voir data-callback dans le HTML).
+  window.onHCaptchaSuccess = function () {
+    envoyerFormulaire();
+  };
+
+  function envoyerFormulaire() {
     fetch('https://api.web3forms.com/submit', {
       method: 'POST',
       headers: { 'Accept': 'application/json' },
@@ -479,7 +494,7 @@ if (description && compteur) {
       feedback.textContent = 'Erreur lors de l\'envoi, réessayez.';
       feedback.className = 'form-feedback erreur';
     });
-  });
+  }
 });
 
 // =============================================
