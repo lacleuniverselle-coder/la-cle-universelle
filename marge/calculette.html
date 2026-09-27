@@ -501,7 +501,7 @@ body.locked > .wrap{display:none;}
 
   <div class="panel">
     <div class="field" style="margin-bottom:8px;">
-      <label>Revenu net du mois (rempli automatiquement : Total net estimé du mois en cours)</label>
+      <label>Revenu net réel du mois (auto : net encaissé des devis + rattrapages datés − outillage acheté ce mois-ci)</label>
       <input type="number" id="revenuMois" value="" min="0" step="0.01" placeholder="0,00" readonly style="opacity:0.7; cursor:not-allowed;">
     </div>
     <div class="private-grid">
@@ -1164,6 +1164,23 @@ function syncRevenuMois(totalNet){
   computePrivate();
 }
 
+// Lit l'outillage et le rattrapage manuel (saisis côté Trésorerie, stockage partagé) pour le mois consulté.
+function computeNetReelAdjustments(monthKey){
+  let raw = {};
+  try{ raw = JSON.parse(localStorage.getItem('devisCalcSettings')||'{}'); }catch(e){}
+  const manualMois = (raw.manualCat || []).filter(m=> m.dateISO === monthKey);
+  let manualContrib = 0;
+  manualMois.forEach(m=>{
+    const achat = m.achat !== undefined ? Number(m.achat)||0 : Number(m.montant)||0;
+    const vente = Number(m.vente)||0;
+    manualContrib += vente - achat;
+  });
+  const outillageMois = (raw.outillage || []).filter(t=> t.dateISO === monthKey);
+  let outillageDepense = 0;
+  outillageMois.forEach(t=>{ outillageDepense += Number(t.montant)||0; });
+  return { manualContrib, outillageDepense };
+}
+
 function renderHistory(){
   const cont = document.getElementById('historyContent');
   document.getElementById('monthDisplay').textContent = getMonthLabel();
@@ -1247,9 +1264,21 @@ function renderHistory(){
   });
 
   html += '</tbody></table>';
-  syncRevenuMois(netEncaisse);
+  const adj = computeNetReelAdjustments(currentMonth);
+  const netReel = netEncaisse + adj.manualContrib - adj.outillageDepense;
+  syncRevenuMois(netReel);
   const moyennePct = totalVente > 0 ? (totalNet/totalVente*100) : 0;
   if(badge) badge.textContent = devis.length + ' devis';
+  const netReelLines = (adj.manualContrib !== 0 || adj.outillageDepense !== 0) ? `
+  <div class="totals-secondary">
+    <span>Rattrapages/consommables datés ce mois</span><b>${adj.manualContrib>=0?'+':''}${fmt(adj.manualContrib)}</b>
+  </div>
+  <div class="totals-secondary">
+    <span>Outillage acheté ce mois</span><b>−${fmt(adj.outillageDepense)}</b>
+  </div>
+  <div class="totals-secondary" style="border-top:1px solid var(--line); font-weight:600;">
+    <span>Net réel du mois (encaissé)</span><b>${fmt(netReel)}</b>
+  </div>` : '';
   const totalsHtml = `
   <div class="totals-main">
     <div class="stat vente"><span class="label">Total vente</span><span class="value">${fmt(totalVente)}</span></div>
@@ -1265,7 +1294,7 @@ function renderHistory(){
   </div>
   <div class="totals-secondary" style="border-top:1px dashed var(--line);">
     <span>Cotisations URSSAF totales${cotisApprox ? ' <small style="opacity:0.7;">(estimation pour les devis anciens sans détail)</small>' : ''}</span><b>${fmt(totalCotisations)}</b>
-  </div>`;
+  </div>${netReelLines}`;
 
   if(totalsCont) totalsCont.innerHTML = totalsHtml;
   cont.innerHTML = html;
