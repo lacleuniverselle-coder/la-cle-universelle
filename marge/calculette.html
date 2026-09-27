@@ -424,20 +424,21 @@ body.locked > .wrap{display:none;}
     <a href="treso.html" style="font-size:0.78rem; color:var(--ink-soft); text-decoration:none; border:1px solid var(--line); border-radius:7px; padding:6px 10px; background:var(--surface); font-weight:500;">🏦 Trésorerie</a>
   </div>
 
-  <div class="panel">
-    <h2>Catégories de matériel</h2>
-    <div class="private-custom-row">
-      <input type="text" id="newCatName" placeholder="Nouvelle catégorie (ex. Verrou 3 points)">
-      <button class="save-btn" id="addCatBtn" style="min-width:auto; padding:7px 12px;">+ Ajouter</button>
+  <div class="mat-serv-grid">
+    <div class="panel" style="margin-bottom:0;">
+      <h2>Catégories de matériel</h2>
+      <div class="private-custom-row">
+        <input type="text" id="newCatName" placeholder="Nouvelle catégorie (ex. Verrou 3 points)">
+        <button class="save-btn" id="addCatBtn" style="min-width:auto; padding:7px 12px;">+ Ajouter</button>
+      </div>
+      <div id="catManagerList" style="margin-top:6px;"></div>
     </div>
-    <div id="catManagerList" style="margin-top:6px;"></div>
-  </div>
 
-  <div class="panel">
-    <h2>Importer un devis/facture (PDF)</h2>
-    <p class="section-sub" style="margin:0 0 8px;">Pré-remplit le client + les lignes matériel/service ci-dessous à partir du PDF exporté par ton logiciel. L'achat matériel n'est jamais dedans : reste à saisir à la main. Vérifie toujours avant d'enregistrer.</p>
-    <input type="file" id="importPdfFile" accept="application/pdf">
-    <div id="importPdfStatus" style="font-size:0.78rem; color:var(--ink-soft); margin-top:6px;"></div>
+    <div class="panel" style="margin-bottom:0;">
+      <h2>Importer un devis/facture (PDF)</h2>
+      <input type="file" id="importPdfFile" accept="application/pdf">
+      <div id="importPdfStatus" style="font-size:0.78rem; color:var(--ink-soft); margin-top:6px;"></div>
+    </div>
   </div>
 
   <div class="mat-serv-grid">
