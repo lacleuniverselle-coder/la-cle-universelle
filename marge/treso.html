@@ -153,10 +153,11 @@ body.locked > .wrap{display:none;}
 <div id="lockScreen">
   <div class="lock-box">
     <h2>Trésorerie</h2>
-    <p>Code d'accès</p>
-    <input type="tel" inputmode="numeric" pattern="[0-9]*" maxlength="4" id="lockInput" autocomplete="off" placeholder="••••">
+    <p>Connexion</p>
+    <input type="email" id="lockEmail" autocomplete="username" placeholder="E-mail">
+    <input type="password" id="lockPass" autocomplete="current-password" placeholder="Mot de passe">
     <div id="lockError"></div>
-    <button id="lockSubmit">Valider</button>
+    <button id="lockSubmit">Se connecter</button>
   </div>
 </div>
 <div class="wrap">
@@ -227,6 +228,7 @@ body.locked > .wrap{display:none;}
   <footer>Données partagées avec la calculette (même stockage local sur cet appareil).</footer>
 </div>
 
+<script src="sync.js"></script>
 <script>
 const BASE_CATEGORIES = [
   { id:'cremone',  label:'Crémone' },
@@ -292,49 +294,7 @@ function addCustomCategory(){
   renderCategories();
 }
 
-/* Verrou d'accès — même code que la calculette */
-const LOCK_HASH = '594686bcfe8a1c52aa5c6ab2feadeac31c7fbc9815ad68487b60d946a12e4765';
-
-async function sha256Hex(str){
-  const enc = new TextEncoder().encode(str);
-  const buf = await crypto.subtle.digest('SHA-256', enc);
-  return Array.from(new Uint8Array(buf)).map(b=>b.toString(16).padStart(2,'0')).join('');
-}
-function unlockApp(){
-  document.body.classList.remove('locked');
-  document.getElementById('lockScreen').classList.add('hidden');
-}
-function showLockError(msg){
-  document.getElementById('lockError').textContent = msg;
-}
-async function checkCode(){
-  const val = document.getElementById('lockInput').value.trim();
-  if(val.length !== 4){ showLockError('Entrez les 4 chiffres'); return; }
-  try{
-    const hash = await sha256Hex(val);
-    if(hash === LOCK_HASH){
-      localStorage.setItem('devisCalcUnlocked', 'true');
-      unlockApp();
-      init();
-    } else {
-      showLockError('Code incorrect');
-      document.getElementById('lockInput').value = '';
-      document.getElementById('lockInput').focus();
-    }
-  }catch(e){
-    showLockError('Le verrou nécessite une connexion sécurisée (https).');
-  }
-}
-if(localStorage.getItem('devisCalcUnlocked') === 'true'){
-  unlockApp();
-} else {
-  document.getElementById('lockSubmit').onclick = checkCode;
-  document.getElementById('lockInput').addEventListener('keydown', (e)=>{
-    if(e.key === 'Enter') checkCode();
-  });
-  document.getElementById('lockInput').addEventListener('input', ()=> showLockError(''));
-  setTimeout(()=> document.getElementById('lockInput').focus(), 50);
-}
+Sync.boot(function(){ init(); });
 
 function fmt(n){
   const sign = n<0 ? '-' : '';
@@ -654,9 +614,6 @@ function init(){
   renderManualCatList();
   renderTools();
   renderNetReel();
-}
-if(localStorage.getItem('devisCalcUnlocked') === 'true'){
-  init();
 }
 
 if('serviceWorker' in navigator){

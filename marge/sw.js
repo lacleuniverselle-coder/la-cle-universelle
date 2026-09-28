@@ -1,7 +1,8 @@
-const CACHE_NAME = 'net-devis-v7';
+const CACHE_NAME = 'net-devis-v8';
 const APP_SHELL = [
   './calculette.html',
   './treso.html',
+  './sync.js',
   './manifest.json',
   './icon-192.png',
   './icon-512.png'
@@ -25,6 +26,8 @@ self.addEventListener('activate', (event) => {
 
 self.addEventListener('fetch', (event) => {
   if (event.request.method !== 'GET') return;
+  // Jamais de cache pour les données Supabase (sinon le portable afficherait d'anciennes données)
+  if (new URL(event.request.url).hostname.endsWith('supabase.co')) return;
   event.respondWith(
     caches.match(event.request).then((cached) => {
       const fetchPromise = fetch(event.request)
