@@ -477,7 +477,6 @@ body.locked > .wrap{display:none;}
     <div class="summary-row"><span>Total achat matériel</span><span id="sAchat">0,00 €</span></div>
     <div class="summary-row"><span>Marge brute</span><span id="sMarge">0,00 €</span></div>
     <div class="summary-row"><span>Charges URSSAF + CFP</span><span id="sCharges">0,00 €</span></div>
-    <div class="summary-row"><span>Coût fixe du jour</span><span id="sFixe">0,00 €</span></div>
     <div class="summary-final" id="summaryFinal">
       <span class="label">Net pour vous<small id="sNetPct" style="display:block; font-weight:400; font-size:0.75rem; margin-top:2px; opacity:0.8;">0,0 % du total vente</small></span>
       <span class="amount" id="sNet">0,00 €</span>
@@ -546,6 +545,8 @@ body.locked > .wrap{display:none;}
     <div class="private-total"><span>Total charges privées (fixes)</span><b id="pTotal">0,00 €</b></div>
     <div class="private-total" id="pCoutsRow" style="display:none;"><span>Coûts ajoutés ce mois</span><b id="pCouts">0,00 €</b></div>
     <div class="private-total prime" id="pPrimesRow" style="display:none;"><span>🎁 Primes reçues ce mois</span><b id="pPrimes">0,00 €</b></div>
+    <div class="private-total"><span>Frais fixes pro du mois</span><b id="pFrais">0,00 €</b></div>
+    <div class="private-ajouts-title" id="pSeuilInfo"></div>
   </div>
 
   <div class="summary">
@@ -566,21 +567,16 @@ body.locked > .wrap{display:none;}
         </div>
       </div>
       <div class="field">
-        <label>Jours travaillés / an</label>
-        <input type="number" id="joursAn" value="330" min="1" step="1">
-      </div>
-      <div class="field">
         <label>CFE annuelle</label>
         <input type="number" id="cfeAn" value="0" min="0" step="1">
       </div>
-      <div class="field">
-        <label>Coût fixe du jour<small style="display:block; font-size:0.66rem; margin-top:1px;">frais fixes annuels ÷ jours travaillés</small></label>
-        <div class="val" id="dayCost" style="font-family:'Inter',system-ui,-apple-system,sans-serif; font-size:1.05rem; font-weight:600; color:var(--steel); font-variant-numeric:tabular-nums; padding:7px 0 0;">0,00 €</div>
-      </div>
     </div>
+    <div class="private-ajouts-title">Frais fixes pro : comptés au mois (total ÷ 12 avec la CFE) : <b id="fraisMoisVal">0,00 €</b></div>
+    <div id="fraisRows"></div>
+    <div class="private-ajouts-btns"><button id="addFrais">+ Frais fixe</button></div>
   </div>
 
-  <footer>Assurance 240 € + logiciel 200 € + tél. 108 €/an + élec. 60 €/an (+ CFE) répartis par jour travaillé · pas de TVA (franchise)</footer>
+  <footer>Frais fixes pro comptés au mois (assurances, logiciel, prévoyance…) · pas de TVA (franchise)</footer>
 
 </div>
 
@@ -655,7 +651,13 @@ function addCustomCategory(){
   renderCatManager();
   renderMat();
 }
-const FRAIS_FIXES_BASE = 240 + 200 + (9*12) + (5*12);
+let fraisFixes = [
+  { id:'ff0', label:'Assurance', amount:240, per:'an' },
+  { id:'ff1', label:'Logiciel', amount:200, per:'an' },
+  { id:'ff2', label:'Téléphone', amount:9, per:'mois' },
+  { id:'ff3', label:'Électricité', amount:5, per:'mois' }
+];
+let fraisIdSeq = 4;
 const TVA_COEF = 1.2; // TVA 20% pour conversion HT <-> TTC des achats matériel
 
 let regime = 'acre';
@@ -670,31 +672,9 @@ let currentMonth = getMonthKey();
 let editingDevisId = null;
 let movingDevisId = null;
 
-// Données reprises de votre historique déjà saisi (septembre 2026).
-// Si vous ouvrez cette page sur un appareil où vous avez déjà enregistré
-// des devis via localStorage, ces valeurs par défaut seront ignorées
-// (vos données sauvegardées prennent le dessus, voir loadSettings()).
-let devisHistory = {
-  '2026-09': [
-    { id:'h0',  client:'Desbordes portail métal',    vente:860.00, net:597.33, date:'', paye:true },
-    { id:'h1',  client:'Melody velo decath',          vente:170.00, net:137.62, date:'', paye:true },
-    { id:'h2',  client:'Mathilde vélo',                vente:185.00, net:98.73,  date:'', paye:true },
-    { id:'h3',  client:'lucie cadenas',                vente:40.00,  net:33.86,  date:'', paye:true },
-    { id:'h4',  client:'longtail crevaison',           vente:35.00,  net:29.40,  date:'', paye:true },
-    { id:'h5',  client:'boss guillemette',             vente:81.00,  net:67.18,  date:'', paye:true },
-    { id:'h6',  client:'florian nul',                  vente:15.00,  net:11.55,  date:'', paye:true },
-    { id:'h7',  client:'adda BAL',                     vente:90.00,  net:78.48,  date:'', paye:true },
-    { id:'h8',  client:'Badge+clé',                    vente:89.90,  net:49.80,  date:'', paye:true },
-    { id:'h9',  client:'BAL PTT',                      vente:90.00,  net:59.67,  date:'', paye:true },
-    { id:'h10', client:'CALISSA IMMO',                 vente:747.00, net:510.88, date:'', paye:true },
-    { id:'h11', client:'BAL bonnefoy crochetage',      vente:100.00, net:72.59,  date:'', paye:true },
-    { id:'h12', client:'Pedrosa clé tubulaire',        vente:75.00,  net:65.10,  date:'', paye:true },
-    { id:'h13', client:'LEO clé vigie picard',         vente:223.20, net:108.02, date:'', paye:true },
-    { id:'h14', client:'Serrure cave lidl',            vente:183.90, net:144.47, date:'', paye:true },
-    { id:'h15', client:'crevaison velo bleu',          vente:47.50,  net:37.89,  date:'', paye:true },
-    { id:'h16', client:'crevaison fat bike',           vente:54.80,  net:41.97,  date:'', paye:true }
-  ]
-};
+// Historique vide au départ : les devis enregistrés viennent de vos données sauvegardées (voir loadSettings()).
+// devisIdSeq reste à 17 pour ne jamais réutiliser un ancien identifiant.
+let devisHistory = {};
 let devisIdSeq = 17;
 
 function getMonthKey(){
@@ -741,7 +721,6 @@ function loadSettings(){
   try{
     const s = JSON.parse(localStorage.getItem('devisCalcSettings')||'{}');
     if(s.regime) regime = s.regime;
-    if(s.joursAn) document.getElementById('joursAn').value = s.joursAn;
     if(s.cfeAn!==undefined) document.getElementById('cfeAn').value = s.cfeAn;
     if(s.revenuMois!==undefined) document.getElementById('revenuMois').value = s.revenuMois;
     if(s.pLoyer!==undefined) document.getElementById('pLoyer').value = s.pLoyer;
@@ -763,6 +742,8 @@ function loadSettings(){
     if(s.pCustomIdSeq) pCustomIdSeq = s.pCustomIdSeq;
     if(s.pAjouts) pAjouts = s.pAjouts;
     if(s.pAjoutsIdSeq) pAjoutsIdSeq = s.pAjoutsIdSeq;
+    if(Array.isArray(s.fraisFixes)) fraisFixes = s.fraisFixes;
+    if(s.fraisIdSeq) fraisIdSeq = s.fraisIdSeq;
   }catch(e){}
 }
 
@@ -772,7 +753,6 @@ function saveSettings(){
     try{ existing = JSON.parse(localStorage.getItem('devisCalcSettings')||'{}'); }catch(e){}
     localStorage.setItem('devisCalcSettings', JSON.stringify(Object.assign({}, existing, {
       regime,
-      joursAn: document.getElementById('joursAn').value,
       cfeAn: document.getElementById('cfeAn').value,
       revenuMois: document.getElementById('revenuMois').value,
       pLoyer: document.getElementById('pLoyer').value,
@@ -790,7 +770,9 @@ function saveSettings(){
       pCustom,
       pCustomIdSeq,
       pAjouts,
-      pAjoutsIdSeq
+      pAjoutsIdSeq,
+      fraisFixes,
+      fraisIdSeq
     })));
   }catch(e){}
 }
@@ -931,17 +913,45 @@ function attachHandlersServ(){
   });
 }
 
-function computeDayCost(){
-  const joursAn = Math.max(1, Number(document.getElementById('joursAn').value)||330);
-  const cfeAn = Math.max(0, Number(document.getElementById('cfeAn').value)||0);
-  const fraisFixesAn = FRAIS_FIXES_BASE + cfeAn;
-  return fraisFixesAn / joursAn;
+// Les frais fixes ne sont plus retirés de chaque devis : ils sont comptés au mois (fraisMoisTotal).
+function computeDayCost(){ return 0; }
+
+function fraisMoisTotal(){
+  const cfe = Math.max(0, Number(document.getElementById('cfeAn').value)||0);
+  return fraisFixes.reduce((t,f)=> t + (Number(f.amount)||0) / (f.per==='an' ? 12 : 1), 0) + cfe/12;
+}
+
+function renderFraisFixes(){
+  const cont = document.getElementById('fraisRows');
+  if(!cont) return;
+  cont.innerHTML = '';
+  fraisFixes.forEach(f=>{
+    const div = document.createElement('div');
+    div.className = 'private-ajout';
+    div.innerHTML = `<div class="private-custom-row">
+      <input type="text" placeholder="Prévoyance, assurance..." data-fflabel="${f.id}" value="${escapeHtml(f.label)}">
+      <input type="number" step="0.01" min="0" placeholder="0,00" data-ffamount="${f.id}" value="${f.amount}">
+      <select data-ffper="${f.id}"><option value="mois"${f.per==='mois'?' selected':''}>/ mois</option><option value="an"${f.per==='an'?' selected':''}>/ an</option></select>
+      <button class="remove-btn" data-ffremove="${f.id}" title="Supprimer">✕</button></div>`;
+    cont.appendChild(div);
+  });
+  const upd = (id,field,v)=>{ const f = fraisFixes.find(x=>x.id===id); if(f) f[field]=v; compute(); };
+  cont.querySelectorAll('[data-fflabel]').forEach(i=> i.oninput = ()=> upd(i.dataset.fflabel,'label',i.value));
+  cont.querySelectorAll('[data-ffamount]').forEach(i=> i.oninput = ()=> upd(i.dataset.ffamount,'amount',i.value));
+  cont.querySelectorAll('[data-ffper]').forEach(i=> i.onchange = ()=> upd(i.dataset.ffper,'per',i.value));
+  cont.querySelectorAll('[data-ffremove]').forEach(b=> b.onclick = ()=>{
+    fraisFixes = fraisFixes.filter(x=>x.id!==b.dataset.ffremove); renderFraisFixes(); compute();
+  });
+}
+
+function netMoyenDevis(){
+  const all = [].concat(...Object.values(devisHistory||{}));
+  return all.length ? all.reduce((t,d)=> t + (Number(d.net)||0), 0) / all.length : 0;
 }
 
 function compute(){
   const rates = RATES[regime];
   const dayCost = computeDayCost();
-  document.getElementById('dayCost').textContent = fmt(dayCost);
 
   let totalVente=0, totalAchat=0, totalCharges=0, totalMarge=0;
 
@@ -980,7 +990,6 @@ function compute(){
   document.getElementById('sAchat').textContent = fmt(totalAchat);
   document.getElementById('sMarge').textContent = fmt(totalMarge);
   document.getElementById('sCharges').textContent = fmt(totalCharges);
-  document.getElementById('sFixe').textContent = fmt(dayCost);
   document.getElementById('sNet').textContent = fmt(netFinal);
   document.getElementById('summaryFinal').classList.toggle('neg', netFinal < 0);
   const pct = totalVente > 0 ? (netFinal/totalVente*100) : 0;
@@ -1005,13 +1014,20 @@ function computePrivate(){
   const ajouts = ajoutsDuMois();
   const totalCouts = ajouts.filter(a=>a.type==='cout').reduce((t,a)=> t + (Number(a.amount)||0), 0);
   const totalPrimes = ajouts.filter(a=>a.type==='prime').reduce((t,a)=> t + (Number(a.amount)||0), 0);
-  const reste = revenu - (totalPrive + totalCouts - totalPrimes);
+  const frais = fraisMoisTotal();
+  const reste = revenu - (totalPrive + totalCouts - totalPrimes + frais);
 
   document.getElementById('pTotal').textContent = fmt(totalPrive);
   document.getElementById('pCoutsRow').style.display = totalCouts !== 0 ? '' : 'none';
   document.getElementById('pCouts').textContent = fmt(totalCouts);
   document.getElementById('pPrimesRow').style.display = totalPrimes !== 0 ? '' : 'none';
   document.getElementById('pPrimes').textContent = '−' + fmt(totalPrimes);
+  document.getElementById('pFrais').textContent = fmt(frais);
+  const fv = document.getElementById('fraisMoisVal'); if(fv) fv.textContent = fmt(frais);
+  const moy = netMoyenDevis(), nb = moy > 0 ? Math.ceil(frais/moy) : null;
+  document.getElementById('pSeuilInfo').innerHTML = 'Seuil du mois : <b>' + fmt(frais) + '</b> de net à faire pour couvrir les frais fixes pro'
+    + (nb ? ' (≈ ' + nb + ' devis au net moyen de ' + fmt(moy) + ')' : '') + ' · '
+    + (revenu >= frais ? '<b style="color:var(--net-pos);">couvert</b>' : 'reste ' + fmt(frais - revenu) + ' à couvrir');
   document.getElementById('pNet').textContent = fmt(reste);
   document.getElementById('privateFinal').classList.toggle('neg', reste < 0);
 }
@@ -1152,7 +1168,6 @@ function exportPdf(){
       <div><span>Total achat matériel</span><b>${get('sAchat')}</b></div>
       <div><span>Marge brute</span><b>${get('sMarge')}</b></div>
       <div><span>Charges URSSAF + CFP</span><b>${get('sCharges')}</b></div>
-      <div><span>Coût fixe du jour</span><b>${get('sFixe')}</b></div>
       <div class="print-net"><span>Net pour vous</span><b>${get('sNet')}</b></div>
     </div>
   `;
@@ -1272,6 +1287,7 @@ function renderHistory(){
   let totalAchatMat = 0;
   let venteEncaisse = 0, netEncaisse = 0, venteAttente = 0, netAttente = 0;
   let totalCotisations = 0, cotisApprox = false;
+  let declMat = 0, declServ = 0, declCot = 0;
   devis.forEach((d, idx)=>{
     totalVente += d.vente;
     totalNet += d.net;
@@ -1290,6 +1306,11 @@ function renderHistory(){
       cotisApprox = true;
     }
 
+    if(estPaye && d.breakdown && d.breakdown.venteMat !== undefined){
+      const rr = RATES[d.regime] || RATES.acre;
+      const vm = Number(d.breakdown.venteMat)||0, vs = Number(d.breakdown.venteServ)||0;
+      declMat += vm; declServ += vs; declCot += vm*rr.mat + vs*rr.serv;
+    }
     const payeCheckbox = `<input type="checkbox" class="paye-check" data-payedevis="${d.id}" ${estPaye ? 'checked' : ''} title="Facture payée">`;
 
     if(editingDevisId === d.id){
@@ -1364,6 +1385,13 @@ function renderHistory(){
   </div>
   <div class="totals-secondary" style="border-top:1px dashed var(--line);">
     <span>Cotisations URSSAF totales${cotisApprox ? ' <small style="opacity:0.7;">(estimation pour les devis anciens sans détail)</small>' : ''}</span><b>${fmt(totalCotisations)}</b>
+  </div>
+  <div class="totals-secondary" style="border-top:1px dashed var(--line); flex-direction:column; align-items:stretch; gap:3px;">
+    <span><b>À déclarer à l'URSSAF (devis payés du mois)</b></span>
+    <span style="display:flex; justify-content:space-between;">Ventes de matériel<b>${fmt(declMat)}</b></span>
+    <span style="display:flex; justify-content:space-between;">Ventes de services<b>${fmt(declServ)}</b></span>
+    <span style="display:flex; justify-content:space-between;">Total à déclarer<b>${fmt(declMat + declServ)}</b></span>
+    <span style="display:flex; justify-content:space-between;">Cotisations correspondantes<b>${fmt(declCot)}</b></span>
   </div>`;
 
   if(totalsCont) totalsCont.innerHTML = totalsHtml;
@@ -1568,7 +1596,7 @@ document.getElementById('btnPlein').onclick = ()=>{
   compute();
 };
 
-document.getElementById('joursAn').oninput = compute;
+document.getElementById('addFrais').onclick = ()=>{ fraisFixes.push({ id:'ff'+(fraisIdSeq++), label:'', amount:'', per:'mois' }); renderFraisFixes(); compute(); };
 document.getElementById('cfeAn').oninput = compute;
 document.getElementById('addArticleMat').onclick = addArticleMat;
 document.getElementById('addArticleServ').onclick = addArticleServ;
@@ -1779,6 +1807,7 @@ if(articlesMat.length === 0) articlesMat.push({ id:'m'+(idSeq++), achat:'', vent
 if(articlesServ.length === 0) articlesServ.push({ id:'s'+(idSeq++), vente:'' });
 renderMat();
 renderServ();
+renderFraisFixes();
 renderPrivateCustom();
 renderHistory();
 compute();

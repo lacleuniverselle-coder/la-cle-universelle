@@ -208,7 +208,7 @@ body.locked > .wrap{display:none;}
   </div>
 
   <h2 class="section-title">Apport &amp; aides reçues</h2>
-  <p class="section-sub">Argent qui entre hors devis : votre apport personnel ou une aide/subvention (ex. aide à l'achat du vélo cargo). Cela n'entre pas dans le "Net réel du mois". Une aide <b>reçue</b> peut être rattachée à un outil : le montant à amortir baisse d'autant. Aucun calcul de cotisations n'est appliqué ici : vérifiez auprès de l'organisme qui verse l'aide et de l'URSSAF si elle doit être déclarée.</p>
+  <p class="section-sub">Argent qui entre hors devis : votre apport personnel ou une aide/subvention (ex. aide à l'achat du vélo cargo). Cela n'entre pas dans le "Net réel du mois". Une aide (reçue ou attendue) peut être rattachée à un outil : le montant à amortir baisse d'autant. Aucun calcul de cotisations n'est appliqué ici : vérifiez auprès de l'organisme qui verse l'aide et de l'URSSAF si elle doit être déclarée.</p>
   <div class="panel">
     <div class="tool-add-row">
       <div class="field" style="max-width:140px;"><label>Type</label>
@@ -232,6 +232,10 @@ body.locked > .wrap{display:none;}
     <div id="apTotals"></div>
     <div id="apList"></div>
   </div>
+
+  <h2 class="section-title">Cascade de l'apport</h2>
+  <p class="section-sub">Où en est l'apport : ce qu'il reste après l'outillage et le vélo (saisis dans « Outillage »), puis ce que les ventes ramènent. Le net des devis est déjà après achat matière et cotisations ; les frais fixes pro sont comptés au mois depuis le mois du premier apport.</p>
+  <div class="panel" id="cascadePanel"></div>
 
   <h2 class="section-title">Outillage — suivi d'amortissement</h2>
   <p class="section-sub">Barre de progression = marge nette cumulée des devis enregistrés depuis la date d'achat de l'outil ÷ montant de l'outil. Indicatif : si plusieurs outils sont amortis en même temps, chacun affiche sa progression sur la même marge cumulée, sans partage comptable strict entre eux.</p>
@@ -402,7 +406,9 @@ function renderCategories(){
       if(manuel.achat > 0) manuelBits.push('acheté ' + fmt(manuel.achat) + ' à la main');
       if(manuel.vente > 0) manuelBits.push('vendu ' + fmt(manuel.vente) + ' à la main');
       const manuelNote = manuelBits.length ? `<br><small style="color:var(--ink-soft); font-weight:400;">dont ${manuelBits.join(', ')}</small>` : '';
-      return `<tr><td>${c.label}</td><td>${fmt(achatCombine)}${manuelNote}</td><td>${fmt(venteCombine)}</td><td>${fmt(venteCombine - achatCombine)}</td></tr>`;
+      const alerte = achatCombine > venteCombine;
+      const st = alerte ? ' style="color:var(--danger,#b3261e); font-weight:600;"' : '';
+      return `<tr><td${st}>${alerte ? '⚠ ' : ''}${c.label}</td><td>${fmt(achatCombine)}${manuelNote}</td><td>${fmt(venteCombine)}</td><td${st}>${fmt(venteCombine - achatCombine)}</td></tr>`;
     }).join('');
     panel.innerHTML = `<table class="cat-table">
       <thead><tr><th>Catégorie</th><th>Acheté</th><th>Vendu</th><th>Marge</th></tr></thead>
@@ -410,6 +416,7 @@ function renderCategories(){
       <tfoot><tr><td>Total</td><td>${fmt(totalAchat)}</td><td>${fmt(totalVente)}</td><td>${fmt(totalVente-totalAchat)}</td></tr></tfoot>
     </table>`;
   }
+  if(anyLine || anyManual){ panel.insertAdjacentHTML('beforeend','<div style="font-size:0.72rem; color:var(--ink-soft); margin-top:6px;">⚠ = catégorie où l\'achat dépasse la vente : c\'est là que le stock ou l\'achat est le moins bien couvert.</div>'); }
   const noteEl = document.getElementById('catNote');
   noteEl.textContent = excludedCount > 0
     ? excludedCount + ' devis antérieur(s) à cette mise à jour n\'ont pas de détail par ligne et ne sont pas comptés ici (colonne Vendu/Marge). Utilisez le rattrapage manuel pour au moins récupérer leur montant acheté et vendu.'
@@ -497,7 +504,7 @@ populateManualCatMonthSelect();
 renderManualCatSelect();
 
 // Net réel du mois consulté dans la calculette (même mois, même stockage partagé) :
-// net des devis encaissés + rattrapages/consommables datés ce mois (vente − achat) − outillage acheté ce mois.
+// net des devis encaissés + rattrapages/consommables datés ce mois (vente − achat) − outillage acheté ce mois − frais fixes pro du mois.
 function computeNetReelMois(monthKey){
   const raw = loadRaw();
   const devisMois = (raw.devisHistory && raw.devisHistory[monthKey]) || [];
@@ -516,10 +523,12 @@ function computeNetReelMois(monthKey){
   let outillageDepense = 0;
   outillageMois.forEach(t=>{ outillageDepense += Number(t.montant)||0; });
 
-  return { netEncaisse, manualContrib, outillageDepense, netReel: netEncaisse + manualContrib - outillageDepense };
+  const fraisFixes = fraisFixesMois(raw);
+  return { netEncaisse, manualContrib, outillageDepense, fraisFixes, netReel: netEncaisse + manualContrib - outillageDepense - fraisFixes };
 }
 
 function renderNetReel(){
+  renderCascade();
   const raw = loadRaw();
   const monthKey = raw.currentMonth || getMonthKeyNow();
   document.getElementById('netReelMonthLabel').textContent = 'Mois consulté dans la calculette : ' + monthLabel(monthKey);
@@ -529,6 +538,7 @@ function renderNetReel(){
     <div class="manual-entry"><span class="cat">Net des devis encaissés</span><span class="amt">${fmt(r.netEncaisse)}</span></div>
     <div class="manual-entry"><span class="cat">Rattrapages/consommables datés ce mois</span><span class="amt">${r.manualContrib>=0?'+':''}${fmt(r.manualContrib)}</span></div>
     <div class="manual-entry"><span class="cat">Outillage acheté ce mois</span><span class="amt">−${fmt(r.outillageDepense)}</span></div>
+    <div class="manual-entry"><span class="cat">Frais fixes pro du mois</span><span class="amt">−${fmt(r.fraisFixes)}</span></div>
     <div class="manual-entry" style="border-top:1px solid var(--line); padding-top:8px; font-weight:600;"><span class="cat">Net réel du mois</span><span class="amt">${fmt(r.netReel)}</span></div>
   `;
 }
@@ -544,6 +554,28 @@ function monthLabel(ym){
   return (monthNames[idx]||'?') + ' ' + year;
 }
 
+/* ---- Frais fixes pro (liste de la calculette, comptés au mois) ---- */
+function fraisFixesMois(raw){
+  const fraisMois = fraisFixesMois(raw);
+  const frais = fraisMois * nbMois;
+  const gains = netDevis + manuel - frais;
+  const position = apport - depenses + gains;
+  const pct = depenses > 0 ? Math.max(0, Math.min(100, gains/depenses*100)) : (gains >= 0 ? 100 : 0);
+  const reste = Math.max(0, depenses - gains);
+  const row = (l,v,b)=> `<div class="manual-entry" style="${b?'border-top:1px solid var(--line); padding-top:8px; font-weight:600;':''}"><span class="cat">${l}</span><span class="amt">${v}</span></div>`;
+  const sg = v => (v>=0?'+':'−') + fmt(Math.abs(v));
+  panel.innerHTML =
+    row('Apport', fmt(apport)) +
+    row('− Outillage et vélo (nets des aides)', '−' + fmt(depenses)) +
+    row('= Reste de l\'apport après achats', fmt(apport - depenses), true) +
+    row('+ Net cumulé des devis payés', sg(netDevis)) +
+    row('+ Consommables saisis à la main (vendu − acheté)', sg(manuel)) +
+    row('− Frais fixes pro (' + nbMois + ' mois)', '−' + fmt(frais)) +
+    row('= Position de trésorerie', fmt(position), true) +
+    `<div style="margin-top:10px; font-size:0.85rem;">Apport comblé à <b>${pct.toLocaleString('fr-FR',{maximumFractionDigits:0})} %</b>${reste>0 ? ' · reste à combler <b>' + fmt(reste) + '</b>' : ' · <b style="color:var(--net-pos);">comblé</b>'}</div>
+     <div style="height:8px; background:var(--line); border-radius:4px; margin-top:6px; overflow:hidden;"><div style="height:100%; width:${pct}%; background:var(--net-pos);"></div></div>`;
+}
+
 /* ---- Apport & aides reçues ---- */
 function loadAp(){ const r = loadRaw(); return Array.isArray(r.apportsAides) ? r.apportsAides : []; }
 function saveAp(list){
@@ -552,7 +584,7 @@ function saveAp(list){
   localStorage.setItem('devisCalcSettings', JSON.stringify(existing));
 }
 function aidesRecuesPourOutil(outilId){
-  return loadAp().filter(a=> a.type === 'aide' && a.statut === 'recue' && a.outilId === outilId)
+  return loadAp().filter(a=> a.type === 'aide' && a.outilId === outilId)
                  .reduce((s,a)=> s + (Number(a.montant)||0), 0);
 }
 function renderApOutilSelect(){
@@ -583,6 +615,7 @@ function renderAp(){
   const totApport = sum(a=>a.type==='apport');
   const totRecues = sum(a=>a.type==='aide' && a.statut==='recue');
   const totAttendues = sum(a=>a.type==='aide' && a.statut!=='recue');
+  renderCascade();
   const totals = document.getElementById('apTotals');
   totals.innerHTML = list.length === 0 ? '' : `
     <div class="manual-entry"><span class="cat">Apport personnel</span><span class="amt">${fmt(totApport)}</span></div>
@@ -657,7 +690,7 @@ function renderTools(){
         <span class="tool-name">${escapeHtml(t.nom)}</span>
         <button class="tool-remove" data-deltool="${t.id}" title="Supprimer">✕</button>
       </div>
-      <div class="tool-meta">Acheté ${fmt(Number(t.montant)||0)} en ${dateAffichee}${aidesRecuesPourOutil(t.id) > 0 ? ` · <span style="color:var(--net-pos);">aides reçues −${fmt(aidesRecuesPourOutil(t.id))} → coût net ${fmt(Math.max(0, (Number(t.montant)||0) - aidesRecuesPourOutil(t.id)))}</span>` : ''}</div>
+      <div class="tool-meta">Acheté ${fmt(Number(t.montant)||0)} en ${dateAffichee}${aidesRecuesPourOutil(t.id) > 0 ? ` · <span style="color:var(--net-pos);">aides (reçues ou attendues) −${fmt(aidesRecuesPourOutil(t.id))} → coût net ${fmt(Math.max(0, (Number(t.montant)||0) - aidesRecuesPourOutil(t.id)))}</span>` : ''}</div>
       <div class="progress-track"><div class="progress-fill${done?' done':''}" style="width:${pct}%;"></div></div>
       <div class="tool-bottom">
         <span>Marge cumulée depuis l'achat : <b>${fmt(margeCumulee)}</b></span>
