@@ -170,7 +170,7 @@ body.locked > .wrap{display:none;}
   <h2 class="section-title" style="margin-top:0;">Net réel du mois</h2>
   <p class="section-sub" id="netReelMonthLabel"></p>
   <div class="panel" id="netReelPanel"></div>
-  <p class="note">Net des devis encaissés ce mois, + consommables/matériel rattrapés ce mois (vente − achat), − outillage acheté ce mois. C'est ce chiffre qui alimente le "Revenu net du mois" du bilan privé dans la calculette.</p>
+  <p class="note">Net des devis encaissés ce mois, + consommables/matériel rattrapés ce mois (vente − achat), − outillage acheté ce mois. Ce chiffre reste ici : la calculette ne compte que les devis.</p>
 
   <h2 class="section-title">Achats matériel par catégorie</h2>
   <p class="section-sub">Cumul sur tout l'historique de devis (tous mois confondus).</p>
@@ -207,6 +207,32 @@ body.locked > .wrap{display:none;}
     <div id="manualCatList"></div>
   </div>
 
+  <h2 class="section-title">Apport &amp; aides reçues</h2>
+  <p class="section-sub">Argent qui entre hors devis : votre apport personnel ou une aide/subvention (ex. aide à l'achat du vélo cargo). Cela n'entre pas dans le "Net réel du mois". Une aide <b>reçue</b> peut être rattachée à un outil : le montant à amortir baisse d'autant. Aucun calcul de cotisations n'est appliqué ici : vérifiez auprès de l'organisme qui verse l'aide et de l'URSSAF si elle doit être déclarée.</p>
+  <div class="panel">
+    <div class="tool-add-row">
+      <div class="field" style="max-width:140px;"><label>Type</label>
+        <select id="apType"><option value="apport">Apport perso</option><option value="aide">Aide / subvention</option></select>
+      </div>
+      <div class="field"><label>Libellé</label><input type="text" id="apLabel" placeholder="Apport de départ, aide vélo cargo..."></div>
+      <div class="field" style="max-width:110px;"><label>Montant</label><input type="number" step="0.01" min="0" id="apMontant" placeholder="0,00"></div>
+      <div class="field" style="max-width:170px;">
+        <label>Mois</label>
+        <div style="display:flex; gap:4px;">
+          <select id="apMonth" style="flex:1.3;"></select>
+          <select id="apYear" style="flex:1;"></select>
+        </div>
+      </div>
+      <div class="field" style="max-width:120px;"><label>Statut</label>
+        <select id="apStatut"><option value="recue">Reçue</option><option value="attendue">Attendue</option></select>
+      </div>
+      <div class="field" id="apOutilField" style="display:none;"><label>Réduit le coût de (option)</label><select id="apOutil"></select></div>
+      <button class="add-btn" id="addApBtn">+ Ajouter</button>
+    </div>
+    <div id="apTotals"></div>
+    <div id="apList"></div>
+  </div>
+
   <h2 class="section-title">Outillage — suivi d'amortissement</h2>
   <p class="section-sub">Barre de progression = marge nette cumulée des devis enregistrés depuis la date d'achat de l'outil ÷ montant de l'outil. Indicatif : si plusieurs outils sont amortis en même temps, chacun affiche sa progression sur la même marge cumulée, sans partage comptable strict entre eux.</p>
   <div class="panel">
@@ -225,7 +251,7 @@ body.locked > .wrap{display:none;}
     <div id="toolList"></div>
   </div>
 
-  <footer>Données partagées avec la calculette (même stockage local sur cet appareil).</footer>
+  <footer>Données partagées avec la calculette et synchronisées entre vos appareils.</footer>
 </div>
 
 <script src="sync.js"></script>
@@ -518,6 +544,85 @@ function monthLabel(ym){
   return (monthNames[idx]||'?') + ' ' + year;
 }
 
+/* ---- Apport & aides reçues ---- */
+function loadAp(){ const r = loadRaw(); return Array.isArray(r.apportsAides) ? r.apportsAides : []; }
+function saveAp(list){
+  const existing = loadRaw();
+  existing.apportsAides = list;
+  localStorage.setItem('devisCalcSettings', JSON.stringify(existing));
+}
+function aidesRecuesPourOutil(outilId){
+  return loadAp().filter(a=> a.type === 'aide' && a.statut === 'recue' && a.outilId === outilId)
+                 .reduce((s,a)=> s + (Number(a.montant)||0), 0);
+}
+function renderApOutilSelect(){
+  const sel = document.getElementById('apOutil');
+  if(!sel) return;
+  const prev = sel.value;
+  const outils = loadRaw().outillage || [];
+  sel.innerHTML = '<option value="">Aucun outil</option>' + outils.map(o=>`<option value="${o.id}">${escapeHtml(o.nom)}</option>`).join('');
+  sel.value = outils.some(o=>o.id===prev) ? prev : '';
+}
+function populateApSelects(){
+  const monthNames = ['Jan','Fév','Mar','Avr','Mai','Jun','Jul','Aoû','Sep','Oct','Nov','Déc'];
+  const mSel = document.getElementById('apMonth');
+  mSel.innerHTML = monthNames.map((m,i)=>`<option value="${String(i+1).padStart(2,'0')}">${m}</option>`).join('');
+  const now = new Date();
+  mSel.value = String(now.getMonth()+1).padStart(2,'0');
+  const ySel = document.getElementById('apYear');
+  const cy = now.getFullYear();
+  const years = [];
+  for(let y = cy - 3; y <= cy + 2; y++) years.push(y);
+  ySel.innerHTML = years.map(y=>`<option value="${y}">${y}</option>`).join('');
+  ySel.value = cy;
+}
+function renderAp(){
+  const list = loadAp();
+  const outils = loadRaw().outillage || [];
+  const sum = (f)=> list.filter(f).reduce((s,a)=> s + (Number(a.montant)||0), 0);
+  const totApport = sum(a=>a.type==='apport');
+  const totRecues = sum(a=>a.type==='aide' && a.statut==='recue');
+  const totAttendues = sum(a=>a.type==='aide' && a.statut!=='recue');
+  const totals = document.getElementById('apTotals');
+  totals.innerHTML = list.length === 0 ? '' : `
+    <div class="manual-entry"><span class="cat">Apport personnel</span><span class="amt">${fmt(totApport)}</span></div>
+    <div class="manual-entry"><span class="cat" style="color:var(--net-pos);">🎁 Aides reçues</span><span class="amt" style="color:var(--net-pos);">+${fmt(totRecues)}</span></div>
+    <div class="manual-entry"><span class="cat">Aides attendues (pas encore reçues)</span><span class="amt" style="opacity:0.7;">${fmt(totAttendues)}</span></div>
+    <div class="manual-entry" style="border-top:1px solid var(--line); padding-top:8px; font-weight:600;"><span class="cat">Total reçu (apport + aides reçues)</span><span class="amt">${fmt(totApport + totRecues)}</span></div>`;
+  const cont = document.getElementById('apList');
+  if(list.length === 0){ cont.innerHTML = '<div class="empty-state">Aucun apport ni aide enregistré.</div>'; }
+  else {
+    cont.innerHTML = '<div style="margin-top:10px;"></div>' + list.slice().reverse().map(a=>{
+      const isAide = a.type === 'aide';
+      const recue = a.statut === 'recue';
+      const outil = a.outilId ? outils.find(o=>o.id===a.outilId) : null;
+      const note = (isAide ? (recue ? 'Reçue' : 'Attendue') : 'Apport') + (a.dateISO ? ' · ' + monthLabel(a.dateISO) : '') + (outil ? ' · réduit : ' + escapeHtml(outil.nom) : '');
+      const color = isAide ? (recue ? 'var(--net-pos)' : 'var(--ink-soft)') : 'var(--ink)';
+      return `
+      <div class="manual-entry" style="${isAide && recue ? 'background:var(--net-bg); border-radius:6px; padding-left:6px; padding-right:6px;' : ''}">
+        <span class="cat" style="color:${color};">${isAide ? '🎁 ' : ''}${escapeHtml(a.libelle || (isAide ? 'Aide' : 'Apport'))} · ${note}</span>
+        <span class="amt" style="color:${color};">${isAide ? '+' : ''}${fmt(Number(a.montant)||0)}</span>
+        ${isAide && !recue ? `<button class="tool-remove" data-aprecue="${a.id}" title="Marquer comme reçue" style="font-size:0.7rem; width:auto; padding:0 6px;">Reçue ?</button>` : ''}
+        <button class="tool-remove" data-apdel="${a.id}" title="Supprimer">✕</button>
+      </div>`;
+    }).join('');
+    cont.querySelectorAll('[data-aprecue]').forEach(btn=>{
+      btn.onclick = ()=>{
+        const l = loadAp(); const a = l.find(x=>x.id===btn.dataset.aprecue);
+        if(a){ a.statut = 'recue'; saveAp(l); renderAp(); }
+      };
+    });
+    cont.querySelectorAll('[data-apdel]').forEach(btn=>{
+      btn.onclick = ()=>{
+        if(!confirm('Supprimer cette entrée ?')) return;
+        saveAp(loadAp().filter(x=>x.id!==btn.dataset.apdel));
+        renderAp();
+      };
+    });
+  }
+  renderTools(); // met à jour le coût net des outils
+}
+
 function toolProgress(tool){
   if(!tool.dateISO) return { margeCumulee:0, pct:0 };
   const devis = allDevis();
@@ -527,8 +632,9 @@ function toolProgress(tool){
       marge += Number(d.net)||0;
     }
   });
-  const montant = Number(tool.montant)||0;
-  const pctRaw = montant > 0 ? (marge/montant*100) : 0;
+  const montantBrut = Number(tool.montant)||0;
+  const montant = Math.max(0, montantBrut - aidesRecuesPourOutil(tool.id));
+  const pctRaw = montant > 0 ? (marge/montant*100) : (montantBrut > 0 ? 100 : 0);
   const pct = Math.max(0, Math.min(100, pctRaw));
   return { margeCumulee: marge, pct };
 }
@@ -536,6 +642,7 @@ function toolProgress(tool){
 function renderTools(){
   const raw = loadRaw();
   const outillage = raw.outillage || [];
+  renderApOutilSelect();
   const cont = document.getElementById('toolList');
   if(outillage.length === 0){
     cont.innerHTML = '<div class="empty-state">Aucun outil enregistré.</div>';
@@ -550,7 +657,7 @@ function renderTools(){
         <span class="tool-name">${escapeHtml(t.nom)}</span>
         <button class="tool-remove" data-deltool="${t.id}" title="Supprimer">✕</button>
       </div>
-      <div class="tool-meta">Acheté ${fmt(Number(t.montant)||0)} en ${dateAffichee}</div>
+      <div class="tool-meta">Acheté ${fmt(Number(t.montant)||0)} en ${dateAffichee}${aidesRecuesPourOutil(t.id) > 0 ? ` · <span style="color:var(--net-pos);">aides reçues −${fmt(aidesRecuesPourOutil(t.id))} → coût net ${fmt(Math.max(0, (Number(t.montant)||0) - aidesRecuesPourOutil(t.id)))}</span>` : ''}</div>
       <div class="progress-track"><div class="progress-fill${done?' done':''}" style="width:${pct}%;"></div></div>
       <div class="tool-bottom">
         <span>Marge cumulée depuis l'achat : <b>${fmt(margeCumulee)}</b></span>
@@ -608,11 +715,29 @@ populateMonthYearSelects();
 document.getElementById('addCatBtn').onclick = addCustomCategory;
 document.getElementById('newCatName').addEventListener('keydown', (e)=>{ if(e.key==='Enter') addCustomCategory(); });
 
+document.getElementById('apType').onchange = ()=>{
+  document.getElementById('apOutilField').style.display = document.getElementById('apType').value === 'aide' ? '' : 'none';
+};
+document.getElementById('addApBtn').onclick = ()=>{
+  const type = document.getElementById('apType').value;
+  const libelle = document.getElementById('apLabel').value.trim();
+  const montant = Number(document.getElementById('apMontant').value)||0;
+  if(montant <= 0){ alert('Entrez un montant supérieur à 0'); return; }
+  const dateISO = document.getElementById('apYear').value + '-' + document.getElementById('apMonth').value;
+  const entry = { id:'ap'+Date.now(), type, libelle, montant, dateISO, statut: type === 'aide' ? document.getElementById('apStatut').value : 'recue' };
+  if(type === 'aide' && document.getElementById('apOutil').value) entry.outilId = document.getElementById('apOutil').value;
+  const l = loadAp(); l.push(entry); saveAp(l);
+  document.getElementById('apLabel').value = '';
+  document.getElementById('apMontant').value = '';
+  renderAp();
+};
+populateApSelects();
+
 function init(){
   renderCatManager();
   renderCategories();
   renderManualCatList();
-  renderTools();
+  renderAp();
   renderNetReel();
 }
 

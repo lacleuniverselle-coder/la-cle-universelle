@@ -404,6 +404,21 @@ footer{text-align:center; color:var(--ink-soft); font-size:0.75rem; margin-top:2
   background:var(--violet); color:#fff; font-weight:600; font-size:0.9rem; cursor:pointer;
 }
 body.locked > .wrap{display:none;}
+
+.private-ajouts-title{font-size:0.72rem; color:var(--ink-soft); margin:10px 0 2px; border-top:1px dashed var(--line); padding-top:8px;}
+.private-ajout{margin-top:6px;}
+.private-ajout .rec{display:flex; align-items:center; gap:5px; font-size:0.72rem; color:var(--ink-soft); margin:3px 0 0 2px;}
+.private-ajout.prime input[type="text"], .private-ajout.prime input[type="number"]{
+  border-color:var(--net-pos); background:var(--net-bg);
+}
+.private-ajout.prime .ico{color:var(--net-pos);}
+.private-ajouts-btns{display:flex; gap:8px; margin-top:8px;}
+.private-ajouts-btns button{
+  flex:1; padding:6px; border:1.5px dashed var(--line); border-radius:8px; background:transparent;
+  color:var(--ink-soft); font-size:0.8rem; cursor:pointer; font-family:inherit;
+}
+.private-ajouts-btns button.prime{border-color:var(--net-pos); color:var(--net-pos);}
+.private-total.prime b, .private-total.prime span{color:var(--net-pos);}
 </style>
 </head>
 <body class="locked">
@@ -511,7 +526,7 @@ body.locked > .wrap{display:none;}
 
   <div class="panel">
     <div class="field" style="margin-bottom:8px;">
-      <label>Revenu net réel du mois (auto : net encaissé des devis + rattrapages datés − outillage acheté ce mois-ci)</label>
+      <label>Revenu net du mois (auto : net encaissé des devis)</label>
       <input type="number" id="revenuMois" value="" min="0" step="0.01" placeholder="0,00" readonly style="opacity:0.7; cursor:not-allowed;">
     </div>
     <div class="private-grid">
@@ -522,8 +537,15 @@ body.locked > .wrap{display:none;}
       <div class="private-row"><label>Assurance moto</label><input type="number" id="pAssurMoto" value="17" step="0.01"></div>
       <div id="privateCustomRows" class="private-custom-sep"></div>
     </div>
-    <button class="add-private-btn" id="addPrivateCustom">+ Ajouter un coût (vacances, imprévu...)</button>
-    <div class="private-total"><span>Total charges privées</span><b id="pTotal">0,00 €</b></div>
+    <div class="private-ajouts-title">Ajouts de ce mois (loisirs, voyage, prime…) — ne concernent que le mois affiché, sauf coût coché « chaque mois »</div>
+    <div id="privateAjoutsRows"></div>
+    <div class="private-ajouts-btns">
+      <button id="addPrivateCout">+ Coût</button>
+      <button id="addPrivatePrime" class="prime">🎁 + Prime</button>
+    </div>
+    <div class="private-total"><span>Total charges privées (fixes)</span><b id="pTotal">0,00 €</b></div>
+    <div class="private-total" id="pCoutsRow" style="display:none;"><span>Coûts ajoutés ce mois</span><b id="pCouts">0,00 €</b></div>
+    <div class="private-total prime" id="pPrimesRow" style="display:none;"><span>🎁 Primes reçues ce mois</span><b id="pPrimes">0,00 €</b></div>
   </div>
 
   <div class="summary">
@@ -641,6 +663,8 @@ let articlesMat = [];
 let articlesServ = [];
 let pCustom = [];
 let pCustomIdSeq = 0;
+let pAjouts = [];        // ajouts privés : { id, type:'cout'|'prime', label, amount, mois:'YYYY-MM'|null(=chaque mois, coûts seulement) }
+let pAjoutsIdSeq = 0;
 let idSeq = 0;
 let currentMonth = getMonthKey();
 let editingDevisId = null;
@@ -737,6 +761,8 @@ function loadSettings(){
     if(s.seuilRenta!==undefined) document.getElementById('seuilRenta').value = s.seuilRenta;
     if(s.pCustom) pCustom = s.pCustom;
     if(s.pCustomIdSeq) pCustomIdSeq = s.pCustomIdSeq;
+    if(s.pAjouts) pAjouts = s.pAjouts;
+    if(s.pAjoutsIdSeq) pAjoutsIdSeq = s.pAjoutsIdSeq;
   }catch(e){}
 }
 
@@ -762,7 +788,9 @@ function saveSettings(){
       devisIdSeq,
       seuilRenta: document.getElementById('seuilRenta').value,
       pCustom,
-      pCustomIdSeq
+      pCustomIdSeq,
+      pAjouts,
+      pAjoutsIdSeq
     })));
   }catch(e){}
 }
@@ -974,11 +1002,75 @@ function computePrivate(){
   const assurMoto = Number(document.getElementById('pAssurMoto').value)||0;
   const totalCustom = pCustom.reduce((s,c)=> s + (Number(c.amount)||0), 0);
   const totalPrive = loyer+tel+courses+assurHab+assurMoto+totalCustom;
-  const reste = revenu - totalPrive;
+  const ajouts = ajoutsDuMois();
+  const totalCouts = ajouts.filter(a=>a.type==='cout').reduce((t,a)=> t + (Number(a.amount)||0), 0);
+  const totalPrimes = ajouts.filter(a=>a.type==='prime').reduce((t,a)=> t + (Number(a.amount)||0), 0);
+  const reste = revenu - (totalPrive + totalCouts - totalPrimes);
 
   document.getElementById('pTotal').textContent = fmt(totalPrive);
+  document.getElementById('pCoutsRow').style.display = totalCouts !== 0 ? '' : 'none';
+  document.getElementById('pCouts').textContent = fmt(totalCouts);
+  document.getElementById('pPrimesRow').style.display = totalPrimes !== 0 ? '' : 'none';
+  document.getElementById('pPrimes').textContent = '−' + fmt(totalPrimes);
   document.getElementById('pNet').textContent = fmt(reste);
   document.getElementById('privateFinal').classList.toggle('neg', reste < 0);
+}
+
+// ---- Ajouts privés du mois (coûts ponctuels et primes) ----
+function ajoutsDuMois(){
+  return pAjouts.filter(a=> a.mois === currentMonth || (a.mois === null && a.type === 'cout'));
+}
+
+function renderPrivateAjouts(){
+  const cont = document.getElementById('privateAjoutsRows');
+  if(!cont) return;
+  cont.innerHTML = '';
+  ajoutsDuMois().forEach(a=>{
+    const isPrime = a.type === 'prime';
+    const div = document.createElement('div');
+    div.className = 'private-ajout' + (isPrime ? ' prime' : '');
+    div.innerHTML = `
+      <div class="private-custom-row">
+        <span class="ico">${isPrime ? '🎁' : ''}</span>
+        <input type="text" placeholder="${isPrime ? 'Prime activité, aide...' : 'Loisirs, voyage, imprévu...'}" data-ajlabel="${a.id}" value="${escapeHtml(a.label)}">
+        <input type="number" step="0.01" min="0" placeholder="0,00" data-ajamount="${a.id}" value="${a.amount}">
+        <button class="remove-btn" data-ajremove="${a.id}" title="Supprimer">✕</button>
+      </div>
+      ${isPrime ? '' : `<label class="rec"><input type="checkbox" data-ajrec="${a.id}" ${a.mois === null ? 'checked' : ''}> 🔁 chaque mois (coût fixe)</label>`}`;
+    cont.appendChild(div);
+  });
+  cont.querySelectorAll('[data-ajlabel]').forEach(inp=>{
+    inp.oninput = ()=> updatePrivateAjout(inp.dataset.ajlabel, 'label', inp.value);
+  });
+  cont.querySelectorAll('[data-ajamount]').forEach(inp=>{
+    inp.oninput = ()=> updatePrivateAjout(inp.dataset.ajamount, 'amount', inp.value);
+  });
+  cont.querySelectorAll('[data-ajremove]').forEach(btn=>{
+    btn.onclick = ()=>{
+      pAjouts = pAjouts.filter(a=>a.id!==btn.dataset.ajremove);
+      renderPrivateAjouts();
+      compute();
+    };
+  });
+  cont.querySelectorAll('[data-ajrec]').forEach(chk=>{
+    chk.onchange = ()=>{
+      const a = pAjouts.find(x=>x.id===chk.dataset.ajrec);
+      if(a){ a.mois = chk.checked ? null : currentMonth; }
+      compute();
+    };
+  });
+}
+
+function addPrivateAjout(type){
+  pAjouts.push({ id:'pa'+(pAjoutsIdSeq++), type, label:'', amount:'', mois: currentMonth });
+  renderPrivateAjouts();
+  compute();
+}
+
+function updatePrivateAjout(id, field, value){
+  const a = pAjouts.find(x=>x.id===id);
+  if(a) a[field] = value;
+  compute();
 }
 
 function renderPrivateCustom(){
@@ -1156,24 +1248,8 @@ function syncRevenuMois(totalNet){
   computePrivate();
 }
 
-// Lit l'outillage et le rattrapage manuel (saisis côté Trésorerie, stockage partagé) pour le mois consulté.
-function computeNetReelAdjustments(monthKey){
-  let raw = {};
-  try{ raw = JSON.parse(localStorage.getItem('devisCalcSettings')||'{}'); }catch(e){}
-  const manualMois = (raw.manualCat || []).filter(m=> m.dateISO === monthKey);
-  let manualContrib = 0;
-  manualMois.forEach(m=>{
-    const achat = m.achat !== undefined ? Number(m.achat)||0 : Number(m.montant)||0;
-    const vente = Number(m.vente)||0;
-    manualContrib += vente - achat;
-  });
-  const outillageMois = (raw.outillage || []).filter(t=> t.dateISO === monthKey);
-  let outillageDepense = 0;
-  outillageMois.forEach(t=>{ outillageDepense += Number(t.montant)||0; });
-  return { manualContrib, outillageDepense };
-}
-
 function renderHistory(){
+  renderPrivateAjouts();
   const cont = document.getElementById('historyContent');
   document.getElementById('monthDisplay').textContent = getMonthLabel();
   populateMonthSelect();
@@ -1269,21 +1345,10 @@ function renderHistory(){
   });
 
   html += '</tbody></table>';
-  const adj = computeNetReelAdjustments(currentMonth);
-  const netReel = netEncaisse + adj.manualContrib - adj.outillageDepense;
-  syncRevenuMois(netReel);
+  // Le revenu du bilan privé = net des devis encaissés uniquement (outillage et rattrapages : voir Trésorerie)
+  syncRevenuMois(netEncaisse);
   const moyennePct = totalVente > 0 ? (totalNet/totalVente*100) : 0;
   if(badge) badge.textContent = devis.length + ' devis';
-  const netReelLines = (adj.manualContrib !== 0 || adj.outillageDepense !== 0) ? `
-  <div class="totals-secondary">
-    <span>Rattrapages/consommables datés ce mois</span><b>${adj.manualContrib>=0?'+':''}${fmt(adj.manualContrib)}</b>
-  </div>
-  <div class="totals-secondary">
-    <span>Outillage acheté ce mois</span><b>−${fmt(adj.outillageDepense)}</b>
-  </div>
-  <div class="totals-secondary" style="border-top:1px solid var(--line); font-weight:600;">
-    <span>Net réel du mois (encaissé)</span><b>${fmt(netReel)}</b>
-  </div>` : '';
   const totalsHtml = `
   <div class="totals-main">
     <div class="stat vente"><span class="label">Total vente</span><span class="value">${fmt(totalVente)}</span></div>
@@ -1299,7 +1364,7 @@ function renderHistory(){
   </div>
   <div class="totals-secondary" style="border-top:1px dashed var(--line);">
     <span>Cotisations URSSAF totales${cotisApprox ? ' <small style="opacity:0.7;">(estimation pour les devis anciens sans détail)</small>' : ''}</span><b>${fmt(totalCotisations)}</b>
-  </div>${netReelLines}`;
+  </div>`;
 
   if(totalsCont) totalsCont.innerHTML = totalsHtml;
   cont.innerHTML = html;
@@ -1525,7 +1590,8 @@ document.getElementById('importFile').onchange = (e)=>{
 });
 
 document.getElementById('seuilRenta').oninput = ()=>{ renderHistory(); saveSettings(); };
-document.getElementById('addPrivateCustom').onclick = addPrivateCustom;
+document.getElementById('addPrivateCout').onclick = ()=> addPrivateAjout('cout');
+document.getElementById('addPrivatePrime').onclick = ()=> addPrivateAjout('prime');
 document.getElementById('addCatBtn').onclick = addCustomCategory;
 document.getElementById('newCatName').addEventListener('keydown', (e)=>{ if(e.key==='Enter') addCustomCategory(); });
 renderCatManager();
