@@ -170,10 +170,10 @@ body.locked > .wrap{display:none;}
   <h2 class="section-title" style="margin-top:0;">Net réel du mois</h2>
   <p class="section-sub" id="netReelMonthLabel"></p>
   <div class="panel" id="netReelPanel"></div>
-  <p class="note">Net des devis encaissés ce mois, + consommables/matériel rattrapés ce mois (vente − achat), − outillage acheté ce mois. Ce chiffre reste ici : la calculette ne compte que les devis.</p>
+  <p class="note">Marge matériel (vendu − acheté) des devis payés ce mois, + consommables saisis à la main ce mois, − outillage et vélo achetés ce mois. Ni main-d'œuvre, ni cotisations, ni frais fixes : ces calculs restent dans la calculette.</p>
 
   <h2 class="section-title">Achats matériel par catégorie</h2>
-  <p class="section-sub">Cumul sur tout l'historique de devis (tous mois confondus).</p>
+  <p class="section-sub">Tableau prêt dès le départ : il se remplit au fil de vos devis payés (tous mois confondus) et de vos saisies manuelles.</p>
   <div class="panel" id="catPanel"></div>
   <p class="note" id="catNote"></p>
 
@@ -234,11 +234,11 @@ body.locked > .wrap{display:none;}
   </div>
 
   <h2 class="section-title">Cascade de l'apport</h2>
-  <p class="section-sub">Où en est l'apport : ce qu'il reste après l'outillage et le vélo (saisis dans « Outillage »), puis ce que les ventes ramènent. Le net des devis est déjà après achat matière et cotisations ; les frais fixes pro sont comptés au mois depuis le mois du premier apport.</p>
+  <p class="section-sub">L'apport est le crédit ; l'outillage et le vélo (saisis dans « Outillage ») sont le débit ; seule la marge sur le matériel (vendu − acheté) vient amortir. Ni main-d'œuvre, ni cotisations, ni frais fixes.</p>
   <div class="panel" id="cascadePanel"></div>
 
   <h2 class="section-title">Outillage — suivi d'amortissement</h2>
-  <p class="section-sub">Barre de progression = marge nette cumulée des devis enregistrés depuis la date d'achat de l'outil ÷ montant de l'outil. Indicatif : si plusieurs outils sont amortis en même temps, chacun affiche sa progression sur la même marge cumulée, sans partage comptable strict entre eux.</p>
+  <p class="section-sub">Barre de progression = marge matériel cumulée (devis payés + saisies manuelles datées) depuis le mois d'achat de l'outil ÷ coût net de l'outil. Indicatif : si plusieurs outils sont amortis en même temps, chacun affiche sa progression sur la même marge cumulée, sans partage comptable strict entre eux.</p>
   <div class="panel">
     <div class="tool-add-row">
       <div class="field"><label>Nom de l'outil</label><input type="text" id="toolNom" placeholder="Pistolet à extraction..."></div>
@@ -359,67 +359,74 @@ function allDevis(){
   return list;
 }
 
+/* Marge matériel (vendu − acheté) d'un devis : uniquement les devis payés, uniquement les lignes matériel */
+function margeMatDevis(d){
+  if(d.paye === false) return 0;
+  const lines = d.breakdown && d.breakdown.matLines;
+  if(!lines) return 0;
+  return lines.reduce((s,l)=> s + (Number(l.vente)||0) - (Number(l.achat)||0), 0);
+}
+function margeManuelle(m){
+  const achat = m.achat !== undefined ? Number(m.achat)||0 : Number(m.montant)||0;
+  return (Number(m.vente)||0) - achat;
+}
+
 function renderCategories(){
   const cats = allCategories();
   const devis = allDevis();
   const totals = {};
   cats.forEach(c=> totals[c.id] = { achat:0, vente:0 });
-  let anyLine = false;
   let excludedCount = 0;
   devis.forEach(d=>{
     const lines = d.breakdown && d.breakdown.matLines;
     if(!lines) { if(d.breakdown && (d.breakdown.achatMat||d.breakdown.venteMat)) excludedCount++; return; }
+    if(d.paye === false) return; // trésorerie : seuls les devis payés comptent
     lines.forEach(l=>{
-      anyLine = true;
       const catId = totals[l.categorie] ? l.categorie : 'autre';
       totals[catId].achat += Number(l.achat)||0;
       totals[catId].vente += Number(l.vente)||0;
     });
   });
-
-  // Rattrapage manuel : chaque entrée porte un montant acheté ET un montant vendu
-  // (les anciennes entrées n'avaient qu'un "montant", compté ici comme achat, pour ne rien perdre).
+  // Rattrapage manuel : acheté ET vendu (anciennes entrées : "montant" compté comme achat)
   const manualList = loadManualCat();
   const manualTotals = {};
   cats.forEach(c=> manualTotals[c.id] = { achat:0, vente:0 });
   manualList.forEach(m=>{
     const catId = manualTotals[m.categorie] !== undefined ? m.categorie : 'autre';
-    const achat = m.achat !== undefined ? Number(m.achat)||0 : Number(m.montant)||0;
-    const vente = Number(m.vente)||0;
-    manualTotals[catId].achat += achat;
-    manualTotals[catId].vente += vente;
+    manualTotals[catId].achat += m.achat !== undefined ? Number(m.achat)||0 : Number(m.montant)||0;
+    manualTotals[catId].vente += Number(m.vente)||0;
   });
-  const anyManual = manualList.length > 0;
 
-  const panel = document.getElementById('catPanel');
-  if(!anyLine && !anyManual){
-    panel.innerHTML = '<div class="empty-state">Aucun montant enregistré pour l\'instant — via un devis catégorisé, ou via le rattrapage manuel ci-dessous.</div>';
-  } else {
-    let totalAchat=0, totalVente=0;
-    let rows = cats.map(c=>{
-      const t = totals[c.id];
-      const manuel = manualTotals[c.id];
-      const achatCombine = t.achat + manuel.achat;
-      const venteCombine = t.vente + manuel.vente;
-      totalAchat += achatCombine; totalVente += venteCombine;
-      const manuelBits = [];
-      if(manuel.achat > 0) manuelBits.push('acheté ' + fmt(manuel.achat) + ' à la main');
-      if(manuel.vente > 0) manuelBits.push('vendu ' + fmt(manuel.vente) + ' à la main');
-      const manuelNote = manuelBits.length ? `<br><small style="color:var(--ink-soft); font-weight:400;">dont ${manuelBits.join(', ')}</small>` : '';
-      const alerte = achatCombine > venteCombine;
-      const st = alerte ? ' style="color:var(--danger,#b3261e); font-weight:600;"' : '';
-      return `<tr><td${st}>${alerte ? '⚠ ' : ''}${c.label}</td><td>${fmt(achatCombine)}${manuelNote}</td><td>${fmt(venteCombine)}</td><td${st}>${fmt(venteCombine - achatCombine)}</td></tr>`;
-    }).join('');
-    panel.innerHTML = `<table class="cat-table">
-      <thead><tr><th>Catégorie</th><th>Acheté</th><th>Vendu</th><th>Marge</th></tr></thead>
-      <tbody>${rows}</tbody>
-      <tfoot><tr><td>Total</td><td>${fmt(totalAchat)}</td><td>${fmt(totalVente)}</td><td>${fmt(totalVente-totalAchat)}</td></tr></tfoot>
-    </table>`;
-  }
-  if(anyLine || anyManual){ panel.insertAdjacentHTML('beforeend','<div style="font-size:0.72rem; color:var(--ink-soft); margin-top:6px;">⚠ = catégorie où l\'achat dépasse la vente : c\'est là que le stock ou l\'achat est le moins bien couvert.</div>'); }
-  const noteEl = document.getElementById('catNote');
-  noteEl.textContent = excludedCount > 0
-    ? excludedCount + ' devis antérieur(s) à cette mise à jour n\'ont pas de détail par ligne et ne sont pas comptés ici (colonne Vendu/Marge). Utilisez le rattrapage manuel pour au moins récupérer leur montant acheté et vendu.'
+  // Toutes les catégories sont toujours affichées (à 0 au départ), triées par marge décroissante
+  let data = cats.map(c=>{
+    const achat = totals[c.id].achat + manualTotals[c.id].achat;
+    const vente = totals[c.id].vente + manualTotals[c.id].vente;
+    return { label:c.label, achat, vente, marge: vente - achat, manuel: manualTotals[c.id] };
+  });
+  data = data.map((r,i)=> Object.assign(r,{i})).sort((x,y)=> (y.marge - x.marge) || (x.i - y.i));
+  const totalAchat = data.reduce((s,r)=>s+r.achat,0);
+  const totalVente = data.reduce((s,r)=>s+r.vente,0);
+  const totalMarge = totalVente - totalAchat;
+  const positive = data.reduce((s,r)=> s + Math.max(0,r.marge), 0);
+
+  const rows = data.map(r=>{
+    const bits = [];
+    if(r.manuel.achat > 0) bits.push('acheté ' + fmt(r.manuel.achat) + ' à la main');
+    if(r.manuel.vente > 0) bits.push('vendu ' + fmt(r.manuel.vente) + ' à la main');
+    const note = bits.length ? `<br><small style="color:var(--ink-soft); font-weight:400;">dont ${bits.join(', ')}</small>` : '';
+    const alerte = r.achat > r.vente;
+    const st = alerte ? ' style="color:var(--danger,#b3261e); font-weight:600;"' : '';
+    const part = (positive > 0 && r.marge > 0) ? Math.round(r.marge/positive*100) + ' %' : '—';
+    return `<tr><td${st}>${alerte ? '⚠ ' : ''}${escapeHtml(r.label)}</td><td>${fmt(r.achat)}${note}</td><td>${fmt(r.vente)}</td><td${st}>${fmt(r.marge)}</td><td>${part}</td></tr>`;
+  }).join('');
+  document.getElementById('catPanel').innerHTML = `<table class="cat-table">
+    <thead><tr><th>Catégorie</th><th>Acheté</th><th>Vendu</th><th>Marge</th><th>Part</th></tr></thead>
+    <tbody>${rows}</tbody>
+    <tfoot><tr><td>Total</td><td>${fmt(totalAchat)}</td><td>${fmt(totalVente)}</td><td>${fmt(totalMarge)}</td><td></td></tr></tfoot>
+  </table>
+  <div style="font-size:0.72rem; color:var(--ink-soft); margin-top:6px;">⚠ = achat supérieur à la vente. Part = poids de la catégorie dans la marge positive totale. Tri : la plus rentable en premier.</div>`;
+  document.getElementById('catNote').textContent = excludedCount > 0
+    ? excludedCount + ' devis antérieur(s) sans détail par ligne ne sont pas comptés ici. Utilisez le rattrapage manuel pour récupérer leurs montants.'
     : '';
 }
 
@@ -508,23 +515,16 @@ renderManualCatSelect();
 function computeNetReelMois(monthKey){
   const raw = loadRaw();
   const devisMois = (raw.devisHistory && raw.devisHistory[monthKey]) || [];
-  let netEncaisse = 0;
-  devisMois.forEach(d=>{ if(d.paye !== false) netEncaisse += Number(d.net)||0; });
+  let margeDevis = 0;
+  devisMois.forEach(d=>{ margeDevis += margeMatDevis(d); });
 
-  const manualMois = (raw.manualCat || []).filter(m=> m.dateISO === monthKey);
   let manualContrib = 0;
-  manualMois.forEach(m=>{
-    const achat = m.achat !== undefined ? Number(m.achat)||0 : Number(m.montant)||0;
-    const vente = Number(m.vente)||0;
-    manualContrib += vente - achat;
-  });
+  (raw.manualCat || []).filter(m=> m.dateISO === monthKey).forEach(m=>{ manualContrib += margeManuelle(m); });
 
-  const outillageMois = (raw.outillage || []).filter(t=> t.dateISO === monthKey);
   let outillageDepense = 0;
-  outillageMois.forEach(t=>{ outillageDepense += Number(t.montant)||0; });
+  (raw.outillage || []).filter(t=> t.dateISO === monthKey).forEach(t=>{ outillageDepense += Number(t.montant)||0; });
 
-  const fraisFixes = fraisFixesMois(raw);
-  return { netEncaisse, manualContrib, outillageDepense, fraisFixes, netReel: netEncaisse + manualContrib - outillageDepense - fraisFixes };
+  return { margeDevis, manualContrib, outillageDepense, netReel: margeDevis + manualContrib - outillageDepense };
 }
 
 function renderNetReel(){
@@ -535,10 +535,9 @@ function renderNetReel(){
   const r = computeNetReelMois(monthKey);
   const panel = document.getElementById('netReelPanel');
   panel.innerHTML = `
-    <div class="manual-entry"><span class="cat">Net des devis encaissés</span><span class="amt">${fmt(r.netEncaisse)}</span></div>
-    <div class="manual-entry"><span class="cat">Rattrapages/consommables datés ce mois</span><span class="amt">${r.manualContrib>=0?'+':''}${fmt(r.manualContrib)}</span></div>
-    <div class="manual-entry"><span class="cat">Outillage acheté ce mois</span><span class="amt">−${fmt(r.outillageDepense)}</span></div>
-    <div class="manual-entry"><span class="cat">Frais fixes pro du mois</span><span class="amt">−${fmt(r.fraisFixes)}</span></div>
+    <div class="manual-entry"><span class="cat">Marge matériel des devis payés (vendu − acheté)</span><span class="amt">${r.margeDevis>=0?'+':''}${fmt(r.margeDevis)}</span></div>
+    <div class="manual-entry"><span class="cat">Consommables saisis à la main, datés ce mois</span><span class="amt">${r.manualContrib>=0?'+':''}${fmt(r.manualContrib)}</span></div>
+    <div class="manual-entry"><span class="cat">Outillage et vélo achetés ce mois</span><span class="amt">−${fmt(r.outillageDepense)}</span></div>
     <div class="manual-entry" style="border-top:1px solid var(--line); padding-top:8px; font-weight:600;"><span class="cat">Net réel du mois</span><span class="amt">${fmt(r.netReel)}</span></div>
   `;
 }
@@ -554,25 +553,34 @@ function monthLabel(ym){
   return (monthNames[idx]||'?') + ' ' + year;
 }
 
-/* ---- Frais fixes pro (liste de la calculette, comptés au mois) ---- */
-function fraisFixesMois(raw){
-  const fraisMois = fraisFixesMois(raw);
-  const frais = fraisMois * nbMois;
-  const gains = netDevis + manuel - frais;
-  const position = apport - depenses + gains;
-  const pct = depenses > 0 ? Math.max(0, Math.min(100, gains/depenses*100)) : (gains >= 0 ? 100 : 0);
-  const reste = Math.max(0, depenses - gains);
+/* ---- Cascade de l'apport : crédit − achats d'outillage/vélo + marge matériel ---- */
+function renderCascade(){
+  const panel = document.getElementById('cascadePanel');
+  if(!panel) return;
+  const raw = loadRaw();
+  const ap = Array.isArray(raw.apportsAides) ? raw.apportsAides : [];
+  const apport = ap.filter(a=>a.type==='apport').reduce((s,a)=> s + (Number(a.montant)||0), 0);
+  const aidesLibres = ap.filter(a=>a.type==='aide' && a.statut==='recue' && !a.outilId).reduce((s,a)=> s + (Number(a.montant)||0), 0);
+  const credit = apport + aidesLibres;
+  const depenses = (raw.outillage || []).reduce((s,t)=> s + Math.max(0, (Number(t.montant)||0) - aidesRecuesPourOutil(t.id)), 0);
+  let marge = 0;
+  allDevis().forEach(d=>{ marge += margeMatDevis(d); });
+  (raw.manualCat || []).forEach(m=>{ marge += margeManuelle(m); });
+  const reste = credit - depenses;
+  const position = reste + marge;
+  const aAmortir = Math.max(0, depenses);
+  const pct = aAmortir > 0 ? Math.max(0, Math.min(100, marge/aAmortir*100)) : 0;
+  const manque = Math.max(0, aAmortir - marge);
   const row = (l,v,b)=> `<div class="manual-entry" style="${b?'border-top:1px solid var(--line); padding-top:8px; font-weight:600;':''}"><span class="cat">${l}</span><span class="amt">${v}</span></div>`;
   const sg = v => (v>=0?'+':'−') + fmt(Math.abs(v));
   panel.innerHTML =
-    row('Apport', fmt(apport)) +
+    row('Apport personnel', fmt(apport)) +
+    (aidesLibres > 0 ? row('+ Aides reçues (non rattachées à un outil)', '+' + fmt(aidesLibres)) : '') +
     row('− Outillage et vélo (nets des aides)', '−' + fmt(depenses)) +
-    row('= Reste de l\'apport après achats', fmt(apport - depenses), true) +
-    row('+ Net cumulé des devis payés', sg(netDevis)) +
-    row('+ Consommables saisis à la main (vendu − acheté)', sg(manuel)) +
-    row('− Frais fixes pro (' + nbMois + ' mois)', '−' + fmt(frais)) +
+    row('= Reste de l\'apport après achats', fmt(reste), true) +
+    row('+ Marge matériel cumulée (vendu − acheté)', sg(marge)) +
     row('= Position de trésorerie', fmt(position), true) +
-    `<div style="margin-top:10px; font-size:0.85rem;">Apport comblé à <b>${pct.toLocaleString('fr-FR',{maximumFractionDigits:0})} %</b>${reste>0 ? ' · reste à combler <b>' + fmt(reste) + '</b>' : ' · <b style="color:var(--net-pos);">comblé</b>'}</div>
+    `<div style="margin-top:10px; font-size:0.85rem;">Achats amortis à <b>${pct.toLocaleString('fr-FR',{maximumFractionDigits:0})} %</b>${aAmortir>0 ? (manque>0 ? ' · reste à amortir <b>' + fmt(manque) + '</b>' : ' · <b style="color:var(--net-pos);">amorti</b>') : ''}</div>
      <div style="height:8px; background:var(--line); border-radius:4px; margin-top:6px; overflow:hidden;"><div style="height:100%; width:${pct}%; background:var(--net-pos);"></div></div>`;
 }
 
@@ -662,8 +670,11 @@ function toolProgress(tool){
   let marge = 0;
   devis.forEach(d=>{
     if(d.dateISO && d.dateISO >= tool.dateISO){
-      marge += Number(d.net)||0;
+      marge += margeMatDevis(d);
     }
+  });
+  (loadRaw().manualCat || []).forEach(m=>{
+    if(m.dateISO && m.dateISO >= tool.dateISO) marge += margeManuelle(m);
   });
   const montantBrut = Number(tool.montant)||0;
   const montant = Math.max(0, montantBrut - aidesRecuesPourOutil(tool.id));
@@ -693,7 +704,7 @@ function renderTools(){
       <div class="tool-meta">Acheté ${fmt(Number(t.montant)||0)} en ${dateAffichee}${aidesRecuesPourOutil(t.id) > 0 ? ` · <span style="color:var(--net-pos);">aides (reçues ou attendues) −${fmt(aidesRecuesPourOutil(t.id))} → coût net ${fmt(Math.max(0, (Number(t.montant)||0) - aidesRecuesPourOutil(t.id)))}</span>` : ''}</div>
       <div class="progress-track"><div class="progress-fill${done?' done':''}" style="width:${pct}%;"></div></div>
       <div class="tool-bottom">
-        <span>Marge cumulée depuis l'achat : <b>${fmt(margeCumulee)}</b></span>
+        <span>Marge matériel depuis l'achat : <b>${fmt(margeCumulee)}</b></span>
         ${done ? '<span class="badge-done">Amorti ✅</span>' : '<span>' + pct.toLocaleString('fr-FR',{maximumFractionDigits:0}) + ' %</span>'}
       </div>
     </div>`;
