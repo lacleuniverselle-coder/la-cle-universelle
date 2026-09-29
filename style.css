@@ -1423,7 +1423,7 @@ footer span {
     color: #c8860a;
     font-size: 1.1rem;
     letter-spacing: .05em;
-    animation: pulse 1.5s ease-in-out infinite
+    animation: ease-in-out infinite
 }
 
 @keyframes roue-rotation {
@@ -1449,17 +1449,17 @@ footer span {
 
 #roue {
     transform-origin: 50% 50%;
-    animation: roue-rotation 3.4s ease-out
+    animation: roue-rotation 2s ease-out
 }
 
 .hero-logo-wrap svg:hover #roue,
 .hero-logo-wrap svg:focus #roue,
 .hero-logo-wrap svg:active #roue {
-    animation: roue-rotation-hover 3.4s ease-out
+    animation: roue-rotation-hover 2s ease-out
 }
 
 #roue.roue-replay {
-    animation: roue-rotation-hover 3.4s ease-out
+    animation: roue-rotation-hover 2s ease-out
 }
 
 @media (prefers-reduced-motion: reduce) {
