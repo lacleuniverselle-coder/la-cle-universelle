@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Compta — La Clé Universelle</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#4C3468">
+<link rel="icon" href="icon-192.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Compta">
+<meta name="robots" content="noindex, nofollow">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#EDEFEF; --surface:#FFFFFF; --line:#D8DBDB;
+  --ink:#1E2328; --ink-soft:#5B6266;
+  --violet:#4C3468; --violet-deep:#382450;
+  --steel:#43616B;
+  --net-pos:#2E6B4C; --net-bg:#E7F1EA;
+  --net-neg:#A23B3B; --net-neg-bg:#F4E6E6;
+  --danger:#A23B3B;
+  box-sizing:border-box;
+  padding-top:env(safe-area-inset-top,0px);
+  padding-bottom:env(safe-area-inset-bottom,0px);
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#181B1D; --surface:#22262A; --line:#33383C;
+    --ink:#EDEFEF; --ink-soft:#9AA3A7;
+    --net-bg:#1E2E24; --net-neg-bg:#2E1E1E;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#181B1D; --surface:#22262A; --line:#33383C;
+  --ink:#EDEFEF; --ink-soft:#9AA3A7;
+  --net-bg:#1E2E24; --net-neg-bg:#2E1E1E;
+}
+*{box-sizing:border-box;}
+html,body{height:100%;}
+html{scroll-padding-top:env(safe-area-inset-top,0px);}
+body{
+  margin:0; background:var(--bg); color:var(--ink);
+  font-family:'Inter',system-ui,-apple-system,sans-serif;
+  -webkit-font-smoothing:antialiased;
+}
+.wrap{max-width:640px; margin:0 auto; padding:20px 16px 40px;}
+h1{
+  font-family:'Fraunces',serif; font-weight:600; font-size:1.5rem;
+  margin:0 0 2px; letter-spacing:-0.01em;
+}
+.sub{color:var(--ink-soft); font-size:0.85rem; margin:0 0 16px;}
+h2.section-title{
+  font-family:'Fraunces',serif; font-weight:600; font-size:1rem;
+  margin:20px 0 3px; letter-spacing:-0.01em;
+}
+.section-sub{color:var(--ink-soft); font-size:0.76rem; margin:0 0 8px;}
+.panel{
+  background:var(--surface); border:1px solid var(--line); border-radius:10px;
+  padding:12px; margin-bottom:12px;
+}
+.panel h2{font-size:0.8rem; font-weight:600; margin:0 0 8px; color:var(--ink-soft); text-transform:none;}
+.back-link{
+  display:inline-block; font-size:0.78rem; color:var(--ink-soft); text-decoration:none;
+  border:1px solid var(--line); border-radius:7px; padding:6px 10px; background:var(--surface); font-weight:500;
+}
+.field{display:flex; flex-direction:column; gap:4px; flex:1; min-width:120px;}
+.field label{font-size:0.74rem; color:var(--ink-soft);}
+.field input, .field select{
+  border:1px solid var(--line); border-radius:7px; padding:7px 8px;
+  font-size:0.9rem; background:var(--bg); color:var(--ink); font-family:inherit;
+  font-variant-numeric:tabular-nums; width:100%;
+}
+.cat-table{width:100%; border-collapse:collapse; font-size:0.88rem;}
+.cat-table th{
+  text-align:left; padding:7px 6px; border-bottom:1px solid var(--line);
+  font-size:0.72rem; color:var(--ink-soft); font-weight:600; text-transform:uppercase;
+}
+.cat-table td{padding:7px 6px; border-bottom:1px solid var(--line);}
+.cat-table td:not(:first-child), .cat-table th:not(:first-child){text-align:right; font-variant-numeric:tabular-nums;}
+.cat-table tbody tr:last-child td{border-bottom:none;}
+.cat-table tfoot td{font-weight:600; border-top:1px solid var(--line); border-bottom:none; padding-top:9px;}
+.empty-state{text-align:center; padding:16px; color:var(--ink-soft); font-size:0.85rem;}
+
+.tool-add-row{display:flex; gap:8px; flex-wrap:wrap; align-items:flex-end; margin-bottom:12px;}
+.tool-add-row .field{min-width:100px;}
+.add-btn{
+  padding:8px 14px; background:var(--violet); color:#fff; border:none; border-radius:7px;
+  font-size:0.85rem; cursor:pointer; font-family:inherit; font-weight:500; white-space:nowrap;
+}
+.add-btn:hover{background:var(--violet-deep);}
+
+.manual-entry{
+  display:flex; justify-content:space-between; align-items:center; gap:8px;
+  padding:6px 2px; border-bottom:1px dashed var(--line); font-size:0.82rem;
+}
+.manual-entry:last-child{border-bottom:none;}
+.manual-entry .cat{color:var(--ink-soft);}
+.manual-entry .amt{font-variant-numeric:tabular-nums; font-weight:600;}
+.tool-card{
+  background:var(--bg); border:1px solid var(--line); border-radius:9px;
+  padding:10px 12px; margin-bottom:9px;
+}
+.tool-top{display:flex; justify-content:space-between; align-items:baseline; gap:8px; margin-bottom:2px;}
+.tool-name{font-weight:600; font-size:0.9rem;}
+.tool-meta{font-size:0.72rem; color:var(--ink-soft); margin-bottom:8px;}
+.tool-remove{background:none; border:none; color:var(--ink-soft); cursor:pointer; font-size:1rem; padding:0 4px;}
+.tool-remove:hover{color:var(--danger);}
+.progress-track{
+  width:100%; height:9px; border-radius:5px; background:var(--line); overflow:hidden; margin-bottom:5px;
+}
+.progress-fill{height:100%; background:var(--steel); border-radius:5px; transition:width 0.2s;}
+.progress-fill.done{background:var(--net-pos);}
+.tool-bottom{display:flex; justify-content:space-between; align-items:center; font-size:0.78rem; color:var(--ink-soft);}
+.tool-bottom b{color:var(--ink); font-variant-numeric:tabular-nums;}
+.badge-done{
+  display:inline-block; background:var(--net-bg); color:var(--net-pos); font-size:0.72rem;
+  font-weight:600; padding:2px 8px; border-radius:20px;
+}
+.note{font-size:0.72rem; color:var(--ink-soft); line-height:1.4; margin-top:4px;}
+footer{text-align:center; color:var(--ink-soft); font-size:0.75rem; margin-top:22px;}
+
+/* Écran de verrouillage (identique à la calculette) */
+#lockScreen{
+  position:fixed; inset:0; background:var(--bg); z-index:9999;
+  display:flex; align-items:center; justify-content:center; padding:20px;
+}
+#lockScreen.hidden{display:none;}
+.lock-box{
+  background:var(--surface); border:1px solid var(--line); border-radius:14px;
+  padding:28px 24px; max-width:300px; width:100%; text-align:center;
+}
+.lock-box h2{font-family:'Fraunces',serif; font-size:1.15rem; margin:0 0 4px;}
+.lock-box p{color:var(--ink-soft); font-size:0.8rem; margin:0 0 18px;}
+#lockInput{
+  width:100%; text-align:center; letter-spacing:0.5em; font-size:1.4rem;
+  border:1px solid var(--line); border-radius:9px; padding:10px 8px;
+  background:var(--bg); color:var(--ink); font-family:inherit;
+  font-variant-numeric:tabular-nums;
+}
+#lockError{color:var(--danger); font-size:0.78rem; margin-top:8px; min-height:1em;}
+#lockSubmit{
+  width:100%; margin-top:14px; padding:10px; border:none; border-radius:9px;
+  background:var(--violet); color:#fff; font-weight:600; font-size:0.9rem; cursor:pointer;
+}
+body.locked > .wrap{display:none;}
+
+.stock-summary{display:flex; gap:10px; margin-bottom:12px;}
+.stock-summary .box{flex:1; background:var(--surface); border:1px solid var(--line); border-radius:10px; padding:10px 12px;}
+.stock-summary .box span{display:block; font-size:0.72rem; color:var(--ink-soft);}
+.stock-summary .box b{font-size:1.25rem; font-variant-numeric:tabular-nums;}
+.stock-summary .box.warn{background:var(--net-neg-bg); border-color:var(--net-neg);}
+.stock-summary .box.warn b{color:var(--net-neg);}
+.stock-card{background:var(--surface); border:1px solid var(--line); border-radius:10px; padding:10px 12px; margin-bottom:9px;}
+.stock-card.low{border-color:#C98A2B; background:#FBF3E3;}
+.stock-card.neg{border-color:var(--net-neg); background:var(--net-neg-bg);}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]) .stock-card.low{background:#33291A;}
+}
+:root[data-theme="dark"] .stock-card.low{background:#33291A;}
+.stock-top{display:flex; justify-content:space-between; align-items:baseline; gap:8px; margin-bottom:8px;}
+.stock-name{font-weight:600; font-size:0.9rem;}
+.stock-flag{font-size:0.72rem; font-weight:600;}
+.stock-card.low .stock-flag{color:#8A5A10;}
+.stock-card.neg .stock-flag{color:var(--net-neg);}
+.stock-card.neg .qte-input{color:var(--net-neg); font-weight:600;}
+.stock-row{display:flex; gap:8px; flex-wrap:wrap; align-items:flex-end;}
+.stock-row .field{min-width:80px;}
+.add-btn{padding:7px 12px;}
+
+.btn2{padding:8px 14px;background:var(--surface);color:var(--ink);border:1px solid var(--line);border-radius:7px;font-size:0.85rem;cursor:pointer;font-family:inherit;font-weight:500;}
+.tbl-wrap{overflow-x:auto;}
+.lv{width:100%;border-collapse:collapse;font-size:0.8rem;}
+.lv th{text-align:left;padding:6px 5px;border-bottom:1px solid var(--line);font-size:0.68rem;color:var(--ink-soft);text-transform:uppercase;white-space:nowrap;}
+.lv td{padding:6px 5px;border-bottom:1px solid var(--line);white-space:nowrap;}
+.lv .r{text-align:right;font-variant-numeric:tabular-nums;}
+.lv tfoot td{font-weight:600;border-bottom:none;}
+.lv .neg{color:var(--net-neg);}
+.undo{background:none;border:none;color:var(--ink-soft);cursor:pointer;font-size:0.95rem;}
+.undo:hover{color:var(--danger);}
+#pdfStatus{font-size:0.78rem;color:var(--ink-soft);margin-top:6px;line-height:1.4;}
+</style>
+</head>
+<body class="locked">
+<div id="lockScreen">
+  <div class="lock-box">
+    <h2>Compta</h2>
+    <p>Connexion</p>
+    <input type="email" id="lockEmail" autocomplete="username" placeholder="E-mail">
+    <input type="password" id="lockPass" autocomplete="current-password" placeholder="Mot de passe">
+    <div id="lockError"></div>
+    <button id="lockSubmit">Se connecter</button>
+  </div>
+</div>
+<div class="wrap">
+  <h1>Compta</h1>
+  <p class="sub">La Clé Universelle — livre des recettes</p>
+  <div style="margin:-8px 0 14px;">
+    <a href="calculette.html" class="back-link">← Retour à la calculette</a>
+    <a href="treso.html" class="back-link" style="margin-left:6px;">🏦 Trésorerie</a>
+  </div>
+
+  <div class="panel">
+    <h2>Importer une facture acquittée (PDF)</h2>
+    <input type="file" id="pdfFile" accept="application/pdf">
+    <div id="pdfStatus"></div>
+  </div>
+
+  <div class="panel">
+    <h2>Nouvelle recette</h2>
+    <div class="tool-add-row" style="margin-bottom:0;">
+      <div class="field"><label>Date d'encaissement</label><input type="date" id="fDate"></div>
+      <div class="field"><label>Client</label><input type="text" id="fClient"></div>
+      <div class="field"><label>Montant encaissé (€)</label><input type="number" inputmode="decimal" step="0.01" id="fMontant"></div>
+      <div class="field"><label>Mode de règlement</label>
+        <select id="fMode"><option>Virement</option><option>Espèces</option><option>Carte bancaire</option><option>Chèque</option><option>Autre</option></select></div>
+      <div class="field"><label>N° de facture</label><input type="text" id="fRef"></div>
+      <button class="add-btn" id="addBtn">Ajouter au livre</button>
+    </div>
+  </div>
+
+  <div class="panel">
+    <div class="tool-add-row" style="margin-bottom:10px;">
+      <div class="field"><label>Période</label><select id="fMois"></select></div>
+      <button class="btn2" id="csvBtn">⬇ Télécharger (CSV)</button>
+    </div>
+    <div class="tbl-wrap" id="livre"></div>
+  </div>
+  <p class="note">Les lignes ne se modifient pas : en cas d'erreur, le bouton ↩ ajoute une ligne d'annulation (montant négatif), puis tu ressaisis la bonne recette.</p>
+</div>
+
+<script src="sync.js"></script>
+<script>
+if(window.pdfjsLib){ pdfjsLib.GlobalWorkerOptions.workerSrc='https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js'; }
+const $ = id=>document.getElementById(id);
+function readSettings(){ try{ return JSON.parse(localStorage.getItem('devisCalcSettings')||'{}'); }catch(e){ return {}; } }
+function loadEntries(){ const s=readSettings(); return (s.compta&&s.compta.entries)||[]; }
+function saveEntries(list){
+  const s=readSettings(); s.compta=Object.assign({}, s.compta||{}, {entries:list});
+  localStorage.setItem('devisCalcSettings', JSON.stringify(s));
+}
+function esc(s){ return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+function num(v){ const n=parseFloat(String(v).replace(/\s/g,'').replace(',','.')); return isNaN(n)?0:n; }
+function r2(n){ return Math.round(n*100)/100; }
+function eur(n){ return r2(n).toLocaleString('fr-FR',{minimumFractionDigits:2,maximumFractionDigits:2})+' €'; }
+function fr(iso){ return iso ? iso.split('-').reverse().join('/') : ''; }
+function isoFromFr(d){ const m=d.match(/(\d{2})\/(\d{2})\/(\d{4})/); return m ? m[3]+'-'+m[2]+'-'+m[1] : ''; }
+
+async function pdfText(buf){
+  const pdf = await pdfjsLib.getDocument({data:buf}).promise;
+  const lines=[];
+  for(let p=1;p<=pdf.numPages;p++){
+    const c = await (await pdf.getPage(p)).getTextContent();
+    let cur='';
+    c.items.forEach(it=>{ cur+=it.str; if(it.hasEOL){ if(cur.trim()) lines.push(cur.trim()); cur=''; } else cur+=' '; });
+    if(cur.trim()) lines.push(cur.trim());
+  }
+  return lines;
+}
+function modeFrom(t){
+  t=(t||'').toLowerCase();
+  if(t.includes('virement')) return 'Virement';
+  if(t.includes('esp')) return 'Espèces';
+  if(t.includes('carte')||t.includes('cb')) return 'Carte bancaire';
+  if(t.includes('chèque')||t.includes('cheque')) return 'Chèque';
+  return t ? 'Autre' : '';
+}
+function parseFacture(lines){
+  const txt = lines.join(' ').replace(/\s+/g,' ');
+  const out = {};
+  let m = txt.match(/Facture N°\s*(\S+)/i); out.ref = m ? m[1] : '';
+  const ai = lines.findIndex(l=>l.startsWith('Adressé à'));
+  out.client = (ai!==-1 && lines[ai+1]) ? lines[ai+1].trim() : '';
+  m = txt.match(/Net à payer\s*([\d\s.,]+?)\s*€/i); out.montant = m ? num(m[1]) : null;
+  m = txt.match(/payée le\s*(\d{2}\/\d{2}\/\d{4})\s*par\s*([^.]+)\./i);
+  out.acquittee = !!m;
+  out.date = m ? isoFromFr(m[1]) : '';
+  out.mode = m ? modeFrom(m[2]) : '';
+  if(!out.mode){ const r = txt.match(/Modes? de règlement\s*:?\s*(.+?)\s*(ACQUITT|Facture|$)/i); if(r) out.mode = modeFrom(r[1]); }
+  return out;
+}
+
+$('pdfFile').onchange = async e=>{
+  const f=e.target.files[0]; e.target.value=''; if(!f) return;
+  const st=$('pdfStatus'); st.textContent='Lecture du PDF…';
+  try{
+    const r = parseFacture(await pdfText(await f.arrayBuffer()));
+    if(!r.ref && r.montant===null){ st.textContent="Je n'ai reconnu ni numéro de facture ni montant dans ce PDF. Rien n'a été rempli."; return; }
+    $('fRef').value=r.ref; $('fClient').value=r.client;
+    if(r.montant!==null) $('fMontant').value=r.montant.toFixed(2);
+    $('fDate').value=r.date; if(r.mode) $('fMode').value=r.mode;
+    const manque=[]; if(!r.date) manque.push("la date d'encaissement"); if(!r.mode) manque.push('le mode de règlement');
+    if(r.client==='') manque.push('le client'); if(r.montant===null) manque.push('le montant');
+    let msg = 'Lu : facture '+(r.ref||'?')+'. Vérifie les champs ci-dessous puis clique sur « Ajouter au livre ».';
+    if(!r.acquittee) msg += " ⚠️ Cette facture n'est pas marquée « acquittée » : ne l'ajoute qu'une fois l'argent reçu.";
+    if(manque.length) msg += ' À compléter à la main : '+manque.join(', ')+'.';
+    if(loadEntries().some(x=>x.ref && x.ref===r.ref && x.montant>0)) msg += ' ⚠️ Une recette avec ce numéro de facture existe déjà dans le livre.';
+    st.textContent=msg;
+  }catch(err){ st.textContent='Erreur de lecture du PDF : '+err.message; }
+};
+
+$('addBtn').onclick = ()=>{
+  const e = { id:'r'+Date.now(), date:$('fDate').value, client:$('fClient').value.trim(),
+              montant:r2(num($('fMontant').value)), mode:$('fMode').value, ref:$('fRef').value.trim() };
+  if(!e.date || !e.client || !e.montant){ $('pdfStatus').textContent='Il manque la date, le client ou le montant.'; return; }
+  const list=loadEntries(); list.push(e); saveEntries(list);
+  ['fClient','fMontant','fRef'].forEach(i=>$(i).value=''); $('fDate').value='';
+  $('pdfStatus').textContent='Ajouté au livre.'; render();
+};
+
+function sorted(list){ return list.slice().sort((a,b)=> a.date<b.date?-1:a.date>b.date?1:(a.id<b.id?-1:1)); }
+function inPeriod(list){ const m=$('fMois').value; return m==='all' ? list : list.filter(x=>x.date.slice(0,7)===m); }
+function fillMonths(){
+  const cur=$('fMois').value||'all';
+  const months=[...new Set(loadEntries().map(x=>x.date.slice(0,7)))].sort().reverse();
+  $('fMois').innerHTML='<option value="all">Toute la période</option>'+months.map(m=>'<option value="'+m+'">'+m.split('-').reverse().join('/')+'</option>').join('');
+  $('fMois').value = (cur==='all'||months.includes(cur)) ? cur : 'all';
+}
+function render(){
+  fillMonths();
+  const list=sorted(inPeriod(loadEntries()));
+  if(!list.length){ $('livre').innerHTML='<div class="empty-state">Aucune recette pour cette période.</div>'; return; }
+  let cum=0;
+  const rows=list.map(x=>{ cum=r2(cum+x.montant);
+    return '<tr><td>'+fr(x.date)+'</td><td>'+esc(x.client)+'</td><td>'+esc(x.mode)+'</td><td>'+esc(x.ref)+'</td>'
+      +'<td class="r'+(x.montant<0?' neg':'')+'">'+eur(x.montant)+'</td><td class="r">'+eur(cum)+'</td>'
+      +'<td>'+(x.montant>0?'<button class="undo" data-undo="'+x.id+'" title="Annuler cette ligne (ajoute une ligne négative)">↩</button>':'')+'</td></tr>'; }).join('');
+  $('livre').innerHTML='<table class="lv"><thead><tr><th>Date</th><th>Client</th><th>Mode</th><th>Facture</th><th class="r">Montant</th><th class="r">Cumul</th><th></th></tr></thead><tbody>'+rows+'</tbody><tfoot><tr><td colspan="4">Total</td><td class="r">'+eur(cum)+'</td><td></td><td></td></tr></tfoot></table>';
+  document.querySelectorAll('[data-undo]').forEach(b=>b.onclick=()=>{
+    const all=loadEntries(), o=all.find(x=>x.id===b.dataset.undo); if(!o) return;
+    if(!confirm('Ajouter une ligne d\'annulation de '+eur(o.montant)+' ('+o.client+') ?')) return;
+    all.push({id:'r'+Date.now(), date:new Date().toISOString().slice(0,10), client:o.client, montant:-o.montant, mode:o.mode, ref:(o.ref?o.ref+' ':'')+'(annulation)'});
+    saveEntries(all); render();
+  });
+}
+$('fMois').onchange = render;
+$('csvBtn').onclick = ()=>{
+  const list=sorted(inPeriod(loadEntries())); if(!list.length) return;
+  const q=s=>'"'+String(s).replace(/"/g,'""')+'"';
+  let cum=0;
+  const lines=['Date d\'encaissement;Client;Mode de règlement;N° de facture;Montant;Cumul'].concat(list.map(x=>{
+    cum=r2(cum+x.montant);
+    return [fr(x.date),q(x.client),q(x.mode),q(x.ref),x.montant.toFixed(2).replace('.',','),cum.toFixed(2).replace('.',',')].join(';'); }));
+  const blob=new Blob(['\ufeff'+lines.join('\r\n')],{type:'text/csv;charset=utf-8'});
+  const a=document.createElement('a'); a.href=URL.createObjectURL(blob);
+  a.download='livre-des-recettes-'+($('fMois').value==='all'?'complet':$('fMois').value)+'.csv'; a.click();
+};
+
+Sync.boot(function(){ render(); });
+if('serviceWorker' in navigator){ window.addEventListener('load',()=>{ navigator.serviceWorker.register('sw.js').catch(()=>{}); }); }
+</script>
+</body>
+</html>
