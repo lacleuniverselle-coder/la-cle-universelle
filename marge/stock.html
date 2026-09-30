@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Stock — La Clé Universelle</title>
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#4C3468">
+<link rel="icon" href="icon-192.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Stock">
+<meta name="robots" content="noindex, nofollow">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#EDEFEF; --surface:#FFFFFF; --line:#D8DBDB;
+  --ink:#1E2328; --ink-soft:#5B6266;
+  --violet:#4C3468; --violet-deep:#382450;
+  --steel:#43616B;
+  --net-pos:#2E6B4C; --net-bg:#E7F1EA;
+  --net-neg:#A23B3B; --net-neg-bg:#F4E6E6;
+  --danger:#A23B3B;
+  box-sizing:border-box;
+  padding-top:env(safe-area-inset-top,0px);
+  padding-bottom:env(safe-area-inset-bottom,0px);
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#181B1D; --surface:#22262A; --line:#33383C;
+    --ink:#EDEFEF; --ink-soft:#9AA3A7;
+    --net-bg:#1E2E24; --net-neg-bg:#2E1E1E;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#181B1D; --surface:#22262A; --line:#33383C;
+  --ink:#EDEFEF; --ink-soft:#9AA3A7;
+  --net-bg:#1E2E24; --net-neg-bg:#2E1E1E;
+}
+*{box-sizing:border-box;}
+html,body{height:100%;}
+html{scroll-padding-top:env(safe-area-inset-top,0px);}
+body{
+  margin:0; background:var(--bg); color:var(--ink);
+  font-family:'Inter',system-ui,-apple-system,sans-serif;
+  -webkit-font-smoothing:antialiased;
+}
+.wrap{max-width:640px; margin:0 auto; padding:20px 16px 40px;}
+h1{
+  font-family:'Fraunces',serif; font-weight:600; font-size:1.5rem;
+  margin:0 0 2px; letter-spacing:-0.01em;
+}
+.sub{color:var(--ink-soft); font-size:0.85rem; margin:0 0 16px;}
+h2.section-title{
+  font-family:'Fraunces',serif; font-weight:600; font-size:1rem;
+  margin:20px 0 3px; letter-spacing:-0.01em;
+}
+.section-sub{color:var(--ink-soft); font-size:0.76rem; margin:0 0 8px;}
+.panel{
+  background:var(--surface); border:1px solid var(--line); border-radius:10px;
+  padding:12px; margin-bottom:12px;
+}
+.panel h2{font-size:0.8rem; font-weight:600; margin:0 0 8px; color:var(--ink-soft); text-transform:none;}
+.back-link{
+  display:inline-block; font-size:0.78rem; color:var(--ink-soft); text-decoration:none;
+  border:1px solid var(--line); border-radius:7px; padding:6px 10px; background:var(--surface); font-weight:500;
+}
+.field{display:flex; flex-direction:column; gap:4px; flex:1; min-width:120px;}
+.field label{font-size:0.74rem; color:var(--ink-soft);}
+.field input, .field select{
+  border:1px solid var(--line); border-radius:7px; padding:7px 8px;
+  font-size:0.9rem; background:var(--bg); color:var(--ink); font-family:inherit;
+  font-variant-numeric:tabular-nums; width:100%;
+}
+.cat-table{width:100%; border-collapse:collapse; font-size:0.88rem;}
+.cat-table th{
+  text-align:left; padding:7px 6px; border-bottom:1px solid var(--line);
+  font-size:0.72rem; color:var(--ink-soft); font-weight:600; text-transform:uppercase;
+}
+.cat-table td{padding:7px 6px; border-bottom:1px solid var(--line);}
+.cat-table td:not(:first-child), .cat-table th:not(:first-child){text-align:right; font-variant-numeric:tabular-nums;}
+.cat-table tbody tr:last-child td{border-bottom:none;}
+.cat-table tfoot td{font-weight:600; border-top:1px solid var(--line); border-bottom:none; padding-top:9px;}
+.empty-state{text-align:center; padding:16px; color:var(--ink-soft); font-size:0.85rem;}
+
+.tool-add-row{display:flex; gap:8px; flex-wrap:wrap; align-items:flex-end; margin-bottom:12px;}
+.tool-add-row .field{min-width:100px;}
+.add-btn{
+  padding:8px 14px; background:var(--violet); color:#fff; border:none; border-radius:7px;
+  font-size:0.85rem; cursor:pointer; font-family:inherit; font-weight:500; white-space:nowrap;
+}
+.add-btn:hover{background:var(--violet-deep);}
+
+.manual-entry{
+  display:flex; justify-content:space-between; align-items:center; gap:8px;
+  padding:6px 2px; border-bottom:1px dashed var(--line); font-size:0.82rem;
+}
+.manual-entry:last-child{border-bottom:none;}
+.manual-entry .cat{color:var(--ink-soft);}
+.manual-entry .amt{font-variant-numeric:tabular-nums; font-weight:600;}
+.tool-card{
+  background:var(--bg); border:1px solid var(--line); border-radius:9px;
+  padding:10px 12px; margin-bottom:9px;
+}
+.tool-top{display:flex; justify-content:space-between; align-items:baseline; gap:8px; margin-bottom:2px;}
+.tool-name{font-weight:600; font-size:0.9rem;}
+.tool-meta{font-size:0.72rem; color:var(--ink-soft); margin-bottom:8px;}
+.tool-remove{background:none; border:none; color:var(--ink-soft); cursor:pointer; font-size:1rem; padding:0 4px;}
+.tool-remove:hover{color:var(--danger);}
+.progress-track{
+  width:100%; height:9px; border-radius:5px; background:var(--line); overflow:hidden; margin-bottom:5px;
+}
+.progress-fill{height:100%; background:var(--steel); border-radius:5px; transition:width 0.2s;}
+.progress-fill.done{background:var(--net-pos);}
+.tool-bottom{display:flex; justify-content:space-between; align-items:center; font-size:0.78rem; color:var(--ink-soft);}
+.tool-bottom b{color:var(--ink); font-variant-numeric:tabular-nums;}
+.badge-done{
+  display:inline-block; background:var(--net-bg); color:var(--net-pos); font-size:0.72rem;
+  font-weight:600; padding:2px 8px; border-radius:20px;
+}
+.note{font-size:0.72rem; color:var(--ink-soft); line-height:1.4; margin-top:4px;}
+footer{text-align:center; color:var(--ink-soft); font-size:0.75rem; margin-top:22px;}
+
+/* Écran de verrouillage (identique à la calculette) */
+#lockScreen{
+  position:fixed; inset:0; background:var(--bg); z-index:9999;
+  display:flex; align-items:center; justify-content:center; padding:20px;
+}
+#lockScreen.hidden{display:none;}
+.lock-box{
+  background:var(--surface); border:1px solid var(--line); border-radius:14px;
+  padding:28px 24px; max-width:300px; width:100%; text-align:center;
+}
+.lock-box h2{font-family:'Fraunces',serif; font-size:1.15rem; margin:0 0 4px;}
+.lock-box p{color:var(--ink-soft); font-size:0.8rem; margin:0 0 18px;}
+#lockInput{
+  width:100%; text-align:center; letter-spacing:0.5em; font-size:1.4rem;
+  border:1px solid var(--line); border-radius:9px; padding:10px 8px;
+  background:var(--bg); color:var(--ink); font-family:inherit;
+  font-variant-numeric:tabular-nums;
+}
+#lockError{color:var(--danger); font-size:0.78rem; margin-top:8px; min-height:1em;}
+#lockSubmit{
+  width:100%; margin-top:14px; padding:10px; border:none; border-radius:9px;
+  background:var(--violet); color:#fff; font-weight:600; font-size:0.9rem; cursor:pointer;
+}
+body.locked > .wrap{display:none;}
+
+.stock-summary{display:flex; gap:10px; margin-bottom:12px;}
+.stock-summary .box{flex:1; background:var(--surface); border:1px solid var(--line); border-radius:10px; padding:10px 12px;}
+.stock-summary .box span{display:block; font-size:0.72rem; color:var(--ink-soft);}
+.stock-summary .box b{font-size:1.25rem; font-variant-numeric:tabular-nums;}
+.stock-summary .box.warn{background:var(--net-neg-bg); border-color:var(--net-neg);}
+.stock-summary .box.warn b{color:var(--net-neg);}
+.stock-card{background:var(--surface); border:1px solid var(--line); border-radius:10px; padding:10px 12px; margin-bottom:9px;}
+.stock-card.low{border-color:#C98A2B; background:#FBF3E3;}
+.stock-card.neg{border-color:var(--net-neg); background:var(--net-neg-bg);}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]) .stock-card.low{background:#33291A;}
+}
+:root[data-theme="dark"] .stock-card.low{background:#33291A;}
+.stock-top{display:flex; justify-content:space-between; align-items:baseline; gap:8px; margin-bottom:8px;}
+.stock-name{font-weight:600; font-size:0.9rem;}
+.stock-flag{font-size:0.72rem; font-weight:600;}
+.stock-card.low .stock-flag{color:#8A5A10;}
+.stock-card.neg .stock-flag{color:var(--net-neg);}
+.stock-card.neg .qte-input{color:var(--net-neg); font-weight:600;}
+.stock-row{display:flex; gap:8px; flex-wrap:wrap; align-items:flex-end;}
+.stock-row .field{min-width:80px;}
+.add-btn{padding:7px 12px;}
+</style>
+</head>
+<body class="locked">
+<div id="lockScreen">
+  <div class="lock-box">
+    <h2>Stock</h2>
+    <p>Connexion</p>
+    <input type="email" id="lockEmail" autocomplete="username" placeholder="E-mail">
+    <input type="password" id="lockPass" autocomplete="current-password" placeholder="Mot de passe">
+    <div id="lockError"></div>
+    <button id="lockSubmit">Se connecter</button>
+  </div>
+</div>
+<div class="wrap">
+  <h1>Stock</h1>
+  <p class="sub">La Clé Universelle — suivi par catégorie</p>
+  <div style="margin:-8px 0 14px;">
+    <a href="calculette.html" class="back-link">← Retour à la calculette</a>
+    <a href="treso.html" class="back-link" style="margin-left:6px;">🏦 Trésorerie</a>
+  </div>
+
+  <div class="stock-summary" id="stockSummary"></div>
+  <p class="section-sub">Le stock baisse tout seul à l'enregistrement d'une facture (quantité de chaque ligne matériel, par catégorie). Tu peux aussi corriger la quantité à la main. Le seuil d'alerte met la catégorie en évidence quand la quantité lui est inférieure ou égale.</p>
+  <div id="stockList"></div>
+  <p class="note">La catégorie « Autre » n'est pas suivie. Les factures enregistrées avant la mise en place du stock ne l'ont pas modifié.</p>
+
+  <footer>Données partagées avec la calculette et synchronisées entre vos appareils.</footer>
+</div>
+
+<script src="sync.js"></script>
+<script>
+const BASE_CATEGORIES = [
+  { id:'cremone',  label:'Crémone' },
+  { id:'larder',   label:'Serrure encastrée (larder)' },
+  { id:'applique', label:'Serrure en applique' },
+  { id:'cylindre', label:'Cylindre' },
+  { id:'poignees', label:'Poignées' }
+];
+function readSettings(){
+  try{ return JSON.parse(localStorage.getItem('devisCalcSettings')||'{}'); }catch(e){ return {}; }
+}
+function stockCategories(){
+  const s = readSettings();
+  return BASE_CATEGORIES.concat(s.customCategories || []);   // « Autre » volontairement exclue
+}
+function loadItems(){
+  const s = readSettings();
+  return (s.stock && s.stock.items) || {};
+}
+// Relit les réglages juste avant d'écrire : ne touche qu'à la clé « stock »
+function saveItem(id, patch){
+  const s = readSettings();
+  const stock = s.stock || {};
+  const items = stock.items || {};
+  items[id] = Object.assign({ qte:0, seuil:0 }, items[id] || {}, patch);
+  stock.items = items;
+  s.stock = stock;
+  localStorage.setItem('devisCalcSettings', JSON.stringify(s));
+}
+function escapeHtml(s){
+  return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+function num(v){ const n = parseFloat(String(v).replace(',','.')); return isNaN(n) ? 0 : n; }
+function round2(n){ return Math.round(n*100)/100; }
+function fmtQ(n){ return round2(n).toLocaleString('fr-FR', {maximumFractionDigits:2}); }
+
+function stateOf(it){
+  const q = num(it.qte), seuil = num(it.seuil);
+  if(q < 0) return 'neg';
+  if(seuil > 0 && q <= seuil) return 'low';
+  return 'ok';
+}
+function flagText(st){ return st==='neg' ? 'Stock négatif' : (st==='low' ? 'Sous le seuil' : ''); }
+
+function renderSummary(){
+  const items = loadItems();
+  let total = 0, alerts = 0;
+  stockCategories().forEach(c=>{
+    const it = items[c.id] || {qte:0, seuil:0};
+    total += num(it.qte);
+    if(stateOf(it) !== 'ok') alerts++;
+  });
+  document.getElementById('stockSummary').innerHTML =
+    '<div class="box"><span>Pièces en stock</span><b>' + fmtQ(total) + '</b></div>' +
+    '<div class="box' + (alerts ? ' warn' : '') + '"><span>Catégories en alerte</span><b>' + alerts + '</b></div>';
+}
+
+function renderList(){
+  const items = loadItems();
+  document.getElementById('stockList').innerHTML = stockCategories().map(c=>{
+    const it = items[c.id] || {qte:0, seuil:0};
+    const st = stateOf(it);
+    return `<div class="stock-card ${st==='ok'?'':st}" id="card-${c.id}">
+      <div class="stock-top"><span class="stock-name">${escapeHtml(c.label)}</span><span class="stock-flag" id="flag-${c.id}">${flagText(st)}</span></div>
+      <div class="stock-row">
+        <div class="field"><label>En stock</label><input type="number" inputmode="decimal" step="any" class="qte-input" data-qte="${c.id}" value="${num(it.qte)}"></div>
+        <div class="field"><label>Seuil d'alerte</label><input type="number" inputmode="decimal" min="0" step="any" data-seuil="${c.id}" value="${num(it.seuil)}"></div>
+        <div class="field"><label>Réappro (+)</label><input type="number" inputmode="decimal" min="0" step="any" id="add-${c.id}" placeholder="0"></div>
+        <button class="add-btn" data-add="${c.id}">Ajouter</button>
+      </div>
+    </div>`;
+  }).join('');
+
+  const refresh = id=>{
+    const it = loadItems()[id] || {qte:0, seuil:0};
+    const st = stateOf(it);
+    const card = document.getElementById('card-'+id);
+    card.className = 'stock-card' + (st==='ok' ? '' : ' '+st);
+    document.getElementById('flag-'+id).textContent = flagText(st);
+    renderSummary();
+  };
+  document.querySelectorAll('[data-qte]').forEach(inp=>{
+    inp.onchange = ()=>{ saveItem(inp.dataset.qte, { qte: round2(num(inp.value)) }); refresh(inp.dataset.qte); };
+  });
+  document.querySelectorAll('[data-seuil]').forEach(inp=>{
+    inp.onchange = ()=>{ saveItem(inp.dataset.seuil, { seuil: Math.max(0, round2(num(inp.value))) }); refresh(inp.dataset.seuil); };
+  });
+  document.querySelectorAll('[data-add]').forEach(btn=>{
+    btn.onclick = ()=>{
+      const id = btn.dataset.add;
+      const add = num(document.getElementById('add-'+id).value);
+      if(add <= 0) return;
+      const cur = num((loadItems()[id]||{}).qte);
+      const n = round2(cur + add);
+      saveItem(id, { qte: n });
+      document.getElementById('add-'+id).value = '';
+      document.querySelector('[data-qte="'+id+'"]').value = n;
+      refresh(id);
+    };
+  });
+}
+
+function init(){
+  renderSummary();
+  renderList();
+}
+Sync.boot(function(){ init(); });
+
+if('serviceWorker' in navigator){
+  window.addEventListener('load', ()=>{
+    navigator.serviceWorker.register('sw.js').catch(()=>{});
+  });
+}
+</script>
+</body>
+</html>

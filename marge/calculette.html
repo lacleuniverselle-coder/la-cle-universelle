@@ -463,7 +463,8 @@ body.locked > .wrap{display:none;}
   <div id="printArea" class="print-area"></div>
   <h1>Net par facture</h1>
   <p class="sub">La Clé Universelle — calcul du gain net après charges URSSAF</p>
-  <div style="display:flex; justify-content:flex-end; margin:-8px 0 14px;">
+  <div style="display:flex; justify-content:flex-end; gap:8px; margin:-8px 0 14px;">
+    <a href="stock.html" style="font-size:0.78rem; color:var(--ink-soft); text-decoration:none; border:1px solid var(--line); border-radius:7px; padding:6px 10px; background:var(--surface); font-weight:500;">📦 Stock</a>
     <a href="treso.html" style="font-size:0.78rem; color:var(--ink-soft); text-decoration:none; border:1px solid var(--line); border-radius:7px; padding:6px 10px; background:var(--surface); font-weight:500;">🏦 Trésorerie</a>
   </div>
 
@@ -644,6 +645,34 @@ function saveCustomCategories(list){
 }
 function allCategories(){
   return BASE_CATEGORIES.concat(loadCustomCategories(), [CAT_AUTRE]);
+}
+// ---- Suivi de stock par catégorie (données : devisCalcSettings.stock.items[catId] = {qte, seuil})
+function catLabelById(id){
+  const c = allCategories().find(x=>x.id===id);
+  return c ? c.label : id;
+}
+// sign = -1 : sortie de stock (facture enregistrée) ; +1 : remise en stock.
+// Retourne la liste des catégories dont la quantité est négative après l'opération.
+function applyStock(out, sign){
+  const negatives = [];
+  try{
+    let s = {};
+    try{ s = JSON.parse(localStorage.getItem('devisCalcSettings')||'{}'); }catch(e){}
+    const stock = s.stock || {};
+    const items = stock.items || {};
+    Object.keys(out||{}).forEach(cat=>{
+      const q = Number(out[cat])||0;
+      if(!q) return;
+      const it = items[cat] || { qte:0, seuil:0 };
+      it.qte = Math.round(((Number(it.qte)||0) + sign*q) * 100) / 100;
+      items[cat] = it;
+      if(it.qte < 0) negatives.push(catLabelById(cat) + ' (' + it.qte + ')');
+    });
+    stock.items = items;
+    s.stock = stock;
+    localStorage.setItem('devisCalcSettings', JSON.stringify(s));
+  }catch(e){}
+  return negatives;
 }
 function categorieOptions(selected){
   return allCategories().map(c=>`<option value="${c.id}" ${c.id===selected?'selected':''}>${c.label}</option>`).join('');
@@ -1235,6 +1264,7 @@ function saveQuote(){
   let venteMat=0, achatMat=0, venteServ=0;
 
   const matLines = [];
+  const stockOut = {};
   articlesMat.forEach(a=>{
     const q = qteOf(a);
     const vente = (Number(a.vente)||0)*q;
@@ -1245,6 +1275,9 @@ function saveQuote(){
     if(achat!==0 || vente!==0){
       // achat / vente = totaux de la ligne (compatibles avec l'existant) ; qte en plus
       matLines.push({ achat, vente, qte: q, categorie: a.categorie || 'autre' });
+      // Sortie de stock : par catégorie (la catégorie « Autre » n'est pas suivie)
+      const cat = a.categorie || 'autre';
+      if(cat !== 'autre' && q > 0) stockOut[cat] = (stockOut[cat]||0) + q;
     }
   });
 
@@ -1269,12 +1302,19 @@ function saveQuote(){
     regime: regime,
     paye: true,
     activite: '',
-    breakdown: { venteMat, achatMat, venteServ, dayCost, matLines }
+    breakdown: { venteMat, achatMat, venteServ, dayCost, matLines },
+    stockOut: stockOut
   });
+
+  // Décrémentation du stock (avant saveSettings, qui relit le stock déjà écrit)
+  const negatives = applyStock(stockOut, -1);
 
   document.getElementById('clientName').value = '';
   renderHistory();
   saveSettings();
+  if(negatives.length){
+    alert('Facture enregistrée. Stock insuffisant : ' + negatives.join(', ') + '.\nPense à saisir ton dernier réapprovisionnement dans 📦 Stock.');
+  }
 }
 
 function escapeHtml(s){
@@ -1572,6 +1612,10 @@ function attachHistoryHandlers(){
     btn.onclick = ()=>{
       const id = btn.dataset.deldevis;
       if(!confirm('Supprimer cette facture de l\'historique ?')) return;
+      const dDel = devisHistory[currentMonth].find(d=>d.id===id);
+      if(dDel && dDel.stockOut && Object.keys(dDel.stockOut).length && confirm('Remettre les articles de cette facture en stock ?')){
+        applyStock(dDel.stockOut, +1);
+      }
       devisHistory[currentMonth] = devisHistory[currentMonth].filter(d=>d.id!==id);
       saveSettings();
       renderHistory();
