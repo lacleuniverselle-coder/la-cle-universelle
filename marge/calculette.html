@@ -3,14 +3,14 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Net par devis — La Clé Universelle</title>
+<title>Net par facture — La Clé Universelle</title>
 <link rel="manifest" href="manifest.json">
 <meta name="theme-color" content="#4C3468">
 <link rel="icon" href="icon-192.png">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<meta name="apple-mobile-web-app-title" content="Net Devis">
+<meta name="apple-mobile-web-app-title" content="Net Facture">
 <meta name="robots" content="noindex, nofollow">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -198,6 +198,33 @@ h2.section-title{
 .regime-pill.plein{color:var(--violet-deep); border-color:var(--violet);}
 .regime-pill.na{cursor:default; opacity:0.5;}
 .history-table th.regime, .history-table td.regime{text-align:right;}
+.history-table th.act, .history-table td.act{text-align:center;}
+.act-pill{
+  display:inline-block; min-width:24px; padding:3px 7px; border-radius:5px; font-size:0.72rem; font-weight:700;
+  cursor:pointer; border:1px solid var(--line); background:var(--bg); color:var(--ink-soft); text-align:center;
+}
+.act-pill.s{background:var(--violet); border-color:var(--violet); color:#fff;}
+.act-pill.v{background:var(--steel); border-color:var(--steel); color:#fff;}
+.urssaf-box{
+  margin-top:10px; padding:10px 12px; border:2px solid var(--violet); border-radius:9px; background:var(--surface);
+  display:flex; flex-direction:column; gap:4px; font-size:0.8rem;
+}
+.urssaf-box .ttl{font-weight:700; color:var(--violet); margin-bottom:2px;}
+.urssaf-box .ln{display:flex; justify-content:space-between; gap:8px; color:var(--ink-soft);}
+.urssaf-box .ln b{color:var(--ink); font-variant-numeric:tabular-nums;}
+.urssaf-box .ln.tot{border-top:1px dashed var(--line); padding-top:4px; margin-top:2px;}
+.urssaf-box .ln.cot, .urssaf-box .ln.cot b{color:var(--danger); font-weight:700;}
+.act-box{margin-top:10px; font-size:0.78rem;}
+.act-box .ttl{font-weight:700; color:var(--ink-soft); margin-bottom:4px;}
+.act-box table{width:100%; border-collapse:collapse; font-variant-numeric:tabular-nums;}
+.act-box th{font-weight:500; color:var(--ink-soft); text-align:right; padding:3px 4px; border-bottom:1px solid var(--line); font-size:0.68rem;}
+.act-box th:first-child, .act-box td:first-child{text-align:left;}
+.act-box td{text-align:right; padding:4px; border-bottom:1px solid var(--line);}
+.act-box tr:last-child td{border-bottom:none;}
+.act-box .note{font-size:0.68rem; color:var(--ink-soft); margin-top:4px; line-height:1.4;}
+.bilan-net-block{margin:2px 0 10px; padding:8px 10px; border:1px solid var(--line); border-radius:8px; background:var(--bg);}
+.bilan-net-block .private-total:first-child{margin-top:0;}
+.qte-field{max-width:80px;}
 
 .edit-stack{display:flex; flex-direction:column; gap:3px;}
 .edit-mini{
@@ -424,7 +451,7 @@ body.locked > .wrap{display:none;}
 <body class="locked">
 <div id="lockScreen">
   <div class="lock-box">
-    <h2>Net par devis</h2>
+    <h2>Net par facture</h2>
     <p>Connexion</p>
     <input type="email" id="lockEmail" autocomplete="username" placeholder="E-mail">
     <input type="password" id="lockPass" autocomplete="current-password" placeholder="Mot de passe">
@@ -434,7 +461,7 @@ body.locked > .wrap{display:none;}
 </div>
 <div class="wrap">
   <div id="printArea" class="print-area"></div>
-  <h1>Net par devis</h1>
+  <h1>Net par facture</h1>
   <p class="sub">La Clé Universelle — calcul du gain net après charges URSSAF</p>
   <div style="display:flex; justify-content:flex-end; margin:-8px 0 14px;">
     <a href="treso.html" style="font-size:0.78rem; color:var(--ink-soft); text-decoration:none; border:1px solid var(--line); border-radius:7px; padding:6px 10px; background:var(--surface); font-weight:500;">🏦 Trésorerie</a>
@@ -451,7 +478,7 @@ body.locked > .wrap{display:none;}
     </div>
 
     <div class="panel" style="margin-bottom:0;">
-      <h2>Importer un devis/facture (PDF)</h2>
+      <h2>Importer une facture (PDF)</h2>
       <input type="file" id="importPdfFile" accept="application/pdf">
       <div id="importPdfStatus" style="font-size:0.78rem; color:var(--ink-soft); margin-top:6px;"></div>
     </div>
@@ -473,12 +500,12 @@ body.locked > .wrap{display:none;}
   </div>
 
   <div class="summary">
-    <div class="summary-row"><span>Total vente</span><span id="sVente">0,00 €</span></div>
+    <div class="summary-row"><span>Total ventes (CA)</span><span id="sVente">0,00 €</span></div>
     <div class="summary-row"><span>Total achat matériel</span><span id="sAchat">0,00 €</span></div>
     <div class="summary-row"><span>Marge brute</span><span id="sMarge">0,00 €</span></div>
     <div class="summary-row"><span>Charges URSSAF + CFP</span><span id="sCharges">0,00 €</span></div>
     <div class="summary-final" id="summaryFinal">
-      <span class="label">Net pour vous<small id="sNetPct" style="display:block; font-weight:400; font-size:0.75rem; margin-top:2px; opacity:0.8;">0,0 % du total vente</small></span>
+      <span class="label">Net pour vous<small id="sNetPct" style="display:block; font-weight:400; font-size:0.75rem; margin-top:2px; opacity:0.8;">0,0 % du total ventes</small></span>
       <span class="amount" id="sNet">0,00 €</span>
     </div>
   </div>
@@ -489,9 +516,9 @@ body.locked > .wrap{display:none;}
       <label>Nom du client</label>
       <input type="text" id="clientName" placeholder="Mme Dupont, Entreprise X...">
     </div>
-    <button class="save-btn" id="saveQuoteBtn">Enregistrer ce devis</button>
+    <button class="save-btn" id="saveQuoteBtn">Enregistrer cette facture</button>
   </div>
-  <button class="save-btn" id="exportPdfBtn" style="width:100%; background:var(--steel); margin-bottom:20px;">🖨 Exporter ce devis en PDF</button>
+  <button class="save-btn" id="exportPdfBtn" style="width:100%; background:var(--steel); margin-bottom:20px;">🖨 Exporter cette facture en PDF</button>
 
   <!-- Historique du mois -->
   <div class="history-panel">
@@ -525,8 +552,13 @@ body.locked > .wrap{display:none;}
 
   <div class="panel">
     <div class="field" style="margin-bottom:8px;">
-      <label>Revenu net du mois (auto : net encaissé des devis)</label>
+      <label>Revenu net du mois (= net après cotisations, factures payées)</label>
       <input type="number" id="revenuMois" value="" min="0" step="0.01" placeholder="0,00" readonly style="opacity:0.7; cursor:not-allowed;">
+    </div>
+    <div class="bilan-net-block">
+      <div class="private-total"><span>Net après cotisations</span><b id="bNetCot">0,00 €</b></div>
+      <div class="private-total"><span>Coûts fixes pro du mois</span><b id="bFixes">0,00 €</b></div>
+      <div class="private-total"><span><b>Reste après coûts fixes pro</b></span><b id="bReste">0,00 €</b></div>
     </div>
     <div class="private-grid">
       <div class="private-row"><label>Loyer</label><input type="number" id="pLoyer" value="680" step="0.01"></div>
@@ -785,7 +817,7 @@ function updateCeilingNote(){
 }
 
 function addArticleMat(){
-  articlesMat.push({ id: 'm'+(idSeq++), achat: '', vente: '', categorie: 'autre' });
+  articlesMat.push({ id: 'm'+(idSeq++), achat: '', vente: '', qte: '1', categorie: 'autre' });
   renderMat();
 }
 
@@ -816,6 +848,9 @@ function updateArticleServ(id, value){
   compute();
 }
 
+// Quantité d'un article matériel : vide ou absente (anciens articles) = 1
+function qteOf(a){ const q = parseFloat(a.qte); return isNaN(q) ? 1 : Math.max(0, q); }
+
 function fmt(n){
   const sign = n<0 ? '-' : '';
   return sign + Math.abs(n).toLocaleString('fr-FR', {minimumFractionDigits:2, maximumFractionDigits:2}) + ' €';
@@ -833,11 +868,12 @@ function renderMat(){
         <button class="remove-btn" data-removemat="${a.id}">✕</button>
       </div>
       <div class="article-fields">
-        <div class="field"><label>Achat HT</label><input type="number" inputmode="decimal" step="0.01" id="mat-${a.id}-achatht" data-matht="${a.id}" value="${a.achat ? (Number(a.achat)/TVA_COEF).toFixed(2) : ''}" placeholder="0,00"></div>
-        <div class="field"><label>Achat TTC</label><input type="number" inputmode="decimal" step="0.01" id="mat-${a.id}-achat" data-mat="${a.id}" data-f="achat" value="${a.achat}" placeholder="0,00"></div>
+        <div class="field"><label>Achat HT (unité)</label><input type="number" inputmode="decimal" step="0.01" id="mat-${a.id}-achatht" data-matht="${a.id}" value="${a.achat ? (Number(a.achat)/TVA_COEF).toFixed(2) : ''}" placeholder="0,00"></div>
+        <div class="field"><label>Achat TTC (unité)</label><input type="number" inputmode="decimal" step="0.01" id="mat-${a.id}-achat" data-mat="${a.id}" data-f="achat" value="${a.achat}" placeholder="0,00"></div>
       </div>
       <div class="article-fields" style="margin-top:6px;">
-        <div class="field"><label>Vente TTC</label><input type="number" inputmode="decimal" step="0.01" id="mat-${a.id}-vente" data-mat="${a.id}" data-f="vente" value="${a.vente}" placeholder="0,00"></div>
+        <div class="field"><label>Vente TTC (unité)</label><input type="number" inputmode="decimal" step="0.01" id="mat-${a.id}-vente" data-mat="${a.id}" data-f="vente" value="${a.vente}" placeholder="0,00"></div>
+        <div class="field qte-field"><label>Qté</label><input type="number" inputmode="decimal" step="1" min="0" id="mat-${a.id}-qte" data-mat="${a.id}" data-f="qte" value="${a.qte === undefined ? 1 : a.qte}" placeholder="1"></div>
       </div>
       <div class="field" style="margin-top:6px;"><label>Catégorie</label><select id="mat-${a.id}-cat" data-mat="${a.id}" data-f="categorie">${categorieOptions(a.categorie||'autre')}</select></div>
       <div class="article-net">
@@ -956,8 +992,10 @@ function compute(){
   let totalVente=0, totalAchat=0, totalCharges=0, totalMarge=0;
 
   articlesMat.forEach(a=>{
-    const vente = Number(a.vente)||0;
-    const achat = Number(a.achat)||0;
+    const q = qteOf(a);
+    const venteU = Number(a.vente)||0, achatU = Number(a.achat)||0;
+    const vente = venteU*q;
+    const achat = achatU*q;
     const charges = vente*rates.mat;
     const marge = vente - achat;
     const net = marge - charges;
@@ -967,8 +1005,8 @@ function compute(){
     if(el) el.textContent = fmt(net);
     const coefEl = document.getElementById('coef-'+a.id);
     if(coefEl){
-      coefEl.textContent = achat > 0
-        ? (vente/achat).toLocaleString('fr-FR', {minimumFractionDigits:2, maximumFractionDigits:2}) + '×'
+      coefEl.textContent = achatU > 0
+        ? (venteU/achatU).toLocaleString('fr-FR', {minimumFractionDigits:2, maximumFractionDigits:2}) + '×'
         : '—';
     }
   });
@@ -994,8 +1032,8 @@ function compute(){
   document.getElementById('summaryFinal').classList.toggle('neg', netFinal < 0);
   const pct = totalVente > 0 ? (netFinal/totalVente*100) : 0;
   document.getElementById('sNetPct').textContent = totalVente > 0
-    ? pct.toLocaleString('fr-FR',{minimumFractionDigits:1, maximumFractionDigits:1}) + ' % du total vente'
-    : '0,0 % du total vente';
+    ? pct.toLocaleString('fr-FR',{minimumFractionDigits:1, maximumFractionDigits:1}) + ' % du total ventes'
+    : '0,0 % du total ventes';
 
   computePrivate();
   updateCeilingNote();
@@ -1026,9 +1064,17 @@ function computePrivate(){
   const fv = document.getElementById('fraisMoisVal'); if(fv) fv.textContent = fmt(frais);
   const moy = netMoyenDevis(), nb = moy > 0 ? Math.ceil(frais/moy) : null;
   document.getElementById('pSeuilInfo').innerHTML = 'Seuil du mois : <b>' + fmt(frais) + '</b> de net à faire pour couvrir les frais fixes pro'
-    + (nb ? ' (≈ ' + nb + ' devis au net moyen de ' + fmt(moy) + ')' : '') + ' · '
+    + (nb ? ' (≈ ' + nb + ' factures au net moyen de ' + fmt(moy) + ')' : '') + ' · '
     + (revenu >= frais ? '<b style="color:var(--net-pos);">couvert</b>' : 'reste ' + fmt(frais - revenu) + ' à couvrir');
   document.getElementById('pNet').textContent = fmt(reste);
+  const bn = document.getElementById('bNetCot');
+  if(bn){
+    bn.textContent = fmt(revenu);
+    document.getElementById('bFixes').textContent = fmt(frais);
+    const bres = document.getElementById('bReste');
+    bres.textContent = fmt(revenu - frais);
+    bres.style.color = (revenu - frais) < 0 ? 'var(--danger)' : '';
+  }
   document.getElementById('privateFinal').classList.toggle('neg', reste < 0);
 }
 
@@ -1137,9 +1183,10 @@ function exportPdf(){
 
   let rows = '';
   articlesMat.forEach((a, i)=>{
-    const achat = Number(a.achat)||0, vente = Number(a.vente)||0;
+    const q = qteOf(a);
+    const achat = (Number(a.achat)||0)*q, vente = (Number(a.vente)||0)*q;
     if(achat===0 && vente===0) return;
-    rows += `<tr><td>Matériel ${i+1}</td><td>${fmt(achat)}</td><td>${fmt(vente)}</td></tr>`;
+    rows += `<tr><td>Matériel ${i+1}${q !== 1 ? ' (×' + q + ')' : ''}</td><td>${fmt(achat)}</td><td>${fmt(vente)}</td></tr>`;
   });
   articlesServ.forEach((a, i)=>{
     const vente = Number(a.vente)||0;
@@ -1164,7 +1211,7 @@ function exportPdf(){
       <tbody>${rows}</tbody>
     </table>
     <div class="print-summary">
-      <div><span>Total vente</span><b>${get('sVente')}</b></div>
+      <div><span>Total ventes (CA)</span><b>${get('sVente')}</b></div>
       <div><span>Total achat matériel</span><b>${get('sAchat')}</b></div>
       <div><span>Marge brute</span><b>${get('sMarge')}</b></div>
       <div><span>Charges URSSAF + CFP</span><b>${get('sCharges')}</b></div>
@@ -1189,13 +1236,15 @@ function saveQuote(){
 
   const matLines = [];
   articlesMat.forEach(a=>{
-    const vente = Number(a.vente)||0;
-    const achat = Number(a.achat)||0;
+    const q = qteOf(a);
+    const vente = (Number(a.vente)||0)*q;
+    const achat = (Number(a.achat)||0)*q;
     const charges = vente*rates.mat;
     totalVente += vente; totalAchat += achat; totalCharges += charges; totalMarge += vente-achat;
     venteMat += vente; achatMat += achat;
     if(achat!==0 || vente!==0){
-      matLines.push({ achat, vente, categorie: a.categorie || 'autre' });
+      // achat / vente = totaux de la ligne (compatibles avec l'existant) ; qte en plus
+      matLines.push({ achat, vente, qte: q, categorie: a.categorie || 'autre' });
     }
   });
 
@@ -1219,6 +1268,7 @@ function saveQuote(){
     dateISO: new Date().toISOString().slice(0,10),
     regime: regime,
     paye: true,
+    activite: '',
     breakdown: { venteMat, achatMat, venteServ, dayCost, matLines }
   });
 
@@ -1241,11 +1291,30 @@ function pctBadge(vente, net){
 
 function regimePill(d){
   if(!d.breakdown){
-    return '<span class="regime-pill na" title="Devis antérieur à la mise à jour : pas de détail matériel/service enregistré, recalcul impossible">—</span>';
+    return '<span class="regime-pill na" title="Facture antérieure à la mise à jour : pas de détail matériel/service enregistré, recalcul impossible">—</span>';
   }
   const label = d.regime === 'plein' ? 'Plein' : 'ACRE';
   const cls = d.regime === 'plein' ? 'plein' : 'acre';
   return `<span class="regime-pill ${cls}" data-toggleregime="${d.id}" title="Cliquer pour recalculer le net avec l'autre régime">${label}</span>`;
+}
+
+// Net après cotisations = ventes − achats − cotisations. Les anciennes factures enregistrées avec un
+// coût du jour (breakdown.dayCost) l'avaient déjà déduit : on le rajoute, car les frais fixes pro
+// sont désormais comptés une seule fois, au mois.
+function netCorr(d){
+  return (Number(d.net)||0) + ((d.breakdown && Number(d.breakdown.dayCost)) || 0);
+}
+function cotisOf(d){
+  if(!d.breakdown || d.breakdown.venteMat === undefined || d.breakdown.venteServ === undefined) return null;
+  const r = RATES[d.regime] || RATES.acre;
+  return (Number(d.breakdown.venteMat)||0)*r.mat + (Number(d.breakdown.venteServ)||0)*r.serv;
+}
+const ACT_CYCLE = { '':'S', 'S':'V', 'V':'' };
+function actPill(d){
+  const a = d.activite || '';
+  const cls = a==='S' ? 's' : a==='V' ? 'v' : '';
+  const title = a==='S' ? 'Serrurerie' : a==='V' ? 'Vélo' : 'Non classée';
+  return `<span class="act-pill ${cls}" data-toggleact="${d.id}" title="${title} — toucher pour changer">${a || '?'}</span>`;
 }
 
 function recomputeDevisNet(d){
@@ -1273,7 +1342,7 @@ function renderHistory(){
   const totalsCont = document.getElementById('historyTotals');
   const badge = document.getElementById('devisCountBadge');
   if(!devisHistory[currentMonth] || devisHistory[currentMonth].length === 0){
-    cont.innerHTML = '<div class="empty-state">Aucun devis enregistré pour ce mois</div>';
+    cont.innerHTML = '<div class="empty-state">Aucune facture enregistrée pour ce mois</div>';
     if(totalsCont) totalsCont.innerHTML = '';
     if(badge) badge.textContent = '';
     syncRevenuMois(0);
@@ -1281,27 +1350,30 @@ function renderHistory(){
   }
 
   const devis = devisHistory[currentMonth];
-  let html = '<table class="history-table"><thead><tr><th class="del-col"></th><th>Client</th><th>Vente</th><th>Net</th><th class="pct">%</th><th class="regime">Régime</th><th class="paye">Payé</th><th></th></tr></thead><tbody>';
+  let html = '<table class="history-table"><thead><tr><th class="del-col"></th><th>Client</th><th>Vente</th><th>Net</th><th class="pct">%</th><th class="regime">Régime</th><th class="act">Act.</th><th class="paye">Payé</th><th></th></tr></thead><tbody>';
 
   let totalVente = 0, totalNet = 0;
   let totalAchatMat = 0;
   let venteEncaisse = 0, netEncaisse = 0, venteAttente = 0, netAttente = 0;
   let totalCotisations = 0, cotisApprox = false;
   let declMat = 0, declServ = 0, declCot = 0;
+  const actAgg = { S:{ca:0,cot:0,net:0}, V:{ca:0,cot:0,net:0}, '':{ca:0,cot:0,net:0} };
+  let actSansDetail = 0;
   devis.forEach((d, idx)=>{
+    const dnet = netCorr(d);
     totalVente += d.vente;
-    totalNet += d.net;
+    totalNet += dnet;
     if(d.breakdown) totalAchatMat += Number(d.breakdown.achatMat)||0;
     const estPaye = d.paye !== false;
-    if(estPaye){ venteEncaisse += d.vente; netEncaisse += d.net; }
-    else { venteAttente += d.vente; netAttente += d.net; }
+    if(estPaye){ venteEncaisse += d.vente; netEncaisse += dnet; }
+    else { venteAttente += d.vente; netAttente += dnet; }
 
     // Cotisations réelles = % sur vente matériel + % sur vente service (pas d'impact de l'achat matériel ni du coût fixe du jour).
     if(d.breakdown && d.breakdown.venteMat !== undefined && d.breakdown.venteServ !== undefined){
       const r = RATES[d.regime] || RATES.acre;
       totalCotisations += (Number(d.breakdown.venteMat)||0)*r.mat + (Number(d.breakdown.venteServ)||0)*r.serv;
     } else {
-      // Devis antérieur à la mise à jour : pas de détail mat/serv, on approxime avec vente-net.
+      // Facture antérieure à la mise à jour : pas de détail mat/serv, on approxime avec vente-net.
       totalCotisations += (d.vente - d.net);
       cotisApprox = true;
     }
@@ -1310,6 +1382,12 @@ function renderHistory(){
       const rr = RATES[d.regime] || RATES.acre;
       const vm = Number(d.breakdown.venteMat)||0, vs = Number(d.breakdown.venteServ)||0;
       declMat += vm; declServ += vs; declCot += vm*rr.mat + vs*rr.serv;
+    }
+    if(estPaye){
+      const ag = actAgg[d.activite || ''] || actAgg[''];
+      ag.ca += d.vente; ag.net += dnet;
+      const c = cotisOf(d);
+      if(c === null) actSansDetail++; else ag.cot += c;
     }
     const payeCheckbox = `<input type="checkbox" class="paye-check" data-payedevis="${d.id}" ${estPaye ? 'checked' : ''} title="Facture payée">`;
 
@@ -1324,10 +1402,11 @@ function renderHistory(){
         </div></td>
         <td><div class="edit-stack">
           <input type="number" step="0.01" class="edit-mini" id="edit-venteServ-${d.id}" value="${b.venteServ}" placeholder="Vente serv." title="Vente service TTC">
-          <b class="edit-net-preview" id="edit-netpreview-${d.id}">${fmt(d.net)}</b>
+          <b class="edit-net-preview" id="edit-netpreview-${d.id}">${fmt(dnet)}</b>
         </div></td>
         <td class="pct pct-na">—</td>
         <td class="regime pct-na">—</td>
+        <td class="act">${actPill(d)}</td>
         <td class="paye">${payeCheckbox}</td>
         <td class="actions"><div class="edit-actions">
           <button class="row-btn" title="Enregistrer" data-savedevis="${d.id}">✓</button>
@@ -1337,7 +1416,7 @@ function renderHistory(){
     } else if(movingDevisId === d.id){
       html += `<tr>
         <td class="del-col"></td>
-        <td colspan="6" style="padding:6px 4px;">
+        <td colspan="7" style="padding:6px 4px;">
           <div style="display:flex; align-items:center; gap:6px; flex-wrap:wrap;">
             <span style="font-size:0.78rem; color:var(--ink-soft);">Déplacer « ${escapeHtml(d.client)} » vers :</span>
             <input type="month" id="move-target-${d.id}" value="${currentMonth}" style="border:1px solid var(--line); border-radius:7px; padding:5px 7px; font-size:0.85rem; background:var(--bg); color:var(--ink); font-family:inherit;">
@@ -1351,9 +1430,10 @@ function renderHistory(){
         <td class="del-col"><button class="row-btn del" title="Supprimer" data-deldevis="${d.id}">🗑</button></td>
         <td>${escapeHtml(d.client)}</td>
         <td>${fmt(d.vente)}</td>
-        <td>${fmt(d.net)}</td>
-        <td class="pct">${pctBadge(d.vente, d.net)}</td>
+        <td>${fmt(dnet)}</td>
+        <td class="pct">${pctBadge(d.vente, dnet)}</td>
         <td class="regime">${regimePill(d)}</td>
+        <td class="act">${actPill(d)}</td>
         <td class="paye">${payeCheckbox}</td>
         <td class="actions">
           <button class="row-btn" title="Monter" data-moveup="${d.id}" ${idx===0 ? 'disabled' : ''}>↑</button>
@@ -1366,13 +1446,13 @@ function renderHistory(){
   });
 
   html += '</tbody></table>';
-  // Le revenu du bilan privé = net des devis encaissés uniquement (outillage et rattrapages : voir Trésorerie)
+  // Le revenu du bilan privé = net des factures payées uniquement (outillage et rattrapages : voir Trésorerie)
   syncRevenuMois(netEncaisse);
   const moyennePct = totalVente > 0 ? (totalNet/totalVente*100) : 0;
-  if(badge) badge.textContent = devis.length + ' devis';
+  if(badge) badge.textContent = devis.length + (devis.length > 1 ? ' factures' : ' facture');
   const totalsHtml = `
   <div class="totals-main">
-    <div class="stat vente"><span class="label">Total vente</span><span class="value">${fmt(totalVente)}</span></div>
+    <div class="stat vente"><span class="label">Total ventes (CA)</span><span class="value">${fmt(totalVente)}</span></div>
     <div class="stat net"><span class="label">Total net estimé</span><span class="value">${fmt(totalNet)}</span></div>
     <div class="stat pct"><span class="label">Moyenne %</span><span class="value">${moyennePct.toLocaleString('fr-FR',{minimumFractionDigits:1,maximumFractionDigits:1})} %</span></div>
   </div>
@@ -1380,18 +1460,28 @@ function renderHistory(){
     <span>Total achat matériel</span><b>${fmt(totalAchatMat)}</b>
   </div>
   <div class="totals-status">
-    <div class="chip"><span class="label">Encaissé (net / vente)</span><span class="value">${fmt(netEncaisse)} / ${fmt(venteEncaisse)}</span></div>
-    <div class="chip"><span class="label">En attente (net / vente)</span><span class="value">${fmt(netAttente)} / ${fmt(venteAttente)}</span></div>
+    <div class="chip"><span class="label">Payé (net / ventes)</span><span class="value">${fmt(netEncaisse)} / ${fmt(venteEncaisse)}</span></div>
+    <div class="chip"><span class="label">En attente (net / ventes)</span><span class="value">${fmt(netAttente)} / ${fmt(venteAttente)}</span></div>
   </div>
   <div class="totals-secondary" style="border-top:1px dashed var(--line);">
-    <span>Cotisations URSSAF totales${cotisApprox ? ' <small style="opacity:0.7;">(estimation pour les devis anciens sans détail)</small>' : ''}</span><b>${fmt(totalCotisations)}</b>
+    <span>Cotisations URSSAF totales${cotisApprox ? ' <small style="opacity:0.7;">(estimation pour les anciennes factures sans détail)</small>' : ''}</span><b>${fmt(totalCotisations)}</b>
   </div>
-  <div class="totals-secondary" style="border-top:1px dashed var(--line); flex-direction:column; align-items:stretch; gap:3px;">
-    <span><b>À déclarer à l'URSSAF (devis payés du mois)</b></span>
-    <span style="display:flex; justify-content:space-between;">Ventes de matériel<b>${fmt(declMat)}</b></span>
-    <span style="display:flex; justify-content:space-between;">Ventes de services<b>${fmt(declServ)}</b></span>
-    <span style="display:flex; justify-content:space-between;">Total à déclarer<b>${fmt(declMat + declServ)}</b></span>
-    <span style="display:flex; justify-content:space-between;">Cotisations correspondantes<b>${fmt(declCot)}</b></span>
+  <div class="urssaf-box">
+    <div class="ttl">Total à déclarer à l'URSSAF (factures payées du mois)</div>
+    <div class="ln"><span>Ventes de matériel</span><b>${fmt(declMat)}</b></div>
+    <div class="ln"><span>Ventes de services</span><b>${fmt(declServ)}</b></div>
+    <div class="ln tot"><span>Total à déclarer</span><b>${fmt(declMat + declServ)}</b></div>
+    <div class="ln cot"><span>Cotisations URSSAF correspondantes</span><b>${fmt(declCot)}</b></div>
+  </div>
+  <div class="act-box">
+    <div class="ttl">Par activité (factures payées)</div>
+    <table>
+      <thead><tr><th>Activité</th><th>CA</th><th>Cotis.</th><th>Net</th></tr></thead>
+      <tbody>
+        ${[['S','Serrurerie (S)'],['V','Vélo (V)'],['','Non classé']].map(([k,l])=>`<tr><td>${l}</td><td>${fmt(actAgg[k].ca)}</td><td>${fmt(actAgg[k].cot)}</td><td>${fmt(actAgg[k].net)}</td></tr>`).join('')}
+      </tbody>
+    </table>
+    <div class="note">Net avant frais fixes pro (non attribuables à une activité).${actSansDetail ? ' ' + actSansDetail + ' ancienne(s) facture(s) sans détail matériel/service : CA et net comptés, cotisations non calculables donc exclues.' : ''}</div>
   </div>`;
 
   if(totalsCont) totalsCont.innerHTML = totalsHtml;
@@ -1408,7 +1498,7 @@ function attachEditBreakdownHandlers(d){
     const r = RATES[d.regime] || RATES.acre;
     const netMat = (venteMat - achatMat) - (venteMat * r.mat);
     const netServ = venteServ - (venteServ * r.serv);
-    const net = netMat + netServ - dayCost;
+    const net = netMat + netServ;
     const el = document.getElementById('edit-netpreview-'+d.id);
     if(el) el.textContent = fmt(net);
   };
@@ -1481,7 +1571,7 @@ function attachHistoryHandlers(){
   document.querySelectorAll('[data-deldevis]').forEach(btn=>{
     btn.onclick = ()=>{
       const id = btn.dataset.deldevis;
-      if(!confirm('Supprimer ce devis de l\'historique ?')) return;
+      if(!confirm('Supprimer cette facture de l\'historique ?')) return;
       devisHistory[currentMonth] = devisHistory[currentMonth].filter(d=>d.id!==id);
       saveSettings();
       renderHistory();
@@ -1493,6 +1583,15 @@ function attachHistoryHandlers(){
       const d = devisHistory[currentMonth].find(x=>x.id===id);
       if(!d) return;
       d.paye = chk.checked;
+      saveSettings();
+      renderHistory();
+    };
+  });
+  document.querySelectorAll('[data-toggleact]').forEach(pill=>{
+    pill.onclick = ()=>{
+      const d = devisHistory[currentMonth].find(x=>x.id===pill.dataset.toggleact);
+      if(!d) return;
+      d.activite = ACT_CYCLE[d.activite || ''] ?? '';
       saveSettings();
       renderHistory();
     };
@@ -1527,7 +1626,21 @@ function attachHistoryHandlers(){
       d.vente = venteMat + venteServ;
       d.net = netMat + netServ - dayCost;
       d.regime = regimeToUse;
-      d.breakdown = { venteMat, achatMat, venteServ, dayCost };
+      // Conserver le détail par ligne (matLines) : sinon la trésorerie ignore ce devis.
+      const oldB = d.breakdown || {};
+      const newB = { venteMat, achatMat, venteServ, dayCost };
+      if(Array.isArray(oldB.matLines)){
+        const sameAmounts = Math.abs((Number(oldB.achatMat)||0) - achatMat) < 0.005 && Math.abs((Number(oldB.venteMat)||0) - venteMat) < 0.005;
+        if(sameAmounts){
+          newB.matLines = oldB.matLines;
+        } else if(achatMat !== 0 || venteMat !== 0){
+          const cats = Array.from(new Set(oldB.matLines.map(l=> l.categorie || 'autre')));
+          newB.matLines = [{ achat: achatMat, vente: venteMat, qte: 1, categorie: cats.length === 1 ? cats[0] : 'autre' }];
+        } else {
+          newB.matLines = [];
+        }
+      }
+      d.breakdown = newB;
       editingDevisId = null;
       saveSettings();
       renderHistory();
@@ -1775,9 +1888,9 @@ document.getElementById('importPdfFile').onchange = async (e)=>{
     }
 
     articlesServ = r.servCount > 0 ? [{ id:'s'+(idSeq++), vente: servFinal.toFixed(2) }] : [];
-    articlesMat = matRowsFinal.map(v => ({ id:'m'+(idSeq++), achat:'', vente: v.toFixed(2), categorie:'autre' }));
+    articlesMat = matRowsFinal.map(v => ({ id:'m'+(idSeq++), achat:'', vente: v.toFixed(2), qte:'1', categorie:'autre' }));
     if(articlesServ.length === 0) articlesServ.push({ id:'s'+(idSeq++), vente:'' });
-    if(articlesMat.length === 0) articlesMat.push({ id:'m'+(idSeq++), achat:'', vente:'', categorie:'autre' });
+    if(articlesMat.length === 0) articlesMat.push({ id:'m'+(idSeq++), achat:'', vente:'', qte:'1', categorie:'autre' });
     document.getElementById('clientName').value = r.client;
     renderMat();
     renderServ();
@@ -1803,7 +1916,7 @@ if(regime==='plein'){
   document.getElementById('btnPlein').classList.add('active');
   document.getElementById('btnAcre').classList.remove('active');
 }
-if(articlesMat.length === 0) articlesMat.push({ id:'m'+(idSeq++), achat:'', vente:'' });
+if(articlesMat.length === 0) articlesMat.push({ id:'m'+(idSeq++), achat:'', vente:'', qte:'1' });
 if(articlesServ.length === 0) articlesServ.push({ id:'s'+(idSeq++), vente:'' });
 renderMat();
 renderServ();

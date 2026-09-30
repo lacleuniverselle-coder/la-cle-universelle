@@ -354,7 +354,7 @@ function allDevis(){
   const history = raw.devisHistory || {};
   const list = [];
   Object.keys(history).forEach(month=>{
-    (history[month]||[]).forEach(d=> list.push(d));
+    (history[month]||[]).forEach(d=> list.push(Object.assign({}, d, { _mois: month })));
   });
   return list;
 }
@@ -511,12 +511,21 @@ populateManualCatMonthSelect();
 renderManualCatSelect();
 
 // Net réel du mois consulté dans la calculette (même mois, même stockage partagé) :
-// net des devis encaissés + rattrapages/consommables datés ce mois (vente − achat) − outillage acheté ce mois − frais fixes pro du mois.
+// net des devis payés (après charges) + rattrapages datés ce mois (vente − achat) − outillage acheté ce mois − frais fixes pro du mois.
+function fraisFixesMois(raw){
+  const list = Array.isArray(raw.fraisFixes) ? raw.fraisFixes : [];
+  const cfe = Math.max(0, Number(raw.cfeAn)||0);
+  return list.reduce((s,f)=> s + (Number(f.amount)||0) / (f.per==='an' ? 12 : 1), 0) + cfe/12;
+}
+function netDevisPaye(d){
+  if(d.paye === false) return 0;
+  return (Number(d.net)||0) + ((d.breakdown && Number(d.breakdown.dayCost)) || 0);
+}
 function computeNetReelMois(monthKey){
   const raw = loadRaw();
   const devisMois = (raw.devisHistory && raw.devisHistory[monthKey]) || [];
-  let margeDevis = 0;
-  devisMois.forEach(d=>{ margeDevis += margeMatDevis(d); });
+  let netDevis = 0;
+  devisMois.forEach(d=>{ netDevis += netDevisPaye(d); });
 
   let manualContrib = 0;
   (raw.manualCat || []).filter(m=> m.dateISO === monthKey).forEach(m=>{ manualContrib += margeManuelle(m); });
@@ -524,7 +533,8 @@ function computeNetReelMois(monthKey){
   let outillageDepense = 0;
   (raw.outillage || []).filter(t=> t.dateISO === monthKey).forEach(t=>{ outillageDepense += Number(t.montant)||0; });
 
-  return { margeDevis, manualContrib, outillageDepense, netReel: margeDevis + manualContrib - outillageDepense };
+  const fraisFixes = fraisFixesMois(raw);
+  return { netDevis, manualContrib, outillageDepense, fraisFixes, netReel: netDevis + manualContrib - outillageDepense - fraisFixes };
 }
 
 function renderNetReel(){
@@ -535,9 +545,10 @@ function renderNetReel(){
   const r = computeNetReelMois(monthKey);
   const panel = document.getElementById('netReelPanel');
   panel.innerHTML = `
-    <div class="manual-entry"><span class="cat">Marge matériel des devis payés (vendu − acheté)</span><span class="amt">${r.margeDevis>=0?'+':''}${fmt(r.margeDevis)}</span></div>
+    <div class="manual-entry"><span class="cat">Net des devis payés (après charges URSSAF)</span><span class="amt">${r.netDevis>=0?'+':''}${fmt(r.netDevis)}</span></div>
     <div class="manual-entry"><span class="cat">Consommables saisis à la main, datés ce mois</span><span class="amt">${r.manualContrib>=0?'+':''}${fmt(r.manualContrib)}</span></div>
     <div class="manual-entry"><span class="cat">Outillage et vélo achetés ce mois</span><span class="amt">−${fmt(r.outillageDepense)}</span></div>
+    <div class="manual-entry"><span class="cat">Frais fixes pro du mois (assurances, CFE ÷ 12…)</span><span class="amt">−${fmt(r.fraisFixes)}</span></div>
     <div class="manual-entry" style="border-top:1px solid var(--line); padding-top:8px; font-weight:600;"><span class="cat">Net réel du mois</span><span class="amt">${fmt(r.netReel)}</span></div>
   `;
 }
@@ -669,7 +680,7 @@ function toolProgress(tool){
   const devis = allDevis();
   let marge = 0;
   devis.forEach(d=>{
-    if(d.dateISO && d.dateISO >= tool.dateISO){
+    if(d._mois && d._mois >= tool.dateISO){
       marge += margeMatDevis(d);
     }
   });
