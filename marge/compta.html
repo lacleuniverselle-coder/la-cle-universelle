@@ -5,6 +5,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Compta — La Clé Universelle</title>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.8.2/jspdf.plugin.autotable.min.js"></script>
 <link rel="manifest" href="manifest.json">
 <meta name="theme-color" content="#4C3468">
 <link rel="icon" href="icon-192.png">
@@ -226,7 +228,8 @@ body.locked > .wrap{display:none;}
   <div class="panel">
     <div class="tool-add-row" style="margin-bottom:10px;">
       <div class="field"><label>Période</label><select id="fMois"></select></div>
-      <button class="btn2" id="csvBtn">⬇ Télécharger (CSV)</button>
+      <button class="btn2" id="csvBtn">⬇ CSV</button>
+      <button class="btn2" id="pdfBtn">⬇ PDF</button>
     </div>
     <div class="tbl-wrap" id="livre"></div>
   </div>
@@ -348,6 +351,77 @@ $('csvBtn').onclick = ()=>{
   const blob=new Blob(['\ufeff'+lines.join('\r\n')],{type:'text/csv;charset=utf-8'});
   const a=document.createElement('a'); a.href=URL.createObjectURL(blob);
   a.download='livre-des-recettes-'+($('fMois').value==='all'?'complet':$('fMois').value)+'.csv'; a.click();
+};
+
+// ===== Export PDF =====
+const PDF_ENTETE = 'La Clé Universelle – Elena Righettini, EI';
+const PDF_SIRET = 'SIRET 810 023 192 00026';
+function moneyPdf(n){
+  n = r2(n); const neg = n<0; const [i,d] = Math.abs(n).toFixed(2).split('.');
+  return (neg?'-':'') + i.replace(/\B(?=(\d{3})+(?!\d))/g,' ') + ',' + d + ' €';
+}
+function moisLabel(ym){
+  const [y,m] = ym.split('-').map(Number);
+  const s = new Date(y, m-1, 1).toLocaleDateString('fr-FR',{month:'long',year:'numeric'});
+  return s.charAt(0).toUpperCase()+s.slice(1);
+}
+$('pdfBtn').onclick = ()=>{
+  if(!(window.jspdf && window.jspdf.jsPDF)){ alert("L'export PDF a besoin d'une connexion internet (bibliothèque non chargée)."); return; }
+  const list = sorted(inPeriod(loadEntries())); if(!list.length) return;
+  const periode = $('fMois').value;
+  const groups = {}; list.forEach(x=>{ (groups[x.date.slice(0,7)] = groups[x.date.slice(0,7)]||[]).push(x); });
+  const months = Object.keys(groups).sort();
+  const doc = new window.jspdf.jsPDF({unit:'mm', format:'a4'});
+  const VIOLET = [76,52,104];
+  months.forEach((ym,idx)=>{
+    if(idx>0) doc.addPage();
+    doc.setFont('helvetica','bold'); doc.setFontSize(11); doc.setTextColor(30,35,40);
+    doc.text(PDF_ENTETE, 14, 16);
+    doc.setFont('helvetica','normal'); doc.setFontSize(9); doc.setTextColor(91,98,102);
+    doc.text(PDF_SIRET, 14, 21);
+    doc.setFont('helvetica','bold'); doc.setFontSize(15); doc.setTextColor(76,52,104);
+    doc.text('Livre des recettes — '+moisLabel(ym), 14, 32);
+    const total = groups[ym].reduce((a,x)=>a+x.montant,0);
+    doc.autoTable({
+      startY: 38,
+      head: [['Date','Client','Mode de règlement','N° facture','Montant']],
+      body: groups[ym].map(x=>[fr(x.date), x.client, x.mode, x.ref, moneyPdf(x.montant)]),
+      foot: [[{content:'Total du mois', colSpan:4, styles:{halign:'left'}}, moneyPdf(total)]],
+      showFoot: 'lastPage',
+      styles: {font:'helvetica', fontSize:9, cellPadding:2.2, textColor:[30,35,40]},
+      headStyles: {fillColor:VIOLET, textColor:255, fontStyle:'bold'},
+      footStyles: {fillColor:[237,239,239], textColor:[30,35,40], fontStyle:'bold'},
+      columnStyles: {4:{halign:'right'}},
+      didParseCell: d=>{ if(d.section!=='body' && d.column.index===4) d.cell.styles.halign='right'; },
+      margin: {left:14,right:14}
+    });
+  });
+  if(periode==='all' && months.length>1){
+    doc.addPage();
+    doc.setFont('helvetica','bold'); doc.setFontSize(11); doc.setTextColor(30,35,40); doc.text(PDF_ENTETE,14,16);
+    doc.setFont('helvetica','normal'); doc.setFontSize(9); doc.setTextColor(91,98,102); doc.text(PDF_SIRET,14,21);
+    doc.setFont('helvetica','bold'); doc.setFontSize(15); doc.setTextColor(76,52,104);
+    doc.text('Livre des recettes — Récapitulatif', 14, 32);
+    const grand = list.reduce((a,x)=>a+x.montant,0);
+    doc.autoTable({
+      startY: 38,
+      head: [['Mois','Nombre de lignes','Total']],
+      body: months.map(ym=>[moisLabel(ym), String(groups[ym].length), moneyPdf(groups[ym].reduce((a,x)=>a+x.montant,0))]),
+      foot: [[{content:'Total général', colSpan:2, styles:{halign:'left'}}, moneyPdf(grand)]],
+      styles: {font:'helvetica', fontSize:10, cellPadding:2.6, textColor:[30,35,40]},
+      headStyles: {fillColor:VIOLET, textColor:255, fontStyle:'bold'},
+      footStyles: {fillColor:[237,239,239], textColor:[30,35,40], fontStyle:'bold'},
+      columnStyles: {1:{halign:'right'},2:{halign:'right'}},
+      didParseCell: d=>{ if(d.section!=='body' && d.column.index>=1) d.cell.styles.halign='right'; },
+      margin: {left:14,right:14}
+    });
+  }
+  const n = doc.getNumberOfPages(), today = new Date().toLocaleDateString('fr-FR');
+  for(let p=1;p<=n;p++){
+    doc.setPage(p); doc.setFont('helvetica','normal'); doc.setFontSize(8); doc.setTextColor(91,98,102);
+    doc.text('Édité le '+today, 14, 288); doc.text('Page '+p+' / '+n, 196, 288, {align:'right'});
+  }
+  doc.save('livre-des-recettes-'+(periode==='all'?'complet':periode)+'.pdf');
 };
 
 Sync.boot(function(){ render(); });
