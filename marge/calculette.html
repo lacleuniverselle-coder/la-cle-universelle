@@ -465,7 +465,7 @@ body.locked > .wrap{display:none;}
   <p class="sub">La Clé Universelle — calcul du gain net après charges URSSAF</p>
   <div style="display:flex; justify-content:flex-end; gap:8px; margin:-8px 0 14px;">
     <a href="stock.html" style="font-size:0.78rem; color:var(--ink-soft); text-decoration:none; border:1px solid var(--line); border-radius:7px; padding:6px 10px; background:var(--surface); font-weight:500;">📦 Stock</a>
-    <a href="treso.html" style="font-size:0.78rem; color:var(--ink-soft); text-decoration:none; border:1px solid var(--line); border-radius:7px; padding:6px 10px; background:var(--surface); font-weight:500;">🏦 Trésorerie</a>
+    <a href="treso.html" style="font-size:0.78rem; color:var(--ink-soft); text-decoration:none; border:1px solid var(--line); border-radius:7px; padding:6px 10px; background:var(--surface); font-weight:500;">🏦 Trésorerie</a>\n    <a href="compta.html" style="font-size:0.78rem; color:var(--ink-soft); text-decoration:none; border:1px solid var(--line); border-radius:7px; padding:6px 10px; background:var(--surface); font-weight:500;">📒 Compta</a>
   </div>
 
   <div class="mat-serv-grid">
@@ -1252,6 +1252,41 @@ function exportPdf(){
 }
 window.addEventListener('afterprint', ()=> document.body.classList.remove('printing'));
 
+// ===== Passage automatique dans Compta (livre des recettes) =====
+let pendingCompta = null;   // infos lues dans le dernier PDF importé
+function comptaInfoFromLines(lines){
+  const txt = lines.join(' ').replace(/\s+/g,' ');
+  const o = { ref:'', date:'', mode:'', acquittee:false, montant:null };
+  let m = txt.match(/Facture N°\s*(\S+)/i); if(m) o.ref = m[1];
+  m = txt.match(/Net à payer\s*([\d\s.,]+?)\s*€/i); if(m) o.montant = pdfParseNumber(m[1]);
+  m = txt.match(/payée le\s*(\d{2})\/(\d{2})\/(\d{4})\s*par\s*([^.]+)\./i);
+  if(m){
+    o.acquittee = true;
+    o.date = m[3]+'-'+m[2]+'-'+m[1];
+    const t = m[4].toLowerCase();
+    o.mode = t.includes('virement') ? 'Virement' : t.includes('esp') ? 'Espèces'
+           : (t.includes('carte')||t.includes('cb')) ? 'Carte bancaire'
+           : (t.includes('chèque')||t.includes('cheque')) ? 'Chèque' : 'Autre';
+  }
+  return o;
+}
+// Retourne un message à afficher (ou '' si rien à dire)
+function pushToCompta(clientName){
+  const p = pendingCompta; pendingCompta = null;
+  if(!p) return '';
+  if(!p.acquittee || p.montant === null || !p.ref)
+    return "Non ajoutée au livre des recettes (facture non acquittée ou numéro/montant illisible) : importe-la dans 📒 Compta une fois payée.";
+  if(p.client && p.client.toLowerCase() !== clientName.toLowerCase())
+    return "Non ajoutée au livre des recettes : le nom du client a été modifié après l'import. Ajoute-la depuis 📒 Compta.";
+  let s = {}; try{ s = JSON.parse(localStorage.getItem('devisCalcSettings')||'{}'); }catch(e){}
+  const entries = (s.compta && s.compta.entries) || [];
+  if(entries.some(x=>x.ref === p.ref && x.montant > 0)) return 'Déjà dans le livre des recettes (facture '+p.ref+').';
+  entries.push({ id:'r'+Date.now(), date:p.date, client:clientName, montant:Math.round(p.montant*100)/100, mode:p.mode, ref:p.ref });
+  s.compta = Object.assign({}, s.compta||{}, { entries });
+  localStorage.setItem('devisCalcSettings', JSON.stringify(s));
+  return 'Ajoutée au livre des recettes (📒 Compta) : '+p.ref+', '+p.montant.toFixed(2).replace('.',',')+' €.';
+}
+
 function saveQuote(){
   const clientName = document.getElementById('clientName').value.trim();
   if(!clientName){
@@ -1308,12 +1343,15 @@ function saveQuote(){
 
   // Décrémentation du stock (avant saveSettings, qui relit le stock déjà écrit)
   const negatives = applyStock(stockOut, -1);
+  const comptaMsg = pushToCompta(clientName);
 
   document.getElementById('clientName').value = '';
   renderHistory();
   saveSettings();
   if(negatives.length){
-    alert('Facture enregistrée. Stock insuffisant : ' + negatives.join(', ') + '.\nPense à saisir ton dernier réapprovisionnement dans 📦 Stock.');
+    alert('Facture enregistrée. Stock insuffisant : ' + negatives.join(', ') + '.\nPense à saisir ton dernier réapprovisionnement dans 📦 Stock.' + (comptaMsg ? '\n\n' + comptaMsg : ''));
+  } else if(comptaMsg){
+    alert('Facture enregistrée.\n' + comptaMsg);
   }
 }
 
@@ -1907,10 +1945,12 @@ document.getElementById('importPdfFile').onchange = async (e)=>{
   if(!file) return;
   const statusEl = document.getElementById('importPdfStatus');
   statusEl.textContent = 'Lecture du PDF…';
+  pendingCompta = null;
   try{
     const buf = await file.arrayBuffer();
     const lines = await extractPdfLines(buf);
     const r = parseDevisLines(lines);
+    pendingCompta = Object.assign(comptaInfoFromLines(lines), { client: r.client });
 
     if(r.servCount === 0 && r.matCount === 0){
       statusEl.textContent = "Je n'ai trouvé aucune ligne service/matériel reconnaissable dans ce PDF. Rien n'a été modifié.";

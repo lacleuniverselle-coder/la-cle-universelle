@@ -1,8 +1,8 @@
-const CACHE_NAME = 'net-devis-v15';
+const CACHE_NAME = 'net-devis-v17';
 const APP_SHELL = [
   './calculette.html',
   './treso.html',
-  './stock.html',
+  './stock.html',\n  './compta.html',
   './sync.js',
   './manifest.json',
   './icon-192.png',
