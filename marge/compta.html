@@ -182,6 +182,7 @@ body.locked > .wrap{display:none;}
 .lv .r{text-align:right;font-variant-numeric:tabular-nums;}
 .lv tfoot td{font-weight:600;border-bottom:none;}
 .lv .neg{color:var(--net-neg);}
+.lv td.nat{white-space:normal;min-width:140px;}
 .undo{background:none;border:none;color:var(--ink-soft);cursor:pointer;font-size:0.95rem;}
 .undo:hover{color:var(--danger);}
 #pdfStatus{font-size:0.78rem;color:var(--ink-soft);margin-top:6px;line-height:1.4;}
@@ -221,6 +222,7 @@ body.locked > .wrap{display:none;}
       <div class="field"><label>Mode de règlement</label>
         <select id="fMode"><option>Virement</option><option>Espèces</option><option>Carte bancaire</option><option>Chèque</option><option>Autre</option></select></div>
       <div class="field"><label>N° de facture</label><input type="text" id="fRef"></div>
+      <div class="field"><label>Nature de la prestation</label><input type="text" id="fNature"></div>
       <button class="add-btn" id="addBtn">Ajouter au livre</button>
     </div>
   </div>
@@ -233,7 +235,7 @@ body.locked > .wrap{display:none;}
     </div>
     <div class="tbl-wrap" id="livre"></div>
   </div>
-  <p class="note">Les lignes ne se modifient pas : en cas d'erreur, le bouton ↩ ajoute une ligne d'annulation (montant négatif), puis tu ressaisis la bonne recette.</p>
+  <p class="note">Les lignes ne se modifient pas : en cas d'erreur, le bouton ↩ ajoute une ligne d'annulation (montant négatif), puis tu ressaisis la bonne recette. Seule exception : la nature de la prestation peut être ajoutée une fois, avec le bouton ✏️, quand elle est vide.</p>
 </div>
 
 <script src="sync.js"></script>
@@ -272,6 +274,18 @@ function modeFrom(t){
   if(t.includes('chèque')||t.includes('cheque')) return 'Chèque';
   return t ? 'Autre' : '';
 }
+function natureFrom(lines){
+  const STOP = /^(Service|Matériel|Désignation|Produit|Description)\b/i;
+  let i = lines.findIndex(l=>/^Selon devis/i.test(l));
+  if(i===-1) i = lines.findIndex(l=>/^Facture$/i.test(l));
+  if(i===-1) return '';
+  const out=[];
+  for(let k=i+1; k<lines.length && out.length<2; k++){
+    if(STOP.test(lines[k])) break;
+    out.push(lines[k]);
+  }
+  return out.join(' ').trim();
+}
 function parseFacture(lines){
   const txt = lines.join(' ').replace(/\s+/g,' ');
   const out = {};
@@ -280,6 +294,7 @@ function parseFacture(lines){
   out.client = (ai!==-1 && lines[ai+1]) ? lines[ai+1].trim() : '';
   m = txt.match(/Net à payer\s*([\d\s.,]+?)\s*€/i); out.montant = m ? num(m[1]) : null;
   m = txt.match(/payée le\s*(\d{2}\/\d{2}\/\d{4})\s*par\s*([^.]+)\./i);
+  out.nature = natureFrom(lines);
   out.acquittee = !!m;
   out.date = m ? isoFromFr(m[1]) : '';
   out.mode = m ? modeFrom(m[2]) : '';
@@ -293,11 +308,11 @@ $('pdfFile').onchange = async e=>{
   try{
     const r = parseFacture(await pdfText(await f.arrayBuffer()));
     if(!r.ref && r.montant===null){ st.textContent="Je n'ai reconnu ni numéro de facture ni montant dans ce PDF. Rien n'a été rempli."; return; }
-    $('fRef').value=r.ref; $('fClient').value=r.client;
+    $('fRef').value=r.ref; $('fClient').value=r.client; $('fNature').value=r.nature||'';
     if(r.montant!==null) $('fMontant').value=r.montant.toFixed(2);
     $('fDate').value=r.date; if(r.mode) $('fMode').value=r.mode;
     const manque=[]; if(!r.date) manque.push("la date d'encaissement"); if(!r.mode) manque.push('le mode de règlement');
-    if(r.client==='') manque.push('le client'); if(r.montant===null) manque.push('le montant');
+    if(r.client==='') manque.push('le client'); if(!r.nature) manque.push('la nature de la prestation'); if(r.montant===null) manque.push('le montant');
     let msg = 'Lu : facture '+(r.ref||'?')+'. Vérifie les champs ci-dessous puis clique sur « Ajouter au livre ».';
     if(!r.acquittee) msg += " ⚠️ Cette facture n'est pas marquée « acquittée » : ne l'ajoute qu'une fois l'argent reçu.";
     if(manque.length) msg += ' À compléter à la main : '+manque.join(', ')+'.';
@@ -308,10 +323,10 @@ $('pdfFile').onchange = async e=>{
 
 $('addBtn').onclick = ()=>{
   const e = { id:'r'+Date.now(), date:$('fDate').value, client:$('fClient').value.trim(),
-              montant:r2(num($('fMontant').value)), mode:$('fMode').value, ref:$('fRef').value.trim() };
+              montant:r2(num($('fMontant').value)), mode:$('fMode').value, ref:$('fRef').value.trim(), nature:$('fNature').value.trim() };
   if(!e.date || !e.client || !e.montant){ $('pdfStatus').textContent='Il manque la date, le client ou le montant.'; return; }
   const list=loadEntries(); list.push(e); saveEntries(list);
-  ['fClient','fMontant','fRef'].forEach(i=>$(i).value=''); $('fDate').value='';
+  ['fClient','fMontant','fRef','fNature'].forEach(i=>$(i).value=''); $('fDate').value='';
   $('pdfStatus').textContent='Ajouté au livre.'; render();
 };
 
@@ -329,14 +344,21 @@ function render(){
   if(!list.length){ $('livre').innerHTML='<div class="empty-state">Aucune recette pour cette période.</div>'; return; }
   let cum=0;
   const rows=list.map(x=>{ cum=r2(cum+x.montant);
-    return '<tr><td>'+fr(x.date)+'</td><td>'+esc(x.client)+'</td><td>'+esc(x.mode)+'</td><td>'+esc(x.ref)+'</td>'
+    return '<tr><td>'+fr(x.date)+'</td><td>'+esc(x.client)+'</td><td class="nat">'+esc(x.nature||'')+'</td><td>'+esc(x.mode)+'</td><td>'+esc(x.ref)+'</td>'
       +'<td class="r'+(x.montant<0?' neg':'')+'">'+eur(x.montant)+'</td><td class="r">'+eur(cum)+'</td>'
-      +'<td>'+(x.montant>0?'<button class="undo" data-undo="'+x.id+'" title="Annuler cette ligne (ajoute une ligne négative)">↩</button>':'')+'</td></tr>'; }).join('');
-  $('livre').innerHTML='<table class="lv"><thead><tr><th>Date</th><th>Client</th><th>Mode</th><th>Facture</th><th class="r">Montant</th><th class="r">Cumul</th><th></th></tr></thead><tbody>'+rows+'</tbody><tfoot><tr><td colspan="4">Total</td><td class="r">'+eur(cum)+'</td><td></td><td></td></tr></tfoot></table>';
+      +'<td>'+(x.nature?'':'<button class="undo" data-nat="'+x.id+'" title="Ajouter la nature de la prestation (une seule fois)">✏️</button>')+(x.montant>0?'<button class="undo" data-undo="'+x.id+'" title="Annuler cette ligne (ajoute une ligne négative)">↩</button>':'')+'</td></tr>'; }).join('');
+  $('livre').innerHTML='<table class="lv"><thead><tr><th>Date</th><th>Client</th><th>Prestation</th><th>Mode</th><th>Facture</th><th class="r">Montant</th><th class="r">Cumul</th><th></th></tr></thead><tbody>'+rows+'</tbody><tfoot><tr><td colspan="5">Total</td><td class="r">'+eur(cum)+'</td><td></td><td></td></tr></tfoot></table>';
+  document.querySelectorAll('[data-nat]').forEach(b=>b.onclick=()=>{
+    const all=loadEntries(), o=all.find(x=>x.id===b.dataset.nat); if(!o || o.nature) return;
+    const v=prompt('Nature de la prestation pour '+o.client+' ('+fr(o.date)+', '+eur(o.montant)+')\n\nAttention : une fois enregistrée, elle ne pourra plus être modifiée.','');
+    if(v===null) return;
+    const t=v.trim(); if(!t) return;
+    o.nature=t; saveEntries(all); render();
+  });
   document.querySelectorAll('[data-undo]').forEach(b=>b.onclick=()=>{
     const all=loadEntries(), o=all.find(x=>x.id===b.dataset.undo); if(!o) return;
     if(!confirm('Ajouter une ligne d\'annulation de '+eur(o.montant)+' ('+o.client+') ?')) return;
-    all.push({id:'r'+Date.now(), date:new Date().toISOString().slice(0,10), client:o.client, montant:-o.montant, mode:o.mode, ref:(o.ref?o.ref+' ':'')+'(annulation)'});
+    all.push({id:'r'+Date.now(), date:new Date().toISOString().slice(0,10), client:o.client, montant:-o.montant, nature:o.nature||'', mode:o.mode, ref:(o.ref?o.ref+' ':'')+'(annulation)'});
     saveEntries(all); render();
   });
 }
@@ -345,9 +367,9 @@ $('csvBtn').onclick = ()=>{
   const list=sorted(inPeriod(loadEntries())); if(!list.length) return;
   const q=s=>'"'+String(s).replace(/"/g,'""')+'"';
   let cum=0;
-  const lines=['Date d\'encaissement;Client;Mode de règlement;N° de facture;Montant;Cumul'].concat(list.map(x=>{
+  const lines=['Date d\'encaissement;Client;Nature de la prestation;Mode de règlement;N° de facture;Montant;Cumul'].concat(list.map(x=>{
     cum=r2(cum+x.montant);
-    return [fr(x.date),q(x.client),q(x.mode),q(x.ref),x.montant.toFixed(2).replace('.',','),cum.toFixed(2).replace('.',',')].join(';'); }));
+    return [fr(x.date),q(x.client),q(x.nature||''),q(x.mode),q(x.ref),x.montant.toFixed(2).replace('.',','),cum.toFixed(2).replace('.',',')].join(';'); }));
   const blob=new Blob(['\ufeff'+lines.join('\r\n')],{type:'text/csv;charset=utf-8'});
   const a=document.createElement('a'); a.href=URL.createObjectURL(blob);
   a.download='livre-des-recettes-'+($('fMois').value==='all'?'complet':$('fMois').value)+'.csv'; a.click();
@@ -384,15 +406,15 @@ $('pdfBtn').onclick = ()=>{
     const total = groups[ym].reduce((a,x)=>a+x.montant,0);
     doc.autoTable({
       startY: 38,
-      head: [['Date','Client','Mode de règlement','N° facture','Montant']],
-      body: groups[ym].map(x=>[fr(x.date), x.client, x.mode, x.ref, moneyPdf(x.montant)]),
-      foot: [[{content:'Total du mois', colSpan:4, styles:{halign:'left'}}, moneyPdf(total)]],
+      head: [['Date','Client','Prestation','Mode de règlement','N° facture','Montant']],
+      body: groups[ym].map(x=>[fr(x.date), x.client, x.nature||'', x.mode, x.ref, moneyPdf(x.montant)]),
+      foot: [[{content:'Total du mois', colSpan:5, styles:{halign:'left'}}, moneyPdf(total)]],
       showFoot: 'lastPage',
       styles: {font:'helvetica', fontSize:9, cellPadding:2.2, textColor:[30,35,40]},
       headStyles: {fillColor:VIOLET, textColor:255, fontStyle:'bold'},
       footStyles: {fillColor:[237,239,239], textColor:[30,35,40], fontStyle:'bold'},
-      columnStyles: {4:{halign:'right'}},
-      didParseCell: d=>{ if(d.section!=='body' && d.column.index===4) d.cell.styles.halign='right'; },
+      columnStyles: {0:{cellWidth:20},1:{cellWidth:30},3:{cellWidth:26},4:{cellWidth:24},5:{cellWidth:24,halign:'right'}},
+      didParseCell: d=>{ if(d.section!=='body' && d.column.index===5) d.cell.styles.halign='right'; },
       margin: {left:14,right:14}
     });
   });
