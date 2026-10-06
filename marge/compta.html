@@ -183,6 +183,7 @@ body.locked > .wrap{display:none;}
 .lv tfoot td{font-weight:600;border-bottom:none;}
 .lv .neg{color:var(--net-neg);}
 .lv td.nat{white-space:normal;min-width:140px;}
+.lv tr.annule td{opacity:0.35;}
 .natin{width:100%;min-width:150px;box-sizing:border-box;font-size:0.8rem;border:1px solid var(--line);border-radius:6px;padding:3px 6px;background:var(--bg);color:var(--ink);font-family:inherit;}
 .undo{background:none;border:none;color:var(--ink-soft);cursor:pointer;font-size:0.95rem;}
 .undo:hover{color:var(--danger);}
@@ -366,7 +367,7 @@ function render(){
   let cum=0;
   const annules=new Set(loadEntries().filter(e=>e.annuleId).map(e=>e.annuleId));
   const rows=list.map(x=>{ cum=r2(cum+x.montant);
-    return '<tr><td>'+(x.montant>0&&!annules.has(x.id)?'<button class="undo" data-edit="'+x.id+'" title="Corriger cette ligne (annule la ligne et ajoute la version corrigée)">✏️</button>':'')+'</td><td>'+fr(x.date)+'</td><td>'+esc(x.client)+'</td><td class="nat">'+(x.nature?esc(x.nature):'<input type="text" class="natin" data-natin="'+x.id+'" placeholder="Nature de la prestation…"> <button class="undo" data-natsave="'+x.id+'" title="Enregistrer (ensuite verrouillé, modifiable seulement via ✏️)">✓</button>')+'</td><td>'+esc(x.mode)+'</td><td>'+esc(x.ref)+'</td>'
+    return '<tr'+((annules.has(x.id)||x.annuleId)?' class="annule" title="Ligne annulée"':'')+'><td>'+(x.montant>0&&!annules.has(x.id)?'<button class="undo" data-edit="'+x.id+'" title="Corriger cette ligne (annule la ligne et ajoute la version corrigée)">✏️</button>':'')+'</td><td>'+fr(x.date)+'</td><td>'+esc(x.client)+'</td><td class="nat">'+(x.nature?esc(x.nature):'<input type="text" class="natin" data-natin="'+x.id+'" placeholder="Nature de la prestation…"> <button class="undo" data-natsave="'+x.id+'" title="Enregistrer (ensuite verrouillé, modifiable seulement via ✏️)">✓</button>')+'</td><td>'+esc(x.mode)+'</td><td>'+esc(x.ref)+'</td>'
       +'<td class="r'+(x.montant<0?' neg':'')+'">'+eur(x.montant)+'</td><td class="r">'+eur(cum)+'</td>'
       +'<td>'+(x.montant>0?'<button class="undo" data-undo="'+x.id+'" title="Annuler cette ligne (ajoute une ligne négative)">↩</button>':'')+'</td></tr>'; }).join('');
   $('livre').innerHTML='<table class="lv"><thead><tr><th></th><th>Date</th><th>Client</th><th>Prestation</th><th>Mode</th><th>Facture</th><th class="r">Montant</th><th class="r">Cumul</th><th></th></tr></thead><tbody>'+rows+'</tbody><tfoot><tr><td colspan="6">Total</td><td class="r">'+eur(cum)+'</td><td></td><td></td></tr></tfoot></table>';
