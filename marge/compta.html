@@ -184,6 +184,8 @@ body.locked > .wrap{display:none;}
 .lv .neg{color:var(--net-neg);}
 .lv td.nat{white-space:normal;min-width:140px;}
 .lv tr.annule td{opacity:0.35;}
+.trash-row{display:flex;justify-content:space-between;align-items:center;gap:8px;padding:6px 0;border-bottom:1px solid var(--line);font-size:0.8rem;}
+#trashPanel summary{cursor:pointer;font-weight:600;font-size:0.85rem;}
 .natin{width:100%;min-width:150px;box-sizing:border-box;font-size:0.8rem;border:1px solid var(--line);border-radius:6px;padding:3px 6px;background:var(--bg);color:var(--ink);font-family:inherit;}
 .undo{background:none;border:none;color:var(--ink-soft);cursor:pointer;font-size:0.95rem;}
 .undo:hover{color:var(--danger);}
@@ -238,7 +240,10 @@ body.locked > .wrap{display:none;}
     </div>
     <div class="tbl-wrap" id="livre"></div>
   </div>
-  <p class="note">Les lignes ne se modifient pas : en cas d'erreur, le bouton ↩ ajoute une ligne d'annulation (montant négatif), puis tu ressaisis la bonne recette. Le bouton ✏️ fait les deux d'un coup : il annule la ligne et ajoute la version corrigée. La nature de la prestation se saisit une fois directement dans le tableau (✓), puis elle est verrouillée.</p>
+  <div class="panel" id="trashPanel" style="display:none;">
+    <details><summary id="trashSum">Corbeille</summary><div id="trash" style="margin-top:8px;"></div></details>
+  </div>
+  <p class="note">Les lignes ne se modifient pas : en cas d'erreur, le bouton ↩ ajoute une ligne d'annulation (montant négatif), puis tu ressaisis la bonne recette. Le bouton ✏️ fait les deux d'un coup : il annule la ligne et ajoute la version corrigée. La nature de la prestation se saisit une fois directement dans le tableau (✓), puis elle est verrouillée. Le bouton 🗑 met une ligne à la corbeille (elle disparaît du livre, du CSV et du PDF, mais reste restaurable).</p>
 </div>
 
 <script src="sync.js"></script>
@@ -249,6 +254,11 @@ function readSettings(){ try{ return JSON.parse(localStorage.getItem('devisCalcS
 function loadEntries(){ const s=readSettings(); return (s.compta&&s.compta.entries)||[]; }
 function saveEntries(list){
   const s=readSettings(); s.compta=Object.assign({}, s.compta||{}, {entries:list});
+  localStorage.setItem('devisCalcSettings', JSON.stringify(s));
+}
+function loadTrash(){ const s=readSettings(); return (s.compta&&s.compta.trash)||[]; }
+function saveBoth(entries,trash){
+  const s=readSettings(); s.compta=Object.assign({}, s.compta||{}, {entries:entries, trash:trash});
   localStorage.setItem('devisCalcSettings', JSON.stringify(s));
 }
 function esc(s){ return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
@@ -360,8 +370,27 @@ function fillMonths(){
   $('fMois').innerHTML='<option value="all">Toute la période</option>'+months.map(m=>'<option value="'+m+'">'+m.split('-').reverse().join('/')+'</option>').join('');
   $('fMois').value = (cur==='all'||months.includes(cur)) ? cur : 'all';
 }
+function renderTrash(){
+  const trash=loadTrash(), panel=$('trashPanel');
+  if(!trash.length){ panel.style.display='none'; return; }
+  panel.style.display='';
+  const groups={}, order=[];
+  trash.forEach(x=>{ if(!groups[x.gid]){ groups[x.gid]=[]; order.push(x.gid); } groups[x.gid].push(x); });
+  $('trashSum').textContent='🗑 Corbeille ('+order.length+')';
+  $('trash').innerHTML=order.map(g=>{
+    const it=groups[g], m=it.find(x=>!x.annuleId)||it[0];
+    return '<div class="trash-row"><span>'+fr(m.date)+' — '+esc(m.client)+' — '+eur(m.montant)+(it.length>1?' (+ '+(it.length-1)+' ligne d\'annulation)':'')+' — supprimé le '+fr(m.supprimeLe)+'</span>'
+      +'<button class="btn2" data-restore="'+g+'">Restaurer</button></div>';
+  }).join('');
+  document.querySelectorAll('[data-restore]').forEach(b=>b.onclick=()=>{
+    const gid=b.dataset.restore, all=loadTrash();
+    const back=all.filter(x=>x.gid===gid).map(x=>{ const c=Object.assign({},x); delete c.gid; delete c.supprimeLe; return c; });
+    saveBoth(loadEntries().concat(back), all.filter(x=>x.gid!==gid)); render();
+  });
+}
 function render(){
   fillMonths();
+  renderTrash();
   const list=sorted(inPeriod(loadEntries()));
   if(!list.length){ $('livre').innerHTML='<div class="empty-state">Aucune recette pour cette période.</div>'; return; }
   let cum=0;
@@ -369,7 +398,7 @@ function render(){
   const rows=list.map(x=>{ cum=r2(cum+x.montant);
     return '<tr'+((annules.has(x.id)||x.annuleId)?' class="annule" title="Ligne annulée"':'')+'><td>'+(x.montant>0&&!annules.has(x.id)?'<button class="undo" data-edit="'+x.id+'" title="Corriger cette ligne (annule la ligne et ajoute la version corrigée)">✏️</button>':'')+'</td><td>'+fr(x.date)+'</td><td>'+esc(x.client)+'</td><td class="nat">'+(x.nature?esc(x.nature):'<input type="text" class="natin" data-natin="'+x.id+'" placeholder="Nature de la prestation…"> <button class="undo" data-natsave="'+x.id+'" title="Enregistrer (ensuite verrouillé, modifiable seulement via ✏️)">✓</button>')+'</td><td>'+esc(x.mode)+'</td><td>'+esc(x.ref)+'</td>'
       +'<td class="r'+(x.montant<0?' neg':'')+'">'+eur(x.montant)+'</td><td class="r">'+eur(cum)+'</td>'
-      +'<td>'+(x.montant>0?'<button class="undo" data-undo="'+x.id+'" title="Annuler cette ligne (ajoute une ligne négative)">↩</button>':'')+'</td></tr>'; }).join('');
+      +'<td>'+(x.montant>0?'<button class="undo" data-undo="'+x.id+'" title="Annuler cette ligne (ajoute une ligne négative)">↩</button>':'')+'<button class="undo" data-del="'+x.id+'" title="Mettre à la corbeille">🗑</button></td></tr>'; }).join('');
   $('livre').innerHTML='<table class="lv"><thead><tr><th></th><th>Date</th><th>Client</th><th>Prestation</th><th>Mode</th><th>Facture</th><th class="r">Montant</th><th class="r">Cumul</th><th></th></tr></thead><tbody>'+rows+'</tbody><tfoot><tr><td colspan="6">Total</td><td class="r">'+eur(cum)+'</td><td></td><td></td></tr></tfoot></table>';
   const saveNature = id=>{
     const inp=document.querySelector('[data-natin="'+id+'"]'); if(!inp) return;
@@ -387,6 +416,17 @@ function render(){
     $('addBtn').textContent='Valider la correction'; $('formTitle').textContent='Corriger une recette'; $('cancelEdit').style.display='';
     $('pdfStatus').textContent='Correction de la ligne du '+fr(o.date)+' ('+o.client+') : modifie les champs puis clique sur « Valider la correction ». L\'ancienne ligne sera annulée et remplacée par la nouvelle.';
     $('formTitle').scrollIntoView({behavior:'smooth',block:'center'});
+  });
+  document.querySelectorAll('[data-del]').forEach(b=>b.onclick=()=>{
+    const all=loadEntries(), o=all.find(x=>x.id===b.dataset.del); if(!o) return;
+    const root=o.annuleId||o.id;
+    const group=all.filter(x=>x.id===root||x.annuleId===root);
+    const msg=(group.length>1 ? 'Mettre à la corbeille cette ligne et sa ligne d\'annulation ('+group.length+' lignes) ?' : 'Mettre à la corbeille la ligne de '+o.client+' ('+eur(o.montant)+') ?')
+      +'\n\nElle disparaîtra du livre, du total, du CSV et du PDF. Tu pourras la restaurer depuis la corbeille.';
+    if(!confirm(msg)) return;
+    const gid='g'+Date.now(), now=new Date().toISOString().slice(0,10), ids=new Set(group.map(x=>x.id));
+    saveBoth(all.filter(x=>!ids.has(x.id)), loadTrash().concat(group.map(x=>Object.assign({},x,{gid:gid,supprimeLe:now}))));
+    render();
   });
   document.querySelectorAll('[data-undo]').forEach(b=>b.onclick=()=>{
     const all=loadEntries(), o=all.find(x=>x.id===b.dataset.undo); if(!o) return;
