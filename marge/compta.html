@@ -228,7 +228,7 @@ body.locked > .wrap{display:none;}
       <div class="field"><label>N° de facture</label><input type="text" id="fRef"></div>
       <div class="field"><label>Nature de la prestation</label><input type="text" id="fNature"></div>
       <button class="add-btn" id="addBtn">Ajouter au livre</button>
-      <button class="btn2" id="cancelEdit" style="display:none;">Annuler la correction</button>
+      <button class="btn2" id="cancelEdit" style="display:none;">Annuler la modification</button>
     </div>
   </div>
 
@@ -243,7 +243,7 @@ body.locked > .wrap{display:none;}
   <div class="panel" id="trashPanel" style="display:none;">
     <details><summary id="trashSum">Corbeille</summary><div id="trash" style="margin-top:8px;"></div></details>
   </div>
-  <p class="note">Les lignes ne se modifient pas : en cas d'erreur, le bouton ↩ ajoute une ligne d'annulation (montant négatif), puis tu ressaisis la bonne recette. Le bouton ✏️ fait les deux d'un coup : il annule la ligne et ajoute la version corrigée. La nature de la prestation se saisit une fois directement dans le tableau (✓), puis elle est verrouillée. Le bouton 🗑 met une ligne à la corbeille (elle disparaît du livre, du CSV et du PDF, mais reste restaurable).</p>
+  <p class="note">Le bouton ✏️ modifie directement la ligne (le livre est remplacé par la version corrigée, sans trace). Le bouton ↩ ajoute plutôt une ligne d'annulation (montant négatif). Le bouton 🗑 met une ligne à la corbeille (elle disparaît du livre, du CSV et du PDF, mais reste restaurable) ; depuis la corbeille, tu peux la supprimer définitivement. La nature de la prestation se saisit directement dans le tableau (✓) tant qu'elle est vide ; ensuite, passe par ✏️ pour la changer.</p>
 </div>
 
 <script src="sync.js"></script>
@@ -340,7 +340,7 @@ function resetForm(){
   ['fClient','fMontant','fRef','fNature'].forEach(i=>$(i).value=''); $('fDate').value='';
   $('addBtn').textContent='Ajouter au livre'; $('formTitle').textContent='Nouvelle recette'; $('cancelEdit').style.display='none';
 }
-$('cancelEdit').onclick = ()=>{ resetForm(); $('pdfStatus').textContent='Correction annulée.'; };
+$('cancelEdit').onclick = ()=>{ resetForm(); $('pdfStatus').textContent='Modification annulée.'; };
 $('addBtn').onclick = ()=>{
   const e = { id:'r'+Date.now(), date:$('fDate').value, client:$('fClient').value.trim(),
               montant:r2(num($('fMontant').value)), mode:$('fMode').value, ref:$('fRef').value.trim(), nature:$('fNature').value.trim() };
@@ -348,14 +348,12 @@ $('addBtn').onclick = ()=>{
   const list=loadEntries();
   if(editingId){
     const o=list.find(x=>x.id===editingId);
-    if(!o){ resetForm(); $('pdfStatus').textContent='Ligne introuvable, correction annulée.'; return; }
+    if(!o){ resetForm(); $('pdfStatus').textContent='Ligne introuvable, modification annulée.'; return; }
     const same = o.date===e.date && o.client===e.client && r2(o.montant)===e.montant && o.mode===e.mode && (o.ref||'')===e.ref && (o.nature||'')===e.nature;
-    if(same){ $('pdfStatus').textContent='Aucune modification : rien à corriger.'; return; }
-    if(!confirm('Ajouter une ligne d\'annulation de '+eur(o.montant)+' ('+o.client+') puis la ligne corrigée de '+eur(e.montant)+' ?')) return;
-    const t=Date.now();
-    list.push({id:'r'+t, date:new Date().toISOString().slice(0,10), client:o.client, montant:-o.montant, nature:o.nature||'', mode:o.mode, ref:(o.ref?o.ref+' ':'')+'(annulation)', annuleId:o.id});
-    e.id='r'+(t+1); list.push(e); saveEntries(list);
-    resetForm(); $('pdfStatus').textContent='Correction enregistrée : ligne annulée et ligne corrigée ajoutée.'; render(); return;
+    if(same){ $('pdfStatus').textContent='Aucune modification.'; return; }
+    e.id=o.id; if(o.annuleId) e.annuleId=o.annuleId;
+    list[list.indexOf(o)]=e; saveEntries(list);
+    resetForm(); $('pdfStatus').textContent='Ligne modifiée.'; render(); return;
   }
   list.push(e); saveEntries(list);
   resetForm();
@@ -380,8 +378,17 @@ function renderTrash(){
   $('trash').innerHTML=order.map(g=>{
     const it=groups[g], m=it.find(x=>!x.annuleId)||it[0];
     return '<div class="trash-row"><span>'+fr(m.date)+' — '+esc(m.client)+' — '+eur(m.montant)+(it.length>1?' (+ '+(it.length-1)+' ligne d\'annulation)':'')+' — supprimé le '+fr(m.supprimeLe)+'</span>'
-      +'<button class="btn2" data-restore="'+g+'">Restaurer</button></div>';
-  }).join('');
+      +'<span style="white-space:nowrap;"><button class="btn2" data-restore="'+g+'">Restaurer</button> <button class="btn2" data-purge="'+g+'" title="Supprimer définitivement">❌</button></span></div>';
+  }).join('')+'<div style="margin-top:10px;"><button class="btn2" id="emptyTrash">Vider la corbeille</button></div>';
+  document.querySelectorAll('[data-purge]').forEach(b=>b.onclick=()=>{
+    const gid=b.dataset.purge, all=loadTrash();
+    if(!confirm('Supprimer définitivement cette ligne ? Cette action est irréversible.')) return;
+    saveBoth(loadEntries(), all.filter(x=>x.gid!==gid)); render();
+  });
+  $('emptyTrash').onclick=()=>{
+    if(!confirm('Vider toute la corbeille ('+order.length+') ? Cette action est irréversible.')) return;
+    saveBoth(loadEntries(), []); render();
+  };
   document.querySelectorAll('[data-restore]').forEach(b=>b.onclick=()=>{
     const gid=b.dataset.restore, all=loadTrash();
     const back=all.filter(x=>x.gid===gid).map(x=>{ const c=Object.assign({},x); delete c.gid; delete c.supprimeLe; return c; });
@@ -396,7 +403,7 @@ function render(){
   let cum=0;
   const annules=new Set(loadEntries().filter(e=>e.annuleId).map(e=>e.annuleId));
   const rows=list.map(x=>{ cum=r2(cum+x.montant);
-    return '<tr'+((annules.has(x.id)||x.annuleId)?' class="annule" title="Ligne annulée"':'')+'><td>'+(x.montant>0&&!annules.has(x.id)?'<button class="undo" data-edit="'+x.id+'" title="Corriger cette ligne (annule la ligne et ajoute la version corrigée)">✏️</button>':'')+'</td><td>'+fr(x.date)+'</td><td>'+esc(x.client)+'</td><td class="nat">'+(x.nature?esc(x.nature):'<input type="text" class="natin" data-natin="'+x.id+'" placeholder="Nature de la prestation…"> <button class="undo" data-natsave="'+x.id+'" title="Enregistrer (ensuite verrouillé, modifiable seulement via ✏️)">✓</button>')+'</td><td>'+esc(x.mode)+'</td><td>'+esc(x.ref)+'</td>'
+    return '<tr'+((annules.has(x.id)||x.annuleId)?' class="annule" title="Ligne annulée"':'')+'><td>'+'<button class="undo" data-edit="'+x.id+'" title="Modifier cette ligne">✏️</button>'+'</td><td>'+fr(x.date)+'</td><td>'+esc(x.client)+'</td><td class="nat">'+(x.nature?esc(x.nature):'<input type="text" class="natin" data-natin="'+x.id+'" placeholder="Nature de la prestation…"> <button class="undo" data-natsave="'+x.id+'" title="Enregistrer (ensuite verrouillé, modifiable seulement via ✏️)">✓</button>')+'</td><td>'+esc(x.mode)+'</td><td>'+esc(x.ref)+'</td>'
       +'<td class="r'+(x.montant<0?' neg':'')+'">'+eur(x.montant)+'</td><td class="r">'+eur(cum)+'</td>'
       +'<td>'+(x.montant>0?'<button class="undo" data-undo="'+x.id+'" title="Annuler cette ligne (ajoute une ligne négative)">↩</button>':'')+'<button class="undo" data-del="'+x.id+'" title="Mettre à la corbeille">🗑</button></td></tr>'; }).join('');
   $('livre').innerHTML='<table class="lv"><thead><tr><th></th><th>Date</th><th>Client</th><th>Prestation</th><th>Mode</th><th>Facture</th><th class="r">Montant</th><th class="r">Cumul</th><th></th></tr></thead><tbody>'+rows+'</tbody><tfoot><tr><td colspan="6">Total</td><td class="r">'+eur(cum)+'</td><td></td><td></td></tr></tfoot></table>';
@@ -413,8 +420,8 @@ function render(){
     editingId=o.id;
     $('fDate').value=o.date; $('fClient').value=o.client; $('fMontant').value=r2(o.montant).toFixed(2);
     $('fMode').value=o.mode; $('fRef').value=o.ref||''; $('fNature').value=o.nature||'';
-    $('addBtn').textContent='Valider la correction'; $('formTitle').textContent='Corriger une recette'; $('cancelEdit').style.display='';
-    $('pdfStatus').textContent='Correction de la ligne du '+fr(o.date)+' ('+o.client+') : modifie les champs puis clique sur « Valider la correction ». L\'ancienne ligne sera annulée et remplacée par la nouvelle.';
+    $('addBtn').textContent='Valider la modification'; $('formTitle').textContent='Modifier une recette'; $('cancelEdit').style.display='';
+    $('pdfStatus').textContent='Modification de la ligne du '+fr(o.date)+' ('+o.client+') : change les champs puis clique sur « Valider la modification ».';
     $('formTitle').scrollIntoView({behavior:'smooth',block:'center'});
   });
   document.querySelectorAll('[data-del]').forEach(b=>b.onclick=()=>{
