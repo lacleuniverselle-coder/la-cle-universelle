@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Bilan — La Clé Universelle</title>
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#4C3468">
+<link rel="icon" href="icon-192.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Bilan">
+<meta name="robots" content="noindex, nofollow">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#EDEFEF; --surface:#FFFFFF; --line:#D8DBDB;
+  --ink:#1E2328; --ink-soft:#5B6266;
+  --violet:#4C3468; --violet-deep:#382450; --steel:#43616B;
+  --net-pos:#2E6B4C; --net-bg:#E7F1EA; --net-neg:#A23B3B; --net-neg-bg:#F4E6E6;
+  --warn:#8A5A10; --warn-bg:#FBF3E3; --danger:#A23B3B;
+  box-sizing:border-box;
+  padding-top:env(safe-area-inset-top,0px);
+  padding-bottom:env(safe-area-inset-bottom,0px);
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#181B1D; --surface:#22262A; --line:#33383C; --ink:#EDEFEF; --ink-soft:#9AA3A7;
+    --net-bg:#1E2E24; --net-neg-bg:#2E1E1E; --warn-bg:#33291A; --warn:#E0B060;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#181B1D; --surface:#22262A; --line:#33383C; --ink:#EDEFEF; --ink-soft:#9AA3A7;
+  --net-bg:#1E2E24; --net-neg-bg:#2E1E1E; --warn-bg:#33291A; --warn:#E0B060;
+}
+*{box-sizing:border-box;}
+html,body{height:100%;}
+html{scroll-padding-top:env(safe-area-inset-top,0px);}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:'Inter',system-ui,-apple-system,sans-serif;-webkit-font-smoothing:antialiased;}
+.wrap{max-width:640px;margin:0 auto;padding:20px 16px 40px;}
+h1{font-family:'Fraunces',serif;font-weight:600;font-size:1.5rem;margin:0 0 2px;letter-spacing:-0.01em;}
+.sub{color:var(--ink-soft);font-size:.85rem;margin:0 0 16px;}
+h2.section-title{font-family:'Fraunces',serif;font-weight:600;font-size:1rem;margin:20px 0 3px;}
+.section-sub{color:var(--ink-soft);font-size:.76rem;margin:0 0 8px;}
+.panel{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:12px;margin-bottom:12px;}
+.back-link{display:inline-block;font-size:.78rem;color:var(--ink-soft);text-decoration:none;border:1px solid var(--line);border-radius:7px;padding:6px 10px;background:var(--surface);font-weight:500;margin-right:6px;}
+.row{display:flex;gap:8px;flex-wrap:wrap;align-items:flex-end;}
+.field{display:flex;flex-direction:column;gap:4px;flex:1;min-width:130px;}
+.field label{font-size:.74rem;color:var(--ink-soft);}
+.field input{border:1px solid var(--line);border-radius:7px;padding:7px 8px;font-size:.9rem;background:var(--bg);color:var(--ink);font-family:inherit;font-variant-numeric:tabular-nums;width:100%;}
+.line{display:flex;justify-content:space-between;align-items:baseline;gap:10px;padding:6px 2px;border-bottom:1px dashed var(--line);font-size:.84rem;}
+.line:last-child{border-bottom:none;}
+.line .l{color:var(--ink-soft);} .line .l small{display:block;font-size:.7rem;opacity:.85;}
+.line .v{font-variant-numeric:tabular-nums;font-weight:600;white-space:nowrap;}
+.line.sub-t{padding-left:12px;} .line.sub-t .v{font-weight:500;}
+.line.tot{border-top:1px solid var(--line);border-bottom:none;padding-top:9px;margin-top:2px;} .line.tot .l{color:var(--ink);font-weight:600;}
+.neg{color:var(--net-neg);}
+.tool{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:6px 0;border-bottom:1px dashed var(--line);font-size:.82rem;}
+.tool:last-child{border-bottom:none;} .tool input{width:78px;border:1px solid var(--line);border-radius:7px;padding:5px 6px;background:var(--bg);color:var(--ink);font-family:inherit;text-align:right;}
+.check{border-radius:10px;padding:12px;font-size:.88rem;margin-bottom:12px;border:1px solid var(--line);}
+.check.ok{background:var(--net-bg);border-color:var(--net-pos);color:var(--net-pos);}
+.check.ko{background:var(--warn-bg);border-color:#C98A2B;color:var(--warn);}
+.check b{font-variant-numeric:tabular-nums;} .check small{display:block;margin-top:6px;line-height:1.4;opacity:.95;}
+.warn{background:var(--warn-bg);color:var(--warn);border-radius:8px;padding:8px 10px;font-size:.76rem;line-height:1.4;margin-bottom:8px;}
+.note{font-size:.72rem;color:var(--ink-soft);line-height:1.4;margin-top:4px;}
+footer{text-align:center;color:var(--ink-soft);font-size:.75rem;margin-top:22px;}
+/* Écran de connexion (identique aux autres pages) */
+#lockScreen{position:fixed;inset:0;background:var(--bg);z-index:9999;display:flex;align-items:center;justify-content:center;padding:20px;}
+#lockScreen.hidden{display:none;}
+.lock-box{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:28px 24px;max-width:300px;width:100%;text-align:center;}
+.lock-box h2{font-family:'Fraunces',serif;font-size:1.15rem;margin:0 0 4px;}
+.lock-box p{color:var(--ink-soft);font-size:.8rem;margin:0 0 18px;}
+#lockError{color:var(--danger);font-size:.78rem;margin-top:8px;min-height:1em;}
+#lockSubmit{width:100%;margin-top:14px;padding:10px;border:none;border-radius:9px;background:var(--violet);color:#fff;font-weight:600;font-size:.9rem;cursor:pointer;}
+body.locked > .wrap{display:none;}
+</style>
+</head>
+<body class="locked">
+<div id="lockScreen">
+  <div class="lock-box">
+    <h2>Bilan</h2>
+    <p>Connexion</p>
+    <input type="email" id="lockEmail" autocomplete="username" placeholder="E-mail">
+    <input type="password" id="lockPass" autocomplete="current-password" placeholder="Mot de passe">
+    <div id="lockError"></div>
+    <button id="lockSubmit">Se connecter</button>
+  </div>
+</div>
+
+<div class="wrap">
+  <h1>Bilan</h1>
+  <p class="sub">La Clé Universelle — situation estimée (actif / passif)</p>
+  <div style="margin:-8px 0 14px;">
+    <a href="calculette.html" class="back-link">← Calculette</a><a href="treso.html" class="back-link">🏦 Trésorerie</a><a href="compta.html" class="back-link">📒 Compta</a>
+  </div>
+
+  <div id="warns"></div>
+  <div id="checkBox"></div>
+
+  <h2 class="section-title" style="margin-top:0;">Actif — ce que vous possédez</h2>
+  <div class="panel" id="actif"></div>
+
+  <h2 class="section-title">Passif — d'où ça vient, ce que vous devez</h2>
+  <div class="panel" id="passif"></div>
+
+  <h2 class="section-title">Résultat estimé</h2>
+  <p class="section-sub">Depuis le début d'activité, jusqu'au mois choisi.</p>
+  <div class="panel" id="resultat"></div>
+  <p class="note">Ce résultat est un résultat de gestion (recettes − achats − cotisations − frais fixes − amortissements). Ce n'est pas le bénéfice imposable : en micro-entreprise, l'impôt se calcule sur le chiffre d'affaires encaissé, après abattement forfaitaire (indiqué ci-dessus à titre indicatif).</p>
+
+  <h2 class="section-title">Paramètres</h2>
+  <div class="panel">
+    <div class="row">
+      <div class="field"><label>Bilan arrêté au mois de</label><input type="month" id="pAsOf"></div>
+      <div class="field"><label>Début d'activité</label><input type="date" id="pDebut"></div>
+    </div>
+  </div>
+
+  <h2 class="section-title">Saisies manuelles</h2>
+  <p class="section-sub">Ce que les autres pages ne connaissent pas. Enregistré dans votre compte (tiroir « bilan » uniquement).</p>
+  <div class="panel">
+    <div class="row" style="margin-bottom:8px;">
+      <div class="field"><label>Solde bancaire + caisse (€)</label><input type="number" step="0.01" inputmode="decimal" id="mBanque"></div>
+      <div class="field"><label>Valeur du stock (€)</label><input type="number" step="0.01" inputmode="decimal" id="mStock"></div>
+    </div>
+    <div class="row" style="margin-bottom:8px;">
+      <div class="field"><label>Cotisations déjà versées à l'URSSAF (€)</label><input type="number" step="0.01" inputmode="decimal" id="mVersees"></div>
+      <div class="field"><label>Prélèvements personnels cumulés (€)</label><input type="number" step="0.01" inputmode="decimal" id="mPrelev"></div>
+    </div>
+    <div class="row">
+      <div class="field"><label>Emprunts restant dus (€)</label><input type="number" step="0.01" inputmode="decimal" id="mEmprunt"></div>
+      <div class="field"><label>Autres dettes (fournisseurs…) (€)</label><input type="number" step="0.01" inputmode="decimal" id="mDettes"></div>
+    </div>
+  </div>
+
+  <h2 class="section-title">Durée d'usure par outil</h2>
+  <p class="section-sub">En mois (60 par défaut). L'outil perd de la valeur chaque mois, dès le mois d'achat.</p>
+  <div class="panel" id="durees"></div>
+
+  <footer>Données partagées avec la calculette, la trésorerie et la compta. Cette page ne modifie que son propre tiroir.</footer>
+</div>
+
+<script src="sync.js"></script>
+<script>
+const KEY = 'devisCalcSettings';
+/* Copie des taux de calculette.html (RATES). À tenir alignée avec la calculette. */
+const RATES = { acre:{mat:0.062, serv:0.1075}, plein:{mat:0.123+0.001, serv:0.212+0.003} };
+const ABATT_VENTE = 0.71, ABATT_SERV = 0.50;      // abattements forfaitaires micro-BIC
+const DUREE_DEFAUT = 60;                           // mois
+const ZERO_MONTHS = ['2025-05','2025-06','2025-07']; // déclarations à zéro
+const $ = id => document.getElementById(id);
+
+function raw(){ try{ return JSON.parse(localStorage.getItem(KEY)||'{}'); }catch(e){ return {}; } }
+function bil(){ return raw().bilan || {}; }
+function saveBilan(patch){            // relit le JSON juste avant d'écrire, ne touche qu'au tiroir « bilan »
+  const s = raw(); s.bilan = Object.assign({}, s.bilan||{}, patch);
+  localStorage.setItem(KEY, JSON.stringify(s));
+}
+const n = v => { const x = parseFloat(String(v).replace(',','.')); return isNaN(x) ? 0 : x; };
+const r2 = x => Math.round(x*100)/100;
+function eur(x){ return (x<0?'−':'') + Math.abs(r2(x)).toLocaleString('fr-FR',{minimumFractionDigits:2,maximumFractionDigits:2}) + ' €'; }
+function esc(s){ return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+const idx = ym => { const [y,m] = ym.split('-'); return (+y)*12 + (+m) - 1; };
+
+function compute(){
+  const s = raw(), b = s.bilan || {};
+  const asOf = $('pAsOf').value || new Date().toISOString().slice(0,7);
+  const debut = $('pDebut').value || b.debut || '2025-05-18';
+  const out = { asOf, warns:[] };
+
+  /* Devis (lecture seule) */
+  let ca=0, caMat=0, caServ=0, achats=0, cotis=0, creances=0, noDetail=0, zeroPaid=0;
+  const hist = s.devisHistory || {};
+  Object.keys(hist).filter(k=>k<=asOf).forEach(k=>{
+    (hist[k]||[]).forEach(d=>{
+      const vente = n(d.vente), paye = d.paye !== false, bd = d.breakdown;
+      const detail = bd && bd.venteMat !== undefined && bd.venteServ !== undefined;
+      ca += vente;
+      if(!paye) creances += vente;
+      if(paye && ZERO_MONTHS.includes(k)) zeroPaid++;
+      if(detail){
+        achats += n(bd.achatMat); caMat += n(bd.venteMat); caServ += n(bd.venteServ);
+        if(paye){ const r = RATES[d.regime] || RATES.acre; cotis += n(bd.venteMat)*r.mat + n(bd.venteServ)*r.serv; }
+      } else {
+        noDetail++;
+        if(paye) cotis += vente - n(d.net);   // même estimation que la calculette
+      }
+    });
+  });
+  /* Rattrapages manuels de la trésorerie (lecture seule) */
+  (s.manualCat||[]).filter(m=>!m.dateISO || m.dateISO<=asOf).forEach(m=>{
+    ca += n(m.vente); caMat += n(m.vente);
+    achats += m.achat !== undefined ? n(m.achat) : n(m.montant);
+  });
+
+  /* Outillage et vélo, amortissement linéaire */
+  const durees = b.durees || {};
+  let immoBrut=0, amort=0;
+  (s.outillage||[]).filter(t=>!t.dateISO || t.dateISO<=asOf).forEach(t=>{
+    const m = n(t.montant), d = Math.max(1, n(durees[t.id]) || DUREE_DEFAUT);
+    const ecoule = t.dateISO ? Math.max(0, idx(asOf)-idx(t.dateISO)) + 1 : d;
+    immoBrut += m; amort += m * Math.min(1, ecoule/d);
+  });
+
+  /* Apport et aides (lecture seule) */
+  let apport=0, aidesRecues=0, aidesAttendues=0;
+  (s.apportsAides||[]).forEach(a=>{
+    const m = n(a.montant);
+    if(a.type==='apport'){ if(!a.dateISO || a.dateISO<=asOf) apport += m; }
+    else if(a.statut==='recue'){ if(!a.dateISO || a.dateISO<=asOf) aidesRecues += m; }
+    else aidesAttendues += m;
+  });
+
+  /* Frais fixes estimés (comme la calculette : ÷12 pour les montants annuels) */
+  const mensuel = (Array.isArray(s.fraisFixes)?s.fraisFixes:[]).reduce((t,f)=> t + n(f.amount)/(f.per==='an'?12:1), 0) + Math.max(0,n(s.cfeAn))/12;
+  const dd = new Date(debut+'T00:00:00'); let mois = 0;
+  if(!isNaN(dd) && idx(asOf) >= idx(debut.slice(0,7))){
+    const jm = new Date(dd.getFullYear(), dd.getMonth()+1, 0).getDate();
+    mois = (idx(asOf) - idx(debut.slice(0,7))) + (jm - dd.getDate() + 1)/jm;
+  }
+  const fixes = mensuel * mois;
+
+  const banque=n(b.banque), stock=n(b.stock), versees=n(b.versees), prelev=n(b.prelev), emprunt=n(b.emprunt), dettes=n(b.dettes);
+  const immoNet = immoBrut - amort;
+  const resultat = ca - achats - cotis - fixes - amort;
+  const dettesCotis = cotis - versees;
+  const actif = banque + stock + creances + aidesAttendues + immoNet;
+  const capitaux = apport + aidesRecues + aidesAttendues + resultat - prelev;
+  const passif = capitaux + emprunt + dettes + dettesCotis;
+  const baseImp = caMat*(1-ABATT_VENTE) + caServ*(1-ABATT_SERV);
+
+  if(noDetail) out.warns.push(noDetail+' ancien(s) devis sans détail matériel/service : leurs cotisations sont estimées (vente − net) et leurs achats ne sont pas comptés.');
+  if(zeroPaid) out.warns.push(zeroPaid+' devis payé(s) datés de mai à juillet 2025, mois déclarés à zéro : à vérifier.');
+  if((s.manualCat||[]).length) out.warns.push('Les rattrapages manuels de la trésorerie sont comptés en ventes et achats, mais sans cotisations.');
+  return Object.assign(out, {ca,caMat,caServ,achats,cotis,creances,immoBrut,amort,immoNet,apport,aidesRecues,aidesAttendues,
+    fixes,mois,banque,stock,versees,prelev,emprunt,dettes,resultat,dettesCotis,actif,capitaux,passif,baseImp});
+}
+
+const L = (l,v,cls,sub) => `<div class="line ${cls||''}"><span class="l">${l}${sub?`<small>${sub}</small>`:''}</span><span class="v ${v<0?'neg':''}">${eur(v)}</span></div>`;
+
+function render(){
+  const c = compute();
+  $('warns').innerHTML = c.warns.map(w=>`<div class="warn">⚠ ${esc(w)}</div>`).join('');
+
+  const ecart = r2(c.actif - c.passif);
+  $('checkBox').innerHTML = Math.abs(ecart) < 1
+    ? `<div class="check ok">✅ Actif = passif (${eur(c.actif)}). Les saisies sont cohérentes.</div>`
+    : `<div class="check ko">Actif <b>${eur(c.actif)}</b> · Passif <b>${eur(c.passif)}</b><br>Écart à expliquer : <b>${eur(ecart)}</b>
+       <small>${ecart>0
+         ? "L'actif dépasse le passif : argent en banque non expliqué (achats de stock non saisis, cotisations versées ou prélèvements non saisis, frais fixes estimés plus bas que la réalité)."
+         : "Le passif dépasse l'actif : probablement des prélèvements personnels non saisis, des dépenses payées non comptées, ou un solde bancaire à mettre à jour."}
+       Compléter les saisies manuelles ci-dessous fait baisser l'écart.</small></div>`;
+
+  $('actif').innerHTML =
+    L('Outillage et vélo (valeur brute)', c.immoBrut,'sub-t') +
+    L('− Usure cumulée', -c.amort,'sub-t') +
+    L('Outillage et vélo, valeur nette', c.immoNet) +
+    L('Stock', c.stock) +
+    L('Factures non encaissées', c.creances,'', 'devis non cochés « payé » dans la calculette') +
+    (c.aidesAttendues?L('Aides attendues', c.aidesAttendues):'') +
+    L('Banque + caisse', c.banque) +
+    L('Total actif', c.actif,'tot');
+
+  $('passif').innerHTML =
+    L('Apport personnel', c.apport,'sub-t') +
+    L('Aides reçues', c.aidesRecues,'sub-t') +
+    (c.aidesAttendues?L('Aides attendues', c.aidesAttendues,'sub-t'):'') +
+    L('Résultat estimé', c.resultat,'sub-t') +
+    L('− Prélèvements personnels', -c.prelev,'sub-t') +
+    L('Capitaux propres', c.capitaux) +
+    L('Emprunts', c.emprunt) +
+    L('Autres dettes', c.dettes) +
+    L('Cotisations à payer', c.dettesCotis,'', c.dettesCotis<0 ? 'négatif = vous avez versé plus que calculé' : 'dues d\'après les devis payés − déjà versées') +
+    L('Total passif', c.passif,'tot');
+
+  $('resultat').innerHTML =
+    L('Chiffre d\'affaires (devis payés ou non)', c.ca) +
+    L('− Achats de matériel', -c.achats) +
+    L('− Cotisations URSSAF (sur devis payés)', -c.cotis,'', 'taux de la calculette, ACRE ou plein selon chaque devis') +
+    L('− Frais fixes estimés', -c.fixes,'', c.mois.toLocaleString('fr-FR',{maximumFractionDigits:1})+' mois × frais fixes de la calculette') +
+    L('− Usure de l\'outillage', -c.amort) +
+    L('Résultat estimé', c.resultat,'tot') +
+    L('Pour mémoire : base imposable indicative', c.baseImp,'', 'CA matériel × 29 % + CA services × 50 %, avant tout autre revenu');
+}
+
+/* Saisies */
+const FIELDS = {mBanque:'banque', mStock:'stock', mVersees:'versees', mPrelev:'prelev', mEmprunt:'emprunt', mDettes:'dettes'};
+function init(){
+  const b = bil();
+  $('pAsOf').value = new Date().toISOString().slice(0,7);
+  $('pDebut').value = b.debut || '2025-05-18';
+  Object.keys(FIELDS).forEach(id=>{
+    $(id).value = b[FIELDS[id]] !== undefined ? b[FIELDS[id]] : '';
+    $(id).onchange = () => { saveBilan({[FIELDS[id]]: n($(id).value)}); render(); };
+  });
+  $('pDebut').onchange = () => { if($('pDebut').value){ saveBilan({debut:$('pDebut').value}); render(); } };
+  $('pAsOf').onchange = () => { renderDurees(); render(); };
+  renderDurees(); render();
+}
+function renderDurees(){
+  const outils = (raw().outillage||[]), d = bil().durees || {};
+  $('durees').innerHTML = outils.length ? outils.map(t=>
+    `<div class="tool"><span>${esc(t.nom)} <small style="color:var(--ink-soft)">${eur(n(t.montant))}</small></span>
+     <span><input type="number" min="1" step="1" inputmode="numeric" data-d="${esc(t.id)}" value="${n(d[t.id])||DUREE_DEFAUT}"> mois</span></div>`).join('')
+    : '<div class="note">Aucun outil enregistré dans la trésorerie.</div>';
+  document.querySelectorAll('[data-d]').forEach(i=> i.onchange = () => {
+    const cur = Object.assign({}, bil().durees||{}); cur[i.dataset.d] = Math.max(1, Math.round(n(i.value)) || DUREE_DEFAUT);
+    saveBilan({durees:cur}); render();
+  });
+}
+Sync.boot(function(){ init(); });
+</script>
+</body>
+</html>
