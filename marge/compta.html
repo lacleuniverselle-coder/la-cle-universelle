@@ -344,10 +344,10 @@ function render(){
   if(!list.length){ $('livre').innerHTML='<div class="empty-state">Aucune recette pour cette période.</div>'; return; }
   let cum=0;
   const rows=list.map(x=>{ cum=r2(cum+x.montant);
-    return '<tr><td>'+fr(x.date)+'</td><td>'+esc(x.client)+'</td><td class="nat">'+esc(x.nature||'')+'</td><td>'+esc(x.mode)+'</td><td>'+esc(x.ref)+'</td>'
+    return '<tr><td>'+(x.nature?'':'<button class="undo" data-nat="'+x.id+'" title="Ajouter la nature de la prestation (une seule fois)">✏️</button>')+'</td><td>'+fr(x.date)+'</td><td>'+esc(x.client)+'</td><td class="nat">'+esc(x.nature||'')+'</td><td>'+esc(x.mode)+'</td><td>'+esc(x.ref)+'</td>'
       +'<td class="r'+(x.montant<0?' neg':'')+'">'+eur(x.montant)+'</td><td class="r">'+eur(cum)+'</td>'
-      +'<td>'+(x.nature?'':'<button class="undo" data-nat="'+x.id+'" title="Ajouter la nature de la prestation (une seule fois)">✏️</button>')+(x.montant>0?'<button class="undo" data-undo="'+x.id+'" title="Annuler cette ligne (ajoute une ligne négative)">↩</button>':'')+'</td></tr>'; }).join('');
-  $('livre').innerHTML='<table class="lv"><thead><tr><th>Date</th><th>Client</th><th>Prestation</th><th>Mode</th><th>Facture</th><th class="r">Montant</th><th class="r">Cumul</th><th></th></tr></thead><tbody>'+rows+'</tbody><tfoot><tr><td colspan="5">Total</td><td class="r">'+eur(cum)+'</td><td></td><td></td></tr></tfoot></table>';
+      +'<td>'+(x.montant>0?'<button class="undo" data-undo="'+x.id+'" title="Annuler cette ligne (ajoute une ligne négative)">↩</button>':'')+'</td></tr>'; }).join('');
+  $('livre').innerHTML='<table class="lv"><thead><tr><th></th><th>Date</th><th>Client</th><th>Prestation</th><th>Mode</th><th>Facture</th><th class="r">Montant</th><th class="r">Cumul</th><th></th></tr></thead><tbody>'+rows+'</tbody><tfoot><tr><td colspan="6">Total</td><td class="r">'+eur(cum)+'</td><td></td><td></td></tr></tfoot></table>';
   document.querySelectorAll('[data-nat]').forEach(b=>b.onclick=()=>{
     const all=loadEntries(), o=all.find(x=>x.id===b.dataset.nat); if(!o || o.nature) return;
     const v=prompt('Nature de la prestation pour '+o.client+' ('+fr(o.date)+', '+eur(o.montant)+')\n\nAttention : une fois enregistrée, elle ne pourra plus être modifiée.','');
