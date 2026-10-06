@@ -1,4 +1,4 @@
-const CACHE_NAME = 'net-devis-v20';
+const CACHE_NAME = 'net-devis-v21';
 const APP_SHELL = [
   './calculette.html',
   './treso.html',

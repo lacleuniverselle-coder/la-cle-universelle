@@ -122,7 +122,7 @@ h2.section-title{
 .article-fields .field{min-width:0; gap:2px;}
 .article-net{
   margin-top:6px; padding-top:6px; border-top:1px dashed var(--line);
-  display:flex; justify-content:space-between; gap:8px; font-size:0.78rem; color:var(--ink-soft);
+  display:flex; flex-wrap:wrap; justify-content:space-between; gap:4px 8px; font-size:0.78rem; color:var(--ink-soft);
 }
 .article-net b{color:var(--ink); font-variant-numeric:tabular-nums;}
 .article-net span{white-space:nowrap;}
@@ -214,6 +214,18 @@ h2.section-title{
 .urssaf-box .ln b{color:var(--ink); font-variant-numeric:tabular-nums;}
 .urssaf-box .ln.tot{border-top:1px dashed var(--line); padding-top:4px; margin-top:2px;}
 .urssaf-box .ln.cot, .urssaf-box .ln.cot b{color:var(--danger); font-weight:700;}
+.mix-box{
+  margin:10px 0 12px; padding:10px 12px; border:2px solid var(--steel); border-radius:9px; background:var(--surface);
+  display:flex; flex-direction:column; gap:4px; font-size:0.8rem;
+}
+.mix-box .ttl{font-weight:700; color:var(--steel); margin-bottom:2px;}
+.mix-box .ln{display:flex; justify-content:space-between; align-items:center; gap:8px; color:var(--ink-soft);}
+.mix-box .ln b{color:var(--ink); font-variant-numeric:tabular-nums; text-align:right;}
+.mix-box .ln.tot{border-top:1px dashed var(--line); padding-top:4px; margin-top:2px;}
+.mix-box input{width:64px; text-align:right; font:inherit; border:1px solid var(--line); border-radius:7px; padding:3px 6px; background:var(--bg,#fff); color:var(--ink);}
+.mix-box details{margin-top:4px; color:var(--ink-soft); line-height:1.4;}
+.mix-box summary{cursor:pointer; font-weight:600; color:var(--steel);}
+.mix-box details div{margin-top:4px;}
 .act-box{margin-top:10px; font-size:0.78rem;}
 .act-box .ttl{font-weight:700; color:var(--ink-soft); margin-bottom:4px;}
 .act-box table{width:100%; border-collapse:collapse; font-variant-numeric:tabular-nums;}
@@ -512,6 +524,26 @@ body.locked > .wrap{display:none;}
     </div>
   </div>
 
+  <!-- Mix matériel / prestations -->
+  <div class="mix-box" id="mixBox">
+    <div class="ttl">Mix matériel / prestations</div>
+    <div class="ln"><span>Ce devis</span><b id="mixDevis">—</b></div>
+    <div class="ln"><span>Mois payé (sans ce devis)</span><b id="mixMois">—</b></div>
+    <div class="ln tot"><span>Mois + ce devis</span><b id="mixCumul">—</b></div>
+    <div class="ln"><span>Objectif : part des prestations (%)</span><input type="number" id="mixObjectif" inputmode="decimal" min="5" max="95" step="1" value="25"></div>
+    <div class="ln"><span>Écart à l'objectif</span><b id="mixGap">—</b></div>
+    <div class="ln"><span>Taux moyen de cotisations</span><b id="mixTaux">—</b></div>
+    <details>
+      <summary>Comment lire ces %</summary>
+      <div>
+        <b>Part des prestations</b> = prestations ÷ (prestations + matériel). Sur 100 € encaissés, 35 € de main-d'œuvre et 65 € de pièces donnent 35 % / 65 %.<br>
+        <b>Image du péage :</b> chaque euro encaissé passe par un péage. Sur la voie « prestations » il coûte 10,9 % (ACRE), sur la voie « matériel » 6,5 %. Plus la part du matériel monte, plus votre taux moyen baisse.<br>
+        <b>À 25 % de prestations :</b> pour 1 € de prestations, il faut 3 € de matériel vendu.<br>
+        <b>Attention :</b> le matériel coûte à l'achat (TTC, sans TVA récupérable). Regardez donc le <i>Net</i>, pas seulement le taux. Et un prix de vente doit rester défendable face au prix public : voyant « Vs public » sur chaque ligne.
+      </div>
+    </details>
+  </div>
+
   <!-- Client + Enregistrement -->
   <div class="client-save-row">
     <div class="field">
@@ -596,9 +628,10 @@ body.locked > .wrap{display:none;}
       <div class="field">
         <label>Régime de charges</label>
         <div class="toggle toggle-rates">
-          <button id="btnAcre" class="active"><span>ACRE</span><small>vente 6,2 % / serv. 10,75 %</small></button>
-          <button id="btnPlein"><span>Taux plein</span><small>vente 12,4 % / serv. 21,5 %</small></button>
+          <button id="btnAcre" class="active"><span>ACRE</span><small>vente 6,5 % / serv. 10,9 %</small></button>
+          <button id="btnPlein"><span>Taux plein</span><small>vente 12,6 % / serv. 21,5 %</small></button>
         </div>
+        <div style="font-size:0.72rem; color:var(--ink-soft); margin-top:4px;">Taux = cotisations + CFP 0,3 % (CFP non réduite par l'ACRE, comme sur le simulateur URSSAF). Cotisations ACRE : 6,2 % matériel / 10,6 % services. Plein : 12,3 % / 21,2 %.</div>
       </div>
       <div class="field">
         <label>CFE annuelle</label>
@@ -618,10 +651,24 @@ body.locked > .wrap{display:none;}
 <script>
 Sync.boot(function(){});
 
+// Taux 2026 = cotisations + CFP. La CFP (0,3 %) n'est pas réduite par l'ACRE (simulateur URSSAF : 5 € sur 1 658 €).
+// Pour changer la CFP du matériel (ex. 0,1 %), modifier uniquement CFP.mat.
+const CFP = { mat: 0.003, serv: 0.003 };
 const RATES = {
+  acre:  { mat: 0.062 + CFP.mat,  serv: 0.106 + CFP.serv },
+  plein: { mat: 0.123 + CFP.mat,  serv: 0.212 + CFP.serv }
+};
+// Anciens taux (devis enregistrés avant cette mise à jour, sans ratesVer) : conservés pour ne pas modifier le passé.
+const RATES_V1 = {
   acre:  { mat: 0.062,  serv: 0.1075 },
   plein: { mat: 0.123 + 0.001, serv: 0.212 + 0.003 }
 };
+function ratesOf(d, reg){
+  const src = (d && d.ratesVer === 2) ? RATES : RATES_V1;
+  return src[reg || (d && d.regime)] || src.acre;
+}
+const COEF_PUBLIC_MIN = 2.5; // le prix public n'est jamais inférieur à 2,5 × l'achat TTC
+let mixObjectif = 25;        // objectif : part des prestations (%)
 const BASE_CATEGORIES = [
   { id:'cremone',  label:'Crémone' },
   { id:'larder',   label:'Serrure encastrée (larder)' },
@@ -804,6 +851,7 @@ function loadSettings(){
     if(s.pCustomIdSeq) pCustomIdSeq = s.pCustomIdSeq;
     if(s.pAjouts) pAjouts = s.pAjouts;
     if(s.pAjoutsIdSeq) pAjoutsIdSeq = s.pAjoutsIdSeq;
+    if(s.mixObjectifPrest!==undefined && !isNaN(parseFloat(s.mixObjectifPrest))){ mixObjectif = parseFloat(s.mixObjectifPrest); const mo = document.getElementById('mixObjectif'); if(mo) mo.value = mixObjectif; }
     if(Array.isArray(s.fraisFixes)) fraisFixes = s.fraisFixes;
     if(s.fraisIdSeq) fraisIdSeq = s.fraisIdSeq;
   }catch(e){}
@@ -833,6 +881,7 @@ function saveSettings(){
       pCustomIdSeq,
       pAjouts,
       pAjoutsIdSeq,
+      mixObjectifPrest: mixObjectif,
       fraisFixes,
       fraisIdSeq
     })));
@@ -905,10 +954,12 @@ function renderMat(){
         <div class="field"><label>Vente TTC (unité)</label><input type="number" inputmode="decimal" step="0.01" id="mat-${a.id}-vente" data-mat="${a.id}" data-f="vente" value="${a.vente}" placeholder="0,00"></div>
         <div class="field qte-field"><label>Qté</label><input type="number" inputmode="decimal" step="1" min="0" id="mat-${a.id}-qte" data-mat="${a.id}" data-f="qte" value="${a.qte === undefined ? 1 : a.qte}" placeholder="1"></div>
       </div>
+      <div class="field" style="margin-top:6px;"><label>Prix public TTC (unité), facultatif</label><input type="number" inputmode="decimal" step="0.01" id="mat-${a.id}-pub" data-mat="${a.id}" data-f="prixPublic" value="${a.prixPublic || ''}" placeholder="vide = achat × 2,5"></div>
       <div class="field" style="margin-top:6px;"><label>Catégorie</label><select id="mat-${a.id}-cat" data-mat="${a.id}" data-f="categorie">${categorieOptions(a.categorie||'autre')}</select></div>
       <div class="article-net">
         <span>Net ligne <b id="net-${a.id}">0,00 €</b></span>
         <span>Coef <b id="coef-${a.id}">—</b></span>
+        <span title="Votre prix de vente ÷ prix public (ou ÷ achat × 2,5 si vous n'avez pas saisi de prix public)">Vs public <b id="pub-${a.id}">—</b></span>
       </div>
     `;
     cont.appendChild(div);
@@ -1015,6 +1066,46 @@ function netMoyenDevis(){
   return all.length ? all.reduce((t,d)=> t + (Number(d.net)||0), 0) / all.length : 0;
 }
 
+function fmtPct(x){ return x.toLocaleString('fr-FR',{minimumFractionDigits:1, maximumFractionDigits:1}) + ' %'; }
+function mixTxt(serv, mat){
+  const t = serv + mat;
+  return t > 0 ? 'Prest. ' + fmtPct(serv/t*100) + ' · Matériel ' + fmtPct(mat/t*100) : '—';
+}
+// Ventes encaissées du mois (factures payées), comme la boîte « À déclarer à l'URSSAF »
+function monthPaid(){
+  let mat = 0, serv = 0;
+  (devisHistory[currentMonth] || []).forEach(d=>{
+    if(d.paye !== false && d.breakdown && d.breakdown.venteMat !== undefined){
+      mat += Number(d.breakdown.venteMat)||0;
+      serv += Number(d.breakdown.venteServ)||0;
+    }
+  });
+  return { mat, serv };
+}
+function renderMix(){
+  if(!document.getElementById('mixBox')) return;
+  const obj = Math.min(95, Math.max(5, parseFloat(mixObjectif)||25));
+  let dm = 0, ds = 0;
+  articlesMat.forEach(a=>{ dm += (Number(a.vente)||0) * qteOf(a); });
+  articlesServ.forEach(a=>{ ds += Number(a.vente)||0; });
+  const m = monthPaid();
+  const tm = m.mat + dm, ts = m.serv + ds, tot = tm + ts;
+  const set = (id, t)=>{ const e = document.getElementById(id); if(e) e.textContent = t; };
+  set('mixDevis', mixTxt(ds, dm));
+  set('mixMois', mixTxt(m.serv, m.mat));
+  set('mixCumul', mixTxt(ts, tm));
+  if(tot <= 0){ set('mixGap', '—'); set('mixTaux', '—'); return; }
+  const p = ts/tot*100;
+  if(p > obj + 0.05){
+    const besoin = ts*(100-obj)/obj - tm;
+    set('mixGap', 'Il manque ' + fmt(besoin) + ' de matériel vendu');
+  } else {
+    set('mixGap', 'Objectif tenu (' + fmtPct(p) + ' ≤ ' + fmtPct(obj) + ')');
+  }
+  const r = RATES[regime];
+  set('mixTaux', fmtPct((tm*r.mat + ts*r.serv)/tot*100));
+}
+
 function compute(){
   const rates = RATES[regime];
   const dayCost = computeDayCost();
@@ -1038,6 +1129,25 @@ function compute(){
       coefEl.textContent = achatU > 0
         ? (venteU/achatU).toLocaleString('fr-FR', {minimumFractionDigits:2, maximumFractionDigits:2}) + '×'
         : '—';
+    }
+    const pubEl = document.getElementById('pub-'+a.id);
+    if(pubEl){
+      const pubU = Number(a.prixPublic)||0;
+      const ref = pubU > 0 ? pubU : achatU*COEF_PUBLIC_MIN;
+      if(venteU > 0 && ref > 0){
+        const rr = venteU/ref;
+        const txt = Math.round(rr*100) + ' %';
+        if(pubU > 0){
+          pubEl.textContent = txt + (rr > 1 ? ' ⚠ au-dessus' : rr >= 0.9 ? ' · proche' : '');
+          pubEl.style.color = rr > 1 ? 'var(--danger)' : '';
+        } else {
+          pubEl.textContent = txt + ' (est.)';
+          pubEl.style.color = '';
+        }
+      } else {
+        pubEl.textContent = '—';
+        pubEl.style.color = '';
+      }
     }
   });
 
@@ -1065,6 +1175,7 @@ function compute(){
     ? pct.toLocaleString('fr-FR',{minimumFractionDigits:1, maximumFractionDigits:1}) + ' % du total ventes'
     : '0,0 % du total ventes';
 
+  renderMix();
   computePrivate();
   updateCeilingNote();
   saveSettings();
@@ -1336,6 +1447,7 @@ function saveQuote(){
     date: new Date().toLocaleDateString('fr-FR'),
     dateISO: new Date().toISOString().slice(0,10),
     regime: regime,
+    ratesVer: 2,
     paye: true,
     activite: '',
     breakdown: { venteMat, achatMat, venteServ, dayCost, matLines },
@@ -1385,7 +1497,7 @@ function netCorr(d){
 }
 function cotisOf(d){
   if(!d.breakdown || d.breakdown.venteMat === undefined || d.breakdown.venteServ === undefined) return null;
-  const r = RATES[d.regime] || RATES.acre;
+  const r = ratesOf(d);
   return (Number(d.breakdown.venteMat)||0)*r.mat + (Number(d.breakdown.venteServ)||0)*r.serv;
 }
 const ACT_CYCLE = { '':'S', 'S':'V', 'V':'' };
@@ -1398,7 +1510,7 @@ function actPill(d){
 
 function recomputeDevisNet(d){
   const b = d.breakdown;
-  const r = RATES[d.regime];
+  const r = ratesOf(d);
   const netMat = (b.venteMat - b.achatMat) - (b.venteMat * r.mat);
   const netServ = b.venteServ - (b.venteServ * r.serv);
   d.net = netMat + netServ - b.dayCost;
@@ -1425,6 +1537,7 @@ function renderHistory(){
     if(totalsCont) totalsCont.innerHTML = '';
     if(badge) badge.textContent = '';
     syncRevenuMois(0);
+    renderMix();
     return;
   }
 
@@ -1449,7 +1562,7 @@ function renderHistory(){
 
     // Cotisations réelles = % sur vente matériel + % sur vente service (pas d'impact de l'achat matériel ni du coût fixe du jour).
     if(d.breakdown && d.breakdown.venteMat !== undefined && d.breakdown.venteServ !== undefined){
-      const r = RATES[d.regime] || RATES.acre;
+      const r = ratesOf(d);
       totalCotisations += (Number(d.breakdown.venteMat)||0)*r.mat + (Number(d.breakdown.venteServ)||0)*r.serv;
     } else {
       // Facture antérieure à la mise à jour : pas de détail mat/serv, on approxime avec vente-net.
@@ -1458,7 +1571,7 @@ function renderHistory(){
     }
 
     if(estPaye && d.breakdown && d.breakdown.venteMat !== undefined){
-      const rr = RATES[d.regime] || RATES.acre;
+      const rr = ratesOf(d);
       const vm = Number(d.breakdown.venteMat)||0, vs = Number(d.breakdown.venteServ)||0;
       declMat += vm; declServ += vs; declCot += vm*rr.mat + vs*rr.serv;
     }
@@ -1550,6 +1663,7 @@ function renderHistory(){
     <div class="ln"><span>Ventes de matériel</span><b>${fmt(declMat)}</b></div>
     <div class="ln"><span>Ventes de services</span><b>${fmt(declServ)}</b></div>
     <div class="ln tot"><span>Total à déclarer</span><b>${fmt(declMat + declServ)}</b></div>
+    <div class="ln"><span>Part prestations / matériel (objectif ${fmtPct(Math.min(95, Math.max(5, parseFloat(mixObjectif)||25)))})</span><b>${mixTxt(declServ, declMat)}</b></div>
     <div class="ln cot"><span>Cotisations URSSAF correspondantes</span><b>${fmt(declCot)}</b></div>
   </div>
   <div class="act-box">
@@ -1566,6 +1680,7 @@ function renderHistory(){
   if(totalsCont) totalsCont.innerHTML = totalsHtml;
   cont.innerHTML = html;
   attachHistoryHandlers();
+  renderMix();
 }
 
 function attachEditBreakdownHandlers(d){
@@ -1574,7 +1689,7 @@ function attachEditBreakdownHandlers(d){
     const achatMat = Number((document.getElementById('edit-achatMat-'+d.id)||{}).value)||0;
     const venteMat = Number((document.getElementById('edit-venteMat-'+d.id)||{}).value)||0;
     const venteServ = Number((document.getElementById('edit-venteServ-'+d.id)||{}).value)||0;
-    const r = RATES[d.regime] || RATES.acre;
+    const r = ratesOf(d);
     const netMat = (venteMat - achatMat) - (venteMat * r.mat);
     const netServ = venteServ - (venteServ * r.serv);
     const net = netMat + netServ;
@@ -1702,7 +1817,7 @@ function attachHistoryHandlers(){
       if(!client){ alert('Le nom du client ne peut pas être vide'); return; }
       const regimeToUse = d.regime || 'acre';
       const dayCost = (d.breakdown && d.breakdown.dayCost !== undefined) ? d.breakdown.dayCost : computeDayCost();
-      const r = RATES[regimeToUse];
+      const r = ratesOf(d, regimeToUse);
       const netMat = (venteMat - achatMat) - (venteMat * r.mat);
       const netServ = venteServ - (venteServ * r.serv);
       d.client = client;
@@ -1794,6 +1909,7 @@ document.getElementById('btnPlein').onclick = ()=>{
 
 document.getElementById('addFrais').onclick = ()=>{ fraisFixes.push({ id:'ff'+(fraisIdSeq++), label:'', amount:'', per:'mois' }); renderFraisFixes(); compute(); };
 document.getElementById('cfeAn').oninput = compute;
+document.getElementById('mixObjectif').oninput = (e)=>{ const v = parseFloat(e.target.value); if(!isNaN(v)) mixObjectif = v; compute(); };
 document.getElementById('addArticleMat').onclick = addArticleMat;
 document.getElementById('addArticleServ').onclick = addArticleServ;
 document.getElementById('saveQuoteBtn').onclick = saveQuote;
