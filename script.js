@@ -315,6 +315,13 @@ function setPrixMode(mode, page) {
     ferCells.forEach(function(c) { c.style.display = ''; });
     if (btnFer) btnFer.classList.add('actif');
   }
+
+  // Mode courant (fond du bloc « Prestations principales », légende) + accessibilité
+  var modeCourant = (mode === 'semaine' || mode === 'nuit') ? mode : 'ferie';
+  conteneur.setAttribute('data-mode', modeCourant);
+  [[btnSem, 'semaine'], [btnNuit, 'nuit'], [btnFer, 'ferie']].forEach(function(p) {
+    if (p[0]) p[0].setAttribute('aria-pressed', String(p[1] === modeCourant));
+  });
 }
 
 // =============================================

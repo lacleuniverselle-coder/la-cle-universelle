@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <meta name="description"
+    content="Perte ou vol de clés à Toulouse : consultez le plafond indicatif de prise en charge selon votre banque.">
+
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://lacleuniverselle.fr/simulateur.html">
+  <meta property="og:title" content="Simulateur perte ou vol de clés à Toulouse | La clé universElle">
+  <meta property="og:description"
+    content="Perte ou vol de clés : consultez le plafond indicatif de prise en charge selon votre banque.">
+  <meta property="og:image" content="https://lacleuniverselle.fr/og-image.jpg">
+  <meta property="og:locale" content="fr_FR">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:image" content="https://lacleuniverselle.fr/og-image.jpg">
+
+  <link rel="canonical" href="https://lacleuniverselle.fr/simulateur.html">
+  <meta name="theme-color" content="#482664">
+  <meta name="robots" content="index, follow">
+
+  <link rel="stylesheet" href="style.css" />
+  <link rel="icon" type="image/x-icon" href="favicon.ico">
+  <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
+  <link rel="manifest" href="site.webmanifest">
+  <script src="script.js" defer></script>
+  <title>Simulateur perte ou vol de clés à Toulouse | La clé universElle</title>
+  <style>
+    #page-simulateur .assurance-page h1 { margin-bottom: .9rem; }
+    #page-simulateur .assur-intro { margin-bottom: 1.5rem; }
+    #page-simulateur .sim-card { background: var(--blanc); border: 1px solid #e4dcee; border-radius: 12px; padding: 1.6rem; margin-bottom: 1.25rem; }
+    #page-simulateur .sim-card label { display: block; margin-bottom: .4rem; font-size: .8rem; font-weight: 600; letter-spacing: .06em; text-transform: uppercase; color: var(--lilas); }
+    #page-simulateur .sim-card select { width: 100%; padding: .75rem .9rem; font-family: "Inter", sans-serif; font-size: .95rem; color: var(--texte); background: var(--blanc); border: 1px solid #d5c8e3; border-radius: 8px; }
+    #page-simulateur .sim-card select:focus-visible { outline: 3px solid var(--lilas); outline-offset: 2px; }
+    #page-simulateur #resultat { margin-top: 1.5rem; padding-top: 1.5rem; border-top: 1px solid #e4dcee; }
+    #page-simulateur #resultat[hidden] { display: none; }
+    #page-simulateur #resultat h3 { margin: 0 0 .5rem; font-size: 1.05rem; color: var(--violet); }
+    #page-simulateur .sim-label { margin: 0 0 .25rem; font-size: .75rem; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; color: var(--lilas); }
+    #page-simulateur .sim-plafond { margin: 0 0 1.4rem; font-size: 2.1rem; font-weight: 700; line-height: 1.15; color: var(--violet); }
+    #page-simulateur .sim-plafond small { font-size: .85rem; font-weight: 400; color: var(--texte); opacity: .65; margin-left: .35rem; }
+    #page-simulateur .sim-rows { display: grid; grid-template-columns: 9rem 1fr; gap: .9rem 1.2rem; margin: 0 0 1.2rem; font-size: .95rem; }
+    #page-simulateur .sim-rows dt { font-size: .75rem; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; color: var(--lilas); padding-top: .2rem; }
+    #page-simulateur .sim-rows dd { margin: 0; }
+    #page-simulateur .sim-mentions { margin: 0; padding-top: 1rem; border-top: 1px solid #efe9f5; font-size: .82rem; line-height: 1.55; color: var(--texte); opacity: .7; }
+    #page-simulateur .sim-legal { margin-top: 2rem; font-size: .75rem; line-height: 1.55; color: var(--texte); opacity: .65; }
+    #page-simulateur .sim-legal p { margin: 0 0 .5rem; }
+    #page-simulateur .sim-demarches h2 { text-align: center; margin: 0 0 1.1rem; font-size: 1.2rem; color: var(--violet); }
+    #page-simulateur .assur-etapes { list-style: none; counter-reset: etape; margin: 0; padding: 0; }
+    #page-simulateur .assur-etapes li { counter-increment: etape; display: flex; gap: .9rem; align-items: flex-start; margin-bottom: .8rem; font-size: .96rem; }
+    #page-simulateur .assur-etapes li::before { content: counter(etape); flex: 0 0 1.7rem; height: 1.7rem; border-radius: 50%; background: var(--violet); color: #fff; font-size: .85rem; font-weight: 600; display: flex; align-items: center; justify-content: center; }
+    @media (max-width: 640px) {
+      #page-simulateur .assurance-page { padding: 3rem 1.25rem; }
+      #page-simulateur .sim-card { padding: 1.2rem; }
+      #page-simulateur .sim-rows { grid-template-columns: 1fr; gap: .2rem; }
+      #page-simulateur .sim-rows dd { margin-bottom: .8rem; }
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- NAV -->
+  <nav id="main-nav">
+    <a class="nav-logo" href="index.html" aria-label="Retour à l'accueil">
+      <div class="nav-logo-svg-wrap"><img src="LOGO_seulpunchy.svg" alt="Logo La clé universElle"
+          style="height:48px;width:auto;display:block;"></div>
+    </a>
+    <ul class="nav-links">
+      <li class="nav-dropdown">
+        <a href="index.html#services" class="nav-dropdown-toggle">Services <span class="nav-dropdown-arrow">▾</span></a>
+        <ul class="nav-dropdown-menu">
+          <li><a href="prestations-serrurerie.html">Serrurerie</a></li>
+          <li><a href="mecanique-velo.html">Mécanique vélo</a></li>
+        </ul>
+      </li>
+      <li><a href="zones.html">Zones</a></li>
+      <li><a href="index.html#concept">Le concept</a></li>
+      <li><a href="pourquoi.html">Pourquoi moi</a></li>
+      <li><a href="index.html#apropos">À propos</a></li>
+      <li><a href="index.html#contact">Contact</a></li>
+      <li><a href="faq.html">FAQ</a></li>
+    </ul>
+    <div style="display:flex; align-items:center; gap:0.6rem;">
+       <a class="nav-whatsapp" href="https://wa.me/33743990437" target="_blank" rel="noopener" aria-label="Contacter sur WhatsApp">
+    <svg viewBox="0 0 24 24" width="20" height="20" fill="white"><path d="M17.6 6.32A8.86 8.86 0 0 0 12.04 4C7.5 4 3.78 7.72 3.78 12.26c0 1.5.4 2.92 1.1 4.16L4 20l3.7-.97a8.84 8.84 0 0 0 4.32 1.1h.01c4.54 0 8.26-3.72 8.26-8.26 0-2.21-.86-4.29-2.69-5.55zM12.04 18.6a6.9 6.9 0 0 1-3.5-.96l-.25-.15-2.6.68.7-2.53-.17-.26a6.86 6.86 0 0 1-1.05-3.65c0-3.8 3.09-6.9 6.9-6.9 1.84 0 3.57.72 4.87 2.02a6.84 6.84 0 0 1 2.02 4.87c0 3.8-3.1 6.9-6.92 6.9zm3.78-5.17c-.21-.1-1.22-.6-1.41-.67-.19-.07-.32-.1-.46.1-.13.2-.52.66-.64.8-.12.13-.24.15-.45.05-1.22-.61-2.02-1.08-2.83-2.46-.21-.37.21-.34.61-1.14.07-.13.03-.25-.03-.36-.06-.1-.46-1.1-.63-1.51-.16-.4-.33-.34-.46-.35-.12-.01-.26-.01-.4-.01-.13 0-.35.05-.54.25-.19.2-.71.7-.71 1.71 0 1 .73 1.97.83 2.1.1.13 1.4 2.14 3.4 2.92 1.7.67 2.05.54 2.42.51.37-.03 1.22-.5 1.39-.99.18-.49.18-.91.13-1-.05-.1-.18-.15-.39-.25z"/></svg>
+  </a>
+      <button class="hamburger" id="hamburger-btn" aria-label="Menu" onclick="toggleMenu()">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+    <div class="mobile-menu" id="mobile-menu">
+      <div class="mobile-accordion">
+        <div class="mobile-accordion-row">
+          <a href="index.html#services" class="mobile-accordion-link" onclick="closeMenu()">Services</a>
+          <button class="mobile-accordion-toggle" aria-label="Sous-menu Services" onclick="toggleMobileAccordion(this)" type="button">
+            <span class="accordion-arrow">▾</span>
+          </button>
+        </div>
+        <div class="mobile-accordion-panel">
+          <a href="prestations-serrurerie.html">Serrurerie</a>
+          <a href="mecanique-velo.html">Mécanique vélo</a>
+        </div>
+      </div>
+      <a href="zones.html" onclick="closeMenu()">Zones</a>
+      <a href="index.html#concept" onclick="closeMenu()">Le concept</a>
+      <a href="pourquoi.html" onclick="closeMenu()">Pourquoi moi</a>
+      <a href="index.html#apropos" onclick="closeMenu()">À propos</a>
+      <a href="index.html#contact" onclick="closeMenu()">Contact</a>
+       <a href="actus.html" onclick="closeMenu()">Actus</a>
+      <a href="faq.html" onclick="closeMenu()">FAQ</a>
+    </div>
+  </nav>
+
+<div id="page-simulateur">
+  <div class="page-content assurance-page">
+    <a class="back-btn" href="serrurerie.html">← Retour aux tarifs</a>
+    <span class="section-label">Simulateur*</span>
+    <h1>Perte ou vol de clés : quelle prise en charge&nbsp;?</h1>
+    <p class="assur-intro">Choisissez votre banque pour connaître le plafond indicatif.</p>
+
+    <form class="sim-card" id="simu" autocomplete="off" onsubmit="return false">
+      <label for="banque">Votre banque</label>
+      <select id="banque"><option value="">Sélectionner votre banque</option></select>
+      <div id="resultat" role="status" aria-live="polite" hidden></div>
+    </form>
+
+    <section class="sim-card sim-demarches">
+      <h2>Démarches à prévoir</h2>
+      <ol class="assur-etapes">
+        <li>Se renseigner auprès de la banque ou de l'assureur avant l'intervention, si possible.</li>
+        <li>Demander un devis, puis une facture détaillée à votre nom.</li>
+        <li>En cas de vol : déposer plainte et conserver le récépissé.</li>
+        <li>Transmettre le dossier complet dans le délai du contrat.</li>
+      </ol>
+    </section>
+
+    <div class="contact-btns-row">
+      <a class="contact-tel-btn" href="sms:+33743990437" aria-label="Envoyer un SMS">SMS</a>
+      <a class="contact-tel-btn" href="tel:0743990437">07 43 99 04 37</a>
+    </div>
+
+    <div class="sim-legal">
+      <p><strong>Information indicative, sans garantie de prise en charge.</strong> Seul l'organisme concerné peut confirmer l'éligibilité et le montant. La clé universElle n'est pas responsable d'un refus, d'une limitation ou d'une modification de prise en charge.</p>
+      <p>* Simulateur issu du site SecurClés.</p>
+    </div>
+  </div>
+
+  <footer>
+    <p>© 2026 <span>La clé universElle</span></p>
+    <div class="footer-links">
+      <a href="mentions-legales.html">Mentions légales</a>
+      <a href="cgv.html">CGV</a>
+      <a href="index.html">← Retour au site</a>
+    </div>
+  </footer>
+</div>
+
+<script>
+(function () {
+  /*
+   REMPLIR LA BASE
+   BANQUES : liste des banques proposées.
+   INFO : une entrée par banque vérifiée { plafond, garantie, declaration }.
+   Sans entrée dans INFO, le simulateur n'affirme rien et renvoie vers la banque.
+  */
+  var BANQUES = ["AXA Banque", "B For Bank", "Banque de Savoie", "Banque Populaire", "BNP Paribas", "Boursorama", "BRED", "Caisse d'Épargne", "Carrefour Banque", "CIC", "Crédit Agricole", "Crédit Coopératif", "Crédit Mutuel", "Fortuneo", "Hello Bank", "HSBC", "La Banque Postale", "LCL", "Lydia", "Ma French Bank", "Monabanq", "N26", "Nickel", "Orange Bank", "Revolut", "Société Générale"];
+  var INFO = {
+    "AXA Banque": { plafond:"320 € (données 2026)", garantie:"Perte des clés, badges, bips, clés de voiture ; vol (pièce spécifique demandée).", declaration:"Declaration de sinistre aupres de SPB via axabanquesinistre.spb.eu ou par téléphone au 0 970 809 237" },
+    "B For Bank": { plafond:"800 € (données 2025)", garantie:"Perte des clés, badges, bips, clés de voiture ; vol (pièces spécifiques demandées).", declaration:"Telechargement direct des elements de déclaration sur l'espace Client BforBank, ou Service Client au 09 74 75 75 00" },
+    "Banque de Savoie": { plafond:"460 € (données 2026)", garantie:"Perte des clés, badges, bips, clés de voiture ; vol (pièce spécifique demandée).", declaration:"Declaration de sinistre en contactant GRAS SAVOYE / VOL ASSUR au 02 38 70 37 08" },
+    "Banque Populaire": { plafond:"300 € (à confirmer)", garantie:"Perte des clés, badges, bips, clés de voiture ; vol (pièces spécifiques demandées).", declaration:"Declaration en contactant BPCE PREVOYANCE au +33 (0)1 84 94 00 93" },
+    "BNP Paribas": { plafond:"850 € (données 2026)", garantie:"", declaration:"Faites votre déclaration en contactant l'organisme indiqué dans les informations fournies pour BNP PARIBAS." },
+    "Boursorama": { plafond:"300 € (données 2026)", garantie:"Perte des clés, badges, bips, clés de voiture ; vol (pièce spécifique demandée).", declaration:"Declaration en contactant Gras Savoye / BOURSORAMA PROTECTION au 02.46.90.00.16" },
+    "Caisse d'Épargne": { plafond:"500 € (données 2026)", garantie:"Vol avec agression uniquement d'après les pièces demandées ; la simple perte ne semble pas couverte. À confirmer auprès de la banque.", declaration:"Declaration auprès du Centre de Gestion des Sinistres de l'Assureur au 09 69 36 45 45" },
+    "Carrefour Banque": { plafond:"500 € (données 2026)", garantie:"", declaration:"Faites votre déclaration sur internet via cb.servicecarte.com ou par téléphone au : 09 69 36 27 43." }
+  };
+
+  var $ = function (id) { return document.getElementById(id); };
+  var b = $("banque"), r = $("resultat");
+  if (!b) return;
+  var esc = function (s) { return String(s).replace(/[&<>"]/g, function (m) { return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[m]; }); };
+
+  var plafond = function (p) {
+    var m = /^(.*?)\s*(\(.*\))$/.exec(p);
+    return m ? esc(m[1]) + "<small>" + esc(m[2]) + "</small>" : esc(p);
+  };
+
+  BANQUES.slice().sort(function (x, y) { return x.localeCompare(y, "fr"); })
+    .forEach(function (n) { b.add(new Option(n, n)); });
+
+  b.addEventListener("change", function () {
+    if (!b.value) { r.hidden = true; return; }
+    var i = INFO[b.value];
+    r.innerHTML = i
+      ? "<p class=\"sim-label\">Plafond de remboursement</p>"
+        + "<p class=\"sim-plafond\">" + plafond(i.plafond) + "</p>"
+        + "<dl class=\"sim-rows\">"
+        + "<dt>Situations couvertes</dt><dd>" + (i.garantie ? esc(i.garantie) : "Non détaillées ici, renseignez-vous auprès de votre banque.") + "</dd>"
+        + "<dt>Déclaration</dt><dd>" + esc(i.declaration) + "</dd>"
+        + "</dl>"
+        + "<p class=\"sim-mentions\">Plafond indicatif pour une carte d'entrée de gamme. Une autre carte peut offrir une couverture souvent plus élevée ou équivalente. À confirmer auprès de votre banque ou de l'assureur avant toute démarche.</p>"
+      : "<h3>Aucune information confirmée pour cette banque</h3>"
+        + "<p>Nous ne disposons pas de données vérifiées pour " + esc(b.value)
+        + ". Cela ne signifie pas qu'aucune garantie n'existe : consultez la notice d'information de votre carte ou contactez le service client de votre banque.</p>";
+    r.hidden = false;
+  });
+})();
+</script>
+
+</body>
+</html>

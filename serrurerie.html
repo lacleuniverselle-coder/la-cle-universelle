@@ -89,7 +89,7 @@
     </div>
   </nav>
 
-<div id="page-tarifs-serrurerie">
+<div id="page-tarifs-serrurerie" data-mode="semaine">
   <div class="tarifs-page-wrapper">
 
     <!-- Colonne contenu -->
@@ -99,21 +99,72 @@
       <div class="tarif-titre-row">
         <h1>Serrurerie</h1>
       </div>
-      <div class="tarif-legende-bandeau">
-        <span><span class="legende-icone">☀️</span> du Lundi au Vendredi 8h30–19h</span>
-        <span class="legende-sep">·</span>
-        <span><span class="legende-icone">☽</span> L-V soir 19h–minuit</span>
-        <span class="legende-sep">·</span>
-        <span><span class="legende-icone">🌴</span> Weekend S-D 8h30-minuit</span>
-      </div>
+      <section class="tarif-principal" aria-labelledby="titre-principal">
+        <h2 id="titre-principal">Prestations principales</h2>
+        <div class="mode-bar">
+          <div class="mode-switch" role="group" aria-label="Tarif selon le moment de l'intervention">
+            <button class="mode-btn actif" id="toggle-sem-serr" type="button" aria-pressed="true"><span aria-hidden="true">&#9728;&#xFE0E;</span> Jour</button>
+            <button class="mode-btn" id="toggle-nuit-serr" type="button" aria-pressed="false"><span aria-hidden="true">&#9790;&#xFE0E;</span> Soir</button>
+            <button class="mode-btn" id="toggle-fer-serr" type="button" aria-pressed="false"><span aria-hidden="true">&#10022;&#xFE0E;</span> Week-end</button>
+          </div>
+          <p class="mode-legende" aria-live="polite">
+            <span data-m="semaine">Du lundi au vendredi, 8h30–19h</span>
+            <span data-m="nuit">Du lundi au vendredi, 19h–minuit</span>
+            <span data-m="ferie">Samedi et dimanche, 8h30–minuit</span>
+          </p>
+        </div>
+        <table class="tp-table">
+          <tbody>
+            <tr>
+              <td class="tp-nom">Porte claquée simple</td>
+              <td class="prix-semaine"><span class="tp-ap">à partir de</span><span class="tp-montant">90&nbsp;€</span></td>
+              <td class="prix-nuit" style="display:none"><span class="tp-ap">à partir de</span><span class="tp-montant">120&nbsp;€</span></td>
+              <td class="prix-ferie" style="display:none"><span class="tp-ap">à partir de</span><span class="tp-montant">140&nbsp;€</span></td>
+            </tr>
+            <tr>
+              <td class="tp-nom">Porte fermée à clé</td>
+              <td class="prix-semaine"><span class="tp-ap">à partir de</span><span class="tp-montant">120&nbsp;€</span></td>
+              <td class="prix-nuit" style="display:none"><span class="tp-ap">à partir de</span><span class="tp-montant">140&nbsp;€</span></td>
+              <td class="prix-ferie" style="display:none"><span class="tp-ap">à partir de</span><span class="tp-montant">175&nbsp;€</span></td>
+            </tr>
+            <tr>
+              <td class="tp-nom">Clé cassée</td>
+              <td class="prix-semaine"><span class="tp-ap">à partir de</span><span class="tp-montant">120&nbsp;€</span></td>
+              <td class="prix-nuit" style="display:none"><span class="tp-ap">à partir de</span><span class="tp-montant">150&nbsp;€</span></td>
+              <td class="prix-ferie" style="display:none"><span class="tp-ap">à partir de</span><span class="tp-montant">190&nbsp;€</span></td>
+            </tr>
+            <tr>
+              <td class="tp-nom">Serrure bloquée</td>
+              <td class="prix-semaine"><span class="tp-ap">à partir de</span><span class="tp-montant">150&nbsp;€</span></td>
+              <!-- À COMPLÉTER : tarifs soir et week-end de « Serrure bloquée » -->
+              <td class="prix-nuit" style="display:none"><span class="tp-devis">Sur devis</span></td>
+              <td class="prix-ferie" style="display:none"><span class="tp-devis">Sur devis</span></td>
+            </tr>
+            <tr>
+              <td class="tp-nom">Changement de cylindre</td>
+              <td class="prix-semaine"><span class="tp-ap">à partir de</span><span class="tp-montant">80&nbsp;€</span></td>
+              <td class="prix-nuit" style="display:none"><span class="tp-ap">à partir de</span><span class="tp-montant">90&nbsp;€</span></td>
+              <td class="prix-ferie" style="display:none"><span class="tp-ap">à partir de</span><span class="tp-montant">110&nbsp;€</span></td>
+            </tr>
+            <tr>
+              <td class="tp-nom">Boîte aux lettres</td>
+              <td class="prix-semaine"><span class="tp-ap">à partir de</span><span class="tp-montant">90&nbsp;€</span></td>
+              <td class="prix-nuit" style="display:none"><span class="tp-ap">à partir de</span><span class="tp-montant">110&nbsp;€</span></td>
+              <td class="prix-ferie" style="display:none"><span class="tp-ap">à partir de</span><span class="tp-montant">120&nbsp;€</span></td>
+            </tr>
+            <tr>
+              <td class="tp-nom">Déverrouillage batterie VAE</td>
+              <td class="prix-semaine"><span class="tp-ap">à partir de</span><span class="tp-montant">90&nbsp;€</span></td>
+              <td class="prix-nuit" style="display:none"><span class="tp-ap">à partir de</span><span class="tp-montant">120&nbsp;€</span></td>
+              <td class="prix-ferie" style="display:none"><span class="tp-ap">à partir de</span><span class="tp-montant">130&nbsp;€</span></td>
+            </tr>
+          </tbody>
+        </table>
+      </section>
 
-      <!-- Déplacement : prestation fixe, toujours visible, hors accordéon -->
-          <table class="tarifs tarif-fixe">
-        <tbody>
-                  </tbody>
-      </table>
-      
-  <div class="tarif-fixe-label" id="clé">Reproduction de clés et badges</div>
+      <p class="devis-centre">Devis gratuit sur demande pour toute autre intervention.</p>
+
+      <div class="tarif-fixe-label" id="clé">Reproduction de clés et badges</div>
       <table class="tarifs tarif-fixe" >
         <tbody>
           <tr>
@@ -126,66 +177,10 @@
       </table>
 
 
-      <button class="tarif-accordeon ouvert" id="ouvertures">Ouvertures <span class="accord-arrow">▸</span></button>
-      <div class="tarif-panel ouvert">
-        <table class="tarifs">
-          <tbody>
-            <tr>
-              <td>Porte claquée (ouverture fine) </td>
-              <td class="prix-semaine">dès 90,00 €</td>
-              <td class="prix-nuit" style="display:none">120,00 €</td>
-              <td class="prix-ferie" style="display:none">140,00 €</td>
-            </tr>
-            <tr>
-              <td>Porte verrouillée standard</td>
-              <td class="prix-semaine">120,00 €</td>
-              <td class="prix-nuit" style="display:none">140,00 €</td>
-              <td class="prix-ferie" style="display:none">175,00 €</td>
-            </tr>
-            <tr>
-              <td>Porte verrouillée haute sécurité</td>
-              <td class="prix-semaine">130,00 €</td>
-              <td class="prix-nuit" style="display:none">160,00 €</td>
-              <td class="prix-ferie" style="display:none">190,00 €</td>
-            </tr>
-            <tr>
-              <td>Clé cassée dans la serrure</td>
-              <td class="prix-semaine">120,00 €</td>
-              <td class="prix-nuit" style="display:none">150,00 €</td>
-              <td class="prix-ferie" style="display:none">190,00 €</td>
-            </tr>
-            <tr>
-              <td>Boîte aux lettres</td>
-              <td class="prix-semaine">90,00 €</td>
-              <td class="prix-nuit" style="display:none">110,00 €</td>
-              <td class="prix-ferie" style="display:none">120,00 €</td>
-            </tr>
-             <tr>
-              <td>Déverrouillage batterie VAE</td>
-              <td class="prix-semaine">90,00 €</td>
-              <td class="prix-nuit" style="display:none">120,00 €</td>
-              <td class="prix-ferie" style="display:none">130,00 €</td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-
       <button class="tarif-accordeon" id="installations">Installations <span class="accord-arrow">▸</span></button>
       <div class="tarif-panel">
         <table class="tarifs">
           <tbody>
-            <tr>
-              <td>Cylindre classique</td>
-              <td class="prix-semaine">dès 80,00 €</td>
-              <td class="prix-nuit" style="display:none">90,00 €</td>
-              <td class="prix-ferie" style="display:none">110,00 €</td>
-            </tr>
-            <tr>
-              <td>Cylindre monobloc</td>
-              <td class="prix-semaine">135,00 €</td>
-              <td class="prix-nuit" style="display:none">145,00 €</td>
-              <td class="prix-ferie" style="display:none">155,00 €</td>
-            </tr>
                
              <tr>
               <td>Verrou simple</td>
@@ -264,10 +259,20 @@
            
             
           </tbody>
-           <p style="font-size:1rem;">Prestation spécifique non listée ? Devis personnalisé sur simple demande.</p>
         </table>
       </div>
      
+      <section class="fournisseurs-bloc" aria-label="Fournisseurs et marques">
+        <p><strong>Principaux fournisseurs&nbsp;:</strong> Au Forum du Bâtiment, Cogeferm, Foussier, Legallais, Angles.</p>
+        <p><strong>Marques &amp; partenaires&nbsp;:</strong> Héraclès, Bricard, Fichet, Picard, Abus, Pollux, Iseo, Cisa, Muel, Wink Haus, Mul-T-Lock, Dorma Kaba, Ferco, JPM, Laperche.</p>
+      </section>
+
+      <section class="assurance-bloc" aria-labelledby="titre-assurance">
+        <h2 id="titre-assurance">Perte ou vol de clés : quelle prise en charge&nbsp;?</h2>
+        <p>Selon la banque, une garantie peut prévoir la prise en charge de frais engagés après une perte ou un vol de clés. Consultez le plafond indicatif en quelques clics grâce au simulateur.</p>
+        <a class="assurance-lien" href="simulateur.html">Consulter le simulateur</a>
+      </section>
+
       <p class="tarifs-note">* Pièces non incluses — tarifs comprenant la main d'œuvre uniquement.<br>
               ** Si remplacement (dépose de l'ancien) : +20 €.<br>
               - La main d'œuvre à l'heure est de 70€ et s'applique aux interventions spécifiques hors grille tarifaire, sur devis préalable<br>
@@ -276,15 +281,6 @@
       <p class="tarifs-note-legal">Interventions sur quincaillerie et bâti existant uniquement (cylindres, serrures, verrous, ferme-portes) — hors pose de bâtis/dormants neufs, non couverts par une garantie décennale (voir <a href="cgv.html">CGV, art. 17</a>).</p>
       <p class="tarifs-note-legal">Tarifs solidaires et étudiants sous conditions de ressources — <a href="pourquoi.html">plus d'infos ici</a>.</p>
     </div><!-- /.tarifs-main-col -->
-
-    <!-- Colonne sticky droite -->
-    <div class="tarifs-side-col">
-      <div class="prix-toggle-widget">
-        <button class="prix-toggle actif" id="toggle-sem-serr" aria-label="Tarifs semaine jour">☀️</button>
-        <button class="prix-toggle" id="toggle-nuit-serr" aria-label="Tarifs semaine nuit">☽</button>
-        <button class="prix-toggle" id="toggle-fer-serr" aria-label="Tarifs weekend">🌴</button>
-      </div>
-    </div><!-- /.tarifs-side-col -->
 
   </div><!-- /.tarifs-page-wrapper -->
   <div class="contact-btns-row" style="margin: 0em">

@@ -3009,3 +3009,156 @@ table.tarifs td.prix-semaine {
   .dispo-bandeau img { height: 84px; }
   .dispo-bandeau p { font-size: 2.7rem; }
 }
+
+/* =============================================
+   PAGE SERRURERIE : bloc « Prestations principales »
+   (titre, sélecteur Jour / Soir / Week-end, tarifs)
+   ============================================= */
+#page-tarifs-serrurerie .tarifs-page-wrapper { grid-template-columns: 1fr; }
+
+#page-tarifs-serrurerie .tarif-principal {
+  border: 1px solid var(--violet); border-radius: 8px;
+  padding: 1.1rem 1.5rem .5rem; margin-bottom: 1rem;
+  background: var(--blanc); color: var(--texte);
+  transition: background-color .25s ease, color .25s ease;
+}
+#page-tarifs-serrurerie[data-mode="nuit"] .tarif-principal { background: var(--violet); color: #fff; }
+#page-tarifs-serrurerie[data-mode="ferie"] .tarif-principal { background: var(--lilas-clair); color: var(--texte); }
+
+#page-tarifs-serrurerie .tarif-principal h2 {
+  font-size: clamp(1.25rem, 3.2vw, 1.5rem); font-weight: 700; line-height: 1.2;
+  text-align: center; margin: 0 0 .8rem; color: inherit;
+}
+
+#page-tarifs-serrurerie .mode-bar {
+  display: flex; flex-direction: column; align-items: center;
+  margin: 0 0 .6rem;
+}
+#page-tarifs-serrurerie .mode-switch {
+  display: inline-flex;
+  border: 1px solid var(--violet); border-radius: 6px; overflow: hidden;
+}
+#page-tarifs-serrurerie .mode-btn {
+  font-family: "Inter", sans-serif; font-size: .8rem; font-weight: 500; line-height: 1.2;
+  min-height: 32px; padding: .3rem .9rem;
+  background: var(--blanc); color: var(--violet);
+  border: 0; border-radius: 0; cursor: pointer;
+}
+#page-tarifs-serrurerie .mode-btn + .mode-btn { border-left: 1px solid var(--violet); }
+#page-tarifs-serrurerie .mode-btn:hover { background: var(--lilas-pale); }
+#page-tarifs-serrurerie .mode-btn.actif { background: var(--violet); color: #fff; }
+#page-tarifs-serrurerie .mode-btn:focus-visible { outline: 3px solid var(--lilas); outline-offset: -3px; }
+
+/* sélecteur sur fond violet (soir) et violet clair (week-end) */
+#page-tarifs-serrurerie[data-mode="nuit"] .mode-switch { border-color: #fff; }
+#page-tarifs-serrurerie[data-mode="nuit"] .mode-btn { background: transparent; color: #fff; }
+#page-tarifs-serrurerie[data-mode="nuit"] .mode-btn + .mode-btn { border-left-color: #fff; }
+#page-tarifs-serrurerie[data-mode="nuit"] .mode-btn:hover { background: rgba(255, 255, 255, .15); }
+#page-tarifs-serrurerie[data-mode="nuit"] .mode-btn.actif { background: #fff; color: var(--violet); }
+#page-tarifs-serrurerie[data-mode="ferie"] .mode-btn { background: transparent; }
+#page-tarifs-serrurerie[data-mode="ferie"] .mode-btn:hover { background: rgba(255, 255, 255, .35); }
+#page-tarifs-serrurerie[data-mode="ferie"] .mode-btn.actif { background: var(--violet); color: #fff; }
+
+#page-tarifs-serrurerie .mode-legende { margin: .4rem 0 0; font-size: .75rem; text-align: center; color: inherit; opacity: .8; }
+#page-tarifs-serrurerie .mode-legende span { display: none; }
+#page-tarifs-serrurerie[data-mode="semaine"] .mode-legende [data-m="semaine"],
+#page-tarifs-serrurerie[data-mode="nuit"] .mode-legende [data-m="nuit"],
+#page-tarifs-serrurerie[data-mode="ferie"] .mode-legende [data-m="ferie"] { display: inline; }
+
+#page-tarifs-serrurerie .tp-table { width: 100%; border-collapse: collapse; }
+#page-tarifs-serrurerie .tp-table td {
+  padding: .4rem 0; vertical-align: middle;
+  border-top: 1px solid rgba(72, 38, 100, .2);
+  border-top-color: color-mix(in srgb, currentColor 22%, transparent);
+}
+#page-tarifs-serrurerie .tp-nom { font-weight: 500; font-size: .92rem; }
+#page-tarifs-serrurerie .tp-table td.prix-semaine,
+#page-tarifs-serrurerie .tp-table td.prix-nuit,
+#page-tarifs-serrurerie .tp-table td.prix-ferie {
+  text-align: right; white-space: nowrap; color: inherit; width: 150px;
+  font-variant-numeric: tabular-nums;
+}
+#page-tarifs-serrurerie .tp-ap { display: inline; font-size: .68rem; font-weight: 400; margin-right: .4rem; opacity: .75; }
+#page-tarifs-serrurerie .tp-montant { font-size: 1.05rem; font-weight: 700; }
+#page-tarifs-serrurerie .tp-devis { font-size: .9rem; font-weight: 500; }
+
+/* phrase devis, hors du bloc, centrée */
+#page-tarifs-serrurerie .devis-centre { text-align: center; font-size: 1rem; margin: 0 0 2rem; }
+
+/* bloc assurance */
+#page-tarifs-serrurerie .assurance-bloc {
+  max-width: 640px; margin: 2.5rem auto 2rem; padding: 1.5rem;
+  text-align: center; background: var(--lilas-pale);
+  border: 1px solid var(--lilas-clair); border-radius: 8px;
+}
+#page-tarifs-serrurerie .assurance-bloc h2 { font-size: 1.25rem; line-height: 1.3; margin: 0 0 .75rem; color: var(--violet); }
+#page-tarifs-serrurerie .assurance-bloc p { font-size: .98rem; margin: 0 auto 1.1rem; }
+#page-tarifs-serrurerie .assurance-lien {
+  display: inline-block; padding: .7rem 1.4rem; border-radius: 6px;
+  background: var(--violet); color: #fff; font-weight: 600; text-decoration: none;
+}
+#page-tarifs-serrurerie .assurance-lien:hover { background: var(--gris); }
+#page-tarifs-serrurerie .assurance-lien:focus-visible { outline: 3px solid var(--lilas); outline-offset: 2px; }
+
+@media (max-width: 640px) {
+  #page-tarifs-serrurerie .tarifs-page-wrapper { padding: 0 1.25rem; }
+  #page-tarifs-serrurerie .tarif-principal { padding: 1rem .9rem .4rem; }
+  #page-tarifs-serrurerie .mode-switch { display: flex; width: 100%; }
+  #page-tarifs-serrurerie .mode-btn { flex: 1; padding: .3rem .3rem; }
+  #page-tarifs-serrurerie .tp-table td.prix-semaine,
+  #page-tarifs-serrurerie .tp-table td.prix-nuit,
+  #page-tarifs-serrurerie .tp-table td.prix-ferie { width: 130px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  #page-tarifs-serrurerie .tarif-principal { transition: none; }
+}
+
+/* fournisseurs et marques (au-dessus du bloc assurance) */
+#page-tarifs-serrurerie .fournisseurs-bloc {
+  max-width: 640px; margin: 2rem auto 0; padding: 1rem 0 0;
+  text-align: center; color: var(--gris);
+  border-top: 1px solid var(--lilas-clair);
+}
+#page-tarifs-serrurerie .fournisseurs-bloc p { font-size: .9rem; line-height: 1.6; margin: 0 0 .6rem; color: inherit; }
+#page-tarifs-serrurerie .fournisseurs-bloc strong { font-weight: 600; }
+
+/* =============================================
+   PAGE ASSURANCE (assurance.html)
+   ============================================= */
+#page-assurance .assurance-page h1 { margin-bottom: .9rem; }
+#page-assurance .assur-intro { margin-bottom: 1.5rem; }
+#page-assurance .assur-form {
+  padding: 1.5rem; margin-bottom: 1.25rem;
+  background: var(--lilas-pale); border: 1px solid var(--violet); border-radius: 8px;
+}
+#page-assurance .assur-form label { display: block; margin-bottom: .35rem; font-size: .9rem; font-weight: 600; color: var(--violet); }
+#page-assurance .assur-form select {
+  width: 100%; margin-bottom: 1.1rem; padding: .7rem .8rem;
+  font-family: "Inter", sans-serif; font-size: .95rem; color: var(--texte);
+  background: var(--blanc); border: 1px solid var(--lilas-clair); border-radius: 6px;
+}
+#page-assurance .assur-form select:disabled { opacity: .55; }
+#page-assurance .assur-btn {
+  width: 100%; padding: .8rem 1rem; border: 0; border-radius: 6px; cursor: pointer;
+  font-family: "Inter", sans-serif; font-size: .95rem; font-weight: 600;
+  background: var(--violet); color: #fff;
+}
+#page-assurance .assur-btn:hover:not(:disabled) { background: var(--gris); }
+#page-assurance .assur-btn:disabled { opacity: .5; cursor: not-allowed; }
+#page-assurance .assur-form select:focus-visible,
+#page-assurance .assur-btn:focus-visible { outline: 3px solid var(--lilas); outline-offset: 2px; }
+#page-assurance #resultat { margin-top: 1.25rem; padding: 1rem 1.1rem; background: var(--blanc); border-left: 5px solid var(--violet); border-radius: 4px; }
+#page-assurance #resultat[hidden] { display: none; }
+#page-assurance #resultat h3 { margin: 0 0 .5rem; font-size: 1.05rem; color: var(--violet); }
+#page-assurance #resultat p { font-size: .95rem; margin: 0 0 .5rem; }
+#page-assurance .assur-small { font-size: .85rem; opacity: .75; }
+#page-assurance .assur-note { padding-left: 1rem; border-left: 3px solid var(--lilas-clair); font-size: .88rem; opacity: .85; margin-bottom: 2rem; }
+#page-assurance .assur-etapes { padding-left: 1.3rem; margin-bottom: 1.5rem; }
+#page-assurance .assur-etapes li { margin-bottom: .6rem; }
+@media (max-width: 640px) {
+  #page-assurance .assurance-page { padding: 3rem 1.25rem; }
+  #page-assurance .assur-form { padding: 1.1rem; }
+}
+
+/* lien assurance dans l'introduction de la page prestations */
+.prestations-main-col .section-desc a { color: var(--violet); font-weight: 600; text-decoration: underline; }
