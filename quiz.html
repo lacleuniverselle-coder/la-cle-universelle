@@ -79,6 +79,7 @@ button.opt:hover:not(:disabled){border-color:var(--violet)}
 .m.term{font-weight:700;color:var(--violet)}
 .m.sel{border-color:var(--violet);background:var(--pale)}
 .m.done{background:var(--ok-bg);border-color:var(--ok);cursor:default}
+.m.done.sel{outline:3px solid var(--lilas);outline-offset:1px}
 .m.bad{background:var(--ko-bg);border-color:var(--ko)}
 .cylwrap{max-width:36rem;margin:10px auto}
 .cyl{display:block;width:100%}
@@ -457,17 +458,23 @@ function runAnim(P){
 function match(){show(function(){
   app.append(head("Relier pièce et définition"));
   app.append(el("p","lede","Touchez une pièce, puis la définition qui lui correspond."));
-  var sel=null,errs=0,done=0;
+  var sel=null,errs=0,done=0,JK=PAIRS.findIndex(function(p){return p[0]==="Judas"}),jb;
   var defs=PAIRS.map(function(p,k){return{k:k,d:p[1]}}).sort(function(){return Math.random()-.5});
   var g=el("div","match"),L=el("div","col"),R=el("div","col"),msg=el("p","note");msg.setAttribute("aria-live","polite");
   var lb=PAIRS.map(function(p,k){var b=el("button","m term",p[0]);b.type="button";b.addEventListener("click",function(){
-    if(b.classList.contains("done"))return;if(sel)sel.classList.remove("sel");sel=b;b.classList.add("sel");b.dataset.k=k});b.dataset.k=k;L.append(b);return b});
+    if(b.classList.contains("done")&&!(k===JK&&!jb.classList.contains("done")))return;if(sel)sel.classList.remove("sel");sel=b;b.classList.add("sel");b.dataset.k=k});b.dataset.k=k;L.append(b);return b});
   defs.forEach(function(x){var b=el("button","m",x.d);b.type="button";b.addEventListener("click",function(){
     if(b.classList.contains("done")||!sel)return;
     if(+sel.dataset.k===x.k){sel.classList.remove("sel");sel.classList.add("done");b.classList.add("done");sel=null;done++;
       if(done===PAIRS.length)msg.textContent=errs?"Terminé avec "+errs+" erreur"+(errs>1?"s":"")+".":"Sans faute : toutes les pièces sont reliées."}
     else{errs++;b.classList.add("bad");setTimeout(function(){b.classList.remove("bad")},600)}
   });R.append(b)});
+  jb=el("button","m","Chanson de Lady Gaga");jb.type="button";
+  jb.addEventListener("click",function(){
+    if(jb.classList.contains("done")||!sel)return;
+    if(+sel.dataset.k===JK){sel.classList.remove("sel");jb.classList.add("done");sel=null}
+    else{errs++;jb.classList.add("bad");setTimeout(function(){jb.classList.remove("bad")},600)}
+  });R.append(jb);
   g.append(L,R);app.append(g,msg,btn("Recommencer","",match));
 })}
 
