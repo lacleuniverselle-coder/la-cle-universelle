@@ -8,6 +8,7 @@
 <style>
 :root{--violet:#482664;--lilas:#8d68b1;--pale:#f3eef8;--line:#e4dcee;--txt:#2b2b2b;--muted:#6b6b6b;--ok:#1c6b45;--ok-bg:#dcf0e5;--ko:#a3322b;--ko-bg:#f8e1de;--tb:0px}
 *{box-sizing:border-box}
+:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
 body{margin:0;font-family:"Inter",system-ui,-apple-system,"Segoe UI",sans-serif;color:var(--txt);background:#fff;line-height:1.55;padding:0 16px 64px}
 .wrap{max-width:44rem;margin:0 auto}
 h1{font-size:clamp(1.8rem,6vw,2.5rem);font-weight:800;color:var(--violet);margin:28px 0 6px;line-height:1.1}
@@ -27,8 +28,19 @@ button:focus-visible,input:focus-visible{outline:3px solid var(--lilas);outline-
 .card{text-align:left;background:var(--pale);border:1.5px solid var(--line);border-radius:16px;padding:1.1rem 1.2rem;display:flex;flex-direction:column;gap:.25rem}
 .card:hover:not(:disabled){border-color:var(--violet)}
 .card:disabled{opacity:.55;cursor:default}
+/*ACCUEIL*/
 .tag{font-size:.78rem;font-weight:600;color:var(--lilas)}
 .card b{font-size:1.02rem;color:var(--violet)}
+.card{background:#fff;border:1px solid var(--line);border-left:4px solid var(--c);border-radius:8px;transition:border-color .15s,box-shadow .15s}
+.card .tag{color:var(--muted);text-transform:uppercase;letter-spacing:.06em;font-size:.72rem;font-weight:700}
+.card .tag::before{content:"";display:inline-block;width:.55rem;height:.55rem;border-radius:50%;background:var(--c);margin-right:.45rem}
+.card b{font-size:1.15rem;font-weight:800}
+.card:hover:not(:disabled){border-color:var(--violet);border-left-color:var(--c);box-shadow:inset 4px 0 0 var(--c)}
+.k0{--c:#b23a30}.k1{--c:#c4620f}.k2{--c:#a8820a}.k3{--c:#1f6b4a}.k4{--c:#1b6b8a}.k5{--c:#5b3a8c}.k6{--c:#9c2f55}
+@media (prefers-reduced-motion:reduce){.card{transition:none}}
+.band2{height:8px;border-radius:4px;margin:0 0 14px;border:1px solid var(--line);background:linear-gradient(180deg,#5bcefa 0 20%,#f5a9b8 20% 40%,#fff 40% 60%,#f5a9b8 60% 80%,#5bcefa 80% 100%)}
+.band{height:6px;border-radius:3px;margin:0 0 4px;background:linear-gradient(90deg,#f28b82,#f6a35c,#e8c23a,#6cc08b,#6aa9e0,#a98bd0,#ef8fbf)}
+
 .card span.d{font-size:.88rem;color:var(--muted)}
 #teambar{position:sticky;top:0;z-index:20;background:#fff;border-bottom:1.5px solid var(--line);padding:.5rem 0;display:flex;gap:.6rem;flex-wrap:wrap}
 .team{display:flex;align-items:center;gap:.35rem;background:var(--pale);border-radius:10px;padding:.3rem .5rem}
@@ -68,14 +80,23 @@ button.opt:hover:not(:disabled){border-color:var(--violet)}
 .m.sel{border-color:var(--violet);background:var(--pale)}
 .m.done{background:var(--ok-bg);border-color:var(--ok);cursor:default}
 .m.bad{background:var(--ko-bg);border-color:var(--ko)}
-.cyl{display:block;width:100%;max-width:26rem;margin:10px auto}
-.cyl .body{fill:var(--pale);stroke:var(--line);stroke-width:2}
+.cylwrap{max-width:36rem;margin:10px auto}
+.cyl{display:block;width:100%}
+.cyl .plug{fill:#ece3f5;stroke:var(--line);stroke-width:2}
+.cyl .stator{fill:var(--pale);stroke:var(--line);stroke-width:2}
+.cyl .key{fill:#fff;stroke:var(--violet);stroke-width:2}
+.cyl .hole{fill:#fff;stroke:var(--violet);stroke-width:2}
+.cyl .kp{fill:#cbb6df}.cyl .dp{fill:#9269b4}
+.cyl .spring{fill:none;stroke:var(--muted);stroke-width:2;stroke-linejoin:round}
 .cyl .sl{stroke:var(--violet);stroke-width:2;stroke-dasharray:6 5}
-.cyl.win .sl{stroke:var(--ok);stroke-dasharray:none}
-.cyl .kp{fill:var(--lilas)}.cyl .dp{fill:#c9b5dd}
-.cyl .al .kp{fill:var(--ok)}.cyl .al .dp{fill:#8fcfae}
-.ctl{display:flex;justify-content:space-around;max-width:26rem;margin:0 auto}
-.ctl div{display:flex;flex-direction:column;gap:6px}
+.cyl.win .sl{stroke:var(--ok);stroke-dasharray:none;stroke-width:3}
+.cyl .al .kp{fill:#8fcfae}.cyl .al .dp{fill:#3f8f5c}
+.cyl .deep .kp{fill:#efb3ad}.cyl .deep .dp{fill:#c65b48}
+.cyl text{font:600 11px Inter,system-ui,sans-serif;fill:var(--violet)}
+.ctl{display:grid;grid-template-columns:repeat(5,1fr);justify-items:center;margin-left:26.15%;width:55.77%}
+.ctl .btn{padding:.35rem .8rem}
+.leg{display:flex;flex-wrap:wrap;gap:.4rem 1.1rem;justify-content:center;font-size:.82rem;color:var(--muted);margin:10px 0}
+.leg i{display:inline-block;width:.9rem;height:.9rem;border-radius:3px;margin-right:.35rem;vertical-align:-2px}
 .bonus{margin-top:12px}
 .ans{margin:.5rem 0 0;display:none}.ans.show{display:block}
 @media (max-width:560px){.match{grid-template-columns:1fr 1.4fr}.q{padding:1.05rem 1rem}}
@@ -208,8 +229,8 @@ function vf(p,t,e){return{p:p,o:["Vrai","Faux"],c:t?0:1,e:e}}
 function qc(p,o,c,e){return{p:p,o:o,c:o.indexOf(c),e:e}}
 var VF=[
  vf("Une porte blindée est totalement incrochetable.",false,"Aucune serrure n'est totalement incrochetable. Le blindage renforce la résistance à l'effraction mais n'offre pas d'inviolabilité."),
- vf("Il faut changer sa serrure après chaque déménagement.",false,"C'est le cylindre qu'on change, pas toute la serrure : nettement moins cher et tout aussi efficace pour récupérer le contrôle des clés."),
- vf("Un cadenas cher est toujours plus sûr qu'un cadenas bon marché.",false,"Le prix n'est pas un gage de sécurité. Mieux vaut vérifier la certification (A2P) que le tarif."),
+ vf("Il faut changer sa serrure après chaque déménagement.",false,"C'est le cylindre qu'on change, pas toute la serrure : nettement moins cher et tout aussi efficace pour récupérer le contrôle des clés. Ce n'est pas une obligation, seulement un conseil. Si vous êtes locataire, gardez le cylindre d'origine pour pouvoir le remettre en place en partant."),
+ vf("Un cylindre cher est toujours plus sûr qu'un cylindre bon marché.",false,"Le prix n'est pas un gage de sécurité : le type de cylindre compte. Un cylindre radial est plus sûr qu'un cylindre paracentrique. Mieux vaut vérifier la certification (A2P) que le tarif."),
  vf("Un verrou supplémentaire ralentit toujours un·e cambrioleur·se, même mal posé.",false,"Mal posé, un verrou peut être inutile, voire donner un faux sentiment de sécurité."),
  vf("Votre assurance peut exiger une serrure 3 points (ou plus) certifiée pour vous indemniser après un cambriolage.",true,"Cela dépend du contrat : certains assureurs fixent des exigences sur la serrure (nombre de points, certification). Relisez les conditions de votre contrat."),
  vf("Il est illégal de crocheter sa propre serrure quand on est enfermé·e dehors.",false,"Ouvrir sa propre porte n'est pas illégal. Un·e pro sérieux·se demandera en revanche de justifier que le logement est bien le vôtre."),
@@ -224,10 +245,63 @@ var CULT=[
  qc("Un·e artisan·e peut-il·elle travailler seul·e en étant micro-entrepreneur·se ?",["Oui","Non"],"Oui","Le statut de micro-entrepreneur·se permet d'exercer seul·e, sans associé·e, avec des démarches administratives allégées."),
  qc("Quelle est la différence entre une clé « à secret » et une clé classique ?",["Elle ne peut pas être reproduite sans autorisation","Elle est plus lourde","Elle ouvre plusieurs serrures"],"Elle ne peut pas être reproduite sans autorisation","Les clés à secret sont protégées par une carte de propriété : seul le fabricant ou un revendeur agréé peut en faire une copie.")
 ];
+var CONSO=FRIEND.slice(0,6).concat([
+ {
+  "p": "Le devis de dépannage est-il toujours gratuit ?",
+  "o": [
+   "Oui, la loi interdit de facturer un devis",
+   "Non, il peut être payant, mais le·la pro doit l'indiquer avant, avec son coût",
+   "Non, il est toujours payant",
+   "Oui, sauf si vous refusez de le signer"
+  ],
+  "c": 1,
+  "e": "Le devis est gratuit sauf indication contraire préalable. Le caractère payant ou gratuit doit figurer dans les informations remises avant toute intervention."
+ },
+ {
+  "p": "À partir de quel montant une facture doit-elle vous être remise ?",
+  "o": [
+   "10 €",
+   "100 €",
+   "25 €",
+   "150 €"
+  ],
+  "c": 2,
+  "e": "Au-delà de ce seuil, la facture est obligatoire une fois la prestation réalisée, et avant le règlement."
+ },
+ {
+  "p": "Le·la pro vous tend le devis à signer une fois les travaux terminés. Que faire ?",
+  "o": [
+   "Signer : c'est une simple formalité pour la comptabilité",
+   "Signer, puis contester sous 14 jours",
+   "Signer en ajoutant la mention « sous réserve »",
+   "Refuser de signer : le devis doit être remis et accepté avant le début des travaux"
+  ],
+  "c": 3,
+  "e": "Faire signer le devis en même temps que la note à payer est une pratique fréquente. Elle prive de la possibilité de comparer et de refuser."
+ },
+ {
+  "p": "Le prix final dépasse le devis signé. Le·la pro peut-il·elle exiger la différence ?",
+  "o": [
+   "Oui, le prix final fait foi sur le devis",
+   "Oui, si l'intervention a duré plus longtemps que prévu",
+   "Non, sauf si vous avez accepté un supplément",
+   "Oui, mais seulement la moitié de la différence"
+  ],
+  "c": 2,
+  "e": "Pendant la validité du devis, le prix ne peut pas être augmenté sans l'accord du client. Tout ajout doit faire l'objet d'un accord signé."
+ }
+]);
 var PARC=[
- {t:"Consommateur·rices averti·es",tag:"QCM · 6 questions",d:"Repérer les abus et connaître ses droits.",items:FRIEND.slice(0,6)},
+ {t:"Consommateur·rices averti·es",tag:"QCM · "+CONSO.length+" questions",d:"Repérer les abus et connaître ses droits.",items:CONSO},
  {t:"Vrai ou faux : mythes de la sécurité",tag:"Vrai / faux · 9 questions",d:"Démêler le vrai du faux.",items:VF},
- {t:"Découverte technique",tag:"QCM · "+(FRIEND.length-6+CULT.length)+" questions",d:"Cylindre, certification, culture serrurerie.",items:FRIEND.slice(6).concat(CULT)}
+ {t:"Découverte technique",tag:"QCM · "+(FRIEND.length-6+CULT.length)+" questions",d:"Cylindre, certification, culture serrurerie.",items:FRIEND.slice(6).concat(CULT)},
+ {t:"Bons réflexes au quotidien",tag:"QCM · 5 questions",d:"Clé cassée, clés perdues, entretien : que faire ?",items:[
+  qc("Votre clé casse dans la serrure. Quel est le bon réflexe ?",["Forcer avec une pince pour la tourner","Ne pas insister et faire retirer le morceau par un·e pro","Pousser le morceau plus loin avec un tournevis","Verser de la colle pour le ressortir"],"Ne pas insister et faire retirer le morceau par un·e pro","Forcer ou pousser risque d'enfoncer le morceau et d'abîmer le cylindre. Un·e pro a des outils fins pour l'extraire."),
+  qc("Que mettre dans une serrure qui se grippe ?",["De l'huile de cuisine","De l'eau savonneuse","Un lubrifiant sec (graphite ou PTFE) fait pour les serrures","Rien : il faut insister"],"Un lubrifiant sec (graphite ou PTFE) fait pour les serrures","Les huiles et graisses attirent la poussière et finissent par encrasser le mécanisme. Un lubrifiant sec, spécial serrure, est plus adapté."),
+  qc("Vous avez perdu vos clés sans savoir où. Que faire ?",["Rien, une serrure est inviolable","Changer uniquement la poignée","Attendre de voir si elles reviennent","Faire changer le cylindre"],"Faire changer le cylindre","Si vos clés ont pu tomber entre de mauvaises mains, changer le cylindre est la solution la plus simple pour reprendre le contrôle."),
+  qc("Après un cambriolage, que faire en premier ?",["Ne toucher à rien, prévenir la police et son assurance","Tout ranger pour y voir clair","Attendre une semaine avant de réagir","Publier un message sur les réseaux sociaux"],"Ne toucher à rien, prévenir la police et son assurance","Ranger efface des indices. Déclarez aussi le sinistre à l'assurance dans le délai prévu par votre contrat."),
+  qc("Où vaut-il mieux éviter de cacher une clé de secours ?",["Chez une personne de confiance","Sous le paillasson ou dans un pot de fleurs","Chez un·e proche qui habite à proximité"],"Sous le paillasson ou dans un pot de fleurs","Ce sont les premières cachettes que l'on vérifie. Mieux vaut confier un double à une personne de confiance.")
+ ]}
 ];
 var PAIRS=[
  ["Pêne","Pièce mobile qui sort de la serrure pour s'engager dans la gâche."],
@@ -235,7 +309,12 @@ var PAIRS=[
  ["Têtière","Plaque visible sur la tranche de la porte, qui recouvre le mécanisme."],
  ["Béquille","Poignée qui actionne le fouillot."],
  ["Fouillot","Pièce interne qui reçoit la béquille."],
- ["Barillet","Contient le mécanisme à goupilles actionné par la clé."]
+ ["Barillet / cylindre","Contient le mécanisme à goupilles actionné par la clé."],
+ ["Rosace","Plaque qui entoure le cylindre ou la poignée et protège le perçage."],
+ ["Paumelle","Charnière qui relie la porte à son cadre et la fait pivoter."],
+ ["Judas","Petite lentille dans la porte pour voir qui est derrière sans ouvrir."],
+ ["Entrebâilleur","Chaînette ou butée qui laisse entrouvrir la porte sans l'ouvrir en grand."],
+ ["Panneton","Aussi appelé entraîneur : partie du cylindre actionnée par la clé, qui en tournant entraîne le pêne pour verrouiller ou déverrouiller."]
 ];
 var BONUS=[
  {q:"Un petit jeu : double une lettre dans certains mots de serrurerie et tu tombes sur une spécialité italienne. Exemple : pêne → penne. Sauras-tu deviner l'autre ?",a:"Le panettone, le gâteau italien de Noël : un clin d'œil entre vocabulaire technique et gourmandise."},
@@ -270,7 +349,7 @@ function setTeams(n){
 
 /* accueil */
 function home(){show(function(){
-  app.append(el("h1",null,"Quiz atelier serrurerie"),el("p","lede","Choisissez un parcours. Chaque bonne réponse aligne une goupille."));
+  app.append(el("h1",null,"Quiz atelier serrurerie"),el("div","band"),el("div","band2"),el("p","lede","Choisissez un parcours. Chaque bonne réponse aligne une goupille."));
   var o=el("div","box");o.append(el("h3",null,"Options de l'atelier"));
   var r1=el("div","row");
   var ab=btn("Mode animateur : "+(S.anim?"activé":"désactivé"),"",function(){S.anim=!S.anim;home()});ab.setAttribute("aria-pressed",S.anim);
@@ -279,14 +358,13 @@ function home(){show(function(){
   [0,2,3,4].forEach(function(n){var b=btn(n?String(n):"Aucune","",function(){setTeams(n);home()});b.setAttribute("aria-pressed",S.teams.length===n);r2.append(b)});
   o.append(r1,r2);app.append(o);
   var g=el("div","cards");
-  PARC.forEach(function(p){g.append(card(p.tag,p.t,p.d,function(){run(p)}))});
-  g.append(card("Relier · 6 pièces","Relier pièce et définition","Associer chaque pièce de la serrure à son rôle.",match));
-  g.append(card("Jeu · cylindre","Aligner les goupilles","Réglez chaque colonne jusqu'à la ligne de césure.",cyl));
-  var ph=card("Photos · bientôt","Reconnaître la pièce","Parcours en préparation : les photos arrivent.",null);ph.disabled=true;g.append(ph);
-  g.append(card("Discussion","Bonus discussion","Trois questions pour animer le groupe.",bonus));
+  PARC.forEach(function(p,i){g.append(card(p.tag,p.t,p.d,function(){run(p)},i))});
+  g.append(card("Relier · 11 pièces","Relier pièce et définition","Associer chaque pièce de la serrure à son rôle.",match,4));
+  g.append(card("Jeu · cylindre","Aligner les goupilles","Réglez chaque colonne jusqu'à la ligne de césure.",cyl,5));
+  g.append(card("Discussion","Bonus discussion","Trois questions pour animer le groupe.",bonus,6));
   app.append(g);
 })}
-function card(tag,t,d,fn){var b=el("button","card");b.type="button";b.append(el("span","tag",tag),el("b",null,t),el("span","d",d));if(fn)b.addEventListener("click",fn);return b}
+function card(tag,t,d,fn,k){var b=el("button","card k"+k);b.type="button";b.append(el("span","tag",tag),el("b",null,t),el("span","d",d));if(fn)b.addEventListener("click",fn);return b}
 
 /* cartes de questions */
 function qcard(q,i,big,onpick){
@@ -384,29 +462,56 @@ function match(){show(function(){
 /* jeu du cylindre */
 function cyl(){show(function(){
   app.append(head("Aligner les goupilles"));
-  app.append(el("p","lede","Chaque colonne contient une goupille de clé (bas) et une goupille de blocage (haut). Réglez la hauteur jusqu'à ce que leur séparation touche la ligne pointillée."));
-  var N=5,SL=140,ST=14,t=[],h=[],moves=0;
-  for(var k=0;k<N;k++){t.push(1+Math.floor(Math.random()*4));h.push(0)}
+  app.append(el("p","lede","Une clé pousse chaque colonne vers le bas, contre un ressort. Appuyez sur ▼ pour enfoncer une colonne : la césure entre la goupille active (claire, côté clé) et la goupille passive (foncée, côté ressort) doit tomber exactement sur la ligne pointillée. Les goupilles actives ont des longueurs différentes : plus elle est courte, plus il faut l'enfoncer. Quand tout est juste, les goupilles passives sont alignées. Trop bas ? Retirez la clé et recommencez."));
+  var N=5,SL=140,ST=12,RS=50,DH=80,TIP=12,FL=360,MAX=7,r=[],n=[],L=[],D=[],moves=0;
+  var sh=function(a){return a.sort(function(){return Math.random()-.5})},rr=sh([1,2]).concat(sh([3,4,5])),LEN=[0,58,50,34,28,22];
+  for(var k=0;k<N;k++){r.push(rr[k]);n.push(0);L.push(LEN[r[k]]);D.push(DH)}
   var NS="http://www.w3.org/2000/svg",svg=document.createElementNS(NS,"svg");
-  svg.setAttribute("viewBox","0 0 360 290");svg.setAttribute("class","cyl");svg.setAttribute("role","img");
-  var ctl=el("div","ctl"),msg=el("p","note");msg.setAttribute("aria-live","polite");msg.style.textAlign="center";
-  function X(k){return 40+k*70}
+  svg.setAttribute("viewBox","-120 0 520 390");svg.setAttribute("role","img");
+  svg.setAttribute("aria-label","Coupe d'un cylindre : une clé pousse cinq colonnes de goupilles contre des ressorts.");
+  var wrap=el("div","cylwrap"),ctl=el("div","ctl"),msg=el("p","note");
+  msg.setAttribute("aria-live","polite");msg.style.textAlign="center";
+  function X(k){return 45+k*58}
   function draw(){
-    var s='<rect class="body" x="10" y="10" width="340" height="270" rx="10"/>',all=true;
+    var s='<rect class="plug" x="10" y="8" width="310" height="'+(SL-8)+'" rx="8"/><rect class="stator" x="10" y="'+SL+'" width="310" height="'+(FL+14-SL)+'" rx="8"/>';
+    var all=true,deep=false,sp=[],ty=[],te=[];
     for(var k=0;k<N;k++){
-      var sp=SL+(t[k]-h[k])*ST,al=sp===SL;if(!al)all=false;
-      s+='<g class="'+(al?"al":"")+'"><rect class="dp" x="'+(X(k)-17)+'" y="'+(sp-45)+'" width="34" height="45" rx="3"/><rect class="kp" x="'+(X(k)-17)+'" y="'+sp+'" width="34" height="50" rx="3"/></g>';
+      var split=SL-(r[k]-n[k])*ST;sp.push(split);
+      ty.push(split-L[k]);te.push(split-L[k]+TIP);
+      if(n[k]!==r[k])all=false;if(n[k]>r[k])deep=true;
     }
-    s+='<line class="sl" x1="10" x2="350" y1="'+SL+'" y2="'+SL+'"/>';
+    var kq=[[14,116]],cl=function(y){return Math.min(138,y)};
+    for(var k=0;k<N;k++){
+      kq.push([X(k)-16,cl(ty[k]+TIP)],[X(k),ty[k]],[X(k)+16,cl(ty[k]+TIP)]);
+    }
+    kq.push([306,138]);
+    var kd="M-8.6,36 L296,36 L319,76";
+    for(var q=kq.length-1;q>=0;q--)kd+=" L"+kq[q][0]+","+kq[q][1];
+    s+='<path class="key" d="'+kd+' L-8.6,116 A62 62 0 1 1 -8.6,36 Z"/>';
+    s+='<circle class="hole" cx="-78" cy="76" r="14"/>';
+    s+='<path d="M0,41 H282 M0,47 H282 M0,53 H282" fill="none" stroke="#9a9a9a" stroke-width="2" stroke-linecap="round"/>';
+    for(var k=0;k<N;k++){
+      var split=sp[k],cls=n[k]===r[k]?"al":n[k]>r[k]?"deep":"",y0=split+D[k],pts="";
+      for(var j=0;j<=16;j++){pts+=(X(k)+(j===0||j===16?0:(j%2?9:-9)))+","+(y0+(FL-y0)*j/16)+" "}
+      s+='<g class="'+cls+'"><polyline class="spring" points="'+pts+'"/><rect class="dp" x="'+(X(k)-16)+'" y="'+split+'" width="32" height="'+D[k]+'" rx="3"/><path class="kp" d="M'+(X(k)-16)+','+split+' L'+(X(k)-16)+','+(split-L[k]+TIP)+' L'+X(k)+','+(split-L[k])+' L'+(X(k)+16)+','+(split-L[k]+TIP)+' L'+(X(k)+16)+','+split+' Z"/></g>';
+    }
+    s+='<line class="sl" x1="10" x2="320" y1="'+SL+'" y2="'+SL+'"/>';
+    s+='<text x="328" y="26">Clé</text><text x="328" y="'+(SL-26)+'">Rotor</text><text x="328" y="'+(SL-2)+'">Ligne de</text><text x="328" y="'+(SL+12)+'">césure</text><text x="328" y="'+(SL+38)+'">Stator</text><text x="328" y="'+(FL-2)+'">Ressorts</text>';
     svg.setAttribute("class","cyl"+(all?" win":""));svg.innerHTML=s;
-    msg.textContent=all?"Toutes les séparations sont sur la ligne de césure : le rotor tourne, la porte s'ouvre ! ("+moves+" réglages)":"Réglages : "+moves;
+    msg.textContent=all?"Les 5 séparations sont sur la ligne de césure : le rotor peut tourner, la porte s'ouvre ! ("+moves+" appuis)":deep?"Une goupille est descendue trop bas : retirez la clé pour recommencer. ("+moves+" appuis)":"Appuis : "+moves;
   }
   for(var k=0;k<N;k++)(function(k){
-    var d=el("div");
-    function mv(v,l){var b=btn(l,"",function(){var n=h[k]+v;if(n<0||n>5)return;h[k]=n;moves++;draw()});b.setAttribute("aria-label",(v>0?"Monter":"Descendre")+" la colonne "+(k+1));return b}
-    d.append(mv(1,"▲"),mv(-1,"▼"));ctl.append(d);
+    var b=btn("▼","",function(){if(n[k]>=MAX)return;n[k]++;moves++;draw()});
+    b.setAttribute("aria-label","Enfoncer la colonne "+(k+1));ctl.append(b);
   })(k);
-  app.append(svg,ctl,msg,btn("Nouveau cylindre","",cyl));draw();
+  var leg=el("div","leg");
+  [["#cbb6df","Goupille active (touche la clé)"],["#9269b4","Goupille passive (poussée par le ressort)"],["","Ressort : repousse vers le haut"]].forEach(function(x){
+    var d=el("span"),i=el("i");if(x[0])i.style.background=x[0];else{i.style.border="2px solid var(--muted)";i.style.borderRadius="50%"}
+    d.append(i,x[1]);leg.append(d)});
+  wrap.append(svg,ctl);
+  var rw=el("div","row");rw.style.justifyContent="center";
+  rw.append(btn("Retirer la clé (recommencer)","",function(){for(var k=0;k<N;k++)n[k]=0;moves=0;draw()}),btn("Nouveau cylindre","",cyl));
+  app.append(wrap,leg,msg,rw);draw();
 })}
 
 /* bonus */
