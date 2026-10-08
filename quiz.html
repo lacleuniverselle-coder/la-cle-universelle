@@ -1,263 +1,426 @@
 <!DOCTYPE html>
 <html lang="fr">
-
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Quiz serrurerie : avant d'appeler un·e serrurier·ère | La clé universElle</title>
-  <meta name="description" content="Quiz de 10 questions pour repérer les abus, connaître vos droits et comprendre ce qu'il y a dans une serrure. Par La clé universElle, serrurière à Toulouse.">
-  <meta property="og:type" content="website">
-  <meta property="og:url" content="https://lacleuniverselle.fr/quiz.html">
-  <meta property="og:title" content="Quiz serrurerie : avant d'appeler un·e serrurier·ère | La clé universElle">
-  <meta property="og:description" content="Dix questions pour repérer les abus, connaître vos droits et comprendre ce qu'il y a dans une serrure.">
-  <meta property="og:image" content="https://lacleuniverselle.fr/og-image.jpg">
-  <meta property="og:locale" content="fr_FR">
-  <meta name="twitter:card" content="summary_large_image">
-  <link rel="canonical" href="https://lacleuniverselle.fr/quiz.html">
-  <meta name="theme-color" content="#482664">
-  <meta name="robots" content="index, follow">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap">
-  <link rel="stylesheet" href="style.css" />
-  <link rel="icon" type="image/x-icon" href="favicon.ico">
-  <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
-  <link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png">
-  <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
-  <link rel="manifest" href="site.webmanifest">
-  <script src="script.js" defer></script>
-  <style>
-    .quiz-lede{font-size:1rem;color:var(--gris);margin-bottom:1rem}
-    .quiz-bar{position:sticky;top:68px;z-index:50;background:var(--blanc);padding:.6rem 0;border-bottom:1.5px solid var(--lilas-clair);display:flex;align-items:center;gap:1rem;flex-wrap:wrap}
-    .quiz-pins{position:relative;display:flex;align-items:flex-end;gap:6px;height:44px;flex:1 1 180px;min-width:0}
-    .quiz-pins::after{content:"";position:absolute;left:0;right:0;bottom:28px;border-top:2px dashed var(--lilas-clair)}
-    .quiz-pin{flex:1;max-width:22px;border-radius:3px 3px 0 0;background:var(--lilas-clair);transition:height .35s ease,background .2s}
-    .quiz-pin.ok{background:#1c6b45}.quiz-pin.ko{background:#a3322b}
-    .quiz-score{font-weight:800;font-size:1.1rem;color:var(--violet);white-space:nowrap;line-height:1.2;font-variant-numeric:tabular-nums}
-    .quiz-score small{display:block;font-weight:500;font-size:.78rem;color:var(--gris)}
-    .quiz-btn{font-family:"Inter",sans-serif;font-size:.85rem;font-weight:600;padding:.4rem .9rem;border-radius:8px;border:1.5px solid var(--violet);background:var(--blanc);color:var(--violet);cursor:pointer}
-    .quiz-btn:hover{background:var(--lilas-pale)}
-    .quiz-btn:focus-visible,.quiz-opt:focus-visible,.quiz-hint:focus-visible{outline:3px solid var(--lilas);outline-offset:2px}
-    .quiz-q{background:var(--lilas-pale);border:1.5px solid var(--lilas-clair);border-radius:16px;padding:1.3rem 1.5rem;margin-top:1rem;display:flex;flex-direction:column;gap:.8rem;box-shadow:0 4px 14px rgba(72,38,100,.06)}
-    .quiz-q h3{font-size:1rem;font-weight:700;color:var(--violet);line-height:1.45}
-    .quiz-num{margin-right:.35em;font-variant-numeric:tabular-nums}
-    .quiz-opts{display:flex;flex-direction:column;gap:.5rem}
-    .quiz-opt{text-align:left;font-family:"Inter",sans-serif;font-size:.92rem;line-height:1.5;color:var(--texte);background:var(--blanc);border:1.5px solid var(--lilas-clair);border-radius:10px;padding:.65rem .8rem;display:flex;gap:.6rem;cursor:pointer}
-    .quiz-opt:hover:not(:disabled){border-color:var(--violet)}
-    .quiz-opt:disabled{cursor:default}
-    .quiz-mark{flex:none;width:1.2em;font-weight:700;color:var(--lilas)}
-    .quiz-opt.right{background:#dcf0e5;border-color:#1c6b45}.quiz-opt.right .quiz-mark{color:#1c6b45}
-    .quiz-opt.wrong{background:#f8e1de;border-color:#a3322b}.quiz-opt.wrong .quiz-mark{color:#a3322b}
-    .quiz-hint{align-self:flex-start;background:none;border:0;padding:0;font-family:"Inter",sans-serif;font-size:.88rem;color:var(--violet);text-decoration:underline;cursor:pointer}
-    .page-content p.quiz-note{font-size:.88rem;margin:0;color:var(--gris)}
-    .page-content p.quiz-fb{font-size:.9rem;margin:0;border-left:3px solid var(--violet);padding-left:.8rem;line-height:1.6}
-    .quiz-fb b.ok{color:#1c6b45}.quiz-fb b.ko{color:#a3322b}
-    .quiz-end{margin-top:1.5rem;background:var(--violet);color:#fff;border-radius:16px;padding:1.3rem 1.5rem}
-    .page-content .quiz-end p{margin:0;color:#fff}
-    .page-content p.quiz-sources{margin-top:2rem;font-size:.88rem;color:var(--gris)}
-    .page-content p.quiz-sources a{color:var(--violet);font-weight:600}
-    @media (max-width:640px){.quiz-q{padding:1.1rem 1rem}.quiz-bar{top:60px}}
-    @media (prefers-reduced-motion:reduce){.quiz-pin{transition:none}}
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Quiz atelier serrurerie</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap">
+<style>
+:root{--violet:#482664;--lilas:#8d68b1;--pale:#f3eef8;--line:#e4dcee;--txt:#2b2b2b;--muted:#6b6b6b;--ok:#1c6b45;--ok-bg:#dcf0e5;--ko:#a3322b;--ko-bg:#f8e1de;--tb:0px}
+*{box-sizing:border-box}
+body{margin:0;font-family:"Inter",system-ui,-apple-system,"Segoe UI",sans-serif;color:var(--txt);background:#fff;line-height:1.55;padding:0 16px 64px}
+.wrap{max-width:44rem;margin:0 auto}
+h1{font-size:clamp(1.8rem,6vw,2.5rem);font-weight:800;color:var(--violet);margin:28px 0 6px;line-height:1.1}
+h2{font-size:1.25rem;font-weight:700;color:var(--violet);margin:6px 0 4px}
+.lede{color:var(--muted);margin:0 0 18px}
+button{font:inherit;color:inherit;cursor:pointer}
+button:focus-visible,input:focus-visible{outline:3px solid var(--lilas);outline-offset:2px}
+.btn{font-weight:600;font-size:.9rem;padding:.5rem 1rem;border-radius:8px;border:1.5px solid var(--violet);background:#fff;color:var(--violet)}
+.btn:hover{background:var(--pale)}
+.btn.main{background:var(--violet);color:#fff}.btn.main:hover{background:#352049}
+.btn[aria-pressed=true]{background:var(--violet);color:#fff}
+.btn:disabled{opacity:.4;cursor:default}
+.row{display:flex;gap:.6rem;flex-wrap:wrap;align-items:center}
+.box{background:var(--pale);border:1.5px solid var(--line);border-radius:16px;padding:1.1rem 1.3rem;margin:12px 0}
+.box h3{margin:0 0 .5rem;font-size:.95rem;color:var(--violet)}
+.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(15rem,1fr));gap:12px;margin-top:14px}
+.card{text-align:left;background:var(--pale);border:1.5px solid var(--line);border-radius:16px;padding:1.1rem 1.2rem;display:flex;flex-direction:column;gap:.25rem}
+.card:hover:not(:disabled){border-color:var(--violet)}
+.card:disabled{opacity:.55;cursor:default}
+.tag{font-size:.78rem;font-weight:600;color:var(--lilas)}
+.card b{font-size:1.02rem;color:var(--violet)}
+.card span.d{font-size:.88rem;color:var(--muted)}
+#teambar{position:sticky;top:0;z-index:20;background:#fff;border-bottom:1.5px solid var(--line);padding:.5rem 0;display:flex;gap:.6rem;flex-wrap:wrap}
+.team{display:flex;align-items:center;gap:.35rem;background:var(--pale);border-radius:10px;padding:.3rem .5rem}
+.team input{width:7.5rem;border:0;background:transparent;font:inherit;font-weight:600;color:var(--violet)}
+.team b{min-width:1.6rem;text-align:center;font-size:1.1rem;font-variant-numeric:tabular-nums}
+.team button{width:1.9rem;height:1.9rem;border-radius:50%;border:1.5px solid var(--violet);background:#fff;color:var(--violet);font-weight:700;line-height:1}
+.qbar{position:sticky;top:var(--tb);z-index:10;background:#fff;padding:.5rem 0;border-bottom:1.5px solid var(--line);display:flex;align-items:center;gap:1rem;flex-wrap:wrap}
+.pins{position:relative;display:flex;align-items:flex-end;gap:6px;height:44px;flex:1 1 160px;min-width:0}
+.pins::after{content:"";position:absolute;left:0;right:0;bottom:28px;border-top:2px dashed var(--line)}
+.pin{flex:1;max-width:22px;border-radius:3px 3px 0 0;background:var(--line);transition:height .35s ease,background .2s}
+.pin.ok{background:var(--ok)}.pin.ko{background:var(--ko)}
+.score{font-weight:800;color:var(--violet);white-space:nowrap;line-height:1.2}
+.score small{display:block;font-weight:500;font-size:.78rem;color:var(--muted)}
+.q{background:var(--pale);border:1.5px solid var(--line);border-radius:16px;padding:1.2rem 1.4rem;margin-top:14px;display:flex;flex-direction:column;gap:.8rem}
+.q h3{margin:0;font-size:1.02rem;font-weight:700;color:var(--violet);line-height:1.45}
+.q.big{padding:1.6rem}.q.big h3{font-size:clamp(1.3rem,4vw,1.8rem)}
+.opts{display:flex;flex-direction:column;gap:.5rem}
+.opt{text-align:left;background:#fff;border:1.5px solid var(--line);border-radius:10px;padding:.65rem .8rem;display:flex;gap:.6rem;font-size:.95rem}
+.big .opt{font-size:clamp(1.05rem,3vw,1.35rem);padding:.85rem 1rem}
+button.opt:hover:not(:disabled){border-color:var(--violet)}
+.opt:disabled{cursor:default}
+.mk{flex:none;width:1.2em;font-weight:700;color:var(--lilas)}
+.opt.right{background:var(--ok-bg);border-color:var(--ok)}.opt.right .mk{color:var(--ok)}
+.opt.wrong{background:var(--ko-bg);border-color:var(--ko)}.opt.wrong .mk{color:var(--ko)}
+.hint{align-self:flex-start;background:none;border:0;padding:0;color:var(--violet);text-decoration:underline;font-size:.88rem}
+.note{margin:0;font-size:.88rem;color:var(--muted)}
+.fb{margin:0;font-size:.92rem;border-left:3px solid var(--violet);padding-left:.8rem}
+.big .fb{font-size:1.05rem}
+.fb b.ok{color:var(--ok)}.fb b.ko{color:var(--ko)}
+.end{margin-top:18px;background:var(--violet);color:#fff;border-radius:16px;padding:1.2rem 1.4rem}
+.end p{margin:0}
+.nav{display:flex;justify-content:space-between;gap:.6rem;margin-top:14px;flex-wrap:wrap}
+.match{display:grid;grid-template-columns:1fr 1.6fr;gap:10px 14px;margin-top:12px}
+.col{display:flex;flex-direction:column;gap:8px}
+.m{text-align:left;background:#fff;border:1.5px solid var(--line);border-radius:10px;padding:.6rem .75rem;font-size:.9rem}
+.m.term{font-weight:700;color:var(--violet)}
+.m.sel{border-color:var(--violet);background:var(--pale)}
+.m.done{background:var(--ok-bg);border-color:var(--ok);cursor:default}
+.m.bad{background:var(--ko-bg);border-color:var(--ko)}
+.cyl{display:block;width:100%;max-width:26rem;margin:10px auto}
+.cyl .body{fill:var(--pale);stroke:var(--line);stroke-width:2}
+.cyl .sl{stroke:var(--violet);stroke-width:2;stroke-dasharray:6 5}
+.cyl.win .sl{stroke:var(--ok);stroke-dasharray:none}
+.cyl .kp{fill:var(--lilas)}.cyl .dp{fill:#c9b5dd}
+.cyl .al .kp{fill:var(--ok)}.cyl .al .dp{fill:#8fcfae}
+.ctl{display:flex;justify-content:space-around;max-width:26rem;margin:0 auto}
+.ctl div{display:flex;flex-direction:column;gap:6px}
+.bonus{margin-top:12px}
+.ans{margin:.5rem 0 0;display:none}.ans.show{display:block}
+@media (max-width:560px){.match{grid-template-columns:1fr 1.4fr}.q{padding:1.05rem 1rem}}
+@media (prefers-reduced-motion:reduce){.pin{transition:none}}
+</style>
 </head>
-
 <body>
-
-  <!-- NAV -->
-  <nav id="main-nav">
-    <a class="nav-logo" href="index.html" aria-label="Retour à l'accueil">
-      <div class="nav-logo-svg-wrap"><img src="LOGO_seulpunchy.svg" alt="Logo La clé universElle"
-          width="48" height="48" style="height:48px;width:auto;display:block;"></div>
-    </a>
-    <ul class="nav-links">
-
-      <li class="nav-dropdown">
-        <a href="index.html#services" class="nav-dropdown-toggle">Services <span class="nav-dropdown-arrow">▾</span></a>
-        <ul class="nav-dropdown-menu">
-          <li><a href="serrurerie.html">Serrurerie</a></li>
-          <li><a href="mecanique-velo.html">Mécanique vélo</a></li>
-        </ul>
-      </li>
-      <li><a href="zones.html">Zones</a></li>
-      <li><a href="index.html#concept">Le concept</a></li>
-      <li><a href="pourquoi.html">Pourquoi moi</a></li>
-
-      <li><a href="index.html#apropos">À propos</a></li>
-      <li><a href="index.html#contact">Contact</a></li>
-      <li><a href="actus.html">Actus</a></li>
-      <li><a href="faq.html">FAQ</a></li>
-    </ul>
-    <div style="display:flex; align-items:center; gap:0.6rem;">
-
-       <a class="nav-whatsapp" href="https://wa.me/33743990437" target="_blank" rel="noopener" aria-label="Contacter sur WhatsApp">
-    <svg viewBox="0 0 24 24" width="20" height="20" fill="white"><path d="M17.6 6.32A8.86 8.86 0 0 0 12.04 4C7.5 4 3.78 7.72 3.78 12.26c0 1.5.4 2.92 1.1 4.16L4 20l3.7-.97a8.84 8.84 0 0 0 4.32 1.1h.01c4.54 0 8.26-3.72 8.26-8.26 0-2.21-.86-4.29-2.69-5.55zM12.04 18.6a6.9 6.9 0 0 1-3.5-.96l-.25-.15-2.6.68.7-2.53-.17-.26a6.86 6.86 0 0 1-1.05-3.65c0-3.8 3.09-6.9 6.9-6.9 1.84 0 3.57.72 4.87 2.02a6.84 6.84 0 0 1 2.02 4.87c0 3.8-3.1 6.9-6.92 6.9zm3.78-5.17c-.21-.1-1.22-.6-1.41-.67-.19-.07-.32-.1-.46.1-.13.2-.52.66-.64.8-.12.13-.24.15-.45.05-1.22-.61-2.02-1.08-2.83-2.46-.21-.37.21-.34.61-1.14.07-.13.03-.25-.03-.36-.06-.1-.46-1.1-.63-1.51-.16-.4-.33-.34-.46-.35-.12-.01-.26-.01-.4-.01-.13 0-.35.05-.54.25-.19.2-.71.7-.71 1.71 0 1 .73 1.97.83 2.1.1.13 1.4 2.14 3.4 2.92 1.7.67 2.05.54 2.42.51.37-.03 1.22-.5 1.39-.99.18-.49.18-.91.13-1-.05-.1-.18-.15-.39-.25z"/></svg>
-  </a>
-
-      <button class="hamburger" id="hamburger-btn" aria-label="Menu" onclick="toggleMenu()">
-        <span></span><span></span><span></span>
-      </button>
-    </div>
-    <div class="mobile-menu" id="mobile-menu">
-
-      <div class="mobile-accordion">
-        <div class="mobile-accordion-row">
-          <a href="index.html#services" class="mobile-accordion-link" onclick="closeMenu()">Services</a>
-          <button class="mobile-accordion-toggle" aria-label="Sous-menu Services" onclick="toggleMobileAccordion(this)" type="button">
-            <span class="accordion-arrow">▾</span>
-          </button>
-        </div>
-        <div class="mobile-accordion-panel">
-          <a href="serrurerie.html">Serrurerie</a>
-          <a href="mecanique-velo.html">Mécanique vélo</a>
-        </div>
-      </div>
-      <a href="zones.html" onclick="closeMenu()">Zones</a>
-      <a href="index.html#concept" onclick="closeMenu()">Le concept</a>
-      <a href="pourquoi.html" onclick="closeMenu()">Pourquoi moi</a>
-      <a href="index.html#apropos" onclick="closeMenu()">À propos</a>
-      <a href="index.html#contact" onclick="closeMenu()">Contact</a>
-      <a href="actus.html" onclick="closeMenu()">Actus</a>
-      <a href="faq.html" onclick="closeMenu()">FAQ</a>
-    </div>
-  </nav>
-
-  <div class="page-content">
-    <a class="back-btn" href="faq.html">← Retour à la FAQ</a>
-    <h1>Quiz : avant d'appeler un·e serrurier·ère</h1>
-    <p class="quiz-lede">Dix questions pour repérer les abus, connaître vos droits et comprendre ce qu'il y a dans une serrure. Chaque bonne réponse aligne une goupille.</p>
-
-    <div class="quiz-bar">
-      <div class="quiz-pins" id="quiz-pins" aria-hidden="true"></div>
-      <div class="quiz-score" id="quiz-score" aria-live="polite"></div>
-      <button class="quiz-btn" id="quiz-reset" type="button">Recommencer</button>
-    </div>
-
-    <div id="quiz-main"></div>
-    <div class="quiz-end" id="quiz-end" hidden><p id="quiz-endtxt"></p></div>
-
-    <p class="quiz-sources">Pour aller plus loin : <a href="https://www.economie.gouv.fr/dgccrf" target="_blank" rel="noopener">DGCCRF</a> · <a href="https://signal.conso.gouv.fr" target="_blank" rel="noopener">SignalConso</a></p>
-  </div>
-
-  <!-- FOOTER -->
-  <footer id="footer-main">
-    <p>© 2026 <span>"La clé universElle"</span> — Serrurerie &amp; Mécanique vélo</p>
-    <p style="margin-top:0.4rem;">Fait avec 🌸 et un vélo cargo · Toulouse, Occitanie</p>
-    <div class="footer-links">
-      <a href="index.html">← Retour au site</a>
-      <a href="mentions-legales.html">Mentions légales</a>
-      <a href="cgv.html">CGV</a>
-      <a href="mentions-legales.html">Politique de confidentialité</a>
-    </div>
-  </footer>
-
+<div class="wrap">
+  <div id="teambar" hidden></div>
+  <main id="app"></main>
+</div>
 <script>
 (function(){
-var SECTIONS=[{at:0,title:"Consommateur·rices averti·es"},{at:6,title:"Découverte technique"}];
-var Q=[
-{p:"Vous êtes enfermé·e dehors, porte simplement claquée. Le·la serrurier·ère annonce d'emblée qu'il faut percer et changer toute la serrure. Que penser ?",
- o:["C'est normal, une porte claquée ne s'ouvre jamais autrement","C'est un signal d'alerte : une porte claquée s'ouvre le plus souvent sans casse","C'est obligatoire pour des raisons d'assurance","C'est le signe d'un·e pro bien équipé·e"],c:1,
- h:"Pensez à ce qui rapporte le plus à un·e pro malhonnête.",
- e:"Un·e pro équipé·e tente d'abord une ouverture fine, sans destruction. Le perçage immédiat sert souvent à facturer une serrure neuve au prix fort."},
-{p:"Avant une intervention de dépannage à domicile, le·la professionnel·le doit :",
- o:["Donner un prix à l'oral, cela suffit","Remettre un devis écrit et détaillé avant de commencer les travaux","Faire un devis seulement au-delà de 1 500 €","Envoyer la facture sous 30 jours, sans devis"],c:1,
- e:"Pour le dépannage à domicile, un devis écrit détaillé (main-d'œuvre, déplacement, pièces, total TTC) doit être remis avant tout début de travaux. Pas de devis, pas d'intervention."},
-{p:"Comment vérifier rapidement qu'une entreprise de serrurerie existe vraiment ?",
- o:["Elle apparaît en premier dans les résultats sponsorisés","Son autocollant était dans la boîte aux lettres ou le hall de l'immeuble","On vérifie son numéro SIRET sur un annuaire officiel des entreprises","Son numéro commence par 01 ou 05"],c:2,
- e:"Le SIRET se vérifie gratuitement en ligne (annuaire des entreprises de l'État, par exemple) : on y voit l'activité, l'adresse et la date de création. Les annonces sponsorisées et les autocollants ne garantissent rien."},
-{p:"Quel est le meilleur moment pour choisir son·sa serrurier·ère ?",
- o:["Le soir de la panne, en appelant le premier numéro trouvé","Avant d'en avoir besoin, en gardant le contact d'un·e artisan·e local·e vérifié·e","Après l'intervention, en comparant les factures","Peu importe, les tarifs sont réglementés"],c:1,
- e:"L'urgence est le terrain favori des abus. Repérer à froid un·e artisan·e du quartier (SIRET vérifié, tarifs affichés) évite de choisir sous pression. Les prix sont libres, pas réglementés."},
-{p:"Lors d'un dépannage urgent à domicile, le·la pro en profite pour vous faire signer le remplacement de la porte entière. Avez-vous un droit de rétractation ?",
- o:["Non, jamais pour une intervention urgente","Oui, 14 jours pour tout ce qui dépasse le strict nécessaire à l'urgence","Oui, mais seulement 24 heures","Seulement si rien n'a encore été payé"],c:1,
- h:"L'urgence justifie d'ouvrir la porte, pas forcément de la remplacer.",
- e:"L'exception au droit de rétractation ne couvre que les travaux strictement nécessaires pour répondre à l'urgence. Les prestations et ventes ajoutées sur place restent soumises au délai de 14 jours."},
-{p:"Vous estimez avoir été surfacturé·e. Quelle démarche, dans le bon ordre ?",
- o:["Faire opposition au paiement sans rien dire","Réclamation écrite à l'entreprise, puis médiateur·rice de la consommation et signalement sur SignalConso","Saisir directement le tribunal, c'est le seul recours","Publier un avis négatif et attendre"],c:1,
- e:"On commence par une réclamation écrite (recommandé avec accusé de réception), devis et facture à l'appui. Sans réponse satisfaisante : médiation de la consommation, gratuite, et signalement à la DGCCRF via SignalConso. Les associations de consommateur·rices peuvent aider."},
-{p:"Dans un cylindre à goupilles, que se passe-t-il quand on insère la bonne clé ?",
- o:["Un aimant attire le pêne","Les goupilles s'alignent à la bonne hauteur et libèrent la rotation du rotor","La clé pousse directement le pêne hors de la gâche","Un ressort unique se comprime et débloque la porte"],c:1,
- e:"Chaque cran de la clé soulève une paire de goupilles à une hauteur précise. Quand toutes les séparations sont alignées sur la ligne de césure, le rotor peut tourner et entraîner le pêne."},
-{p:"Que garantit la certification A2P (1, 2 ou 3 étoiles) sur une serrure ?",
- o:["Que la serrure est fabriquée en France","Un temps de résistance testé face à l'effraction, croissant avec le nombre d'étoiles","Que la serrure est inviolable","La durée de la garantie commerciale"],c:1,
- e:"L'A2P atteste d'une résistance testée en laboratoire : environ 5, 10 ou 15 minutes selon le nombre d'étoiles. Aucune serrure n'est inviolable : on gagne du temps, ce qui décourage l'effraction."},
-{p:"Quel détail visible depuis le palier signale un point faible sur une serrure standard ?",
- o:["Un cylindre qui dépasse nettement de la porte, sans protection","Une poignée de couleur dorée","Une clé plate à trous plutôt qu'à dents","La présence d'un judas"],c:0,
- h:"Ce qui dépasse donne de la prise.",
- e:"Un cylindre qui dépasse de plus de quelques millimètres offre une prise et peut être cassé. La parade : un cylindre à la bonne longueur et une rosace ou un protège-cylindre."},
-{p:"Quel est l'intérêt d'une serrure multipoints par rapport à une serrure à un seul point ?",
- o:["Elle se passe de clé","Elle verrouille la porte à plusieurs endroits, ce qui répartit les efforts en cas de tentative de forçage","Elle rend le cylindre inutile","Elle est obligatoire dans tous les logements"],c:1,
- e:"Avec 3 ou 5 points d'ancrage (haut, milieu, bas), la porte résiste bien mieux à l'enfoncement ou au pied-de-biche. Mais le cylindre et la solidité de la porte et du bâti comptent tout autant."}
+var FRIEND=[
+ {
+  "p": "Vous êtes enfermé·e dehors, porte simplement claquée. Le·la serrurier·ère annonce d'emblée qu'il faut percer et changer toute la serrure. Que penser ?",
+  "o": [
+   "C'est normal, une porte claquée ne s'ouvre jamais autrement",
+   "C'est un signal d'alerte : une porte claquée s'ouvre le plus souvent sans casse",
+   "C'est obligatoire pour des raisons d'assurance",
+   "C'est le signe d'un·e pro bien équipé·e"
+  ],
+  "c": 1,
+  "h": "Pensez à ce qui rapporte le plus à un·e pro malhonnête.",
+  "e": "Un·e pro équipé·e tente d'abord une ouverture fine, sans destruction. Le perçage immédiat sert souvent à facturer une serrure neuve au prix fort."
+ },
+ {
+  "p": "Avant une intervention de dépannage à domicile, le·la professionnel·le doit :",
+  "o": [
+   "Donner un prix à l'oral, cela suffit",
+   "Remettre un devis écrit et détaillé avant de commencer les travaux",
+   "Faire un devis seulement au-delà de 1 500 €",
+   "Envoyer la facture sous 30 jours, sans devis"
+  ],
+  "c": 1,
+  "e": "Pour le dépannage à domicile, un devis écrit détaillé (main-d'œuvre, déplacement, pièces, total TTC) doit être remis avant tout début de travaux. Pas de devis, pas d'intervention."
+ },
+ {
+  "p": "Comment vérifier rapidement qu'une entreprise de serrurerie existe vraiment ?",
+  "o": [
+   "Elle apparaît en premier dans les résultats sponsorisés",
+   "Son autocollant était dans la boîte aux lettres ou le hall de l'immeuble",
+   "On vérifie son numéro SIRET sur un annuaire officiel des entreprises",
+   "Son numéro commence par 01 ou 05"
+  ],
+  "c": 2,
+  "e": "Le SIRET se vérifie gratuitement en ligne (annuaire des entreprises de l'État, par exemple) : on y voit l'activité, l'adresse et la date de création. Les annonces sponsorisées et les autocollants ne garantissent rien."
+ },
+ {
+  "p": "Quel est le meilleur moment pour choisir son·sa serrurier·ère ?",
+  "o": [
+   "Le soir de la panne, en appelant le premier numéro trouvé",
+   "Avant d'en avoir besoin, en gardant le contact d'un·e artisan·e local·e vérifié·e",
+   "Après l'intervention, en comparant les factures",
+   "Peu importe, les tarifs sont réglementés"
+  ],
+  "c": 1,
+  "e": "L'urgence est le terrain favori des abus. Repérer à froid un·e artisan·e du quartier (SIRET vérifié, tarifs affichés) évite de choisir sous pression. Les prix sont libres, pas réglementés."
+ },
+ {
+  "p": "Lors d'un dépannage urgent à domicile, le·la pro en profite pour vous faire signer le remplacement de la porte entière. Avez-vous un droit de rétractation ?",
+  "o": [
+   "Non, jamais pour une intervention urgente",
+   "Oui, 14 jours pour tout ce qui dépasse le strict nécessaire à l'urgence",
+   "Oui, mais seulement 24 heures",
+   "Seulement si rien n'a encore été payé"
+  ],
+  "c": 1,
+  "h": "L'urgence justifie d'ouvrir la porte, pas forcément de la remplacer.",
+  "e": "L'exception au droit de rétractation ne couvre que les travaux strictement nécessaires pour répondre à l'urgence. Les prestations et ventes ajoutées sur place restent soumises au délai de 14 jours."
+ },
+ {
+  "p": "Vous estimez avoir été surfacturé·e. Quelle démarche, dans le bon ordre ?",
+  "o": [
+   "Faire opposition au paiement sans rien dire",
+   "Réclamation écrite à l'entreprise, puis médiateur·rice de la consommation et signalement sur SignalConso",
+   "Saisir directement le tribunal, c'est le seul recours",
+   "Publier un avis négatif et attendre"
+  ],
+  "c": 1,
+  "e": "On commence par une réclamation écrite (recommandé avec accusé de réception), devis et facture à l'appui. Sans réponse satisfaisante : médiation de la consommation, gratuite, et signalement à la DGCCRF via SignalConso. Les associations de consommateur·rices peuvent aider."
+ },
+ {
+  "p": "Dans un cylindre à goupilles, que se passe-t-il quand on insère la bonne clé ?",
+  "o": [
+   "Un aimant attire le pêne",
+   "Les goupilles s'alignent à la bonne hauteur et libèrent la rotation du rotor",
+   "La clé pousse directement le pêne hors de la gâche",
+   "Un ressort unique se comprime et débloque la porte"
+  ],
+  "c": 1,
+  "e": "Chaque cran de la clé soulève une paire de goupilles à une hauteur précise. Quand toutes les séparations sont alignées sur la ligne de césure, le rotor peut tourner et entraîner le pêne."
+ },
+ {
+  "p": "Que garantit la certification A2P (1, 2 ou 3 étoiles) sur une serrure ?",
+  "o": [
+   "Que la serrure est fabriquée en France",
+   "Un temps de résistance testé face à l'effraction, croissant avec le nombre d'étoiles",
+   "Que la serrure est inviolable",
+   "La durée de la garantie commerciale"
+  ],
+  "c": 1,
+  "e": "L'A2P atteste d'une résistance testée en laboratoire : environ 5, 10 ou 15 minutes selon le nombre d'étoiles. Aucune serrure n'est inviolable : on gagne du temps, ce qui décourage l'effraction."
+ },
+ {
+  "p": "Quel détail visible depuis le palier signale un point faible sur une serrure standard ?",
+  "o": [
+   "Un cylindre qui dépasse nettement de la porte, sans protection",
+   "Une poignée de couleur dorée",
+   "Une clé plate à trous plutôt qu'à dents",
+   "La présence d'un judas"
+  ],
+  "c": 0,
+  "h": "Ce qui dépasse donne de la prise.",
+  "e": "Un cylindre qui dépasse de plus de quelques millimètres offre une prise et peut être cassé. La parade : un cylindre à la bonne longueur et une rosace ou un protège-cylindre."
+ },
+ {
+  "p": "Quel est l'intérêt d'une serrure multipoints par rapport à une serrure à un seul point ?",
+  "o": [
+   "Elle se passe de clé",
+   "Elle verrouille la porte à plusieurs endroits, ce qui répartit les efforts en cas de tentative de forçage",
+   "Elle rend le cylindre inutile",
+   "Elle est obligatoire dans tous les logements"
+  ],
+  "c": 1,
+  "e": "Avec 3 ou 5 points d'ancrage (haut, milieu, bas), la porte résiste bien mieux à l'enfoncement ou au pied-de-biche. Mais le cylindre et la solidité de la porte et du bâti comptent tout autant."
+ }
 ];
-var REST=[18,40,12,36,22,42,14,38,20,34],LINE=29;
-var ans=[];
-function $(id){return document.getElementById(id)}
-function el(t,c,txt){var e=document.createElement(t);if(c)e.className=c;if(txt!=null)e.textContent=txt;return e}
-function build(){
-  ans=Q.map(function(){return null});
-  var quiz=$("quiz-main");quiz.textContent="";
-  Q.forEach(function(q,i){
-    SECTIONS.forEach(function(s){if(s.at===i){quiz.append(el("h2",null,s.title))}});
-    var card=el("section","quiz-q");
-    var h3=el("h3");h3.append(el("span","quiz-num",(i+1)+"."),q.p);
-    var opts=el("div","quiz-opts");
-    q.o.forEach(function(t,j){
-      var b=el("button","quiz-opt");b.type="button";b.id="q"+i+"o"+j;
-      b.append(el("span","quiz-mark",String.fromCharCode(65+j)),el("span",null,t));
-      b.addEventListener("click",function(){pick(i,j)});
-      opts.append(b);
-    });
-    card.append(h3,opts);
-    if(q.h){
-      var hb=el("button","quiz-hint","Voir un indice");hb.type="button";hb.id="q"+i+"hint";
-      var hp=el("p","quiz-note","Indice : "+q.h);hp.hidden=true;
-      hb.addEventListener("click",function(){hp.hidden=false;hb.hidden=true});
-      card.append(hb,hp);
-    }
-    var fb=el("p","quiz-fb");fb.id="q"+i+"fb";fb.hidden=true;card.append(fb);
-    quiz.append(card);
+function vf(p,t,e){return{p:p,o:["Vrai","Faux"],c:t?0:1,e:e}}
+function qc(p,o,c,e){return{p:p,o:o,c:o.indexOf(c),e:e}}
+var VF=[
+ vf("Une porte blindée est totalement incrochetable.",false,"Aucune serrure n'est totalement incrochetable. Le blindage renforce la résistance à l'effraction mais n'offre pas d'inviolabilité."),
+ vf("Il faut changer sa serrure après chaque déménagement.",false,"C'est le cylindre qu'on change, pas toute la serrure : nettement moins cher et tout aussi efficace pour récupérer le contrôle des clés."),
+ vf("Un cadenas cher est toujours plus sûr qu'un cadenas bon marché.",false,"Le prix n'est pas un gage de sécurité. Mieux vaut vérifier la certification (A2P) que le tarif."),
+ vf("Un verrou supplémentaire ralentit toujours un·e cambrioleur·se, même mal posé.",false,"Mal posé, un verrou peut être inutile, voire donner un faux sentiment de sécurité."),
+ vf("Votre assurance peut exiger une serrure 3 points (ou plus) certifiée pour vous indemniser après un cambriolage.",true,"Cela dépend du contrat : certains assureurs fixent des exigences sur la serrure (nombre de points, certification). Relisez les conditions de votre contrat."),
+ vf("Il est illégal de crocheter sa propre serrure quand on est enfermé·e dehors.",false,"Ouvrir sa propre porte n'est pas illégal. Un·e pro sérieux·se demandera en revanche de justifier que le logement est bien le vôtre."),
+ vf("Un bon éclairage extérieur peut contribuer à dissuader un·e cambrioleur·se.",true,"La lumière réduit l'anonymat recherché. Elle complète une bonne serrure sans la remplacer."),
+ vf("Une clé « de sécurité » protégée par brevet ne se copie que sur présentation d'une carte de propriété.",true,"Ces clés ne sont reproduites que sur présentation de la carte de propriété, chez le fabricant ou un revendeur agréé."),
+ vf("Une serrure connectée (Bluetooth) est toujours plus sûre qu'une serrure mécanique.",false,"Une serrure connectée ajoute du confort mais introduit d'autres risques (piratage, panne électronique) absents d'une serrure mécanique.")
+];
+var CULT=[
+ qc("Depuis quand les serrures à clé existent-elles ?",["Antiquité","Moyen Âge","19e siècle"],"Antiquité","On en trouve déjà dans l'Égypte ancienne, il y a plusieurs milliers d'années."),
+ qc("Avant d'ouvrir une porte, un·e serrurier·ère sérieux·se vérifie que vous habitez bien le logement.",["Vrai","Faux"],"Vrai","C'est une bonne pratique professionnelle : on demande une pièce d'identité et un justificatif de domicile pour éviter d'ouvrir un logement à une personne extérieure."),
+ qc("Le mot « clé » vient du latin « clavis ».",["Vrai","Faux"],"Vrai","« Clavis » désigne la clé en latin, à l'origine de plusieurs mots français liés à la fermeture."),
+ qc("Un·e artisan·e peut-il·elle travailler seul·e en étant micro-entrepreneur·se ?",["Oui","Non"],"Oui","Le statut de micro-entrepreneur·se permet d'exercer seul·e, sans associé·e, avec des démarches administratives allégées."),
+ qc("Quelle est la différence entre une clé « à secret » et une clé classique ?",["Elle ne peut pas être reproduite sans autorisation","Elle est plus lourde","Elle ouvre plusieurs serrures"],"Elle ne peut pas être reproduite sans autorisation","Les clés à secret sont protégées par une carte de propriété : seul le fabricant ou un revendeur agréé peut en faire une copie.")
+];
+var PARC=[
+ {t:"Consommateur·rices averti·es",tag:"QCM · 6 questions",d:"Repérer les abus et connaître ses droits.",items:FRIEND.slice(0,6)},
+ {t:"Vrai ou faux : mythes de la sécurité",tag:"Vrai / faux · 9 questions",d:"Démêler le vrai du faux.",items:VF},
+ {t:"Découverte technique",tag:"QCM · "+(FRIEND.length-6+CULT.length)+" questions",d:"Cylindre, certification, culture serrurerie.",items:FRIEND.slice(6).concat(CULT)}
+];
+var PAIRS=[
+ ["Pêne","Pièce mobile qui sort de la serrure pour s'engager dans la gâche."],
+ ["Gâche","Pièce métallique fixée dans le cadre, qui reçoit le pêne."],
+ ["Têtière","Plaque visible sur la tranche de la porte, qui recouvre le mécanisme."],
+ ["Béquille","Poignée qui actionne le fouillot."],
+ ["Fouillot","Pièce interne qui reçoit la béquille."],
+ ["Barillet","Contient le mécanisme à goupilles actionné par la clé."]
+];
+var BONUS=[
+ {q:"Un petit jeu : double une lettre dans certains mots de serrurerie et tu tombes sur une spécialité italienne. Exemple : pêne → penne. Sauras-tu deviner l'autre ?",a:"Le panettone, le gâteau italien de Noël : un clin d'œil entre vocabulaire technique et gourmandise."},
+ {q:"Pourquoi le vélo cargo est-il pratique pour un métier comme celui-ci à Toulouse ?",a:"Zéro émission, zéro bruit, et il passe là où une voiture reste coincée. Le cargo transporte l'outillage nécessaire à domicile."},
+ {q:"Combien de clés perdues un·e serrurier·ère fabrique-t-il·elle en moyenne par semaine ?",a:"Zéro, puisqu'elles sont perdues :P"}
+];
+var REST=[18,40,12,36,22,42,14,38,20],LINE=29;
+var S={anim:false,teams:[]};
+var app=document.getElementById("app"),tb=document.getElementById("teambar");
+function el(t,c,x){var e=document.createElement(t);if(c)e.className=c;if(x!=null)e.textContent=x;return e}
+function btn(txt,cls,fn){var b=el("button","btn"+(cls?" "+cls:""),txt);b.type="button";if(fn)b.addEventListener("click",fn);return b}
+function show(fn){app.textContent="";window.scrollTo(0,0);fn()}
+function head(title){var d=el("div");d.append(btn("← Accueil","",home),el("h2",null,title));d.firstChild.style.marginBottom="10px";return d}
+
+/* équipes */
+function drawTeams(){
+  tb.textContent="";tb.hidden=!S.teams.length;
+  S.teams.forEach(function(t,k){
+    var d=el("div","team"),i=el("input");i.value=t.n;i.setAttribute("aria-label","Nom de l'équipe "+(k+1));
+    i.addEventListener("input",function(){t.n=i.value});
+    var pts=el("b",null,t.s);
+    function chg(v){var b=el("button",null,v>0?"+":"−");b.type="button";b.setAttribute("aria-label",(v>0?"Ajouter":"Retirer")+" un point à "+t.n);b.addEventListener("click",function(){t.s+=v;pts.textContent=t.s});return b}
+    d.append(i,chg(-1),pts,chg(1));tb.append(d);
   });
-  var pins=$("quiz-pins");pins.textContent="";
-  Q.forEach(function(){pins.append(el("div","quiz-pin"))});
-  refresh();
+  document.documentElement.style.setProperty("--tb",S.teams.length?tb.offsetHeight+"px":"0px");
 }
-function pick(i,j){
-  if(ans[i]!==null)return;
-  ans[i]=j;var q=Q[i],ok=j===q.c;
-  q.o.forEach(function(_,k){
-    var b=$("q"+i+"o"+k);b.disabled=true;
+function setTeams(n){
+  var old=S.teams;S.teams=[];
+  for(var k=0;k<n;k++)S.teams.push(old[k]||{n:"Équipe "+(k+1),s:0});
+  drawTeams();
+}
+
+/* accueil */
+function home(){show(function(){
+  app.append(el("h1",null,"Quiz atelier serrurerie"),el("p","lede","Choisissez un parcours. Chaque bonne réponse aligne une goupille."));
+  var o=el("div","box");o.append(el("h3",null,"Options de l'atelier"));
+  var r1=el("div","row");
+  var ab=btn("Mode animateur : "+(S.anim?"activé":"désactivé"),"",function(){S.anim=!S.anim;home()});ab.setAttribute("aria-pressed",S.anim);
+  r1.append(ab,el("span","note","Une question à la fois en grand, avec un bouton « Révéler »."));
+  var r2=el("div","row");r2.style.marginTop="10px";r2.append(el("span",null,"Équipes :"));
+  [0,2,3,4].forEach(function(n){var b=btn(n?String(n):"Aucune","",function(){setTeams(n);home()});b.setAttribute("aria-pressed",S.teams.length===n);r2.append(b)});
+  o.append(r1,r2);app.append(o);
+  var g=el("div","cards");
+  PARC.forEach(function(p){g.append(card(p.tag,p.t,p.d,function(){run(p)}))});
+  g.append(card("Relier · 6 pièces","Relier pièce et définition","Associer chaque pièce de la serrure à son rôle.",match));
+  g.append(card("Jeu · cylindre","Aligner les goupilles","Réglez chaque colonne jusqu'à la ligne de césure.",cyl));
+  var ph=card("Photos · bientôt","Reconnaître la pièce","Parcours en préparation : les photos arrivent.",null);ph.disabled=true;g.append(ph);
+  g.append(card("Discussion","Bonus discussion","Trois questions pour animer le groupe.",bonus));
+  app.append(g);
+})}
+function card(tag,t,d,fn){var b=el("button","card");b.type="button";b.append(el("span","tag",tag),el("b",null,t),el("span","d",d));if(fn)b.addEventListener("click",fn);return b}
+
+/* cartes de questions */
+function qcard(q,i,big,onpick){
+  var c=el("section","q"+(big?" big":"")),h=el("h3");h.append(big?"":(i+1)+". ",q.p);
+  var ops=el("div","opts");
+  q.o.forEach(function(t,j){
+    var b=el(onpick?"button":"div","opt");if(onpick){b.type="button";b.addEventListener("click",function(){onpick(j)})}
+    b.append(el("span","mk",String.fromCharCode(65+j)),el("span",null,t));ops.append(b);
+  });
+  c.append(h,ops);return c;
+}
+function mark(c,q,j){
+  var o=c.querySelectorAll(".opt");
+  Array.prototype.forEach.call(o,function(b,k){
+    if(b.tagName==="BUTTON")b.disabled=true;
     if(k===q.c){b.classList.add("right");b.firstChild.textContent="✓"}
     else if(k===j){b.classList.add("wrong");b.firstChild.textContent="✗"}
   });
-  var hb=$("q"+i+"hint");if(hb)hb.hidden=true;
-  var fb=$("q"+i+"fb");fb.textContent="";
-  fb.append(el("b",ok?"ok":"ko",ok?"Bonne réponse. ":"Pas tout à fait. "),q.e);fb.hidden=false;
-  refresh();
 }
-function refresh(){
-  var done=ans.filter(function(a){return a!==null}).length;
-  var good=ans.filter(function(a,i){return a===Q[i].c}).length;
-  Array.prototype.forEach.call($("quiz-pins").children,function(p,i){
-    var a=ans[i];
-    p.className="quiz-pin"+(a===null?"":a===Q[i].c?" ok":" ko");
-    p.style.height=(a!==null&&a===Q[i].c?LINE:REST[i])+"px";
+function fbk(c,q,ok){
+  var f=el("p","fb");
+  if(ok!==null)f.append(el("b",ok?"ok":"ko",ok?"Bonne réponse. ":"Pas tout à fait. "));
+  f.append(q.e);c.append(f);
+}
+
+/* parcours */
+function run(P){S.anim?runAnim(P):runNormal(P)}
+function runNormal(P){show(function(){
+  var ans=P.items.map(function(){return null});
+  app.append(head(P.t));
+  var bar=el("div","qbar"),pins=el("div","pins"),sc=el("div","score"),rs=btn("Recommencer","",function(){run(P)});
+  pins.setAttribute("aria-hidden","true");sc.setAttribute("aria-live","polite");
+  P.items.forEach(function(){pins.append(el("div","pin"))});
+  bar.append(pins,sc,rs);app.append(bar);
+  var end=el("div","end");end.hidden=true;var et=el("p");end.append(et);
+  function refresh(){
+    var done=0,good=0;
+    ans.forEach(function(a,i){if(a!==null){done++;if(a===P.items[i].c)good++}});
+    Array.prototype.forEach.call(pins.children,function(p,i){
+      var a=ans[i],ok=a!==null&&a===P.items[i].c;
+      p.className="pin"+(a===null?"":ok?" ok":" ko");p.style.height=(ok?LINE:REST[i%REST.length])+"px";
+    });
+    sc.textContent="";sc.append(good+" / "+P.items.length,el("small",null,done+" répondue"+(done>1?"s":"")));
+    if(done===P.items.length){
+      var m=good===P.items.length?"Toutes les goupilles sont alignées : la serrure tourne.":good>=Math.ceil(P.items.length*.7)?"Bons réflexes. Relisez les explications des questions manquées.":"Reprenez les explications : ce sont les bons réflexes à garder.";
+      et.textContent="";et.append(el("b",null,good+" bonnes réponses sur "+P.items.length+". "),m);end.hidden=false;
+    }else end.hidden=true;
+  }
+  P.items.forEach(function(q,i){
+    var c=qcard(q,i,false,function(j){
+      if(ans[i]!==null)return;ans[i]=j;mark(c,q,j);
+      var hb=c.querySelector(".hint"),hn=c.querySelector(".note");if(hb)hb.remove();if(hn)hn.remove();
+      fbk(c,q,j===q.c);refresh();
+    });
+    if(q.h){var hb=el("button","hint","Voir un indice");hb.type="button";var hn=el("p","note","Indice : "+q.h);hn.hidden=true;
+      hb.addEventListener("click",function(){hn.hidden=false;hb.hidden=true});c.append(hb,hn)}
+    app.append(c);
   });
-  $("quiz-score").textContent="";
-  $("quiz-score").append(good+" / "+Q.length,el("small",null,done+" répondue"+(done>1?"s":"")));
-  var end=$("quiz-end");
-  if(done===Q.length){
-    var msg=good===Q.length?"Toutes les goupilles sont alignées : la serrure tourne.":
-      good>=7?"Bons réflexes. Relisez les explications des questions manquées.":
-      "Reprenez les explications : ce sont les réflexes à garder avant d'appeler.";
-    $("quiz-endtxt").textContent="";
-    $("quiz-endtxt").append(el("b",null,good+" bonnes réponses sur "+Q.length+". "),msg);
-    end.hidden=false;
-  }else end.hidden=true;
+  app.append(end);refresh();
+})}
+function runAnim(P){
+  var i=0,rev=false;
+  function draw(){show(function(){
+    var q=P.items[i];app.append(head(P.t));
+    app.append(el("p","note","Question "+(i+1)+" sur "+P.items.length));
+    var c=qcard(q,i,true,null);app.append(c);
+    var nv=el("div","nav");
+    nv.append(btn("← Précédente","",function(){if(i>0){i--;rev=false;draw()}}));
+    if(!rev){nv.append(btn("Révéler la réponse","main",function(){rev=true;mark(c,q,-1);fbk(c,q,null);nv.replaceWith(nv2())}))}
+    else nv.append(nv2());
+    function nv2(){var s=el("span");s.append(i<P.items.length-1?btn("Question suivante →","main",function(){i++;rev=false;draw()}):btn("Terminer","main",home));return s}
+    app.append(nv);
+  })}
+  draw();
 }
-$("quiz-reset").addEventListener("click",function(){build();window.scrollTo(0,0)});
-build();
+
+/* relier */
+function match(){show(function(){
+  app.append(head("Relier pièce et définition"));
+  app.append(el("p","lede","Touchez une pièce, puis la définition qui lui correspond."));
+  var sel=null,errs=0,done=0;
+  var defs=PAIRS.map(function(p,k){return{k:k,d:p[1]}}).sort(function(){return Math.random()-.5});
+  var g=el("div","match"),L=el("div","col"),R=el("div","col"),msg=el("p","note");msg.setAttribute("aria-live","polite");
+  var lb=PAIRS.map(function(p,k){var b=el("button","m term",p[0]);b.type="button";b.addEventListener("click",function(){
+    if(b.classList.contains("done"))return;if(sel)sel.classList.remove("sel");sel=b;b.classList.add("sel");b.dataset.k=k});b.dataset.k=k;L.append(b);return b});
+  defs.forEach(function(x){var b=el("button","m",x.d);b.type="button";b.addEventListener("click",function(){
+    if(b.classList.contains("done")||!sel)return;
+    if(+sel.dataset.k===x.k){sel.classList.remove("sel");sel.classList.add("done");b.classList.add("done");sel=null;done++;
+      if(done===PAIRS.length)msg.textContent=errs?"Terminé avec "+errs+" erreur"+(errs>1?"s":"")+".":"Sans faute : toutes les pièces sont reliées."}
+    else{errs++;b.classList.add("bad");setTimeout(function(){b.classList.remove("bad")},600)}
+  });R.append(b)});
+  g.append(L,R);app.append(g,msg,btn("Recommencer","",match));
+})}
+
+/* jeu du cylindre */
+function cyl(){show(function(){
+  app.append(head("Aligner les goupilles"));
+  app.append(el("p","lede","Chaque colonne contient une goupille de clé (bas) et une goupille de blocage (haut). Réglez la hauteur jusqu'à ce que leur séparation touche la ligne pointillée."));
+  var N=5,SL=140,ST=14,t=[],h=[],moves=0;
+  for(var k=0;k<N;k++){t.push(1+Math.floor(Math.random()*4));h.push(0)}
+  var NS="http://www.w3.org/2000/svg",svg=document.createElementNS(NS,"svg");
+  svg.setAttribute("viewBox","0 0 360 290");svg.setAttribute("class","cyl");svg.setAttribute("role","img");
+  var ctl=el("div","ctl"),msg=el("p","note");msg.setAttribute("aria-live","polite");msg.style.textAlign="center";
+  function X(k){return 40+k*70}
+  function draw(){
+    var s='<rect class="body" x="10" y="10" width="340" height="270" rx="10"/>',all=true;
+    for(var k=0;k<N;k++){
+      var sp=SL+(t[k]-h[k])*ST,al=sp===SL;if(!al)all=false;
+      s+='<g class="'+(al?"al":"")+'"><rect class="dp" x="'+(X(k)-17)+'" y="'+(sp-45)+'" width="34" height="45" rx="3"/><rect class="kp" x="'+(X(k)-17)+'" y="'+sp+'" width="34" height="50" rx="3"/></g>';
+    }
+    s+='<line class="sl" x1="10" x2="350" y1="'+SL+'" y2="'+SL+'"/>';
+    svg.setAttribute("class","cyl"+(all?" win":""));svg.innerHTML=s;
+    msg.textContent=all?"Toutes les séparations sont sur la ligne de césure : le rotor tourne, la porte s'ouvre ! ("+moves+" réglages)":"Réglages : "+moves;
+  }
+  for(var k=0;k<N;k++)(function(k){
+    var d=el("div");
+    function mv(v,l){var b=btn(l,"",function(){var n=h[k]+v;if(n<0||n>5)return;h[k]=n;moves++;draw()});b.setAttribute("aria-label",(v>0?"Monter":"Descendre")+" la colonne "+(k+1));return b}
+    d.append(mv(1,"▲"),mv(-1,"▼"));ctl.append(d);
+  })(k);
+  app.append(svg,ctl,msg,btn("Nouveau cylindre","",cyl));draw();
+})}
+
+/* bonus */
+function bonus(){show(function(){
+  app.append(head("Bonus discussion"));
+  BONUS.forEach(function(b){
+    var c=el("section","q bonus");c.append(el("h3",null,b.q));
+    var a=el("p","fb ans",b.a),r=btn("Révéler la réponse","",function(){a.classList.toggle("show")});
+    r.style.alignSelf="flex-start";c.append(r,a);app.append(c);
+  });
+})}
+window.addEventListener("resize",drawTeams);
+home();
 })();
 </script>
-
 </body>
-
 </html>
