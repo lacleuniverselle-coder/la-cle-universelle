@@ -45,10 +45,10 @@
     </a>
     <ul class="nav-links">
       <li class="nav-dropdown">
-        <a href="index.html#services" class="nav-dropdown-toggle">Services <span class="nav-dropdown-arrow">▾</span></a>
+        <a href="javascript:void(0)" class="nav-dropdown-toggle" role="button" aria-haspopup="true">Serrurerie <span class="nav-dropdown-arrow">▾</span></a>
         <ul class="nav-dropdown-menu">
-          <li><a href="prestations-serrurerie.html">Serrurerie</a></li>
-          <li><a href="mecanique-velo.html">Mécanique vélo</a></li>
+          <li><a href="prestations-serrurerie.html">Prestations</a></li>
+          <li><a href="serrurerie.html">Tarifs</a></li>
         </ul>
       </li>
       <li><a href="zones.html">Zones</a></li>
@@ -56,6 +56,8 @@
       <li><a href="pourquoi.html">Pourquoi moi</a></li>
       <li><a href="index.html#apropos">À propos</a></li>
       <li><a href="index.html#contact">Contact</a></li>
+      <li><a href="actus.html">Actus</a></li>
+      <li><a href="mecanique-velo.html">Option vélo</a></li>
       <li><a href="faq.html">FAQ</a></li>
     </ul>
     <div style="display:flex; align-items:center; gap:0.6rem;">
@@ -69,14 +71,14 @@
     <div class="mobile-menu" id="mobile-menu">
       <div class="mobile-accordion">
         <div class="mobile-accordion-row">
-          <a href="index.html#services" class="mobile-accordion-link" onclick="closeMenu()">Services</a>
-          <button class="mobile-accordion-toggle" aria-label="Sous-menu Services" onclick="toggleMobileAccordion(this)" type="button">
+          <a href="javascript:void(0)" class="mobile-accordion-link" onclick="toggleMobileAccordion(this.nextElementSibling)">Serrurerie</a>
+          <button class="mobile-accordion-toggle" aria-label="Sous-menu Serrurerie" onclick="toggleMobileAccordion(this)" type="button">
             <span class="accordion-arrow">▾</span>
           </button>
         </div>
         <div class="mobile-accordion-panel">
-          <a href="prestations-serrurerie.html">Serrurerie</a>
-          <a href="mecanique-velo.html">Mécanique vélo</a>
+          <a href="prestations-serrurerie.html" onclick="closeMenu()">Prestations</a>
+          <a href="serrurerie.html" onclick="closeMenu()">Tarifs</a>
         </div>
       </div>
       <a href="zones.html" onclick="closeMenu()">Zones</a>
@@ -85,6 +87,7 @@
       <a href="index.html#apropos" onclick="closeMenu()">À propos</a>
       <a href="index.html#contact" onclick="closeMenu()">Contact</a>
        <a href="actus.html" onclick="closeMenu()">Actus</a>
+      <a href="mecanique-velo.html" onclick="closeMenu()">Option vélo</a>
       <a href="faq.html" onclick="closeMenu()">FAQ</a>
     </div>
   </nav>
