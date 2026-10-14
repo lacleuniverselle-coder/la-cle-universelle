@@ -3235,7 +3235,7 @@ table.tarifs td.prix-semaine {
     transition: transform .1s, box-shadow .2s, background .2s;
 }
 .hero-btn-call { background: var(--jaune); color: var(--violet); border: 0; box-shadow: 0 6px 18px rgba(0, 0, 0, .3); }
-.hero-btn-call .hero-btn-num { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+.hero-btn-call .hero-btn-num { display: block; margin-top: .15rem; font-size: .72rem; font-weight: 500; letter-spacing: .03em; opacity: .75; white-space: nowrap; }
 .hero-btn-call:hover { background: #ffd23f; transform: translateY(-2px); }
 
 .hero-link {
@@ -3521,3 +3521,117 @@ h2 { font-size: clamp(1rem, 2.1vw, 1.6rem); margin-bottom: .5rem; }
     .hero-media { height: clamp(160px, 28vh, 220px); }  /* au lieu de 105–135px */
 }
 
+.social-links {
+    display: flex;
+    justify-content: center;
+    gap: .6rem;
+    margin-top: .8rem
+}
+
+.social-links a {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 34px;
+    height: 34px;
+    border-radius: 8px;
+    border: 1px solid rgba(255, 255, 255, .35);
+    background: rgba(255, 255, 255, .06);
+    color: #fff;
+    transition: background .2s ease, border-color .2s ease, transform .2s ease
+}
+
+.social-links svg {
+    display: block;
+    width: 18px;
+    height: 18px;
+    fill: currentColor
+}
+
+.social-links a:hover,
+.social-links a:focus-visible {
+    background: rgba(255, 255, 255, .18);
+    border-color: rgba(255, 255, 255, .7);
+    transform: translateY(-2px)
+}
+
+/* ===================================================================
+   CONTACT — version compacte
+   =================================================================== */
+#contact { padding: 1.6rem 2rem; }
+.contact-btns-rowcont { margin: .4rem 0 .6rem; gap: .6rem; }
+.contact-tel-btn { margin: 0; padding: .4rem 1.1rem; font-size: .82rem; }
+.hours-card { padding: 1rem 1.1rem; }
+.hours-card-title { margin: 0 0 .7rem; }
+.hours-row { padding: .4rem .15rem; }
+.hours-note { margin: .7rem 0 .6rem; }
+.contact-columns .contact-form-new { gap: .3rem; }
+.contact-form-new input[type=email],
+.contact-form-new input[type=tel],
+.contact-form-new input[type=text],
+.contact-form-new textarea { padding: .45rem .7rem; }
+.contact-form-new textarea { height: 64px; }
+.btn-send { padding: .5rem 1.4rem; }
+
+/* Avis Google (widget Elfsight) — version compacte */
+.reviews-compact {
+    max-width: 720px;
+    margin: .6rem auto 1rem;
+    zoom: .85
+}
+
+/* ===================================================================
+   PRESTATIONS — version compacte (page prestations-serrurerie uniquement)
+   =================================================================== */
+.prestations-main-col { padding: .8rem 1rem 1.5rem; }
+.prestations-main-col h1 { font-size: 1.4rem; margin: .1rem 0 .3rem; }
+.prestations-main-col .section-desc { font-size: .86rem; line-height: 1.45; margin-bottom: .3rem; }
+.prestations-main-col .section-desc > div { margin-bottom: .3rem; }
+.prestations-main-col .prest-cat-title { margin: 1.1rem 0 .5rem; font-size: 1rem; }
+.prestations-main-col > .prest-cat-title:first-of-type { margin-top: .4rem; }
+.prestations-main-col .prest-icon { width: 28px; height: 28px; object-fit: contain; }
+.prestations-main-col .prest-cat-title,
+.prestations-main-col .prest-comment { justify-content: center; text-align: center; }
+.prestations-main-col .prest-grid { grid-template-columns: 1fr 1fr; gap: 10px; margin: .4rem 0 0; width: 100%; }
+.prestations-main-col .prest-card { padding: .5rem .7rem; height: auto; }
+.prestations-main-col .prest-card .card-title-row { margin-bottom: .15rem; }
+.prestations-main-col .prest-card h3 { font-size: .92rem; margin-left: 0; }
+.prestations-main-col .prest-card p { font-size: .82rem; line-height: 1.4; min-height: 0; margin: 0; }
+.prestations-main-col .prest-comment { margin: 1.1rem 0 .5rem; font-size: 1rem; }
+.prestations-main-col .prest-steps { gap: 12px; margin-top: 1.5rem; }
+.prestations-main-col .prest-steps .card { padding: .9rem .7rem .5rem; }
+.prestations-main-col .prest-steps .card-icon { width: 1.6rem; height: 1.6rem; font-size: .9rem; margin: 0; }
+.prestations-main-col .prest-steps .card h3 { font-size: .92rem; }
+.prestations-main-col .prest-steps .card p { font-size: .82rem; line-height: 1.4; min-height: 0; margin: 0; }
+.prestations-main-col .prest-cta { margin-top: 1.3rem; padding: .6rem 1.1rem; }
+.prestations-main-col p.tarifs-note-legal { font-size: .72rem; line-height: 1.4; margin: .6rem 0 0; }
+#page-prestations-serrurerie .contact-btns-row { margin-bottom: 1.2rem !important; }
+
+@media (max-width: 640px) {
+    .prestations-main-col { padding: .7rem .9rem 1.2rem; }
+    .prestations-main-col h1 { font-size: 1.3rem; }
+    .prestations-main-col .section-desc { font-size: .88rem; }
+    .prestations-main-col .prest-grid { grid-template-columns: 1fr; gap: 10px; }
+    .prestations-main-col .prest-card { padding: .6rem .8rem; }
+    .prestations-main-col .prest-card h3 { font-size: .95rem; }
+    .prestations-main-col .prest-card p { font-size: .85rem; line-height: 1.45; }
+    .prestations-main-col .prest-steps { grid-template-columns: 1fr; row-gap: 1.4rem; }
+    .prestations-main-col .prest-steps .card p { font-size: .85rem; }
+}
+
+/* Carte assurance mise en avant */
+.prestations-main-col .prest-card-highlight {
+    background: var(--lilas-pale);
+    border: 1.5px solid var(--violet);
+    box-shadow: 0 4px 14px rgba(72, 38, 100, .25);
+}
+.prestations-main-col .prest-card-highlight:hover {
+    border-color: var(--violet);
+    box-shadow: 0 6px 20px rgba(72, 38, 100, .38);
+}
+.prestations-main-col .prest-card-highlight .prest-card-link {
+    margin-top: .25rem;
+    font-weight: 700;
+    color: var(--violet);
+    text-decoration: underline;
+}
