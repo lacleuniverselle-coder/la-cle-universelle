@@ -2160,10 +2160,10 @@ table.tarifs td.prix-semaine {
 
 .contact-columns {
     display: grid;
-    grid-template-columns: minmax(0, 1fr) 400px;
+    grid-template-columns: 400px 1fr;
     gap: 1.5rem;
-    justify-content: center;
-    align-items: start
+    justify-content: start;
+    align-items: stretch
 }
 
 .contact-columns .contact-form-new {
@@ -3159,7 +3159,7 @@ table.tarifs td.prix-semaine {
     font-weight: 600;
     letter-spacing: .09em;
     text-transform: uppercase;
-    line-height: 1.5;
+    line-height: 1.;
     white-space: nowrap;
 }
 
@@ -3326,8 +3326,8 @@ table.tarifs td.prix-semaine {
     .hero-media { height: clamp(160px, 28vh, 220px); }
     .hero-body { padding: 0 1.6rem .8rem; }
 
-    .hero-v2 .hero-logo-wrap { margin: -63px 0 .5rem; }
-    .hero-v2 .hero-logo-wrap :is(svg, img) { height: 115px; }
+    .hero-v2 .hero-logo-wrap { margin: -35px 0 .1rem; }
+    .hero-v2 .hero-logo-wrap :is(svg, img) { height: 130px; margin: 0 0 -.5rem;}
 
     .hero-eyebrow { margin: 0 0 .4rem; font-size: .68rem; }
     .hero-title { margin: 0 0 .5rem; font-size: 1.4rem; font-weight: 600; }
@@ -3463,8 +3463,8 @@ h2 { font-size: clamp(1rem, 2.1vw, 1.6rem); margin-bottom: .5rem; }
 
 /* Avis Google (widget Elfsight) — version compacte */
 .reviews-compact {
-    min-width: 0;
-    margin: 0;
+    max-width: 720px;
+    margin: .6rem auto 1rem;
     zoom: .85
 }
 
