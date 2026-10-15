@@ -2160,10 +2160,10 @@ table.tarifs td.prix-semaine {
 
 .contact-columns {
     display: grid;
-    grid-template-columns: 400px 1fr;
+    grid-template-columns: minmax(0, 1fr) 400px;
     gap: 1.5rem;
-    justify-content: start;
-    align-items: stretch
+    justify-content: center;
+    align-items: start
 }
 
 .contact-columns .contact-form-new {
@@ -3463,8 +3463,8 @@ h2 { font-size: clamp(1rem, 2.1vw, 1.6rem); margin-bottom: .5rem; }
 
 /* Avis Google (widget Elfsight) — version compacte */
 .reviews-compact {
-    max-width: 720px;
-    margin: .6rem auto 1rem;
+    min-width: 0;
+    margin: 0;
     zoom: .85
 }
 
