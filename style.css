@@ -3092,9 +3092,15 @@ table.tarifs td.prix-semaine {
 
 
 /* ===================================================================
-   HERO v2 — photo + bloc violet (logo, titre, icônes, appel) + bulle téléphone
-   Mobile d'abord. N'utilise PAS la classe .hero (autres pages intactes).
+   HERO v2 — photo + bloc violet (logo, titre, engagements, appel)
+   -------------------------------------------------------------------
+   Organisation : 1) styles communs  2) mobile (≤ 640px)
+                  3) desktop (≥ 641px)  4) bulle téléphone
+   N'utilise PAS la classe .hero (autres pages intactes).
    =================================================================== */
+
+/* ---------- 1) COMMUN ---------- */
+
 .hero-v2 {
     --jaune: #fac517;
     position: relative;
@@ -3109,8 +3115,9 @@ table.tarifs td.prix-semaine {
     box-shadow: 0 8px 32px rgba(72, 38, 100, .25);
 }
 
-.hero-media { position: relative; height: auto; background: var(--violet); }
-.hero-photo { display: block; width: 100%; height: auto; aspect-ratio: 1400 / 841; object-fit: cover; object-position: 50% 50%; }
+/* Photo */
+.hero-media { position: relative; background: var(--violet); }
+.hero-photo { display: block; width: 100%; height: 100%; object-fit: cover; object-position: 50% 50%; }
 .hero-media::after {
     content: "";
     position: absolute;
@@ -3119,31 +3126,35 @@ table.tarifs td.prix-semaine {
     pointer-events: none;
 }
 
-.hero-body { display: flex; flex-direction: column; align-items: center; padding: 0 1rem 1rem; }
+/* Corps du bloc violet : tout est centré */
+.hero-body { display: flex; flex-direction: column; align-items: center; text-align: center; }
 
-/* Logo plus grand, pastille blanche chevauchant la photo */
+/* Logo : pastille blanche qui chevauche la photo.
+   Le SVG est centré dans la pastille ; line-height: 0 + display: block
+   évitent tout espace fantôme sous le logo. */
 .hero-v2 .hero-logo-wrap {
     position: relative;
     z-index: 1;
-    display: block;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    align-self: center;
     width: auto;
     max-width: 100%;
-    align-self: flex-start;
-    margin: -80px 0 .8rem;
-    padding: .4rem 1rem;
+    padding: .3rem .8rem;
+    line-height: 0;
     background: var(--blanc);
-    border-radius: 12px;
+    border-radius: 10px;
     overflow: hidden;
     box-shadow: 0 6px 18px rgba(0, 0, 0, .28);
 }
-.hero-v2 .hero-logo-wrap svg { display: block; height: 150px; width: auto; max-width: 100%; }
+.hero-v2 .hero-logo-wrap :is(svg, img) { display: block; width: auto; max-width: 100%; }
 
-.hero-v2 .hero-text { display: block; width: 100%; margin: 0; text-align: left; }
+/* Textes */
+.hero-v2 .hero-text { display: block; width: 100%; margin: 0; text-align: center; }
 
 .hero-eyebrow {
-    margin: 0 0 .45rem;
     color: var(--jaune);
-    font-size: clamp(.52rem, 3vw, .68rem);
     font-weight: 600;
     letter-spacing: .09em;
     text-transform: uppercase;
@@ -3153,11 +3164,8 @@ table.tarifs td.prix-semaine {
 
 /* Chaque ligne du titre reste entière (jamais coupée) */
 .hero-title {
-    margin: 0 0 .6rem;
     font-family: "Inter", sans-serif;
-    font-size: clamp(1rem, 4.9vw, 2.1rem);
-    font-weight: 750;
-    line-height: 1.1;
+    line-height: 1.25;
     letter-spacing: -.01em;
     color: var(--blanc);
     text-shadow: 0 2px 10px rgba(0, 0, 0, .25);
@@ -3166,21 +3174,19 @@ table.tarifs td.prix-semaine {
 .hero-title-accent { color: var(--jaune); }
 
 .hero-sub {
-    margin: 0 0 .9rem;
-    font-size: clamp(.64rem, 3.6vw, 1rem);
     font-weight: 300;
-    line-height: 1.45;
+    line-height: 1.4;
     color: rgba(255, 255, 255, .92);
 }
 
-/* Icônes blanches dans le bloc violet : 2×2 mobile, 4 colonnes desktop */
+/* Engagements (icônes blanches) : 2 colonnes mobile, 4 colonnes desktop */
 .hero-v2 .hero-assurances {
     --hero-line: rgba(255, 255, 255, .22);
     list-style: none;
     width: 100%;
     display: grid;
     grid-template-columns: 1fr 1fr;
-    margin: .7rem 0 0;
+    margin: 0;
     padding: 0;
     border-top: 1px solid var(--hero-line);
     border-bottom: 1px solid var(--hero-line);
@@ -3190,17 +3196,12 @@ table.tarifs td.prix-semaine {
     display: flex;
     align-items: center;
     gap: .4rem;
-    padding: .35rem .3rem .35rem .4rem;
-    font-size: clamp(.68rem, 3vw, .8rem);
-    font-weight: 600;
     line-height: 1.25;
     color: var(--blanc);
 }
-.hero-v2 .hero-assurances li:nth-child(odd) { border-right: 1px solid var(--hero-line); }
-.hero-v2 .hero-assurances li:nth-child(-n+2) { border-bottom: 1px solid var(--hero-line); }
-.hero-v2 .ha-icon { flex: none; width: 20px; height: 20px; color: var(--blanc); }
+.hero-v2 .ha-icon { flex: none; color: var(--blanc); }
 
-/* Appel + tarifs, centrés */
+/* Appel + tarifs */
 .hero-cta { width: 100%; display: flex; flex-direction: column; align-items: center; }
 
 .hero-actions {
@@ -3210,31 +3211,26 @@ table.tarifs td.prix-semaine {
     flex-direction: row;
     align-items: center;
     justify-content: center;
-    gap: .8rem;
+    margin-bottom: 0;
 }
 
 .hero-btn {
     box-sizing: border-box;
-    flex: 1 1 0;
-    min-width: 0;
+    flex: none;
     position: relative;
-    min-height: 68px;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    padding: .7rem .9rem;
-    border-radius: 14px;
+    border-radius: 10px;
     font-family: "Inter", sans-serif;
-    font-weight: 800;
-    font-size: clamp(1rem, 4.8vw, 1.2rem);
     line-height: 1.2;
     text-align: center;
     text-decoration: none;
     cursor: pointer;
     transition: transform .1s, box-shadow .2s, background .2s;
 }
-.hero-btn-call { background: var(--jaune); color: var(--violet); border: 0; box-shadow: 0 6px 18px rgba(0, 0, 0, .3); }
+.hero-btn-call { background: var(--jaune); color: var(--violet); border: 0; }
 .hero-btn-call .hero-btn-num { display: block; margin-top: .15rem; font-size: .72rem; font-weight: 500; letter-spacing: .03em; opacity: .75; white-space: nowrap; }
 .hero-btn-call:hover { background: #ffd23f; transform: translateY(-2px); }
 
@@ -3242,8 +3238,6 @@ table.tarifs td.prix-semaine {
     flex: none;
     padding: .5rem .1rem;
     color: var(--blanc);
-    font-size: clamp(.82rem, 3.6vw, .95rem);
-    font-weight: 600;
     line-height: 1.25;
     text-align: center;
     text-decoration: none;
@@ -3251,13 +3245,13 @@ table.tarifs td.prix-semaine {
 .hero-link:hover { text-decoration: underline; }
 .hero-btn:focus-visible, .hero-link:focus-visible, .call-bubble:focus-visible { outline: 3px solid var(--blanc); outline-offset: 2px; }
 
+/* Disponibilité + avis Google */
 .hero-status {
     display: flex;
     align-items: center;
     justify-content: center;
     gap: .5rem;
-    margin: .8rem 0 0;
-    font-size: .8rem;
+    margin: .6rem 0 0;
     font-weight: 500;
     line-height: 1.3;
     text-align: center;
@@ -3265,8 +3259,7 @@ table.tarifs td.prix-semaine {
 }
 .hero-dot { flex: none; width: 8px; height: 8px; border-radius: 50%; background: #4ade80; box-shadow: 0 0 0 3px rgba(74, 222, 128, .25); }
 
-/* Avis Google discret, centré sous la disponibilité */
-.hero-proofs { width: 100%; margin-top: .35rem; display: flex; justify-content: center; }
+.hero-proofs { width: 100%; margin-top: .2rem; display: flex; justify-content: center; }
 .hero-v2 .gbp-link {
     width: auto;
     margin: 0;
@@ -3276,14 +3269,91 @@ table.tarifs td.prix-semaine {
     box-shadow: none;
     border: 0;
     color: rgba(255, 255, 255, .72);
-    font-size: .72rem;
     font-weight: 500;
 }
 .hero-v2 .gbp-link:hover { background: transparent; color: var(--blanc); }
 .hero-v2 .gbp-badge { background: none; padding: 0; box-shadow: none; }
 .hero-v2 .gbp-badge svg { width: 15px; height: 15px; }
 
-/* Bulle téléphone flottante */
+@media (prefers-reduced-motion: reduce) {
+    .hero-btn, .hero-v2 .gbp-link, .call-bubble { transition: none; animation: none; }
+    .hero-btn:hover { transform: none; }
+}
+
+
+/* ---------- 2) MOBILE (≤ 640px) — compact ---------- */
+@media (max-width: 640px) {
+    .hero-media { height: 220px; }
+    .hero-body { padding: 0 1rem .9rem; }
+
+    .hero-v2 .hero-logo-wrap { margin: -45px 0 .5rem; }
+    .hero-v2 .hero-logo-wrap :is(svg, img) { height: 95px; }
+
+    .hero-eyebrow { margin: 0 0 .35rem; font-size: clamp(.6rem, 2.9vw, .72rem); }
+    .hero-title { margin: 0 0 .45rem; font-size: clamp(.82rem, 3.6vw, 1.35rem); font-weight: 750; }
+    .hero-sub { margin: 0 0 .7rem; font-size: .76rem; }
+
+    /* 2 engagements seulement (le délai de 30 min est déjà dans le titre) */
+    .hero-v2 .hero-assurances { margin-top: .8rem; }
+    .hero-v2 .hero-assurances li { padding: .4rem; font-size: .66rem; font-weight: 600; }
+    .hero-v2 .hero-assurances li:nth-child(1),
+    .hero-v2 .hero-assurances li:nth-child(3) { display: none; }
+    .hero-v2 .hero-assurances li:nth-child(2) { border-right: 1px solid var(--hero-line); }
+    .hero-v2 .ha-icon { width: 18px; height: 18px; }
+
+    .hero-actions { gap: .5rem; }
+    .hero-btn {
+        min-width: 0;
+        min-height: 34px;
+        padding: .35rem .8rem;
+        font-size: clamp(.74rem, 3.4vw, .88rem);
+        font-weight: 800;
+        white-space: nowrap;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, .28);
+    }
+    .hero-btn-label { white-space: nowrap; }
+    .hero-link { font-size: clamp(.7rem, 3.2vw, .8rem); font-weight: 600; white-space: nowrap; }
+
+    .hero-status { font-size: .7rem; }
+    .hero-v2 .gbp-link { font-size: .68rem; }
+}
+
+
+/* ---------- 3) DESKTOP (≥ 641px) — largeur alignée sur le menu ---------- */
+@media (min-width: 641px) {
+    .hero-v2 { width: min(860px, calc(100% - 1.2rem)); margin: .6rem auto .8rem; }
+    .hero-media { height: clamp(160px, 28vh, 220px); }
+    .hero-body { padding: 0 1.6rem .8rem; }
+
+    .hero-v2 .hero-logo-wrap { margin: -63px 0 .5rem; }
+    .hero-v2 .hero-logo-wrap :is(svg, img) { height: 115px; }
+
+    .hero-eyebrow { margin: 0 0 .4rem; font-size: .68rem; }
+    .hero-title { margin: 0 0 .5rem; font-size: 1.4rem; font-weight: 600; }
+    .hero-sub { margin: 0 0 .8rem; font-size: .88rem; }
+
+    .hero-v2 .hero-assurances { grid-template-columns: repeat(4, 1fr); margin-top: .6rem; }
+    .hero-v2 .hero-assurances li { padding: .3rem .5rem; font-size: .76rem; font-weight: 500; }
+    .hero-v2 .hero-assurances li:not(:last-child) { border-right: 1px solid var(--hero-line); }
+    .hero-v2 .ha-icon { width: 16px; height: 16px; }
+
+    .hero-actions { gap: .6rem; }
+    .hero-btn {
+        min-width: 200px;
+        min-height: 36px;
+        padding: .3rem .9rem;
+        font-size: .85rem;
+        font-weight: 700;
+        box-shadow: 0 3px 10px rgba(0, 0, 0, .25);
+    }
+    .hero-link { font-size: .8rem; font-weight: 500; }
+
+    .hero-status { font-size: .76rem; }
+    .hero-v2 .gbp-link { font-size: .66rem; }
+}
+
+
+/* ---------- 4) BULLE TÉLÉPHONE FLOTTANTE ---------- */
 .call-bubble {
     position: fixed;
     right: 1rem;
@@ -3304,156 +3374,6 @@ table.tarifs td.prix-semaine {
     transition: opacity .2s, transform .2s;
 }
 .call-bubble.is-on { opacity: 1; transform: scale(1); pointer-events: auto; }
-
-@media (min-width: 641px) {
-    .hero-v2 { margin-top: 1.2rem; margin-bottom: 1.5rem; }
-    .hero-media { height: 270px; }
-    .hero-photo { height: 100%; aspect-ratio: auto; }
-    .hero-body { padding: 0 2rem 1.6rem; }
-    .hero-v2 .hero-logo-wrap { margin-top: -95px; }
-    .hero-v2 .hero-logo-wrap svg { height: 175px; }
-    .hero-title { font-size: 2.1rem; }
-    .hero-v2 .hero-assurances { grid-template-columns: repeat(4, 1fr); }
-    .hero-v2 .hero-assurances li { padding: .4rem .6rem; font-size: .82rem; }
-    .hero-v2 .hero-assurances li:nth-child(-n+2) { border-bottom: 0; }
-    .hero-v2 .hero-assurances li:nth-child(odd) { border-right: 0; }
-    .hero-v2 .hero-assurances li:not(:last-child) { border-right: 1px solid var(--hero-line); }
-    .hero-btn { flex: none; min-width: 290px; }
-}
-
-@media (prefers-reduced-motion: reduce) {
-    .hero-btn, .hero-v2 .gbp-link, .call-bubble { transition: none; animation: none; }
-    .hero-btn:hover { transform: none; }
-}
-
-/* HERO mobile : version aérée (moins d'infos, plus d'espace) */
-@media (max-width: 640px) {
-    .hero-body { padding: 0 1.2rem 1.4rem; }
-    .hero-v2 .hero-logo-wrap { margin-bottom: 1.2rem; }
-    .hero-eyebrow { margin-bottom: .7rem; }
-    .hero-title { margin-bottom: .9rem; line-height: 1.3; }
-    .hero-sub { margin-bottom: 1.4rem; }
-    .hero-actions { margin-bottom: .2rem; }
-    .hero-status { margin-top: .9rem; }
-    .hero-proofs { margin-top: .6rem; }
-
-    /* bandeau : 2 engagements seulement (le délai 30 min est déjà dans le titre, devis gratuit est secondaire) */
-    .hero-v2 .hero-assurances { margin-top: 1.3rem; }
-    .hero-v2 .hero-assurances li:nth-child(1),
-    .hero-v2 .hero-assurances li:nth-child(3) { display: none; }
-    .hero-v2 .hero-assurances li { padding: .6rem .4rem; border: 0; }
-    .hero-v2 .hero-assurances li:nth-child(2) { border-right: 1px solid var(--hero-line); }
-}
-
-
-/* ===================================================================
-   HERO v2 — version compacte (mobile d'abord)
-   =================================================================== */
-.hero-media { height: 150px; }
-.hero-photo { height: 100%; aspect-ratio: auto; }
-.hero-body { padding: 0 1rem .9rem; }
-.hero-v2 .hero-logo-wrap { margin: -55px 0 .5rem; padding: .3rem .8rem; border-radius: 10px; }
-.hero-v2 .hero-logo-wrap svg { height: 105px; }
-.hero-eyebrow { font-size: clamp(.6rem, 2.9vw, .72rem); margin-bottom: .35rem; }
-.hero-title { font-size: clamp(.9rem, 4vw, 1.35rem); line-height: 1.25; margin-bottom: .45rem; }
-.hero-sub { font-size: .82rem; line-height: 1.4; margin-bottom: .7rem; }
-.hero-actions { gap: .7rem; margin-bottom: 0; }
-.hero-btn {
-    flex: none;
-    min-height: 42px;
-    padding: .5rem 1rem;
-    border-radius: 12px;
-    font-size: .92rem;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, .28);
-}
-.hero-link { font-size: .8rem; }
-.hero-status { margin-top: .6rem; font-size: .74rem; }
-.hero-proofs { margin-top: .2rem; }
-.hero-v2 .gbp-link { font-size: .68rem; }
-.hero-v2 .hero-assurances { margin-top: .7rem; }
-.hero-v2 .hero-assurances li { font-size: .7rem; padding: .4rem .4rem; }
-.hero-v2 .ha-icon { width: 18px; height: 18px; }
-
-@media (max-width: 640px) {
-    .hero-body { padding: 0 1rem .9rem; }
-    .hero-v2 .hero-logo-wrap { margin-bottom: .5rem; }
-    .hero-eyebrow { margin-bottom: .35rem; }
-    .hero-title { margin-bottom: .45rem; line-height: 1.25; }
-    .hero-sub { margin-bottom: .7rem; }
-    .hero-actions { margin-bottom: 0; }
-    .hero-status { margin-top: .6rem; }
-    .hero-proofs { margin-top: .2rem; }
-    .hero-v2 .hero-assurances { margin-top: .8rem; }
-    .hero-v2 .hero-assurances li { padding: .4rem .4rem; }
-}
-
-@media (min-width: 641px) {
-    .hero-media { height: 220px; }
-    .hero-body { padding: 0 2rem 1.2rem; }
-    .hero-v2 .hero-logo-wrap { margin-top: -72px; }
-    .hero-v2 .hero-logo-wrap svg { height: 135px; }
-    .hero-title { font-size: 1.7rem; }
-    .hero-sub { font-size: .92rem; }
-    .hero-btn { min-width: 240px; min-height: 46px; font-size: 1rem; }
-    .hero-v2 .hero-assurances li { font-size: .8rem; padding: .4rem .6rem; }
-}
-
-
-/* ===================================================================
-   HERO v2 — mobile ultra-compact (écrans étroits)
-   =================================================================== */
-@media (max-width: 640px) {
-    .hero-media { height: 120px; }
-    .hero-v2 .hero-logo-wrap { margin-top: -45px; }
-    .hero-v2 .hero-logo-wrap svg { height: 95px; }
-    .hero-title { font-size: clamp(.82rem, 3.6vw, 1.35rem); }
-    .hero-sub { font-size: .76rem; }
-    .hero-actions { gap: .5rem; }
-    .hero-btn {
-        min-height: 34px;
-        padding: .35rem .8rem;
-        border-radius: 10px;
-        font-size: clamp(.74rem, 3.4vw, .88rem);
-        white-space: nowrap;
-    }
-    .hero-btn-label { white-space: nowrap; }
-    .hero-link { font-size: clamp(.7rem, 3.2vw, .8rem); white-space: nowrap; }
-    .hero-status { font-size: .7rem; }
-    .hero-v2 .hero-assurances li { font-size: .66rem; }
-}
-
-
-/* ===================================================================
-   HERO v2 — desktop compact (largeur alignée sur le menu)
-   =================================================================== */
-@media (min-width: 641px) {
-    .hero-v2 { width: min(820px, calc(100% - 1.2rem)); margin: .5rem auto .7rem; }
-    .hero-media { height: clamp(90px, 15vh, 115px); }
-    .hero-body { padding: 0 1.5rem .7rem; }
-    .hero-v2 .hero-logo-wrap { margin: -55px 0 .4rem; padding: .3rem .8rem; }
-    .hero-v2 .hero-logo-wrap svg { height: 100px; }
-    .hero-eyebrow { font-size: .68rem; font-weight: 600; margin-bottom: .3rem; }
-    .hero-title { font-size: 1.25rem; font-weight: 600; line-height: 1.25; margin-bottom: .4rem; }
-    .hero-title .ht-l { display: inline; }
-    .hero-sub { font-size: .82rem; margin-bottom: .6rem; }
-    .hero-actions { gap: .6rem; }
-    .hero-btn {
-        min-width: 180px;
-        min-height: 32px;
-        padding: .3rem .9rem;
-        border-radius: 10px;
-        font-size: .8rem;
-        font-weight: 700;
-        box-shadow: 0 3px 10px rgba(0, 0, 0, .25);
-    }
-    .hero-link { font-size: .8rem; font-weight: 500; }
-    .hero-status { margin-top: .45rem; font-size: .72rem; }
-    .hero-proofs { margin-top: .1rem; }
-    .hero-v2 .gbp-link { font-size: .66rem; }
-    .hero-v2 .hero-assurances { margin-top: .5rem; }
-    .hero-v2 .hero-assurances li { font-size: .72rem; font-weight: 500; padding: .25rem .5rem; }
-    .hero-v2 .ha-icon { width: 16px; height: 16px; }
-}
 
 
 /* ===================================================================
@@ -3486,39 +3406,6 @@ h2 { font-size: clamp(1rem, 2.1vw, 1.6rem); margin-bottom: .5rem; }
 @media (max-width: 640px) {
     section { padding: 1.8rem 1rem; }
     #zones { padding: 1.2rem 1rem !important; }
-}
-
-/* ===================================================================
-   HERO desktop — un peu moins compact
-   =================================================================== */
-@media (min-width: 641px) {
-    .hero-v2 { width: min(860px, calc(100% - 1.2rem)); margin: .6rem auto .8rem; }
-    .hero-media { height: clamp(105px, 18vh, 135px); }
-    .hero-body { padding: 0 1.6rem .8rem; }
-    .hero-v2 .hero-logo-wrap { margin: -63px 0 .5rem; }
-    .hero-v2 .hero-logo-wrap svg { height: 115px; }
-    .hero-eyebrow { margin-bottom: .4rem; }
-    .hero-title { font-size: 1.4rem; margin-bottom: .5rem; }
-    .hero-sub { font-size: .88rem; margin-bottom: .8rem; }
-    .hero-btn { min-width: 200px; min-height: 36px; font-size: .85rem; }
-    .hero-status { margin-top: .6rem; font-size: .76rem; }
-    .hero-proofs { margin-top: .2rem; }
-    .hero-v2 .hero-assurances { margin-top: .6rem; }
-    .hero-v2 .hero-assurances li { font-size: .76rem; padding: .3rem .5rem; }
-}
-
-/* Centrage du hero */
-.hero-body { align-items: center; text-align: center; }
-.hero-v2 .hero-text { text-align: center; }
-.hero-v2 .hero-logo-wrap { align-self: center; }  /* logo centré aussi (sinon il reste à gauche) */
-.hero-title .ht-l { display: block; }            /* les lignes du titre restent entières */
-
-
-@media (max-width: 640px) {
-    .hero-media { height: 220px; }   /* au lieu de 120px */
-}
-@media (min-width: 641px) {
-    .hero-media { height: clamp(160px, 28vh, 220px); }  /* au lieu de 105–135px */
 }
 
 .social-links {
