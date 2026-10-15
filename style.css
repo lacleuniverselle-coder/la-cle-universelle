@@ -3147,6 +3147,7 @@ table.tarifs td.prix-semaine {
     border-radius: 10px;
     overflow: hidden;
     box-shadow: 0 6px 18px rgba(0, 0, 0, .28);
+    
 }
 .hero-v2 .hero-logo-wrap :is(svg, img) { display: block; width: auto; max-width: 100%; }
 
@@ -3158,7 +3159,7 @@ table.tarifs td.prix-semaine {
     font-weight: 600;
     letter-spacing: .09em;
     text-transform: uppercase;
-    line-height: 1.4;
+    line-height: 1.5;
     white-space: nowrap;
 }
 
