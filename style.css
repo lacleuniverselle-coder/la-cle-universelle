@@ -3291,7 +3291,7 @@ table.tarifs td.prix-semaine {
     .hero-v2 .hero-logo-wrap :is(svg, img) { height: 95px; }
 
     .hero-eyebrow { margin: 0 0 .35rem; font-size: clamp(.6rem, 2.9vw, .72rem); }
-    .hero-title { margin: 0 0 .45rem; font-size: clamp(.82rem, 3.6vw, 1.35rem); font-weight: 750; }
+    .hero-title { margin: 0 0 .45rem; font-size: clamp(.92rem, 3.6vw, 1.55rem); font-weight: 750; }
     .hero-sub { margin: 0 0 .7rem; font-size: .76rem; }
 
     /* 2 engagements seulement (le délai de 30 min est déjà dans le titre) */
@@ -3330,7 +3330,7 @@ table.tarifs td.prix-semaine {
     .hero-v2 .hero-logo-wrap :is(svg, img) { height: 130px; margin: 0 0 -.5rem;}
 
     .hero-eyebrow { margin: 0 0 .4rem; font-size: .68rem; }
-    .hero-title { margin: 0 0 .5rem; font-size: 1.4rem; font-weight: 600; }
+    .hero-title { margin: 0 0 .5rem; font-size: 1.7rem; font-weight: 600; }
     .hero-sub { margin: 0 0 .8rem; font-size: .88rem; }
 
     .hero-v2 .hero-assurances { grid-template-columns: repeat(4, 1fr); margin-top: .6rem; }
