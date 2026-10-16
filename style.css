@@ -3523,3 +3523,89 @@ h2 { font-size: clamp(1rem, 2.1vw, 1.6rem); margin-bottom: .5rem; }
     color: var(--violet);
     text-decoration: underline;
 }
+
+/* ===== Page prestations : catégorie Audit de sécurité (même style que l'accueil) ===== */
+.audit-intro { font-size: .84rem; line-height: 1.4; color: var(--gris); text-align: center; margin: 0 auto .7rem; max-width: 60ch; }
+.audit-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+    margin: 0 0 1rem;
+    width: 100%;
+    align-items: stretch;
+}
+.audit-block {
+    display: flex; flex-direction: column;
+    background: var(--blanc); color: var(--texte);
+    border: 1.5px solid var(--violet); border-top: 5px solid var(--lilas);
+    border-radius: 12px; padding: .7rem .85rem .6rem;
+}
+.audit-block h3 { font-size: 1rem; font-weight: 800; line-height: 1.2; color: var(--violet); text-align: center; margin: 0 0 .2rem; }
+.audit-lead { font-size: .74rem; font-weight: 600; line-height: 1.3; color: var(--gris); text-align: center; margin: 0; }
+.audit-lead::after { content: ""; display: block; width: 36px; height: 2px; border-radius: 2px; background: var(--lilas); margin: .5rem auto 0; }
+.audit-block ul { list-style: none; margin: .4rem 0 .5rem; padding: 0; font-size: .78rem; line-height: 1.3; }
+.audit-block li { position: relative; padding: .28rem 0 .28rem 1rem; border-top: 1px solid rgba(72, 38, 100, .15); }
+.audit-block li:first-child { border-top: 0; }
+.audit-block li::before { content: ""; position: absolute; left: 0; top: .6rem; width: 5px; height: 5px; background: var(--violet); border-radius: 1px; }
+.audit-foot { margin: auto 0 0; padding-top: .45rem; border-top: 1px solid rgba(72, 38, 100, .3); font-size: .76rem; font-weight: 700; text-align: center; color: var(--violet); }
+@media (max-width: 720px) {
+    .audit-grid { grid-template-columns: 1fr; gap: 10px; }
+}
+
+/* ===== Accueil : 3 cartes (Ce que je fais) ===== */
+.svc-grid { display: grid; grid-template-columns: 1fr; gap: 16px; max-width: 900px; margin: 1.4rem auto 0; align-items: stretch; }
+@media (min-width: 720px) { .svc-grid { grid-template-columns: repeat(3, 1fr); } }
+.svc-card {
+    display: flex; flex-direction: column;
+    background: var(--blanc); color: var(--texte);
+    border-radius: 12px; border-top: 6px solid var(--lilas);
+    padding: 1.2rem 1.1rem 1rem;
+}
+.svc-card h3 { display: flex; align-items: center; justify-content: center; font-size: .9rem; font-weight: 800; line-height: 1.25; letter-spacing: .02em; text-transform: uppercase; color: var(--violet); text-align: center; margin: 0 0 .6rem; }
+.svc-sub { font-size: .76rem; font-weight: 600; line-height: 1.4; color: var(--gris); text-align: center; margin: 0; }
+/* Séparation titre / liste : petit trait centré. Variante "écart seul" : supprimer le ::after et passer .svc-sub à margin-bottom: 1.4rem */
+.svc-sub::after { content: ""; display: block; width: 44px; height: 3px; border-radius: 2px; background: var(--lilas); margin: 1.1rem auto 0; }
+@media (min-width: 720px) { .svc-card h3 { min-height: 2.5em; } .svc-sub { min-height: 6em; } }
+/* Alignement strict des lignes (titre / sous-titre / liste) entre les 3 cartes, quel que soit le texte */
+@supports (grid-template-rows: subgrid) {
+    @media (min-width: 720px) {
+        .svc-grid { grid-template-rows: auto auto 1fr auto; gap: 0 16px; }
+        .svc-card { display: grid; grid-row: span 4; grid-template-rows: subgrid; }
+        .svc-card h3, .svc-sub { min-height: 0; }
+    }
+}
+.svc-card ul { list-style: none; margin: 1rem 0 0; padding: 0; font-size: .8rem; line-height: 1.4; }
+.svc-card li { position: relative; padding: .45rem 0 .45rem 1rem; border-top: 1px solid rgba(72, 38, 100, .15); }
+.svc-card li:first-child { border-top: 0; }
+.svc-card li::before { content: ""; position: absolute; left: 0; top: .85rem; width: 5px; height: 5px; background: var(--violet); border-radius: 1px; }
+.svc-free { margin: auto 0 0; padding-top: .8rem; font-size: .78rem; font-weight: 700; text-align: center; color: #e7bb2b; }
+
+/* Audit : mise en valeur */
+.svc-card--audit {
+    background: #34194b; color: var(--blanc);
+    border: 2px solid #e7bb2b; border-top: 6px solid #e7bb2b;
+    box-shadow: 0 0 0 1px rgba(231, 187, 43, .35), 0 0 22px rgba(231, 187, 43, .45), 0 0 48px rgba(231, 187, 43, .2);
+    animation: svc-glow 3.6s ease-in-out infinite;
+}
+.svc-card--audit h3, .svc-card--audit .svc-sub { color: var(--blanc); }
+.svc-card--audit li { border-top-color: rgba(255, 255, 255, .22); }
+.svc-card--audit li::before { background: #e7bb2b; }
+.svc-card--audit .svc-sub::after { background: #e7bb2b; }
+@keyframes svc-glow {
+    0%, 100% { box-shadow: 0 0 0 1px rgba(231, 187, 43, .35), 0 0 18px rgba(231, 187, 43, .35), 0 0 40px rgba(231, 187, 43, .15); }
+    50% { box-shadow: 0 0 0 1px rgba(231, 187, 43, .55), 0 0 28px rgba(231, 187, 43, .65), 0 0 60px rgba(231, 187, 43, .3); }
+}
+@media (prefers-reduced-motion: reduce) { .svc-card--audit { animation: none; } }
+
+/* Boutons sous les cartes */
+.svc-links { display: flex; justify-content: center; gap: 10px; max-width: 900px; margin: 1.6rem auto 0; }
+.svc-btn { box-sizing: border-box; display: flex; align-items: center; justify-content: center; gap: .35em; width: calc(50% - 5px); max-width: 210px; text-align: center; padding: .6rem .4rem; border-radius: 8px; font-size: clamp(.64rem, 3.3vw, .76rem); line-height: 1.2; font-weight: 700; text-decoration: none; transition: background .2s, color .2s; }
+/* Ordinateur : chaque bouton est centré sur un espace entre deux colonnes (écart = (largeur + 16px) / 3 entre les centres) */
+@media (min-width: 720px) {
+    .svc-links { gap: max(12px, calc((100% + 16px) / 3 - 210px)); }
+    .svc-btn { width: 210px; padding: .65rem 1.2rem; font-size: .88rem; }
+}
+.svc-btn--prest { color: var(--blanc); border: 1.5px solid var(--blanc); }
+.svc-btn--prest:hover { background: var(--blanc); color: var(--violet); }
+.svc-btn--tarifs { background: #e7bb2b; color: var(--violet); border: 1.5px solid #e7bb2b; }
+.svc-btn--tarifs:hover { background: #f2cc4d; border-color: #f2cc4d; }
