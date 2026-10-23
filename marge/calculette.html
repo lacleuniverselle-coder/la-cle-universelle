@@ -140,7 +140,11 @@ h2.section-title{
 .summary-row{
   display:flex; justify-content:space-between; padding:3px 0; font-size:0.82rem; color:var(--ink-soft);
 }
-.summary-row span:last-child{font-variant-numeric:tabular-nums; color:var(--ink); font-weight:700; font-size:1.02rem;}
+.summary-row span:last-child{font-variant-numeric:tabular-nums; color:var(--ink); font-weight:400; font-size:0.82rem;}
+.summary-row.big{align-items:baseline; padding:4px 0 6px; color:var(--ink);}
+.summary-row.big span:first-child{font-weight:600; font-size:0.88rem;}
+.summary-row.big span:last-child{font-weight:700; font-size:1.15rem;}
+.summary-row.charges span:last-child{color:var(--danger,#C0392B);}
 .summary-final{
   margin-top:6px; padding-top:10px; border-top:1px solid var(--line);
   background:var(--net-bg); margin-left:-12px; margin-right:-12px; margin-bottom:-12px;
@@ -515,10 +519,10 @@ body.locked > .wrap{display:none;}
   </div>
 
   <div class="summary">
-    <div class="summary-row"><span>Total ventes (CA)</span><span id="sVente">0,00 €</span></div>
+    <div class="summary-row big"><span>Total ventes (CA)</span><span id="sVente">0,00 €</span></div>
     <div class="summary-row"><span>Total achat matériel</span><span id="sAchat">0,00 €</span></div>
     <div class="summary-row"><span>Marge brute</span><span id="sMarge">0,00 €</span></div>
-    <div class="summary-row"><span>Charges URSSAF + CFP</span><span id="sCharges">0,00 €</span></div>
+    <div class="summary-row charges"><span>Charges URSSAF + CFP</span><span id="sCharges">0,00 €</span></div>
     <div class="summary-final" id="summaryFinal">
       <span class="label">Net pour vous<small id="sNetPct" style="display:block; font-weight:400; font-size:0.75rem; margin-top:2px; opacity:0.8;">0,0 % du total ventes</small></span>
       <span class="amount" id="sNet">0,00 €</span>
