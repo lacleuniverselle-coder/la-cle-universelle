@@ -140,7 +140,7 @@ h2.section-title{
 .summary-row{
   display:flex; justify-content:space-between; padding:3px 0; font-size:0.82rem; color:var(--ink-soft);
 }
-.summary-row span:last-child{font-variant-numeric:tabular-nums; color:var(--ink);}
+.summary-row span:last-child{font-variant-numeric:tabular-nums; color:var(--ink); font-weight:700; font-size:1.02rem;}
 .summary-final{
   margin-top:6px; padding-top:10px; border-top:1px solid var(--line);
   background:var(--net-bg); margin-left:-12px; margin-right:-12px; margin-bottom:-12px;
@@ -155,6 +155,8 @@ h2.section-title{
 }
 .summary-final.neg .amount{color:var(--net-neg);}
 
+.backup-links{text-align:center; font-size:0.72rem; color:var(--ink-soft); margin:18px 0 4px;}
+.backup-links button{background:none; border:none; padding:0 2px; font:inherit; color:inherit; text-decoration:underline; cursor:pointer;}
 .private-grid{display:flex; flex-direction:column; gap:5px;}
 .private-row{display:flex; justify-content:space-between; align-items:center; gap:8px;}
 .private-row label{font-size:0.82rem; flex:1;}
@@ -488,7 +490,6 @@ body.locked > .wrap{display:none;}
         <input type="text" id="newCatName" placeholder="Nouvelle catégorie (ex. Verrou 3 points)">
         <button class="save-btn" id="addCatBtn" style="min-width:auto; padding:7px 12px;">+ Ajouter</button>
       </div>
-      <div id="catManagerList" style="margin-top:6px;"></div>
     </div>
 
     <div class="panel" style="margin-bottom:0;">
@@ -528,7 +529,6 @@ body.locked > .wrap{display:none;}
   <div class="mix-box" id="mixBox">
     <div class="ttl">Mix matériel / prestations</div>
     <div class="ln"><span>Ce devis</span><b id="mixDevis">—</b></div>
-    <div class="ln"><span>Mois payé (sans ce devis)</span><b id="mixMois">—</b></div>
     <div class="ln tot"><span>Mois + ce devis</span><b id="mixCumul">—</b></div>
     <div class="ln"><span>Objectif : part des prestations (%)</span><input type="number" id="mixObjectif" inputmode="decimal" min="5" max="95" step="1" value="25"></div>
     <div class="ln"><span>Écart à l'objectif</span><b id="mixGap">—</b></div>
@@ -539,7 +539,7 @@ body.locked > .wrap{display:none;}
         <b>Part des prestations</b> = prestations ÷ (prestations + matériel). Sur 100 € encaissés, 35 € de main-d'œuvre et 65 € de pièces donnent 35 % / 65 %.<br>
         <b>Image du péage :</b> chaque euro encaissé passe par un péage. Sur la voie « prestations » il coûte 10,9 % (ACRE), sur la voie « matériel » 6,5 %. Plus la part du matériel monte, plus votre taux moyen baisse.<br>
         <b>À 25 % de prestations :</b> pour 1 € de prestations, il faut 3 € de matériel vendu.<br>
-        <b>Attention :</b> le matériel coûte à l'achat (TTC, sans TVA récupérable). Regardez donc le <i>Net</i>, pas seulement le taux. Et un prix de vente doit rester défendable face au prix public : voyant « Vs public » sur chaque ligne.
+        <b>Attention :</b> le matériel coûte à l'achat (TTC, sans TVA récupérable). Regardez donc le <i>Net</i>, pas seulement le taux.
       </div>
     </details>
   </div>
@@ -552,7 +552,6 @@ body.locked > .wrap{display:none;}
     </div>
     <button class="save-btn" id="saveQuoteBtn">Enregistrer cette facture</button>
   </div>
-  <button class="save-btn" id="exportPdfBtn" style="width:100%; background:var(--steel); margin-bottom:20px;">🖨 Exporter cette facture en PDF</button>
 
   <!-- Historique du mois -->
   <div class="history-panel">
@@ -570,15 +569,6 @@ body.locked > .wrap{display:none;}
       <input type="number" id="seuilRenta" value="40" min="0" max="100" step="1">
     </div>
     <div id="historyContent"></div>
-  </div>
-
-  <div class="panel">
-    <h2>Sauvegarde de vos données</h2>
-    <div class="client-save-row" style="margin-top:0;">
-      <button class="save-btn" id="exportBtn" style="flex:1;">⬇ Exporter mes données</button>
-      <button class="save-btn" id="importBtn" style="flex:1; background:var(--violet);">⬆ Importer une sauvegarde</button>
-      <input type="file" id="importFile" accept="application/json" style="display:none;">
-    </div>
   </div>
 
   <h2 class="section-title">Bilan mensuel privé</h2>
@@ -643,13 +633,19 @@ body.locked > .wrap{display:none;}
     <div class="private-ajouts-btns"><button id="addFrais">+ Frais fixe</button></div>
   </div>
 
+  <div class="backup-links">Sauvegarde :
+    <button type="button" id="exportBtn">Exporter</button> ·
+    <button type="button" id="importBtn">Importer</button>
+    <input type="file" id="importFile" accept="application/json" style="display:none;">
+  </div>
+
   <footer>Frais fixes pro comptés au mois (assurances, logiciel, prévoyance…) · pas de TVA (franchise)</footer>
 
 </div>
 
 <script src="sync.js"></script>
 <script>
-Sync.boot(function(){});
+Sync.boot(function(){ if(window.__migGazElec && typeof saveSettings==='function') saveSettings(); });
 
 // Taux 2026 = cotisations + CFP. La CFP (0,3 %) n'est pas réduite par l'ACRE (simulateur URSSAF : 5 € sur 1 658 €).
 // Pour changer la CFP du matériel (ex. 0,1 %), modifier uniquement CFP.mat.
@@ -667,7 +663,6 @@ function ratesOf(d, reg){
   const src = (d && d.ratesVer === 2) ? RATES : RATES_V1;
   return src[reg || (d && d.regime)] || src.acre;
 }
-const COEF_PUBLIC_MIN = 2.5; // le prix public n'est jamais inférieur à 2,5 × l'achat TTC
 let mixObjectif = 25;        // objectif : part des prestations (%)
 const BASE_CATEGORIES = [
   { id:'cremone',  label:'Crémone' },
@@ -826,6 +821,23 @@ function goToMonth(key){
   saveSettings();
 }
 
+// Déplace les ajouts « chaque mois » Gaz / Électricité vers les charges fixes privées (même montant).
+function migrerGazElec(){
+  const motifs = [
+    { re:/^\s*(gas|gaz)\b/i, label:'Gaz', defaut:'32' },
+    { re:/^\s*([ée]lec|[ée]lectricit[ée])/i, label:'Électricité', defaut:'22' }
+  ];
+  const aMigrer = pAjouts.filter(a=> a.type==='cout' && a.mois===null && motifs.some(m=>m.re.test(a.label||'')));
+  if(!aMigrer.length) return;
+  try{ localStorage.setItem('devisCalcBackupAvantMigrationGazElec', localStorage.getItem('devisCalcSettings')||''); }catch(e){}
+  aMigrer.forEach(a=>{
+    const m = motifs.find(x=>x.re.test(a.label||''));
+    pCustom.push({ id:'pc'+(pCustomIdSeq++), label:m.label, amount: (a.amount!==''&&a.amount!=null) ? a.amount : m.defaut });
+  });
+  pAjouts = pAjouts.filter(a=>!aMigrer.includes(a));
+  window.__migGazElec = true;
+}
+
 function loadSettings(){
   try{
     const s = JSON.parse(localStorage.getItem('devisCalcSettings')||'{}');
@@ -851,6 +863,7 @@ function loadSettings(){
     if(s.pCustomIdSeq) pCustomIdSeq = s.pCustomIdSeq;
     if(s.pAjouts) pAjouts = s.pAjouts;
     if(s.pAjoutsIdSeq) pAjoutsIdSeq = s.pAjoutsIdSeq;
+    migrerGazElec();
     if(s.mixObjectifPrest!==undefined && !isNaN(parseFloat(s.mixObjectifPrest))){ mixObjectif = parseFloat(s.mixObjectifPrest); const mo = document.getElementById('mixObjectif'); if(mo) mo.value = mixObjectif; }
     if(Array.isArray(s.fraisFixes)) fraisFixes = s.fraisFixes;
     if(s.fraisIdSeq) fraisIdSeq = s.fraisIdSeq;
@@ -954,12 +967,10 @@ function renderMat(){
         <div class="field"><label>Vente TTC (unité)</label><input type="number" inputmode="decimal" step="0.01" id="mat-${a.id}-vente" data-mat="${a.id}" data-f="vente" value="${a.vente}" placeholder="0,00"></div>
         <div class="field qte-field"><label>Qté</label><input type="number" inputmode="decimal" step="1" min="0" id="mat-${a.id}-qte" data-mat="${a.id}" data-f="qte" value="${a.qte === undefined ? 1 : a.qte}" placeholder="1"></div>
       </div>
-      <div class="field" style="margin-top:6px;"><label>Prix public TTC (unité), facultatif</label><input type="number" inputmode="decimal" step="0.01" id="mat-${a.id}-pub" data-mat="${a.id}" data-f="prixPublic" value="${a.prixPublic || ''}" placeholder="vide = achat × 2,5"></div>
       <div class="field" style="margin-top:6px;"><label>Catégorie</label><select id="mat-${a.id}-cat" data-mat="${a.id}" data-f="categorie">${categorieOptions(a.categorie||'autre')}</select></div>
       <div class="article-net">
         <span>Net ligne <b id="net-${a.id}">0,00 €</b></span>
         <span>Coef <b id="coef-${a.id}">—</b></span>
-        <span title="Votre prix de vente ÷ prix public (ou ÷ achat × 2,5 si vous n'avez pas saisi de prix public)">Vs public <b id="pub-${a.id}">—</b></span>
       </div>
     `;
     cont.appendChild(div);
@@ -1092,7 +1103,6 @@ function renderMix(){
   const tm = m.mat + dm, ts = m.serv + ds, tot = tm + ts;
   const set = (id, t)=>{ const e = document.getElementById(id); if(e) e.textContent = t; };
   set('mixDevis', mixTxt(ds, dm));
-  set('mixMois', mixTxt(m.serv, m.mat));
   set('mixCumul', mixTxt(ts, tm));
   if(tot <= 0){ set('mixGap', '—'); set('mixTaux', '—'); return; }
   const p = ts/tot*100;
@@ -1129,25 +1139,6 @@ function compute(){
       coefEl.textContent = achatU > 0
         ? (venteU/achatU).toLocaleString('fr-FR', {minimumFractionDigits:2, maximumFractionDigits:2}) + '×'
         : '—';
-    }
-    const pubEl = document.getElementById('pub-'+a.id);
-    if(pubEl){
-      const pubU = Number(a.prixPublic)||0;
-      const ref = pubU > 0 ? pubU : achatU*COEF_PUBLIC_MIN;
-      if(venteU > 0 && ref > 0){
-        const rr = venteU/ref;
-        const txt = Math.round(rr*100) + ' %';
-        if(pubU > 0){
-          pubEl.textContent = txt + (rr > 1 ? ' ⚠ au-dessus' : rr >= 0.9 ? ' · proche' : '');
-          pubEl.style.color = rr > 1 ? 'var(--danger)' : '';
-        } else {
-          pubEl.textContent = txt + ' (est.)';
-          pubEl.style.color = '';
-        }
-      } else {
-        pubEl.textContent = '—';
-        pubEl.style.color = '';
-      }
     }
   });
 
@@ -1913,7 +1904,6 @@ document.getElementById('mixObjectif').oninput = (e)=>{ const v = parseFloat(e.t
 document.getElementById('addArticleMat').onclick = addArticleMat;
 document.getElementById('addArticleServ').onclick = addArticleServ;
 document.getElementById('saveQuoteBtn').onclick = saveQuote;
-document.getElementById('exportPdfBtn').onclick = exportPdf;
 document.getElementById('newMonthBtn').onclick = newMonth;
 document.getElementById('monthSelect').onchange = (e)=> goToMonth(e.target.value);
 document.getElementById('prevMonthBtn').onclick = ()=> goToMonth(prevMonthKeyOf(currentMonth));
@@ -1972,6 +1962,15 @@ function pdfTryParseRow(line, hasRemise){
   let i = tokens.length - 1;
   if(i < 0) return null;
 
+  // Lit un montant à partir de la fin, en regroupant les milliers (« 1 236,32 »).
+  // Sûr pour le total et la remise : ils sont toujours précédés d'une unité (€, %, -).
+  const readAmountGreedy = ()=>{
+    if(i < 0 || !/^\d+([.,]\d+)?$/.test(tokens[i])) return null;
+    let str = tokens[i]; i--;
+    while(i >= 0 && /^\d{1,3}$/.test(tokens[i]) && /^\d{3}([.,]\d+)?$/.test(str)){ str = tokens[i] + str; i--; }
+    return pdfParseNumber(str);
+  };
+
   // TVA (pourcentage ou "-")
   if(tokens[i] === '-'){ i--; }
   else if(tokens[i] === '%'){ i--; if(i<0) return null; i--; }
@@ -1982,33 +1981,56 @@ function pdfTryParseRow(line, hasRemise){
   let totalHt;
   if(tokens[i] === '-'){ totalHt = 0; i--; }
   else if(tokens[i] === '€'){
-    i--; if(i<0) return null;
-    totalHt = pdfParseNumber(tokens[i]); i--;
+    i--; totalHt = readAmountGreedy();
+    if(totalHt === null) return null;
   } else return null;
   if(i < 0) return null;
 
   // Remise (colonne optionnelle)
+  let remEur = 0, remPct = 0;
   if(hasRemise){
     if(tokens[i] === '-'){ i--; }
-    else if(tokens[i] === '€' || tokens[i] === '%'){ i--; if(i<0) return null; i--; }
-    else return null;
+    else if(tokens[i] === '€' || tokens[i] === '%'){
+      const unit = tokens[i]; i--;
+      const v = readAmountGreedy();
+      if(v === null) return null;
+      if(unit === '€') remEur = v; else remPct = v;
+    } else return null;
     if(i < 0) return null;
   }
 
   // PU HT (montant ou "-")
-  let puHt;
-  if(tokens[i] === '-'){ puHt = 0; i--; }
-  else if(tokens[i] === '€'){
-    i--; if(i<0) return null;
-    puHt = pdfParseNumber(tokens[i]); i--;
-  } else return null;
-  if(i < 0) return null;
+  if(tokens[i] === '-'){
+    i--;
+    if(i < 0 || !/^\d+$/.test(tokens[i])) return null;
+    return { qty: parseInt(tokens[i],10), puHt: 0, totalHt };
+  }
+  if(tokens[i] !== '€') return null;
+  i--; if(i < 0) return null;
+  const puTok = tokens[i];
+  if(!/^\d+([.,]\d+)?$/.test(puTok)) return null;
 
-  // Quantité
-  if(!/^\d+$/.test(tokens[i])) return null;
-  const qty = parseInt(tokens[i],10);
-
-  return { qty, puHt, totalHt };
+  // Le PU peut être « 236,32 » (qty = jeton précédent) ou « 1 236,32 » (milliers, qty = jeton encore avant).
+  // On garde l'hypothèse dont le calcul qté × PU (− remise) retombe sur le total HT de la ligne.
+  const ecart = (qty, pu)=>{
+    const brut = qty*pu;
+    const net1 = remPct ? brut*(1-remPct/100) : brut - remEur;
+    const net2 = remPct ? net1 : qty*(pu - remEur);
+    return Math.min(Math.abs(net1 - totalHt), Math.abs(net2 - totalHt));
+  };
+  const cands = [];
+  if(i-1 >= 0 && /^\d+$/.test(tokens[i-1])){
+    const qty = parseInt(tokens[i-1],10), pu = pdfParseNumber(puTok);
+    cands.push({ qty, puHt: pu, err: ecart(qty, pu) });
+  }
+  if(i-2 >= 0 && /^\d{3}([.,]\d+)?$/.test(puTok) && /^\d{1,3}$/.test(tokens[i-1]) && /^\d+$/.test(tokens[i-2])){
+    const qty = parseInt(tokens[i-2],10), pu = pdfParseNumber(tokens[i-1] + puTok);
+    cands.push({ qty, puHt: pu, err: ecart(qty, pu) });
+  }
+  if(!cands.length) return null;
+  let best = cands[0];
+  if(cands.length > 1 && cands[1].err + 0.005 < cands[0].err) best = cands[1];
+  return { qty: best.qty, puHt: best.puHt, totalHt };
 }
 
 function parseDevisLines(lines){
@@ -2048,7 +2070,7 @@ function parseDevisLines(lines){
     const row = pdfTryParseRow(line, currentSection.hasRemise);
     if(row){
       if(currentSection.type === 'service'){ servTotal += row.totalHt; servCount++; }
-      else if(currentSection.type === 'materiel'){ matRows.push(row.totalHt); }
+      else if(currentSection.type === 'materiel'){ if(row.totalHt > 0.005) matRows.push(row.totalHt); } // ignore les lignes à 0 € (ex. évacuation ancienne serrure)
       else if(currentSection.type === 'remise'){ remiseTotal += row.totalHt; }
     }
   }
