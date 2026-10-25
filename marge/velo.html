@@ -1,0 +1,404 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Vélo — La Clé Universelle</title>
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#4C3468">
+<link rel="icon" href="icon-192.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Vélo">
+<meta name="robots" content="noindex, nofollow">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#EDEFEF; --surface:#FFFFFF; --line:#D8DBDB;
+  --ink:#1E2328; --ink-soft:#5B6266;
+  --violet:#4C3468; --violet-deep:#382450;
+  --steel:#43616B;
+  --net-pos:#2E6B4C; --net-bg:#E7F1EA;
+  --net-neg:#A23B3B; --net-neg-bg:#F4E6E6;
+  --danger:#A23B3B;
+  box-sizing:border-box;
+  padding-top:env(safe-area-inset-top,0px);
+  padding-bottom:env(safe-area-inset-bottom,0px);
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#181B1D; --surface:#22262A; --line:#33383C;
+    --ink:#EDEFEF; --ink-soft:#9AA3A7;
+    --net-bg:#1E2E24; --net-neg-bg:#2E1E1E;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#181B1D; --surface:#22262A; --line:#33383C;
+  --ink:#EDEFEF; --ink-soft:#9AA3A7;
+  --net-bg:#1E2E24; --net-neg-bg:#2E1E1E;
+}
+*{box-sizing:border-box;}
+html,body{height:100%;}
+html{scroll-padding-top:env(safe-area-inset-top,0px);}
+body{
+  margin:0; background:var(--bg); color:var(--ink);
+  font-family:'Inter',system-ui,-apple-system,sans-serif;
+  -webkit-font-smoothing:antialiased;
+}
+.wrap{max-width:640px; margin:0 auto; padding:20px 16px 40px;}
+h1{
+  font-family:'Fraunces',serif; font-weight:600; font-size:1.5rem;
+  margin:0 0 2px; letter-spacing:-0.01em;
+}
+.sub{color:var(--ink-soft); font-size:0.85rem; margin:0 0 16px;}
+h2.section-title{
+  font-family:'Fraunces',serif; font-weight:600; font-size:1rem;
+  margin:20px 0 3px; letter-spacing:-0.01em;
+}
+.section-sub{color:var(--ink-soft); font-size:0.76rem; margin:0 0 8px;}
+.panel{
+  background:var(--surface); border:1px solid var(--line); border-radius:10px;
+  padding:12px; margin-bottom:12px;
+}
+.panel h2{font-size:0.8rem; font-weight:600; margin:0 0 8px; color:var(--ink-soft); text-transform:none;}
+.back-link{
+  display:inline-block; font-size:0.78rem; color:var(--ink-soft); text-decoration:none;
+  border:1px solid var(--line); border-radius:7px; padding:6px 10px; background:var(--surface); font-weight:500;
+}
+.field{display:flex; flex-direction:column; gap:4px; flex:1; min-width:120px;}
+.field label{font-size:0.74rem; color:var(--ink-soft);}
+.field input, .field select{
+  border:1px solid var(--line); border-radius:7px; padding:7px 8px;
+  font-size:0.9rem; background:var(--bg); color:var(--ink); font-family:inherit;
+  font-variant-numeric:tabular-nums; width:100%;
+}
+.cat-table{width:100%; border-collapse:collapse; font-size:0.88rem;}
+.cat-table th{
+  text-align:left; padding:7px 6px; border-bottom:1px solid var(--line);
+  font-size:0.72rem; color:var(--ink-soft); font-weight:600; text-transform:uppercase;
+}
+.cat-table td{padding:7px 6px; border-bottom:1px solid var(--line);}
+.cat-table td:not(:first-child), .cat-table th:not(:first-child){text-align:right; font-variant-numeric:tabular-nums;}
+.cat-table tbody tr:last-child td{border-bottom:none;}
+.cat-table tfoot td{font-weight:600; border-top:1px solid var(--line); border-bottom:none; padding-top:9px;}
+.empty-state{text-align:center; padding:16px; color:var(--ink-soft); font-size:0.85rem;}
+
+.tool-add-row{display:flex; gap:8px; flex-wrap:wrap; align-items:flex-end; margin-bottom:12px;}
+.tool-add-row .field{min-width:100px;}
+.add-btn{
+  padding:8px 14px; background:var(--violet); color:#fff; border:none; border-radius:7px;
+  font-size:0.85rem; cursor:pointer; font-family:inherit; font-weight:500; white-space:nowrap;
+}
+.add-btn:hover{background:var(--violet-deep);}
+
+.manual-entry{
+  display:flex; justify-content:space-between; align-items:center; gap:8px;
+  padding:6px 2px; border-bottom:1px dashed var(--line); font-size:0.82rem;
+}
+.manual-entry:last-child{border-bottom:none;}
+.manual-entry .cat{color:var(--ink-soft);}
+.manual-entry .amt{font-variant-numeric:tabular-nums; font-weight:600;}
+.tool-card{
+  background:var(--bg); border:1px solid var(--line); border-radius:9px;
+  padding:10px 12px; margin-bottom:9px;
+}
+.tool-top{display:flex; justify-content:space-between; align-items:baseline; gap:8px; margin-bottom:2px;}
+.tool-name{font-weight:600; font-size:0.9rem;}
+.tool-meta{font-size:0.72rem; color:var(--ink-soft); margin-bottom:8px;}
+.tool-remove{background:none; border:none; color:var(--ink-soft); cursor:pointer; font-size:1rem; padding:0 4px;}
+.tool-remove:hover{color:var(--danger);}
+.progress-track{
+  width:100%; height:9px; border-radius:5px; background:var(--line); overflow:hidden; margin-bottom:5px;
+}
+.progress-fill{height:100%; background:var(--steel); border-radius:5px; transition:width 0.2s;}
+.progress-fill.done{background:var(--net-pos);}
+.tool-bottom{display:flex; justify-content:space-between; align-items:center; font-size:0.78rem; color:var(--ink-soft);}
+.tool-bottom b{color:var(--ink); font-variant-numeric:tabular-nums;}
+.badge-done{
+  display:inline-block; background:var(--net-bg); color:var(--net-pos); font-size:0.72rem;
+  font-weight:600; padding:2px 8px; border-radius:20px;
+}
+.note{font-size:0.72rem; color:var(--ink-soft); line-height:1.4; margin-top:4px;}
+footer{text-align:center; color:var(--ink-soft); font-size:0.75rem; margin-top:22px;}
+
+/* Écran de verrouillage (identique à la calculette) */
+#lockScreen{
+  position:fixed; inset:0; background:var(--bg); z-index:9999;
+  display:flex; align-items:center; justify-content:center; padding:20px;
+}
+#lockScreen.hidden{display:none;}
+.lock-box{
+  background:var(--surface); border:1px solid var(--line); border-radius:14px;
+  padding:28px 24px; max-width:300px; width:100%; text-align:center;
+}
+.lock-box h2{font-family:'Fraunces',serif; font-size:1.15rem; margin:0 0 4px;}
+.lock-box p{color:var(--ink-soft); font-size:0.8rem; margin:0 0 18px;}
+#lockInput{
+  width:100%; text-align:center; letter-spacing:0.5em; font-size:1.4rem;
+  border:1px solid var(--line); border-radius:9px; padding:10px 8px;
+  background:var(--bg); color:var(--ink); font-family:inherit;
+  font-variant-numeric:tabular-nums;
+}
+#lockError{color:var(--danger); font-size:0.78rem; margin-top:8px; min-height:1em;}
+#lockSubmit{
+  width:100%; margin-top:14px; padding:10px; border:none; border-radius:9px;
+  background:var(--violet); color:#fff; font-weight:600; font-size:0.9rem; cursor:pointer;
+}
+body.locked > .wrap{display:none;}
+
+.vsum{display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-bottom:12px;}
+.vsum .box{background:var(--surface); border:1px solid var(--line); border-radius:10px; padding:10px 12px;}
+.vsum .box span{display:block; font-size:0.72rem; color:var(--ink-soft);}
+.vsum .box b{font-size:1.15rem; font-variant-numeric:tabular-nums;}
+.vsum .box.warn{background:var(--net-neg-bg); border-color:var(--net-neg);}
+.vsum .box.warn b{color:var(--net-neg);}
+.frow{display:flex; gap:8px; flex-wrap:wrap; align-items:flex-end; margin-bottom:8px;}
+.frow .field{min-width:110px;}
+.ghost-btn{padding:8px 14px;background:none;color:var(--ink-soft);border:1px solid var(--line);border-radius:7px;font-size:0.85rem;cursor:pointer;font-family:inherit;}
+.small-btn{padding:4px 9px; font-size:0.74rem;}
+.item{background:var(--bg); border:1px solid var(--line); border-radius:9px; padding:9px 11px; margin-bottom:8px;}
+.item-top{display:flex; justify-content:space-between; align-items:baseline; gap:8px;}
+.item-name{font-weight:600; font-size:0.86rem;}
+.item-amt{font-variant-numeric:tabular-nums; font-weight:600; font-size:0.86rem; white-space:nowrap;}
+.item-meta{font-size:0.72rem; color:var(--ink-soft); margin-top:2px;}
+.item-actions{display:flex; gap:6px; flex-wrap:wrap; margin-top:7px; align-items:center;}
+.badge-ok{display:inline-block; background:var(--net-bg); color:var(--net-pos); font-size:0.7rem; font-weight:600; padding:2px 8px; border-radius:20px;}
+.badge-due{display:inline-block; background:var(--net-neg-bg); color:var(--net-neg); font-size:0.7rem; font-weight:600; padding:2px 8px; border-radius:20px;}
+.chk{display:flex; gap:6px; align-items:center; font-size:0.78rem; color:var(--ink-soft);}
+.msg{font-size:0.78rem; margin:6px 0; padding:8px 10px; border-radius:8px; background:var(--net-neg-bg); color:var(--net-neg);}
+</style>
+</head>
+<body class="locked">
+<div id="lockScreen">
+  <div class="lock-box">
+    <h2>Vélo</h2>
+    <p>Connexion</p>
+    <input type="email" id="lockEmail" autocomplete="username" placeholder="E-mail">
+    <input type="password" id="lockPass" autocomplete="current-password" placeholder="Mot de passe">
+    <div id="lockError"></div>
+    <button id="lockSubmit">Se connecter</button>
+  </div>
+</div>
+<div class="wrap">
+  <h1>Vélo</h1>
+  <p class="sub">La Clé Universelle — réparation de vélos : achats, pièces utilisées, stock</p>
+  <div style="margin:-8px 0 14px;">
+    <a href="calculette.html" class="back-link">← Retour à la calculette</a>
+    <a href="treso.html" class="back-link" style="margin-left:6px;">🏦 Trésorerie</a>
+    <a href="stock.html" class="back-link" style="margin-left:6px;">📦 Stock</a>
+    <a href="compta.html" class="back-link" style="margin-left:6px;">📒 Compta</a>
+    <a href="bilan.html" class="back-link" style="margin-left:6px;">⚖️ Bilan</a>
+  </div>
+
+  <div class="vsum" id="vsum"></div>
+
+  <h2 class="section-title">Reste à payer</h2>
+  <p class="section-sub">Factures d'achat vélo non payées, par échéance.</p>
+  <div class="panel" id="echPanel"></div>
+
+  <h2 class="section-title">Factures d'achat</h2>
+  <p class="section-sub">Montants TTC (franchise de TVA : la TVA des fournisseurs fait partie du coût).</p>
+  <div class="panel">
+    <div class="frow">
+      <div class="field"><label>Fournisseur</label><input type="text" id="fF" placeholder="Bicyclit"></div>
+      <div class="field"><label>N° de facture</label><input type="text" id="fN"></div>
+      <div class="field"><label>Date</label><input type="date" id="fD"></div>
+    </div>
+    <div class="frow">
+      <div class="field"><label>Total TTC (€)</label><input type="number" step="0.01" inputmode="decimal" id="fT"></div>
+      <div class="field"><label>Échéance</label><input type="date" id="fE"></div>
+      <div class="field"><label>Statut</label><select id="fP"><option value="1">Payée</option><option value="0">À payer</option></select></div>
+    </div>
+    <div class="frow">
+      <div class="field" style="flex:2;"><label>Note libre</label><input type="text" id="fNote"></div>
+      <button class="add-btn" id="fAdd">Ajouter</button>
+      <button class="ghost-btn" id="fCancel" style="display:none;">Annuler</button>
+    </div>
+    <div id="fMsg"></div>
+  </div>
+  <div id="invList"></div>
+
+  <h2 class="section-title">Pièces utilisées pour les clients</h2>
+  <p class="section-sub">Saisir le coût d'achat TTC de la pièce posée. Le stock vélo baisse d'autant. Cocher « déjà compté dans la calculette » si ce coût est déjà dans l'achat matière d'un devis : il ne sera alors pas ajouté une seconde fois aux achats du bilan.</p>
+  <div class="panel">
+    <div class="frow">
+      <div class="field"><label>Date</label><input type="date" id="pD"></div>
+      <div class="field" style="flex:2;"><label>Pièce / client (libre)</label><input type="text" id="pDesc"></div>
+      <div class="field"><label>Coût d'achat TTC (€)</label><input type="number" step="0.01" inputmode="decimal" id="pC"></div>
+    </div>
+    <div class="frow">
+      <label class="chk"><input type="checkbox" id="pCalc"> déjà compté dans la calculette</label>
+      <button class="add-btn" id="pAdd">Ajouter</button>
+    </div>
+    <div id="pMsg"></div>
+  </div>
+  <div id="pcList"></div>
+
+  <p class="note">Stock vélo = total des factures d'achat − coût des pièces utilisées. Cette page ne modifie que son propre tiroir « velo » ; le bilan la lit (stock vélo à l'actif, factures non payées en dettes, pièces non comptées dans la calculette en achats).</p>
+  <footer>Données partagées avec la calculette et synchronisées entre vos appareils.</footer>
+</div>
+
+<script src="sync.js"></script>
+<script>
+const KEY = 'devisCalcSettings';
+const $ = id => document.getElementById(id);
+function readSettings(){ try{ return JSON.parse(localStorage.getItem(KEY)||'{}'); }catch(e){ return {}; } }
+function loadVelo(){ const v = readSettings().velo || {}; return { invoices:v.invoices||[], pieces:v.pieces||[], seed:v.seed }; }
+// Relit les réglages juste avant d'écrire : ne touche qu'à la clé « velo »
+function saveVelo(fn){
+  const s = readSettings(), v = s.velo || {};
+  v.invoices = v.invoices || []; v.pieces = v.pieces || [];
+  fn(v); s.velo = v;
+  localStorage.setItem(KEY, JSON.stringify(s));
+}
+function esc(s){ return String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+function num(v){ const n = parseFloat(String(v).replace(',','.')); return isNaN(n) ? 0 : n; }
+function r2(n){ return Math.round(n*100)/100; }
+function fmtE(n){ return (n<0?'−':'') + Math.abs(r2(n)).toLocaleString('fr-FR',{minimumFractionDigits:2,maximumFractionDigits:2}) + ' €'; }
+function todayStr(){ return new Date().toISOString().slice(0,10); }
+function fmtD(d){ const m = /^(\d{4})-(\d{2})-(\d{2})$/.exec(d||''); return m ? m[3]+'/'+m[2]+'/'+m[1] : (d||'—'); }
+function uid(){ return 'v' + Date.now().toString(36) + Math.random().toString(36).slice(2,6); }
+
+// Pré-saisie unique (2 factures déjà payées), seulement si le tiroir n'existe pas encore
+function seed(){
+  if(loadVelo().seed) return;
+  saveVelo(v=>{
+    if(v.seed) return;
+    v.invoices.push(
+      { id:uid(), fournisseur:'Bicyclit', num:'', date:'2026-09-03', totalTtc:128.47, echeance:'', payee:true, payeeLe:'', note:'' },
+      { id:uid(), fournisseur:'Bicyclit', num:'8581', date:'2026-09-15', totalTtc:132.10, echeance:'', payee:true, payeeLe:'', note:'proforma : facture définitive à récupérer' }
+    );
+    v.seed = 1;
+  });
+}
+
+function totals(){
+  const v = loadVelo();
+  let achats=0, du=0, util=0, utilCalc=0;
+  v.invoices.forEach(f=>{ achats += num(f.totalTtc); if(!f.payee) du += num(f.totalTtc); });
+  v.pieces.forEach(p=>{ util += num(p.cout); if(p.calc) utilCalc += num(p.cout); });
+  return { achats, du, util, utilCalc, stock: achats - util };
+}
+
+function renderSummary(){
+  const t = totals();
+  $('vsum').innerHTML =
+    `<div class="box"><span>Stock vélo</span><b>${fmtE(t.stock)}</b></div>` +
+    `<div class="box${t.du>0?' warn':''}"><span>Reste à payer</span><b>${fmtE(t.du)}</b></div>` +
+    `<div class="box"><span>Achats cumulés (TTC)</span><b>${fmtE(t.achats)}</b></div>` +
+    `<div class="box"><span>Pièces utilisées</span><b>${fmtE(t.util)}</b></div>` +
+    (t.stock < 0 ? `<div class="msg" style="grid-column:1/-1;margin:0;">Stock négatif : des pièces utilisées n'ont pas de facture d'achat saisie.</div>` : '') +
+    (t.util > 0 ? `<div class="note" style="grid-column:1/-1;margin:0;">Dont ${fmtE(t.utilCalc)} déjà comptés dans la calculette ; ${fmtE(t.util - t.utilCalc)} ajoutés aux achats du bilan.</div>` : '');
+}
+
+function renderEch(){
+  const today = todayStr();
+  const list = loadVelo().invoices.map((f,i)=>({f,i})).filter(x=>!x.f.payee)
+    .sort((a,b)=>(a.f.echeance||'9999').localeCompare(b.f.echeance||'9999'));
+  let tot = 0;
+  const rows = list.map(({f,i})=>{
+    tot += num(f.totalTtc);
+    const late = f.echeance && f.echeance < today;
+    return `<div class="manual-entry"><span>${f.echeance ? fmtD(f.echeance) : 'sans échéance'} · ${esc(f.fournisseur)} ${esc(f.num)}${late ? ' · <b style="color:var(--net-neg)">en retard</b>' : ''}</span><span class="amt">${fmtE(num(f.totalTtc))}</span><button class="add-btn small-btn" data-pay="${i}">Marquer payée</button></div>`;
+  }).join('');
+  $('echPanel').innerHTML = rows
+    ? rows + `<p class="note">Reste à payer : <b>${fmtE(tot)}</b> TTC (${list.length} facture${list.length>1?'s':''}).</p>`
+    : '<p class="note" style="margin:0;">Aucune facture à payer.</p>';
+  document.querySelectorAll('[data-pay]').forEach(b=> b.onclick = ()=>{
+    saveVelo(v=>{ const f = v.invoices[+b.dataset.pay]; f.payee = true; f.payeeLe = todayStr(); });
+    renderAll();
+  });
+}
+
+let EDIT = null;   // id de la facture en cours de modification
+function renderInv(){
+  const list = loadVelo().invoices.map((f,i)=>({f,i})).sort((a,b)=>(b.f.date||'').localeCompare(a.f.date||''));
+  $('invList').innerHTML = list.length ? list.map(({f,i})=>
+    `<div class="item"><div class="item-top"><span class="item-name">${esc(f.fournisseur)}${f.num ? ' · n° ' + esc(f.num) : ''}</span><span class="item-amt">${fmtE(num(f.totalTtc))}</span></div>
+     <div class="item-meta">${fmtD(f.date)}${f.echeance ? ' · échéance ' + fmtD(f.echeance) : ''}${f.payee && f.payeeLe ? ' · payée le ' + fmtD(f.payeeLe) : ''}${f.note ? '<br>' + esc(f.note) : ''}</div>
+     <div class="item-actions">${f.payee ? '<span class="badge-ok">Payée</span>' : '<span class="badge-due">À payer</span>'}
+       <button class="ghost-btn small-btn" data-edit="${i}">Modifier</button>
+       <button class="ghost-btn small-btn" data-del="${i}">Supprimer</button></div></div>`).join('')
+    : '<div class="empty-state">Aucune facture d\'achat.</div>';
+  document.querySelectorAll('[data-edit]').forEach(b=> b.onclick = ()=>{
+    const f = loadVelo().invoices[+b.dataset.edit]; EDIT = f.id;
+    $('fF').value = f.fournisseur||''; $('fN').value = f.num||''; $('fD').value = f.date||''; $('fT').value = f.totalTtc;
+    $('fE').value = f.echeance||''; $('fP').value = f.payee ? '1' : '0'; $('fNote').value = f.note||'';
+    $('fAdd').textContent = 'Enregistrer'; $('fCancel').style.display = ''; window.scrollTo({top:$('fF').getBoundingClientRect().top + scrollY - 120, behavior:'smooth'});
+  });
+  document.querySelectorAll('[data-del]').forEach(b=> b.onclick = ()=>{
+    const f = loadVelo().invoices[+b.dataset.del];
+    if(!confirm('Supprimer la facture ' + (f.fournisseur||'') + ' ' + (f.num||'') + ' (' + fmtE(num(f.totalTtc)) + ') ?')) return;
+    saveVelo(v=>{ v.invoices.splice(+b.dataset.del, 1); });
+    if(EDIT === f.id) resetForm();
+    renderAll();
+  });
+}
+function resetForm(){
+  EDIT = null;
+  ['fF','fN','fD','fT','fE','fNote'].forEach(id=>$(id).value = '');
+  $('fP').value = '1'; $('fAdd').textContent = 'Ajouter'; $('fCancel').style.display = 'none'; $('fMsg').innerHTML = '';
+}
+function submitInv(){
+  const fourn = $('fF').value.trim(), numF = $('fN').value.trim(), date = $('fD').value, ttc = num($('fT').value);
+  const err = t=>{ $('fMsg').innerHTML = '<div class="msg">' + t + '</div>'; };
+  if(!fourn) return err('Renseigne le fournisseur.');
+  if(!date) return err('Renseigne la date de la facture.');
+  if(!(ttc > 0)) return err('Renseigne un total TTC supérieur à 0.');
+  const payee = $('fP').value === '1';
+  const f = { fournisseur:fourn, num:numF, date, totalTtc:r2(ttc), echeance:$('fE').value, payee, note:$('fNote').value.trim() };
+  const dup = loadVelo().invoices.some(x=> x.id !== EDIT && numF && String(x.fournisseur).toLowerCase()===fourn.toLowerCase() && x.num===numF);
+  if(dup) return err('Facture déjà saisie (' + esc(fourn) + ' n° ' + esc(numF) + ').');
+  saveVelo(v=>{
+    if(EDIT){
+      const old = v.invoices.find(x=>x.id===EDIT);
+      if(old){ f.id = old.id; f.payeeLe = payee ? (old.payee ? (old.payeeLe||'') : todayStr()) : ''; Object.assign(old, f); }
+    } else { f.id = uid(); f.payeeLe = payee ? todayStr() : ''; v.invoices.push(f); }
+  });
+  resetForm(); renderAll();
+}
+
+function renderPieces(){
+  const list = loadVelo().pieces.map((p,i)=>({p,i})).sort((a,b)=>(b.p.date||'').localeCompare(a.p.date||''));
+  $('pcList').innerHTML = list.length ? list.map(({p,i})=>
+    `<div class="item"><div class="item-top"><span class="item-name">${esc(p.desc||'Pièce')}</span><span class="item-amt">${fmtE(num(p.cout))}</span></div>
+     <div class="item-meta">${fmtD(p.date)}</div>
+     <div class="item-actions"><label class="chk"><input type="checkbox" data-calc="${i}" ${p.calc?'checked':''}> déjà compté dans la calculette</label>
+       <button class="ghost-btn small-btn" data-pdel="${i}">Supprimer</button></div></div>`).join('')
+    : '<div class="empty-state">Aucune pièce utilisée saisie.</div>';
+  document.querySelectorAll('[data-calc]').forEach(c=> c.onchange = ()=>{
+    saveVelo(v=>{ v.pieces[+c.dataset.calc].calc = c.checked; }); renderSummary();
+  });
+  document.querySelectorAll('[data-pdel]').forEach(b=> b.onclick = ()=>{
+    if(!confirm('Supprimer cette pièce utilisée ?')) return;
+    saveVelo(v=>{ v.pieces.splice(+b.dataset.pdel, 1); }); renderAll();
+  });
+}
+function submitPiece(){
+  const cout = num($('pC').value), date = $('pD').value || todayStr();
+  if(!(cout > 0)){ $('pMsg').innerHTML = '<div class="msg">Renseigne un coût d\'achat TTC supérieur à 0.</div>'; return; }
+  saveVelo(v=>{ v.pieces.push({ id:uid(), date, desc:$('pDesc').value.trim(), cout:r2(cout), calc:$('pCalc').checked }); });
+  ['pDesc','pC'].forEach(id=>$(id).value=''); $('pCalc').checked = false; $('pMsg').innerHTML = '';
+  renderAll();
+}
+
+function renderAll(){ renderSummary(); renderEch(); renderInv(); renderPieces(); }
+function init(){
+  seed();
+  $('pD').value = todayStr();
+  $('fAdd').onclick = submitInv; $('fCancel').onclick = resetForm; $('pAdd').onclick = submitPiece;
+  renderAll();
+}
+Sync.boot(function(){ init(); });
+
+if('serviceWorker' in navigator){
+  window.addEventListener('load', ()=>{
+    navigator.serviceWorker.register('sw.js').catch(()=>{});
+  });
+}
+</script>
+
+</body>
+</html>

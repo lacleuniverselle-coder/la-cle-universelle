@@ -106,7 +106,7 @@ body.locked > .wrap{display:none;}
   <h1>Bilan</h1>
   <p class="sub">La Clé Universelle — situation estimée (actif / passif)</p>
   <div style="margin:-8px 0 14px;">
-    <a href="calculette.html" class="back-link">← Calculette</a><a href="treso.html" class="back-link">🏦 Trésorerie</a><a href="stock.html" class="back-link">📦 Stock</a><a href="compta.html" class="back-link">📒 Compta</a>
+    <a href="calculette.html" class="back-link">← Calculette</a><a href="treso.html" class="back-link">🏦 Trésorerie</a><a href="stock.html" class="back-link">📦 Stock</a><a href="compta.html" class="back-link">📒 Compta</a><a href="velo.html" class="back-link">🚲 Vélo</a>
   </div>
 
   <div id="warns"></div>
@@ -149,21 +149,23 @@ body.locked > .wrap{display:none;}
       <div class="field"><label>Valeur du stock (€) — vide = automatique</label><input type="number" step="0.01" inputmode="decimal" id="mStock"></div>
     </div>
     <div class="note" id="stockNote" style="margin:-2px 0 8px;"></div>
+    <div class="note" id="veloNote" style="margin:-2px 0 8px;"></div>
     <div class="row" style="margin-bottom:8px;">
       <div class="field"><label>Cotisations déjà versées à l'URSSAF (€)</label><input type="number" step="0.01" inputmode="decimal" id="mVersees"></div>
       <div class="field"><label>Prélèvements personnels cumulés (€)</label><input type="number" step="0.01" inputmode="decimal" id="mPrelev"></div>
     </div>
     <div class="row">
       <div class="field"><label>Emprunts restant dus (€)</label><input type="number" step="0.01" inputmode="decimal" id="mEmprunt"></div>
-      <div class="field"><label>Autres dettes (fournisseurs…) (€)</label><input type="number" step="0.01" inputmode="decimal" id="mDettes"></div>
+      <div class="field"><label>Autres dettes hors factures fournisseurs (€)</label><input type="number" step="0.01" inputmode="decimal" id="mDettes"></div>
     </div>
+    <div class="note">Les factures fournisseurs non payées (pages Stock et Vélo) sont reprises automatiquement dans les dettes : ne pas les saisir ici.</div>
   </div>
 
   <h2 class="section-title">Durée d'usure par outil</h2>
   <p class="section-sub">En mois (60 par défaut). L'outil perd de la valeur chaque mois, dès le mois d'achat.</p>
   <div class="panel" id="durees"></div>
 
-  <footer>Données partagées avec la calculette, la trésorerie et la compta. Cette page ne modifie que son propre tiroir.</footer>
+  <footer>Données partagées avec la calculette, la trésorerie, la compta, le stock et le vélo. Cette page ne modifie que son propre tiroir.</footer>
 </div>
 
 <script src="sync.js"></script>
@@ -255,6 +257,24 @@ function compute(){
   const stockManuel = b.stock !== undefined && b.stock !== null && b.stock !== '';
   if(!stockManuel && asOf < new Date().toISOString().slice(0,7)) out.warns.push("Le stock automatique est celui d'aujourd'hui, pas celui de fin " + asOf + " : saisissez-le à la main pour une date passée.");
 
+  /* Vélo (lecture seule du tiroir « velo ») : stock = achats − pièces utilisées, jusqu'au mois choisi */
+  const vl = s.velo || {};
+  const okM = d => !d || String(d).slice(0,7) <= asOf;
+  let veloAchats=0, veloUtil=0, veloPiecesResultat=0;
+  (vl.invoices||[]).filter(f=>okM(f.date)).forEach(f=>{ veloAchats += n(f.totalTtc); });
+  (vl.pieces||[]).filter(p=>okM(p.date)).forEach(p=>{
+    veloUtil += n(p.cout);
+    if(!p.calc) veloPiecesResultat += n(p.cout);   // coût déjà saisi dans la calculette : pas recompté
+  });
+  const veloBrut = veloAchats - veloUtil;
+  const stockVelo = Math.max(0, veloBrut);
+  if(veloBrut < 0) out.warns.push("Stock vélo négatif (" + eur(veloBrut) + ") : des pièces utilisées n'ont pas de facture d'achat saisie. Il est compté à 0 dans l'actif.");
+
+  /* Factures fournisseurs non payées à la date choisie (stock.html + velo.html) */
+  const impayee = f => okM(f.date) && (!f.payee || (f.payeeLe && String(f.payeeLe).slice(0,7) > asOf));
+  const dettesFact = ((s.stock && s.stock.invoices) || []).filter(impayee).reduce((t,f)=>t+n(f.totalTtc),0)
+                   + (vl.invoices||[]).filter(impayee).reduce((t,f)=>t+n(f.totalTtc),0);
+
   /* Compta : encaissements réels du livre des recettes, jusqu'au mois choisi */
   let comptaEnc = 0, comptaN = 0;
   ((s.compta && s.compta.entries) || []).filter(e=>e.date && e.date.slice(0,7) <= asOf).forEach(e=>{ comptaEnc += n(e.montant); comptaN++; });
@@ -262,17 +282,17 @@ function compute(){
 
   const banque=n(b.banque), stock = stockManuel ? n(b.stock) : stockAuto, versees=n(b.versees), prelev=n(b.prelev), emprunt=n(b.emprunt), dettes=n(b.dettes);
   const immoNet = immoBrut - amort;
-  const resultat = ca - achats - cotis - fixes - amort;
+  const resultat = ca - achats - veloPiecesResultat - cotis - fixes - amort;
   const dettesCotis = cotis - versees;
-  const actif = banque + stock + creances + aidesAttendues + immoNet;
+  const actif = banque + stock + stockVelo + creances + aidesAttendues + immoNet;
   const capitaux = apport + aidesRecues + aidesAttendues + resultat - prelev;
-  const passif = capitaux + emprunt + dettes + dettesCotis;
+  const passif = capitaux + emprunt + dettes + dettesFact + dettesCotis;
   const baseImp = caMatP*(1-ABATT_VENTE) + caServP*(1-ABATT_SERV);
 
   if(noDetail) out.warns.push(noDetail+' ancien(s) devis sans détail matériel/service : leurs cotisations sont estimées (vente − net) et leurs achats ne sont pas comptés.');
   if(zeroPaid) out.warns.push(zeroPaid+' devis payé(s) datés de mai à juillet 2025, mois déclarés à zéro : à vérifier.');
   if((s.manualCat||[]).length) out.warns.push('Les rattrapages manuels de la trésorerie sont comptés en ventes et achats, mais sans cotisations.');
-  return Object.assign(out, {ca,caMat,caServ,caMatP,caServP,stockAuto,stockManuel,comptaEnc,comptaN,encaisseDevis,achats,cotis,creances,immoBrut,amort,immoNet,apport,aidesRecues,aidesAttendues,
+  return Object.assign(out, {ca,caMat,caServ,caMatP,caServP,stockAuto,stockManuel,stockVelo,veloAchats,veloUtil,veloPiecesResultat,dettesFact,comptaEnc,comptaN,encaisseDevis,achats,cotis,creances,immoBrut,amort,immoNet,apport,aidesRecues,aidesAttendues,
     fixes,mois,banque,stock,versees,prelev,emprunt,dettes,resultat,dettesCotis,actif,capitaux,passif,baseImp});
 }
 
@@ -305,6 +325,7 @@ function render(){
   $('stockNote').textContent = c.stockManuel
     ? 'Stock saisi à la main : ' + eur(c.stock) + ' (page Stock : ' + eur(c.stockAuto) + '). Videz le champ pour repasser en automatique.'
     : 'Stock automatique : ' + eur(c.stockAuto) + ' (page Stock, quantité × prix moyen d\'achat TTC).';
+  $('veloNote').textContent = 'Stock vélo (page Vélo, compté à part) : ' + eur(c.stockVelo) + ' = achats ' + eur(c.veloAchats) + ' − pièces utilisées ' + eur(c.veloUtil) + '.';
   $('mStock').placeholder = 'auto : ' + r2(c.stockAuto).toFixed(2);
 
   $('actif').innerHTML =
@@ -312,6 +333,7 @@ function render(){
     L('− Usure cumulée', -c.amort,'sub-t') +
     L('Outillage et vélo, valeur nette', c.immoNet) +
     L('Stock', c.stock,'',c.stockManuel?'saisi à la main':'automatique (page Stock)') +
+    L('Stock vélo', c.stockVelo,'','automatique (page Vélo)') +
     L('Factures non encaissées', c.creances,'', 'devis non cochés « payé » dans la calculette') +
     (c.aidesAttendues?L('Aides attendues', c.aidesAttendues):'') +
     L('Banque + caisse', c.banque) +
@@ -325,7 +347,8 @@ function render(){
     L('− Prélèvements personnels', -c.prelev,'sub-t') +
     L('Capitaux propres', c.capitaux) +
     L('Emprunts', c.emprunt) +
-    L('Autres dettes', c.dettes) +
+    L('Dettes fournisseurs', c.dettesFact,'','factures non payées (pages Stock et Vélo)') +
+    L('Autres dettes hors factures fournisseurs', c.dettes) +
     L('Cotisations à payer', c.dettesCotis,'', c.dettesCotis<0 ? 'négatif = vous avez versé plus que calculé' : 'dues d\'après les devis payés − déjà versées') +
     L('Total passif', c.passif,'tot');
 
@@ -334,6 +357,7 @@ function render(){
     L('dont encaissé', c.ca - c.creances,'sub-t') +
     L('dont à encaisser', c.creances,'sub-t') +
     L('− Achats de matériel', -c.achats) +
+    (c.veloPiecesResultat?L('− Pièces vélo utilisées', -c.veloPiecesResultat,'', 'coût d\'achat des pièces non déjà comptées dans la calculette'):'') +
     L('− Cotisations URSSAF (sur devis payés)', -c.cotis,'', 'taux de la calculette, ACRE ou plein selon chaque devis') +
     L('− Frais fixes estimés', -c.fixes,'', c.mois.toLocaleString('fr-FR',{maximumFractionDigits:1})+' mois × frais fixes de la calculette') +
     L('− Usure de l\'outillage', -c.amort) +
