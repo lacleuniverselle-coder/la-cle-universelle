@@ -3323,10 +3323,11 @@ table.tarifs td.prix-semaine {
 /* ---------- 3) DESKTOP (≥ 641px) — largeur alignée sur le menu ---------- */
 @media (min-width: 641px) {
     .hero-v2 { width: min(860px, calc(100% - 1.2rem)); margin: .6rem auto .8rem; }
-    .hero-media { height: clamp(260px, 42vh, 400px); }
+    .hero-media { height: clamp(300px, 62vh, 520px); }
+    .hero-media::after { background: linear-gradient(to bottom, rgba(72, 38, 100, 0) 78%, rgba(72, 38, 100, .35) 100%); }
     .hero-body { padding: 0 1.6rem .8rem; }
 
-    .hero-v2 .hero-logo-wrap { margin: -35px 0 .1rem; }
+    .hero-v2 .hero-logo-wrap { margin: -140px 0 calc(8px + .1rem); }
     .hero-v2 .hero-logo-wrap :is(svg, img) { height: 130px; margin: 0 0 -.5rem;}
 
     .hero-eyebrow { margin: 0 0 .4rem; font-size: .68rem; }
@@ -3796,3 +3797,6 @@ body.prest-lb-lock { overflow: hidden; }
     }
     .prestations-main-col .prest-cat-title .prest-icon { width: 30px; height: 30px; }
 }
+
+/* Les liens d'ancre (#services, #zones…) s'arrêtent sous le menu fixe, sans couper le haut de la section */
+html { scroll-padding-top: 5rem; }
