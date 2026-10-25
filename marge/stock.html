@@ -184,6 +184,22 @@ body.locked > .wrap{display:none;}
 .manual-entry{flex-wrap:wrap;}
 details.panel summary{cursor:pointer;font-size:0.9rem;margin-bottom:6px;}
 .jr{font-size:0.74rem;}
+#printJr{display:none;}
+@page{size:A4 landscape; margin:10mm;}
+@media print{
+  body.printing-jr > *:not(#printJr){display:none!important;}
+  body.printing-jr{background:#fff!important; color:#000!important;}
+  body.printing-jr #printJr{display:block!important; background:#fff; color:#000; font-family:Inter,Arial,sans-serif;}
+  #printJr h1{font-size:15pt; margin:0 0 2mm;}
+  #printJr .pj-sub{font-size:9pt; margin:0 0 4mm; color:#333;}
+  #printJr table{width:100%; border-collapse:collapse; font-size:8pt;}
+  #printJr th,#printJr td{border-bottom:0.3pt solid #999; padding:1.5mm 1.5mm; text-align:left; color:#000; background:#fff;}
+  #printJr th{border-bottom:0.8pt solid #000; font-weight:700;}
+  #printJr td:nth-child(n+7),#printJr th:nth-child(n+7){text-align:right; white-space:nowrap;}
+  #printJr thead{display:table-header-group;}
+  #printJr tr{page-break-inside:avoid;}
+  #printJr .pj-tot{margin-top:4mm; font-size:10pt; font-weight:700; text-align:right;}
+}
 .jr td,.jr th{white-space:nowrap;padding:5px 6px;text-align:left!important;}
 .jr td:nth-child(n+7),.jr th:nth-child(n+7){text-align:right!important;}
 </style>
@@ -220,7 +236,7 @@ details.panel summary{cursor:pointer;font-size:0.9rem;margin-bottom:6px;}
   <div id="stockList"></div>
   <p class="note">Outillage, frais, hors activité et « Autre » ne sont pas suivis dans le stock.</p>
   <details class="panel" id="cptPanel"><summary><b>Comptage physique</b></summary><div id="cptBody"></div></details>
-  <details class="panel"><summary><b>Journal d'achats</b></summary><div id="jrBody"></div></details>
+  <details class="panel"><summary><b>Journal d'achats</b></summary><div class="stock-row" style="margin:8px 0;"><button class="add-btn" id="jrPdf">Exporter en PDF</button></div><div id="jrBody"></div></details>
 
   <footer>Données partagées avec la calculette et synchronisées entre vos appareils.</footer>
 </div>
@@ -408,19 +424,44 @@ function renderEch(){
 }
 
 // Journal d'achats (une ligne par article, frais compris)
-function renderJournal(){
+function journalRows(){
   const rows = [];
   (loadStock().invoices||[]).forEach(f=>(f.lignes||[]).forEach(l=>rows.push({ d:f.date||'', f:f.fournisseur, n:f.num, l })));
   rows.sort((a,b)=>b.d.localeCompare(a.d));
+  return rows;
+}
+function journalTable(rows, withTotal){
   let tot = 0;
   const body = rows.map(r=>{
     const l = r.l, t = l.qte*l.puHt*(1+tvaOf(l)/100); tot += t;
     return `<tr><td>${fmtD(r.d)}</td><td>${escapeHtml(r.f)}</td><td>${escapeHtml(r.n)}</td><td>${escapeHtml(l.ref)}</td><td>${escapeHtml(l.desc)}</td><td>${escapeHtml(catLabel(l.cat))}</td><td>${fmtQ(l.qte)}</td><td>${fmtE(l.puHt)}</td><td>${fmtQ(tvaOf(l))} %</td><td>${fmtE(t)}</td></tr>`;
   }).join('');
+  const head = '<thead><tr><th>Date</th><th>Fournisseur</th><th>N°</th><th>Réf.</th><th>Désignation</th><th>Catégorie</th><th>Qté</th><th>PU HT</th><th>TVA</th><th>TTC</th></tr></thead>';
+  return { tot, html: `<table class="cat-table jr">${head}<tbody>${body}</tbody></table>` };
+}
+function renderJournal(){
+  const rows = journalRows();
+  const t = journalTable(rows);
+  const btn = document.getElementById('jrPdf'); if(btn) btn.disabled = !rows.length;
   document.getElementById('jrBody').innerHTML = rows.length
-    ? `<div style="overflow-x:auto;"><table class="cat-table jr"><thead><tr><th>Date</th><th>Fournisseur</th><th>N°</th><th>Réf.</th><th>Désignation</th><th>Catégorie</th><th>Qté</th><th>PU HT</th><th>TVA</th><th>TTC</th></tr></thead><tbody>${body}</tbody></table></div><p class="note">${rows.length} ligne(s) · total ${fmtE(tot)} TTC (outillage et frais inclus).</p>`
+    ? `<div style="overflow-x:auto;">${t.html}</div><p class="note">${rows.length} ligne(s) · total ${fmtE(t.tot)} TTC (outillage et frais inclus).</p>`
     : '<div class="empty-state">Aucun achat enregistré.</div>';
 }
+// Export PDF : vue d'impression dédiée (Enregistrer au format PDF dans la boîte de dialogue)
+function exportJournalPdf(){
+  const rows = journalRows();
+  if(!rows.length) return;
+  const t = journalTable(rows);
+  let box = document.getElementById('printJr');
+  if(!box){ box = document.createElement('div'); box.id = 'printJr'; document.body.appendChild(box); }
+  const d = rows[rows.length-1].d, f = rows[0].d;
+  box.innerHTML = `<h1>Journal d\u2019achats — La Clé Universelle</h1><p class="pj-sub">Du ${fmtD(d)} au ${fmtD(f)} · ${rows.length} ligne(s) · exporté le ${fmtD(todayStr())}</p>${t.html.replace(' class="cat-table jr"','')}<div class="pj-tot">Total : ${fmtE(t.tot)} TTC (outillage et frais inclus)</div>`;
+  const clean = ()=>{ document.body.classList.remove('printing-jr'); box.innerHTML=''; window.removeEventListener('afterprint', clean); };
+  window.addEventListener('afterprint', clean);
+  document.body.classList.add('printing-jr');
+  setTimeout(()=>window.print(), 50);
+}
+document.getElementById('jrPdf').addEventListener('click', exportJournalPdf);
 
 // PARSE-BEGIN
 function norm(s){ return String(s).normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase(); }
