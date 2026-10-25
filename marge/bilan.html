@@ -309,12 +309,6 @@ function compute(asOf){
       }
     });
   });
-  /* Rattrapages manuels de la trésorerie (lecture seule) */
-  (s.manualCat||[]).filter(m=>!m.dateISO || m.dateISO<=asOf).forEach(m=>{
-    ca += n(m.vente); caMat += n(m.vente); caMatP += n(m.vente);
-    achats += m.achat !== undefined ? n(m.achat) : n(m.montant);
-  });
-
   /* Outillage et vélo, amortissement linéaire */
   const durees = b.durees || {};
   let immoBrut=0, amort=0;
@@ -392,7 +386,6 @@ function compute(asOf){
 
   if(noDetail) out.warns.push(noDetail+' ancien(s) devis sans détail matériel/service : leurs cotisations sont estimées (vente − net) et leurs achats ne sont pas comptés.');
   if(zeroPaid) out.warns.push(zeroPaid+' devis payé(s) datés de juin et juillet 2026, mois déclarés à zéro : à vérifier.');
-  if((s.manualCat||[]).length) out.warns.push('Les rattrapages manuels de la trésorerie sont comptés en ventes et achats, mais sans cotisations.');
   return Object.assign(out, {ca,caMat,caServ,caMatP,caServP,stockAuto,stockManuel,stockVelo,veloAchats,veloUtil,veloPiecesResultat,dettesFact,comptaEnc,comptaN,encaisseDevis,achats,materiel,marge,cotis,cotisPrev,creances,immoBrut,amort,immoNet,apport,aidesRecues,aidesAttendues,
     fixes,mois,banque,banqueSaisie,banqueAttendue,stock,versees,prelev,emprunt,dettes,dettesTotal,resultat,dettesCotis,actif,capitaux,passif,baseImp,taux,provImpot,resultatApres,
     estime: estimeBanque || estimeStock, estimeBanque, estimeStock});

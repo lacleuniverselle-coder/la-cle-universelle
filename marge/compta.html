@@ -238,6 +238,7 @@ body.locked > .wrap{display:none;}
   <div class="panel">
     <div class="tool-add-row" style="margin-bottom:10px;">
       <div class="field"><label>Période</label><select id="fMois"></select></div>
+      <div class="field" style="flex:0 0 auto;min-width:90px;"><label>Lignes comptées</label><div id="fCount" style="padding:7px 0;font-size:0.9rem;font-weight:600;font-variant-numeric:tabular-nums;">0</div></div>
       <button class="btn2" id="csvBtn">⬇ CSV</button>
       <button class="btn2" id="pdfBtn">⬇ PDF</button>
     </div>
@@ -402,6 +403,7 @@ function render(){
   fillMonths();
   renderTrash();
   const list=sorted(inPeriod(loadEntries()));
+  $('fCount').textContent=list.length;
   if(!list.length){ $('livre').innerHTML='<div class="empty-state">Aucune recette pour cette période.</div>'; return; }
   let cum=0;
   const annules=new Set(loadEntries().filter(e=>e.annuleId).map(e=>e.annuleId));
