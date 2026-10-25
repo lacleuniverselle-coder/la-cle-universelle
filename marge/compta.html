@@ -406,10 +406,10 @@ function render(){
   let cum=0;
   const annules=new Set(loadEntries().filter(e=>e.annuleId).map(e=>e.annuleId));
   const rows=list.map(x=>{ cum=r2(cum+x.montant);
-    return '<tr'+((annules.has(x.id)||x.annuleId)?' class="annule" title="Ligne annulée"':'')+'><td>'+'<button class="undo" data-edit="'+x.id+'" title="Modifier cette ligne">✏️</button>'+'</td><td>'+fr(x.date)+'</td><td>'+esc(x.client)+'</td><td class="nat">'+(x.nature?esc(x.nature):'<input type="text" class="natin" data-natin="'+x.id+'" placeholder="Nature de la prestation…"> <button class="undo" data-natsave="'+x.id+'" title="Enregistrer (ensuite verrouillé, modifiable seulement via ✏️)">✓</button>')+'</td><td>'+esc(x.mode)+'</td><td>'+esc(x.ref)+'</td>'
-      +'<td class="r'+(x.montant<0?' neg':'')+'">'+eur(x.montant)+'</td><td class="r">'+eur(cum)+'</td>'
+    return '<tr'+((annules.has(x.id)||x.annuleId)?' class="annule" title="Ligne annulée"':'')+'><td>'+'<button class="undo" data-edit="'+x.id+'" title="Modifier cette ligne">✏️</button>'+'</td><td>'+fr(x.date)+'</td><td>'+esc(x.client)+'</td><td class="r'+(x.montant<0?' neg':'')+'">'+eur(x.montant)+'</td><td class="nat">'+(x.nature?esc(x.nature):'<input type="text" class="natin" data-natin="'+x.id+'" placeholder="Nature de la prestation…"> <button class="undo" data-natsave="'+x.id+'" title="Enregistrer (ensuite verrouillé, modifiable seulement via ✏️)">✓</button>')+'</td><td>'+esc(x.mode)+'</td><td>'+esc(x.ref)+'</td>'
+      +'<td class="r">'+eur(cum)+'</td>'
       +'<td>'+(x.montant>0?'<button class="undo" data-undo="'+x.id+'" title="Annuler cette ligne (ajoute une ligne négative)">↩</button>':'')+'<button class="undo" data-del="'+x.id+'" title="Mettre à la corbeille">🗑</button></td></tr>'; }).join('');
-  $('livre').innerHTML='<table class="lv"><thead><tr><th></th><th>Date</th><th>Client</th><th>Prestation</th><th>Mode</th><th>Facture</th><th class="r">Montant</th><th class="r">Cumul</th><th></th></tr></thead><tbody>'+rows+'</tbody><tfoot><tr><td colspan="6">Total</td><td class="r">'+eur(cum)+'</td><td></td><td></td></tr></tfoot></table>';
+  $('livre').innerHTML='<table class="lv"><thead><tr><th></th><th>Date</th><th>Client</th><th class="r">Montant</th><th>Prestation</th><th>Mode</th><th>Facture</th><th class="r">Cumul</th><th></th></tr></thead><tbody>'+rows+'</tbody><tfoot><tr><td colspan="3">Total</td><td class="r">'+eur(cum)+'</td><td colspan="5"></td></tr></tfoot></table>';
   const saveNature = id=>{
     const inp=document.querySelector('[data-natin="'+id+'"]'); if(!inp) return;
     const t=inp.value.trim(); if(!t) return;
