@@ -485,6 +485,7 @@ body.locked > .wrap{display:none;}
     <a href="stock.html" style="font-size:0.78rem; color:var(--ink-soft); text-decoration:none; border:1px solid var(--line); border-radius:7px; padding:6px 10px; background:var(--surface); font-weight:500;">📦 Stock</a>
     <a href="treso.html" style="font-size:0.78rem; color:var(--ink-soft); text-decoration:none; border:1px solid var(--line); border-radius:7px; padding:6px 10px; background:var(--surface); font-weight:500;">🏦 Trésorerie</a>
     <a href="compta.html" style="font-size:0.78rem; color:var(--ink-soft); text-decoration:none; border:1px solid var(--line); border-radius:7px; padding:6px 10px; background:var(--surface); font-weight:500;">📒 Compta</a>
+    <a href="bilan.html" style="font-size:0.78rem; color:var(--ink-soft); text-decoration:none; border:1px solid var(--line); border-radius:7px; padding:6px 10px; background:var(--surface); font-weight:500;">⚖️ Bilan</a>
   </div>
 
   <div class="mat-serv-grid">
@@ -648,25 +649,11 @@ body.locked > .wrap{display:none;}
 </div>
 
 <script src="sync.js"></script>
+<script src="taux.js"></script>
 <script>
 Sync.boot(function(){ if(window.__migGazElec && typeof saveSettings==='function') saveSettings(); });
 
-// Taux 2026 = cotisations + CFP. La CFP (0,3 %) n'est pas réduite par l'ACRE (simulateur URSSAF : 5 € sur 1 658 €).
-// Pour changer la CFP du matériel (ex. 0,1 %), modifier uniquement CFP.mat.
-const CFP = { mat: 0.003, serv: 0.003 };
-const RATES = {
-  acre:  { mat: 0.062 + CFP.mat,  serv: 0.106 + CFP.serv },
-  plein: { mat: 0.123 + CFP.mat,  serv: 0.212 + CFP.serv }
-};
-// Anciens taux (devis enregistrés avant cette mise à jour, sans ratesVer) : conservés pour ne pas modifier le passé.
-const RATES_V1 = {
-  acre:  { mat: 0.062,  serv: 0.1075 },
-  plein: { mat: 0.123 + 0.001, serv: 0.212 + 0.003 }
-};
-function ratesOf(d, reg){
-  const src = (d && d.ratesVer === 2) ? RATES : RATES_V1;
-  return src[reg || (d && d.regime)] || src.acre;
-}
+// Taux et abattements : voir taux.js (source unique, partagée avec le bilan).
 let mixObjectif = 25;        // objectif : part des prestations (%)
 const BASE_CATEGORIES = [
   { id:'cremone',  label:'Crémone' },
