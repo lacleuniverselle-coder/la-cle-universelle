@@ -3817,7 +3817,7 @@ html { scroll-padding-top: 5rem; }
 /* Page À propos : photo à gauche (desktop), texte qui l'enveloppe (mobile) */
 .apropos-content.apropos-page {
     display: grid;
-    grid-template-columns: minmax(0, 170px) minmax(0, 1fr);
+    grid-template-columns: minmax(0, 210px) minmax(0, 1fr);
     gap: 2rem;
     align-items: start
 }
