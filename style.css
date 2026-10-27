@@ -3814,10 +3814,10 @@ html { scroll-padding-top: 5rem; }
 .svc-tip a { color: var(--lilas-clair); font-weight: 600; text-decoration: underline; text-underline-offset: 2px; }
 .svc-tip a:hover { color: var(--blanc); }
 
-/* Page À propos : photo à gauche, texte à droite (desktop + mobile) */
+/* Page À propos : photo à gauche (desktop), texte qui l'enveloppe (mobile) */
 .apropos-content.apropos-page {
     display: grid;
-    grid-template-columns: minmax(0, 340px) minmax(0, 1fr);
+    grid-template-columns: minmax(0, 240px) minmax(0, 1fr);
     gap: 2rem;
     align-items: start
 }
@@ -3835,22 +3835,38 @@ html { scroll-padding-top: 5rem; }
     aspect-ratio: 647 / 1195;
     object-fit: cover;
     border: 3px solid #fff;
-    border-radius: 12px
+    border-radius: 12px;
+    pointer-events: none;
+    user-select: none;
+    -webkit-user-select: none;
+    -webkit-user-drag: none;
+    -webkit-touch-callout: none
 }
 
 @media (max-width:860px) {
     .apropos-content.apropos-page {
-        grid-template-columns: minmax(0, 40%) minmax(0, 1fr);
-        gap: 1rem
+        display: block
+    }
+
+    .apropos-content.apropos-page::after {
+        content: "";
+        display: block;
+        clear: both
+    }
+
+    .apropos-content.apropos-page .apropos-image {
+        float: left;
+        width: 120px;
+        margin: 0 1rem .5rem 0
     }
 
     .apropos-content.apropos-page .apropos-text p {
-        font-size: .8rem;
-        line-height: 1.6
+        font-size: .9rem;
+        line-height: 1.65
     }
 
     .apropos-content.apropos-page .apropos-text p+p {
-        margin-top: .7rem
+        margin-top: .8rem
     }
 
     .apropos-content.apropos-page .apropos-image img {
