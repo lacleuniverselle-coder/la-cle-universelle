@@ -3800,3 +3800,16 @@ body.prest-lb-lock { overflow: hidden; }
 
 /* Les liens d'ancre (#services, #zones…) s'arrêtent sous le menu fixe, sans couper le haut de la section */
 html { scroll-padding-top: 5rem; }
+
+/* Conseil "bon réflexe" sous la description de la section services */
+.svc-tip {
+    display: flex; align-items: flex-start; gap: .6rem;
+    max-width: 700px; margin: .9rem 0 1.2rem; padding: .65rem .9rem;
+    background: rgba(255, 255, 255, .08);
+    border-left: 3px solid #e7bb2b; border-radius: 0 8px 8px 0;
+    color: var(--blanc); font-size: .85rem; line-height: 1.5;
+}
+.svc-tip-icon { flex: none; font-size: 1.1rem; line-height: 1.4; }
+.svc-tip strong { color: #e7bb2b; font-weight: 700; }
+.svc-tip a { color: var(--lilas-clair); font-weight: 600; text-decoration: underline; text-underline-offset: 2px; }
+.svc-tip a:hover { color: var(--blanc); }
