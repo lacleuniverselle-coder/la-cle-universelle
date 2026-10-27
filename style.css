@@ -3817,7 +3817,7 @@ html { scroll-padding-top: 5rem; }
 /* Page À propos : photo à gauche (desktop), texte qui l'enveloppe (mobile) */
 .apropos-content.apropos-page {
     display: grid;
-    grid-template-columns: minmax(0, 240px) minmax(0, 1fr);
+    grid-template-columns: minmax(0, 170px) minmax(0, 1fr);
     gap: 2rem;
     align-items: start
 }
@@ -3832,7 +3832,7 @@ html { scroll-padding-top: 5rem; }
     display: block;
     width: 100%;
     height: auto;
-    aspect-ratio: 647 / 1195;
+    aspect-ratio: 527 / 1074;
     object-fit: cover;
     border: 3px solid #fff;
     border-radius: 12px;
@@ -3856,7 +3856,7 @@ html { scroll-padding-top: 5rem; }
 
     .apropos-content.apropos-page .apropos-image {
         float: left;
-        width: 120px;
+        width: 90px;
         margin: 0 1rem .5rem 0
     }
 
