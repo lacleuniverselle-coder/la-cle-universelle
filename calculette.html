@@ -1,0 +1,2149 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Net par facture — La Clé Universelle</title>
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#4C3468">
+<link rel="icon" href="icon-192.png">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Net Facture">
+<meta name="robots" content="noindex, nofollow">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+<style>
+:root{
+  --bg:#EDEFEF; --surface:#FFFFFF; --line:#D8DBDB;
+  --ink:#1E2328; --ink-soft:#5B6266;
+  --violet:#4C3468; --violet-deep:#382450;
+  --steel:#43616B;
+  --net-pos:#2E6B4C; --net-bg:#E7F1EA;
+  --net-neg:#A23B3B; --net-neg-bg:#F4E6E6;
+  --danger:#A23B3B;
+  box-sizing:border-box;
+  padding-top:env(safe-area-inset-top,0px);
+  padding-bottom:env(safe-area-inset-bottom,0px);
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#181B1D; --surface:#22262A; --line:#33383C;
+    --ink:#EDEFEF; --ink-soft:#9AA3A7;
+    --net-bg:#1E2E24; --net-neg-bg:#2E1E1E;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#181B1D; --surface:#22262A; --line:#33383C;
+  --ink:#EDEFEF; --ink-soft:#9AA3A7;
+  --net-bg:#1E2E24; --net-neg-bg:#2E1E1E;
+}
+*{box-sizing:border-box;}
+html,body{height:100%;}
+html{scroll-padding-top:env(safe-area-inset-top,0px);}
+body{
+  margin:0; background:var(--bg); color:var(--ink);
+  font-family:'Inter',system-ui,-apple-system,sans-serif;
+  -webkit-font-smoothing:antialiased;
+}
+.wrap{max-width:640px; margin:0 auto; padding:20px 16px 40px;}
+h1{
+  font-family:'Fraunces',serif; font-weight:600; font-size:1.5rem;
+  margin:0 0 2px; letter-spacing:-0.01em;
+}
+.sub{color:var(--ink-soft); font-size:0.85rem; margin:0 0 16px;}
+h2.section-title{
+  font-family:'Fraunces',serif; font-weight:600; font-size:1rem;
+  margin:20px 0 3px; letter-spacing:-0.01em;
+}
+.section-sub{color:var(--ink-soft); font-size:0.76rem; margin:0 0 8px;}
+
+.panel{
+  background:var(--surface); border:1px solid var(--line); border-radius:10px;
+  padding:12px; margin-bottom:12px;
+}
+.panel h2{font-size:0.8rem; font-weight:600; margin:0 0 8px; color:var(--ink-soft); text-transform:none;}
+
+.settings-row{display:flex; gap:10px; flex-wrap:wrap; align-items:flex-end;}
+.field{display:flex; flex-direction:column; gap:4px; flex:1; min-width:120px;}
+.field label{font-size:0.74rem; color:var(--ink-soft);}
+.field input, .field select{
+  border:1px solid var(--line); border-radius:7px; padding:7px 8px;
+  font-size:0.9rem; background:var(--bg); color:var(--ink); font-family:inherit;
+  font-variant-numeric:tabular-nums; width:100%;
+}
+.toggle{display:flex; border:1px solid var(--line); border-radius:7px; overflow:hidden;}
+.toggle button{
+  flex:1; padding:7px 6px; border:none; background:var(--bg); color:var(--ink-soft);
+  font-size:0.82rem; cursor:pointer; font-family:inherit;
+}
+.toggle button.active{background:var(--violet); color:#fff; font-weight:600;}
+
+.toggle-rates button{padding:6px 8px; line-height:1.3;}
+.toggle-rates button span{display:block; font-size:0.85rem; font-weight:600;}
+.toggle-rates button small{display:block; font-size:0.66rem; font-weight:400; opacity:0.8; margin-top:1px;}
+.toggle-rates button.active small{opacity:0.9;}
+
+.mat-serv-grid{display:grid; grid-template-columns:1fr 1fr; gap:14px;}
+.mat-serv-col .section-title{margin:0 0 2px;}
+.mat-serv-col .section-sub{margin:0 0 8px;}
+@media (max-width:520px){
+  .mat-serv-grid{grid-template-columns:1fr;}
+}
+
+.daycost-banner{
+  background:var(--surface); border:1px solid var(--line); border-radius:10px;
+  padding:10px 12px; margin-bottom:12px; display:flex; justify-content:space-between; align-items:center;
+}
+.daycost-banner .lbl{font-size:0.78rem; color:var(--ink-soft);}
+.daycost-banner .lbl small{display:block; font-size:0.68rem; margin-top:1px;}
+.daycost-banner .val{font-family:'Inter',system-ui,-apple-system,sans-serif; font-size:1.1rem; font-weight:600; color:var(--steel); font-variant-numeric:tabular-nums;}
+
+.article{
+  background:var(--surface); border:1px solid var(--line); border-radius:9px;
+  padding:9px 10px; margin-bottom:7px; position:relative;
+}
+.article-top{display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;}
+.type-toggle{display:flex; border:1px solid var(--line); border-radius:7px; overflow:hidden;}
+.type-toggle button{
+  padding:6px 12px; border:none; background:var(--bg); color:var(--ink-soft);
+  font-size:0.8rem; cursor:pointer; font-family:inherit;
+}
+.type-toggle button.active.mat{background:var(--steel); color:#fff;}
+.type-toggle button.active.serv{background:var(--violet); color:#fff;}
+.remove-btn{
+  background:none; border:none; color:var(--ink-soft); cursor:pointer; font-size:1.1rem;
+  padding:2px 6px; line-height:1;
+}
+.article-fields{display:flex; gap:7px;}
+.article-fields .field{min-width:0; gap:2px;}
+.article-net{
+  margin-top:6px; padding-top:6px; border-top:1px dashed var(--line);
+  display:flex; flex-wrap:wrap; justify-content:space-between; gap:4px 8px; font-size:0.78rem; color:var(--ink-soft);
+}
+.article-net b{color:var(--ink); font-variant-numeric:tabular-nums;}
+.article-net span{white-space:nowrap;}
+
+.add-btn{
+  width:100%; padding:8px; border:1.5px dashed var(--line); border-radius:9px;
+  background:none; color:var(--ink-soft); font-size:0.8rem; cursor:pointer;
+  font-family:inherit; margin-bottom:12px;
+}
+.add-btn:active{background:var(--surface);}
+
+.summary{
+  background:var(--surface); border:1px solid var(--line); border-radius:11px; padding:12px;
+}
+.summary-row{
+  display:flex; justify-content:space-between; padding:3px 0; font-size:0.82rem; color:var(--ink-soft);
+}
+.summary-row span:last-child{font-variant-numeric:tabular-nums; color:var(--ink); font-weight:400; font-size:0.82rem;}
+.summary-row.big{align-items:baseline; padding:4px 0 6px; color:var(--ink);}
+.summary-row.big span:first-child{font-weight:600; font-size:0.88rem;}
+.summary-row.big span:last-child{font-weight:700; font-size:1.15rem;}
+.summary-row.charges span:last-child{color:var(--danger,#C0392B);}
+.summary-final{
+  margin-top:6px; padding-top:10px; border-top:1px solid var(--line);
+  background:var(--net-bg); margin-left:-12px; margin-right:-12px; margin-bottom:-12px;
+  padding:10px 12px; border-radius:0 0 11px 11px;
+  display:flex; justify-content:space-between; align-items:baseline;
+}
+.summary-final.neg{background:var(--net-neg-bg);}
+.summary-final .label{font-size:0.88rem; font-weight:600;}
+.summary-final .amount{
+  font-family:'Inter',system-ui,-apple-system,sans-serif; font-size:1.15rem; font-weight:600; color:var(--net-pos);
+  font-variant-numeric:tabular-nums;
+}
+.summary-final.neg .amount{color:var(--net-neg);}
+
+.backup-links{text-align:center; font-size:0.72rem; color:var(--ink-soft); margin:18px 0 4px;}
+.backup-links button{background:none; border:none; padding:0 2px; font:inherit; color:inherit; text-decoration:underline; cursor:pointer;}
+.private-grid{display:flex; flex-direction:column; gap:5px;}
+.private-row{display:flex; justify-content:space-between; align-items:center; gap:8px;}
+.private-row label{font-size:0.82rem; flex:1;}
+.private-row input{
+  width:90px; text-align:right; border:1px solid var(--line); border-radius:7px;
+  padding:5px 7px; font-size:0.85rem; background:var(--bg); color:var(--ink);
+  font-family:inherit; font-variant-numeric:tabular-nums;
+}
+.private-total{
+  display:flex; justify-content:space-between; padding-top:6px; margin-top:2px;
+  border-top:1px dashed var(--line); font-size:0.82rem; color:var(--ink-soft);
+}
+.private-total b{color:var(--ink); font-variant-numeric:tabular-nums;}
+
+.private-custom-row{display:flex; align-items:center; gap:6px;}
+.private-custom-row input[type="text"]{
+  flex:1; border:1px solid var(--line); border-radius:7px; padding:5px 7px;
+  font-size:0.8rem; background:var(--bg); color:var(--ink); font-family:inherit; min-width:0;
+}
+.private-custom-row input[type="number"]{
+  width:90px; text-align:right; border:1px solid var(--line); border-radius:7px;
+  padding:5px 7px; font-size:0.85rem; background:var(--bg); color:var(--ink);
+  font-family:inherit; font-variant-numeric:tabular-nums;
+}
+.private-custom-row .remove-btn{flex:none;}
+.private-custom-sep{border-top:1px dashed var(--line); margin:2px 0 1px; padding-top:6px;}
+.add-private-btn{
+  width:100%; padding:6px; border:1.5px dashed var(--line); border-radius:8px;
+  background:none; color:var(--ink-soft); font-size:0.78rem; cursor:pointer;
+  font-family:inherit; margin-top:2px;
+}
+.add-private-btn:active{background:var(--bg);}
+
+/* Pastille régime dans l'historique */
+.regime-pill{
+  display:inline-block; padding:3px 8px; border-radius:5px; font-size:0.72rem; font-weight:600;
+  cursor:pointer; border:1px solid var(--line); background:var(--bg); color:var(--ink-soft);
+  white-space:nowrap;
+}
+.regime-pill.acre{color:var(--steel); border-color:var(--steel);}
+.regime-pill.plein{color:var(--violet-deep); border-color:var(--violet);}
+.regime-pill.na{cursor:default; opacity:0.5;}
+.history-table th.regime, .history-table td.regime{text-align:right;}
+.history-table th.act, .history-table td.act{text-align:center;}
+.act-pill{
+  display:inline-block; min-width:24px; padding:3px 7px; border-radius:5px; font-size:0.72rem; font-weight:700;
+  cursor:pointer; border:1px solid var(--line); background:var(--bg); color:var(--ink-soft); text-align:center;
+}
+.act-pill.s{background:var(--violet); border-color:var(--violet); color:#fff;}
+.act-pill.v{background:var(--steel); border-color:var(--steel); color:#fff;}
+.urssaf-box{
+  margin-top:10px; padding:10px 12px; border:2px solid var(--violet); border-radius:9px; background:var(--surface);
+  display:flex; flex-direction:column; gap:4px; font-size:0.8rem;
+}
+.urssaf-box .ttl{font-weight:700; color:var(--violet); margin-bottom:2px;}
+.urssaf-box .ln{display:flex; justify-content:space-between; gap:8px; color:var(--ink-soft);}
+.urssaf-box .ln b{color:var(--ink); font-variant-numeric:tabular-nums;}
+.urssaf-box .ln.tot{border-top:1px dashed var(--line); padding-top:4px; margin-top:2px;}
+.urssaf-box .ln.cot, .urssaf-box .ln.cot b{color:var(--danger); font-weight:700;}
+.mix-box{
+  margin:10px 0 12px; padding:10px 12px; border:2px solid var(--steel); border-radius:9px; background:var(--surface);
+  display:flex; flex-direction:column; gap:4px; font-size:0.8rem;
+}
+.mix-box .ttl{font-weight:700; color:var(--steel); margin-bottom:2px;}
+.mix-box .ln{display:flex; justify-content:space-between; align-items:center; gap:8px; color:var(--ink-soft);}
+.mix-box .ln b{color:var(--ink); font-variant-numeric:tabular-nums; text-align:right;}
+.mix-box .ln.tot{border-top:1px dashed var(--line); padding-top:4px; margin-top:2px;}
+.mix-box input{width:64px; text-align:right; font:inherit; border:1px solid var(--line); border-radius:7px; padding:3px 6px; background:var(--bg,#fff); color:var(--ink);}
+.mix-box details{margin-top:4px; color:var(--ink-soft); line-height:1.4;}
+.mix-box summary{cursor:pointer; font-weight:600; color:var(--steel);}
+.mix-box details div{margin-top:4px;}
+.act-box{margin-top:10px; font-size:0.78rem;}
+.act-box .ttl{font-weight:700; color:var(--ink-soft); margin-bottom:4px;}
+.act-box table{width:100%; border-collapse:collapse; font-variant-numeric:tabular-nums;}
+.act-box th{font-weight:500; color:var(--ink-soft); text-align:right; padding:3px 4px; border-bottom:1px solid var(--line); font-size:0.68rem;}
+.act-box th:first-child, .act-box td:first-child{text-align:left;}
+.act-box td{text-align:right; padding:4px; border-bottom:1px solid var(--line);}
+.act-box tr:last-child td{border-bottom:none;}
+.act-box .note{font-size:0.68rem; color:var(--ink-soft); margin-top:4px; line-height:1.4;}
+.bilan-net-block{margin:2px 0 10px; padding:8px 10px; border:1px solid var(--line); border-radius:8px; background:var(--bg);}
+.bilan-net-block .private-total:first-child{margin-top:0;}
+.qte-field{max-width:80px;}
+
+.edit-stack{display:flex; flex-direction:column; gap:3px;}
+.edit-mini{
+  width:100%; border:1px solid var(--line); border-radius:6px; padding:5px 6px;
+  font-size:0.78rem; background:var(--bg); color:var(--ink); font-family:inherit;
+  font-variant-numeric:tabular-nums;
+}
+.edit-net-preview{
+  display:block; margin-top:2px; font-size:0.8rem; color:var(--ink);
+  font-variant-numeric:tabular-nums;
+}
+
+footer{text-align:center; color:var(--ink-soft); font-size:0.75rem; margin-top:22px;}
+.note{font-size:0.75rem; color:var(--ink-soft); margin-top:10px; line-height:1.4;}
+
+/* Styles pour client + enregistrement */
+.client-save-row{display:flex; gap:10px; flex-wrap:wrap; align-items:flex-end; margin-bottom:20px; margin-top:20px;}
+.client-save-row .field{flex:1; min-width:150px;}
+.save-btn{
+  padding:10px 16px; background:var(--steel); color:#fff; border:none; border-radius:7px;
+  font-size:0.9rem; cursor:pointer; font-family:inherit; font-weight:500; 
+  min-width:140px; transition:background 0.2s;
+}
+.save-btn:hover{background:var(--violet);}
+.save-btn:active{opacity:0.8;}
+
+/* Styles pour le tableau d'historique */
+.history-panel{
+  background:var(--surface); border:1px solid var(--line); border-radius:10px;
+  padding:16px; margin-bottom:16px;
+}
+.history-panel h2{font-size:0.85rem; font-weight:600; margin:0 0 12px; color:var(--ink-soft);}
+.history-month{font-size:0.75rem; color:var(--ink-soft); margin-bottom:12px;}
+.history-month strong{color:var(--ink);}
+
+.month-nav{display:flex; align-items:center; gap:8px; margin-bottom:10px;}
+.month-nav-btn{
+  border:1px solid var(--line); border-radius:7px; background:var(--bg); color:var(--ink);
+  width:36px; height:36px; flex:none; font-size:1rem; cursor:pointer; font-family:inherit;
+}
+.month-nav-btn:active{background:var(--surface);}
+.month-nav select{
+  flex:1; border:1px solid var(--line); border-radius:7px; padding:8px 10px;
+  font-size:0.9rem; background:var(--bg); color:var(--ink); font-family:inherit;
+  font-weight:600; text-align:center; text-align-last:center;
+}
+
+.history-table{width:100%; border-collapse:collapse; font-size:0.9rem; margin-bottom:12px;}
+.history-table th{
+  text-align:left; padding:8px 6px; border-bottom:1px solid var(--line);
+  font-size:0.75rem; color:var(--ink-soft); font-weight:600; text-transform:uppercase;
+}
+.history-table td{
+  padding:8px 6px; border-bottom:1px solid var(--line);
+}
+.history-table td:last-child, .history-table th:last-child{text-align:right; font-variant-numeric:tabular-nums;}
+.history-table tbody tr:last-child td{border-bottom:none;}
+.history-table td.del-col, .history-table th.del-col{width:1%; padding-right:0; text-align:left;}
+.history-table td.del-col .row-btn{padding:3px 4px 3px 0;}
+
+.history-totals{
+  display:flex; justify-content:space-between; align-items:center;
+  padding-top:8px; border-top:1px solid var(--line); font-size:0.82rem;
+}
+.history-totals .stat{display:flex; gap:3px; flex-direction:column;}
+.history-totals .stat .label{font-size:0.68rem; color:var(--ink-soft);}
+.history-totals .stat .value{font-weight:600; color:var(--ink); font-variant-numeric:tabular-nums; font-size:0.88rem;}
+
+/* Badge nombre de devis, à côté du titre */
+.history-panel h2{display:flex; align-items:center; gap:8px; flex-wrap:wrap;}
+.count-badge{
+  font-size:0.68rem; font-weight:600; color:var(--ink-soft); background:var(--bg);
+  border:1px solid var(--line); padding:2px 9px; border-radius:20px; text-transform:none;
+}
+
+/* Bloc A — chiffres clés mis en avant */
+.totals-main{
+  display:grid; grid-template-columns:repeat(3,1fr); gap:6px;
+  text-align:center; padding:2px 0 12px;
+}
+.totals-main .stat{display:flex; flex-direction:column; gap:2px; min-width:0;}
+.totals-main .stat .label{
+  font-size:0.66rem; color:var(--ink-soft); text-transform:uppercase; letter-spacing:0.02em;
+}
+.totals-main .stat .value{
+  font-family:'Inter',system-ui,-apple-system,sans-serif; font-weight:600; font-size:1.05rem; color:var(--ink);
+  font-variant-numeric:tabular-nums; overflow-wrap:break-word;
+}
+.totals-main .stat.net .value{color:var(--net-pos);}
+.totals-main .stat.pct .value{color:var(--steel);}
+
+/* Bloc B — info secondaire discrète */
+.totals-secondary{
+  display:flex; justify-content:space-between; align-items:center;
+  padding:8px 0; border-top:1px dashed var(--line);
+  font-size:0.78rem; color:var(--ink-soft);
+}
+.totals-secondary b{color:var(--ink); font-variant-numeric:tabular-nums; font-weight:600;}
+
+/* Bloc C — statut paiement en chips */
+.totals-status{display:grid; grid-template-columns:1fr 1fr; gap:8px; margin-top:2px;}
+.totals-status .chip{
+  background:var(--bg); border:1px solid var(--line); border-radius:8px;
+  padding:8px 6px; text-align:center; min-width:0;
+}
+.totals-status .chip .label{
+  display:block; font-size:0.66rem; color:var(--ink-soft); margin-bottom:3px;
+}
+.totals-status .chip .value{
+  font-size:0.85rem; font-weight:600; color:var(--ink);
+  font-variant-numeric:tabular-nums; overflow-wrap:break-word;
+}
+
+.new-month-btn{
+  width:100%; padding:10px; background:var(--violet); color:#fff; border:none; 
+  border-radius:7px; font-size:0.9rem; cursor:pointer; font-family:inherit; 
+  font-weight:500; margin-top:12px; transition:background 0.2s;
+}
+.new-month-btn:hover{background:var(--violet-deep);}
+.new-month-btn:active{opacity:0.8;}
+
+.empty-state{
+  text-align:center; padding:20px; color:var(--ink-soft); font-size:0.9rem;
+}
+
+/* Seuil de rentabilité */
+.seuil-row{display:flex; justify-content:space-between; align-items:center; gap:10px; margin-bottom:12px; padding-bottom:12px; border-bottom:1px solid var(--line);}
+.seuil-row label{font-size:0.85rem; color:var(--ink-soft); flex:1;}
+.seuil-row input{
+  width:70px; text-align:right; border:1px solid var(--line); border-radius:7px;
+  padding:7px 8px; font-size:0.9rem; background:var(--bg); color:var(--ink);
+  font-family:inherit; font-variant-numeric:tabular-nums;
+}
+.ceiling-note{font-size:0.72rem; color:var(--ink-soft); line-height:1.4; margin-bottom:14px;}
+
+/* Colonne % et badges dans l'historique */
+.history-table td.pct, .history-table th.pct{text-align:right;}
+.pct-badge{
+  display:inline-block; padding:2px 7px; border-radius:5px; font-weight:600;
+  font-variant-numeric:tabular-nums; font-size:0.85rem;
+}
+.pct-good{background:var(--net-bg); color:var(--net-pos);}
+.pct-bad{background:var(--net-neg-bg); color:var(--net-neg);}
+.pct-na{color:var(--ink-soft);}
+
+/* Actions (modifier / supprimer) */
+.history-table td.actions{text-align:right; white-space:nowrap;}
+.row-btn{
+  background:none; border:none; cursor:pointer; font-size:0.95rem; padding:3px 5px;
+  color:var(--ink-soft); line-height:1;
+}
+.row-btn:hover{color:var(--steel);}
+.row-btn.del:hover{color:var(--net-neg);}
+.row-btn:disabled{opacity:0.25; cursor:default;}
+.row-btn:disabled:hover{color:var(--ink-soft);}
+
+/* Ligne en édition */
+.edit-input{
+  width:100%; border:1px solid var(--violet); border-radius:5px; padding:5px 6px;
+  font-size:0.85rem; background:var(--bg); color:var(--ink); font-family:inherit;
+  font-variant-numeric:tabular-nums;
+}
+.edit-input.client-input{text-align:left;}
+.edit-actions{display:flex; gap:4px; justify-content:flex-end;}
+.print-area{display:none;}
+@media print{
+  body.printing{background:#fff;}
+  body.printing .wrap > *:not(#printArea){display:none !important;}
+  body.printing #printArea{
+    display:block !important; color:#1E2328; font-family:'Inter',system-ui,sans-serif;
+  }
+  .print-header h1{font-family:'Fraunces',serif; font-size:1.4rem; margin:0 0 2px;}
+  .print-header .print-sub{color:#5B6266; font-size:0.85rem; margin:0 0 16px;}
+  .print-meta{display:flex; justify-content:space-between; font-size:0.9rem; margin-bottom:14px; padding-bottom:10px; border-bottom:1px solid #ccc;}
+  .print-table{width:100%; border-collapse:collapse; margin-bottom:16px; font-size:0.88rem;}
+  .print-table th, .print-table td{text-align:left; padding:5px 4px; border-bottom:1px solid #ddd;}
+  .print-table th:not(:first-child), .print-table td:not(:first-child){text-align:right;}
+  .print-summary{max-width:320px; margin-left:auto; font-size:0.9rem;}
+  .print-summary > div{display:flex; justify-content:space-between; padding:3px 0;}
+  .print-summary .print-net{border-top:1px solid #1E2328; margin-top:6px; padding-top:8px; font-size:1.05rem; font-weight:600;}
+}
+
+/* Écran de verrouillage */
+#lockScreen{
+  position:fixed; inset:0; background:var(--bg); z-index:9999;
+  display:flex; align-items:center; justify-content:center; padding:20px;
+}
+#lockScreen.hidden{display:none;}
+.lock-box{
+  background:var(--surface); border:1px solid var(--line); border-radius:14px;
+  padding:28px 24px; max-width:300px; width:100%; text-align:center;
+}
+.lock-box h2{font-family:'Fraunces',serif; font-size:1.15rem; margin:0 0 4px;}
+.lock-box p{color:var(--ink-soft); font-size:0.8rem; margin:0 0 18px;}
+#lockInput{
+  width:100%; text-align:center; letter-spacing:0.5em; font-size:1.4rem;
+  border:1px solid var(--line); border-radius:9px; padding:10px 8px;
+  background:var(--bg); color:var(--ink); font-family:inherit;
+  font-variant-numeric:tabular-nums;
+}
+#lockError{color:var(--danger); font-size:0.78rem; margin-top:8px; min-height:1em;}
+#lockSubmit{
+  width:100%; margin-top:14px; padding:10px; border:none; border-radius:9px;
+  background:var(--violet); color:#fff; font-weight:600; font-size:0.9rem; cursor:pointer;
+}
+body.locked > .wrap{display:none;}
+
+.private-ajouts-title{font-size:0.72rem; color:var(--ink-soft); margin:10px 0 2px; border-top:1px dashed var(--line); padding-top:8px;}
+.private-ajout{margin-top:6px;}
+.private-ajout .rec{display:flex; align-items:center; gap:5px; font-size:0.72rem; color:var(--ink-soft); margin:3px 0 0 2px;}
+.private-ajout.prime input[type="text"], .private-ajout.prime input[type="number"]{
+  border-color:var(--net-pos); background:var(--net-bg);
+}
+.private-ajout.prime .ico{color:var(--net-pos);}
+.private-ajouts-btns{display:flex; gap:8px; margin-top:8px;}
+.private-ajouts-btns button{
+  flex:1; padding:6px; border:1.5px dashed var(--line); border-radius:8px; background:transparent;
+  color:var(--ink-soft); font-size:0.8rem; cursor:pointer; font-family:inherit;
+}
+.private-ajouts-btns button.prime{border-color:var(--net-pos); color:var(--net-pos);}
+.private-total.prime b, .private-total.prime span{color:var(--net-pos);}
+</style>
+</head>
+<body class="locked">
+<div id="lockScreen">
+  <div class="lock-box">
+    <h2>Net par facture</h2>
+    <p>Connexion</p>
+    <input type="email" id="lockEmail" autocomplete="username" placeholder="E-mail">
+    <input type="password" id="lockPass" autocomplete="current-password" placeholder="Mot de passe">
+    <div id="lockError"></div>
+    <button id="lockSubmit">Se connecter</button>
+  </div>
+</div>
+<div class="wrap">
+  <div id="printArea" class="print-area"></div>
+  <h1>Net par facture</h1>
+  <p class="sub">La Clé Universelle — calcul du gain net après charges URSSAF</p>
+  <div style="display:flex; justify-content:flex-end; gap:8px; margin:-8px 0 14px;">
+    <a href="stock.html" style="font-size:0.78rem; color:var(--ink-soft); text-decoration:none; border:1px solid var(--line); border-radius:7px; padding:6px 10px; background:var(--surface); font-weight:500;">📦 Stock</a>
+    <a href="treso.html" style="font-size:0.78rem; color:var(--ink-soft); text-decoration:none; border:1px solid var(--line); border-radius:7px; padding:6px 10px; background:var(--surface); font-weight:500;">🏦 Trésorerie</a>
+    <a href="compta.html" style="font-size:0.78rem; color:var(--ink-soft); text-decoration:none; border:1px solid var(--line); border-radius:7px; padding:6px 10px; background:var(--surface); font-weight:500;">📒 Compta</a>
+    <a href="bilan.html" style="font-size:0.78rem; color:var(--ink-soft); text-decoration:none; border:1px solid var(--line); border-radius:7px; padding:6px 10px; background:var(--surface); font-weight:500;">⚖️ Bilan</a>
+  </div>
+
+  <div class="mat-serv-grid">
+    <div class="panel" style="margin-bottom:0;">
+      <h2>Catégories de matériel</h2>
+      <div class="private-custom-row">
+        <input type="text" id="newCatName" placeholder="Nouvelle catégorie (ex. Verrou 3 points)">
+        <button class="save-btn" id="addCatBtn" style="min-width:auto; padding:7px 12px;">+ Ajouter</button>
+      </div>
+    </div>
+
+    <div class="panel" style="margin-bottom:0;">
+      <h2>Importer une facture (PDF)</h2>
+      <input type="file" id="importPdfFile" accept="application/pdf">
+      <div id="importPdfStatus" style="font-size:0.78rem; color:var(--ink-soft); margin-top:6px;"></div>
+    </div>
+  </div>
+
+  <div class="mat-serv-grid">
+    <div class="mat-serv-col">
+      <h2 class="section-title" style="margin-top:0;">Matériel</h2>
+      <p class="section-sub">Achat revendu + posé.</p>
+      <div id="articlesMat"></div>
+      <button class="add-btn" id="addArticleMat">+ Ajouter un article matériel</button>
+    </div>
+    <div class="mat-serv-col">
+      <h2 class="section-title" style="margin-top:0;">Service</h2>
+      <p class="section-sub">Main d'œuvre seule.</p>
+      <div id="articlesServ"></div>
+      <button class="add-btn" id="addArticleServ">+ Ajouter un article service</button>
+    </div>
+  </div>
+
+  <div class="summary">
+    <div class="summary-row big"><span>Total ventes (CA)</span><span id="sVente">0,00 €</span></div>
+    <div class="summary-row"><span>Total achat matériel</span><span id="sAchat">0,00 €</span></div>
+    <div class="summary-row"><span>Marge brute</span><span id="sMarge">0,00 €</span></div>
+    <div class="summary-row charges"><span>Charges URSSAF + CFP</span><span id="sCharges">0,00 €</span></div>
+    <div class="summary-final" id="summaryFinal">
+      <span class="label">Net pour vous<small id="sNetPct" style="display:block; font-weight:400; font-size:0.75rem; margin-top:2px; opacity:0.8;">0,0 % du total ventes</small></span>
+      <span class="amount" id="sNet">0,00 €</span>
+    </div>
+  </div>
+
+  <!-- Mix matériel / prestations -->
+  <div class="mix-box" id="mixBox">
+    <div class="ttl">Mix matériel / prestations</div>
+    <div class="ln"><span>Ce devis</span><b id="mixDevis">—</b></div>
+    <div class="ln tot"><span>Mois + ce devis</span><b id="mixCumul">—</b></div>
+    <div class="ln"><span>Objectif : part des prestations (%)</span><input type="number" id="mixObjectif" inputmode="decimal" min="5" max="95" step="1" value="25"></div>
+    <div class="ln"><span>Écart à l'objectif</span><b id="mixGap">—</b></div>
+    <div class="ln"><span>Taux moyen de cotisations</span><b id="mixTaux">—</b></div>
+    <details>
+      <summary>Comment lire ces %</summary>
+      <div>
+        <b>Part des prestations</b> = prestations ÷ (prestations + matériel). Sur 100 € encaissés, 35 € de main-d'œuvre et 65 € de pièces donnent 35 % / 65 %.<br>
+        <b>Image du péage :</b> chaque euro encaissé passe par un péage. Sur la voie « prestations » il coûte 10,9 % (ACRE), sur la voie « matériel » 6,5 %. Plus la part du matériel monte, plus votre taux moyen baisse.<br>
+        <b>À 25 % de prestations :</b> pour 1 € de prestations, il faut 3 € de matériel vendu.<br>
+        <b>Attention :</b> le matériel coûte à l'achat (TTC, sans TVA récupérable). Regardez donc le <i>Net</i>, pas seulement le taux.
+      </div>
+    </details>
+  </div>
+
+  <!-- Client + Enregistrement -->
+  <div class="client-save-row">
+    <div class="field">
+      <label>Nom du client</label>
+      <input type="text" id="clientName" placeholder="Mme Dupont, Entreprise X...">
+    </div>
+    <button class="save-btn" id="saveQuoteBtn">Enregistrer cette facture</button>
+  </div>
+
+  <!-- Historique du mois -->
+  <div class="history-panel">
+    <h2>Historique du mois <span class="count-badge" id="devisCountBadge"></span></h2>
+    <div class="month-nav">
+      <button class="month-nav-btn" id="prevMonthBtn" title="Mois précédent">←</button>
+      <select id="monthSelect"></select>
+      <button class="month-nav-btn" id="nextMonthBtn" title="Mois suivant">→</button>
+    </div>
+    <div class="history-month">Mois consulté : <strong id="monthDisplay"></strong></div>
+    <div id="historyTotals"></div>
+    <button class="new-month-btn" id="newMonthBtn">Nouveau mois</button>
+    <div class="seuil-row">
+      <label>Seuil de rentabilité mini (% net/vente)</label>
+      <input type="number" id="seuilRenta" value="40" min="0" max="100" step="1">
+    </div>
+    <div id="historyContent"></div>
+  </div>
+
+  <h2 class="section-title">Bilan mensuel privé</h2>
+  <p class="section-sub">Séparé du calcul d'activité — pour voir ce qu'il vous reste une fois vos charges de vie déduites.</p>
+
+  <div class="panel">
+    <div class="field" style="margin-bottom:8px;">
+      <label>Revenu net du mois (= net après cotisations, factures payées)</label>
+      <input type="number" id="revenuMois" value="" min="0" step="0.01" placeholder="0,00" readonly style="opacity:0.7; cursor:not-allowed;">
+    </div>
+    <div class="bilan-net-block">
+      <div class="private-total"><span>Net après cotisations</span><b id="bNetCot">0,00 €</b></div>
+      <div class="private-total"><span>Coûts fixes pro du mois</span><b id="bFixes">0,00 €</b></div>
+      <div class="private-total"><span><b>Reste après coûts fixes pro</b></span><b id="bReste">0,00 €</b></div>
+    </div>
+    <div class="private-grid">
+      <div class="private-row"><label>Loyer</label><input type="number" id="pLoyer" value="680" step="0.01"></div>
+      <div class="private-row"><label>Téléphone</label><input type="number" id="pTel" value="7" step="0.01"></div>
+      <div class="private-row"><label>Courses</label><input type="number" id="pCourses" value="100" step="0.01"></div>
+      <div class="private-row"><label>Assurance habitation</label><input type="number" id="pAssurHab" value="12" step="0.01"></div>
+      <div class="private-row"><label>Assurance moto</label><input type="number" id="pAssurMoto" value="17" step="0.01"></div>
+      <div id="privateCustomRows" class="private-custom-sep"></div>
+    </div>
+    <div class="private-ajouts-title">Ajouts de ce mois (loisirs, voyage, prime…) — ne concernent que le mois affiché, sauf coût coché « chaque mois »</div>
+    <div id="privateAjoutsRows"></div>
+    <div class="private-ajouts-btns">
+      <button id="addPrivateCout">+ Coût</button>
+      <button id="addPrivatePrime" class="prime">🎁 + Prime</button>
+    </div>
+    <div class="private-total"><span>Total charges privées (fixes)</span><b id="pTotal">0,00 €</b></div>
+    <div class="private-total" id="pCoutsRow" style="display:none;"><span>Coûts ajoutés ce mois</span><b id="pCouts">0,00 €</b></div>
+    <div class="private-total prime" id="pPrimesRow" style="display:none;"><span>🎁 Primes reçues ce mois</span><b id="pPrimes">0,00 €</b></div>
+    <div class="private-total"><span>Frais fixes pro du mois</span><b id="pFrais">0,00 €</b></div>
+    <div class="private-ajouts-title" id="pSeuilInfo"></div>
+  </div>
+
+  <div class="summary">
+    <div class="summary-final" id="privateFinal">
+      <span class="label">Reste à la fin du mois</span>
+      <span class="amount" id="pNet">0,00 €</span>
+    </div>
+  </div>
+
+  <div class="panel">
+    <h2>Réglages</h2>
+    <div class="settings-row">
+      <div class="field">
+        <label>Régime de charges</label>
+        <div class="toggle toggle-rates">
+          <button id="btnAcre" class="active"><span>ACRE</span><small>vente 6,5 % / serv. 10,9 %</small></button>
+          <button id="btnPlein"><span>Taux plein</span><small>vente 12,6 % / serv. 21,5 %</small></button>
+        </div>
+        <div style="font-size:0.72rem; color:var(--ink-soft); margin-top:4px;">Taux = cotisations + CFP 0,3 % (CFP non réduite par l'ACRE, comme sur le simulateur URSSAF). Cotisations ACRE : 6,2 % matériel / 10,6 % services. Plein : 12,3 % / 21,2 %.</div>
+      </div>
+      <div class="field">
+        <label>CFE annuelle</label>
+        <input type="number" id="cfeAn" value="0" min="0" step="1">
+      </div>
+    </div>
+    <div class="private-ajouts-title">Frais fixes pro : comptés au mois (total ÷ 12 avec la CFE) : <b id="fraisMoisVal">0,00 €</b></div>
+    <div id="fraisRows"></div>
+    <div class="private-ajouts-btns"><button id="addFrais">+ Frais fixe</button></div>
+  </div>
+
+  <div class="backup-links">Sauvegarde :
+    <button type="button" id="exportBtn">Exporter</button> ·
+    <button type="button" id="importBtn">Importer</button>
+    <input type="file" id="importFile" accept="application/json" style="display:none;">
+  </div>
+
+  <footer>Frais fixes pro comptés au mois (assurances, logiciel, prévoyance…) · pas de TVA (franchise)</footer>
+
+</div>
+
+<script src="sync.js"></script>
+<script src="taux.js"></script>
+<script>
+Sync.boot(function(){ if(window.__migGazElec && typeof saveSettings==='function') saveSettings(); });
+
+// Taux et abattements : voir taux.js (source unique, partagée avec le bilan).
+let mixObjectif = 25;        // objectif : part des prestations (%)
+const BASE_CATEGORIES = [
+  { id:'cremone',  label:'Crémone' },
+  { id:'larder',   label:'Serrure encastrée (larder)' },
+  { id:'applique', label:'Serrure en applique' },
+  { id:'cylindre', label:'Cylindre' },
+  { id:'poignees', label:'Poignées' }
+];
+const CAT_AUTRE = { id:'autre', label:'Autre' };
+function loadCustomCategories(){
+  try{
+    const s = JSON.parse(localStorage.getItem('devisCalcSettings')||'{}');
+    return s.customCategories || [];
+  }catch(e){ return []; }
+}
+function saveCustomCategories(list){
+  try{
+    let existing = {};
+    try{ existing = JSON.parse(localStorage.getItem('devisCalcSettings')||'{}'); }catch(e){}
+    existing.customCategories = list;
+    localStorage.setItem('devisCalcSettings', JSON.stringify(existing));
+  }catch(e){}
+}
+function allCategories(){
+  return BASE_CATEGORIES.concat(loadCustomCategories(), [CAT_AUTRE]);
+}
+// ---- Suivi de stock par catégorie (données : devisCalcSettings.stock.items[catId] = {qte, seuil})
+function catLabelById(id){
+  const c = allCategories().find(x=>x.id===id);
+  return c ? c.label : id;
+}
+// sign = -1 : sortie de stock (facture enregistrée) ; +1 : remise en stock.
+// Retourne la liste des catégories dont la quantité est négative après l'opération.
+function applyStock(out, sign){
+  const negatives = [];
+  try{
+    let s = {};
+    try{ s = JSON.parse(localStorage.getItem('devisCalcSettings')||'{}'); }catch(e){}
+    const stock = s.stock || {};
+    const items = stock.items || {};
+    Object.keys(out||{}).forEach(cat=>{
+      const q = Number(out[cat])||0;
+      if(!q) return;
+      const it = items[cat] || { qte:0, seuil:0 };
+      it.qte = Math.round(((Number(it.qte)||0) + sign*q) * 100) / 100;
+      items[cat] = it;
+      if(it.qte < 0) negatives.push(catLabelById(cat) + ' (' + it.qte + ')');
+    });
+    stock.items = items;
+    s.stock = stock;
+    localStorage.setItem('devisCalcSettings', JSON.stringify(s));
+  }catch(e){}
+  return negatives;
+}
+function categorieOptions(selected){
+  return allCategories().map(c=>`<option value="${c.id}" ${c.id===selected?'selected':''}>${c.label}</option>`).join('');
+}
+function renderCatManager(){
+  const cont = document.getElementById('catManagerList');
+  if(!cont) return;
+  const customs = loadCustomCategories();
+  if(customs.length===0){ cont.innerHTML = '<p class="section-sub" style="margin:4px 0 0;">Aucune catégorie personnalisée pour l\'instant.</p>'; return; }
+  cont.innerHTML = customs.map(c=>`
+    <div class="private-row"><label>${c.label}</label><button class="remove-btn" data-delcat="${c.id}" title="Supprimer">✕</button></div>
+  `).join('');
+  cont.querySelectorAll('[data-delcat]').forEach(btn=>{
+    btn.onclick = ()=>{
+      if(!confirm('Supprimer cette catégorie ? Les articles déjà classés dedans garderont cette valeur, mais elle n\'apparaîtra plus dans la liste.')) return;
+      const list = loadCustomCategories().filter(c=>c.id!==btn.dataset.delcat);
+      saveCustomCategories(list);
+      renderCatManager();
+      renderMat();
+    };
+  });
+}
+function addCustomCategory(){
+  const input = document.getElementById('newCatName');
+  const label = input.value.trim();
+  if(!label){ return; }
+  const existing = allCategories();
+  if(existing.some(c=>c.label.toLowerCase()===label.toLowerCase())){
+    alert('Cette catégorie existe déjà.');
+    return;
+  }
+  const id = 'c'+Date.now();
+  const list = loadCustomCategories();
+  list.push({ id, label });
+  saveCustomCategories(list);
+  input.value = '';
+  renderCatManager();
+  renderMat();
+}
+let fraisFixes = [
+  { id:'ff0', label:'Assurance', amount:240, per:'an' },
+  { id:'ff1', label:'Logiciel', amount:200, per:'an' },
+  { id:'ff2', label:'Téléphone', amount:9, per:'mois' },
+  { id:'ff3', label:'Électricité', amount:5, per:'mois' }
+];
+let fraisIdSeq = 4;
+const TVA_COEF = 1.2; // TVA 20% pour conversion HT <-> TTC des achats matériel
+
+let regime = 'acre';
+let articlesMat = [];
+let articlesServ = [];
+let pCustom = [];
+let pCustomIdSeq = 0;
+let pAjouts = [];        // ajouts privés : { id, type:'cout'|'prime', label, amount, mois:'YYYY-MM'|null(=chaque mois, coûts seulement) }
+let pAjoutsIdSeq = 0;
+let idSeq = 0;
+let currentMonth = getMonthKey();
+let editingDevisId = null;
+let movingDevisId = null;
+
+// Historique vide au départ : les devis enregistrés viennent de vos données sauvegardées (voir loadSettings()).
+// devisIdSeq reste à 17 pour ne jamais réutiliser un ancien identifiant.
+let devisHistory = {};
+let devisIdSeq = 17;
+
+function getMonthKey(){
+  const now = new Date();
+  return now.getFullYear() + '-' + String(now.getMonth()+1).padStart(2,'0');
+}
+
+function monthLabel(key){
+  const [year, month] = key.split('-');
+  const monthNames = ['Jan','Fév','Mar','Avr','Mai','Jun','Jul','Aoû','Sep','Oct','Nov','Déc'];
+  return monthNames[parseInt(month)-1] + ' ' + year;
+}
+
+function getMonthLabel(){
+  return monthLabel(currentMonth);
+}
+
+function prevMonthKeyOf(key){
+  const [year, month] = key.split('-').map(Number);
+  let y = year, m = month - 1;
+  if(m < 1){ m = 12; y -= 1; }
+  return y + '-' + String(m).padStart(2,'0');
+}
+
+// Liste déroulante des mois : tous les mois ayant des données + le mois actuellement consulté.
+function populateMonthSelect(){
+  const sel = document.getElementById('monthSelect');
+  if(!sel) return;
+  const months = Array.from(new Set([...Object.keys(devisHistory), currentMonth])).sort();
+  sel.innerHTML = months.map(k =>
+    `<option value="${k}" ${k===currentMonth ? 'selected' : ''}>${monthLabel(k)}</option>`
+  ).join('');
+}
+
+function goToMonth(key){
+  currentMonth = key;
+  editingDevisId = null;
+  movingDevisId = null;
+  renderHistory();
+  saveSettings();
+}
+
+// Déplace les ajouts « chaque mois » Gaz / Électricité vers les charges fixes privées (même montant).
+function migrerGazElec(){
+  const motifs = [
+    { re:/^\s*(gas|gaz)\b/i, label:'Gaz', defaut:'32' },
+    { re:/^\s*([ée]lec|[ée]lectricit[ée])/i, label:'Électricité', defaut:'22' }
+  ];
+  const aMigrer = pAjouts.filter(a=> a.type==='cout' && a.mois===null && motifs.some(m=>m.re.test(a.label||'')));
+  if(!aMigrer.length) return;
+  try{ localStorage.setItem('devisCalcBackupAvantMigrationGazElec', localStorage.getItem('devisCalcSettings')||''); }catch(e){}
+  aMigrer.forEach(a=>{
+    const m = motifs.find(x=>x.re.test(a.label||''));
+    pCustom.push({ id:'pc'+(pCustomIdSeq++), label:m.label, amount: (a.amount!==''&&a.amount!=null) ? a.amount : m.defaut });
+  });
+  pAjouts = pAjouts.filter(a=>!aMigrer.includes(a));
+  window.__migGazElec = true;
+}
+
+function loadSettings(){
+  try{
+    const s = JSON.parse(localStorage.getItem('devisCalcSettings')||'{}');
+    if(s.regime) regime = s.regime;
+    if(s.cfeAn!==undefined) document.getElementById('cfeAn').value = s.cfeAn;
+    if(s.revenuMois!==undefined) document.getElementById('revenuMois').value = s.revenuMois;
+    if(s.pLoyer!==undefined) document.getElementById('pLoyer').value = s.pLoyer;
+    if(s.pTel!==undefined) document.getElementById('pTel').value = s.pTel;
+    if(s.pCourses!==undefined) document.getElementById('pCourses').value = s.pCourses;
+    if(s.pAssurHab!==undefined) document.getElementById('pAssurHab').value = s.pAssurHab;
+    if(s.pAssurMoto!==undefined) document.getElementById('pAssurMoto').value = s.pAssurMoto;
+    if(s.currentMonth) currentMonth = s.currentMonth;
+    if(s.devisHistory) devisHistory = s.devisHistory;
+    if(s.articlesMat){
+      articlesMat = s.articlesMat;
+      articlesMat.forEach(a=>{ if(!a.categorie) a.categorie = 'autre'; });
+    }
+    if(s.articlesServ) articlesServ = s.articlesServ;
+    if(s.idSeq) idSeq = s.idSeq;
+    if(s.devisIdSeq) devisIdSeq = s.devisIdSeq;
+    if(s.seuilRenta!==undefined) document.getElementById('seuilRenta').value = s.seuilRenta;
+    if(s.pCustom) pCustom = s.pCustom;
+    if(s.pCustomIdSeq) pCustomIdSeq = s.pCustomIdSeq;
+    if(s.pAjouts) pAjouts = s.pAjouts;
+    if(s.pAjoutsIdSeq) pAjoutsIdSeq = s.pAjoutsIdSeq;
+    migrerGazElec();
+    if(s.mixObjectifPrest!==undefined && !isNaN(parseFloat(s.mixObjectifPrest))){ mixObjectif = parseFloat(s.mixObjectifPrest); const mo = document.getElementById('mixObjectif'); if(mo) mo.value = mixObjectif; }
+    if(Array.isArray(s.fraisFixes)) fraisFixes = s.fraisFixes;
+    if(s.fraisIdSeq) fraisIdSeq = s.fraisIdSeq;
+  }catch(e){}
+}
+
+function saveSettings(){
+  try{
+    let existing = {};
+    try{ existing = JSON.parse(localStorage.getItem('devisCalcSettings')||'{}'); }catch(e){}
+    localStorage.setItem('devisCalcSettings', JSON.stringify(Object.assign({}, existing, {
+      regime,
+      cfeAn: document.getElementById('cfeAn').value,
+      revenuMois: document.getElementById('revenuMois').value,
+      pLoyer: document.getElementById('pLoyer').value,
+      pTel: document.getElementById('pTel').value,
+      pCourses: document.getElementById('pCourses').value,
+      pAssurHab: document.getElementById('pAssurHab').value,
+      pAssurMoto: document.getElementById('pAssurMoto').value,
+      currentMonth,
+      devisHistory,
+      articlesMat,
+      articlesServ,
+      idSeq,
+      devisIdSeq,
+      seuilRenta: document.getElementById('seuilRenta').value,
+      pCustom,
+      pCustomIdSeq,
+      pAjouts,
+      pAjoutsIdSeq,
+      mixObjectifPrest: mixObjectif,
+      fraisFixes,
+      fraisIdSeq
+    })));
+  }catch(e){}
+}
+
+// Plafond théorique = ce que laisserait un devis 100% service ou 100% matériel
+// UNIQUEMENT après charges URSSAF/CFP, sans le coût fixe du jour ni l'achat matière.
+// C'est un maximum indépassable dans ce régime, pas un seuil à atteindre.
+function updateCeilingNote(){
+  // Texte de repère retiré de l'affichage à la demande de l'utilisatrice.
+}
+
+function addArticleMat(){
+  articlesMat.push({ id: 'm'+(idSeq++), achat: '', vente: '', qte: '1', categorie: 'autre' });
+  renderMat();
+}
+
+function addArticleServ(){
+  articlesServ.push({ id: 's'+(idSeq++), vente: '' });
+  renderServ();
+}
+
+function removeArticleMat(id){
+  articlesMat = articlesMat.filter(a=>a.id!==id);
+  renderMat();
+}
+
+function removeArticleServ(id){
+  articlesServ = articlesServ.filter(a=>a.id!==id);
+  renderServ();
+}
+
+function updateArticleMat(id, field, value){
+  const a = articlesMat.find(a=>a.id===id);
+  if(a) a[field] = value;
+  compute();
+}
+
+function updateArticleServ(id, value){
+  const a = articlesServ.find(a=>a.id===id);
+  if(a) a.vente = value;
+  compute();
+}
+
+// Quantité d'un article matériel : vide ou absente (anciens articles) = 1
+function qteOf(a){ const q = parseFloat(a.qte); return isNaN(q) ? 1 : Math.max(0, q); }
+
+function fmt(n){
+  const sign = n<0 ? '-' : '';
+  return sign + Math.abs(n).toLocaleString('fr-FR', {minimumFractionDigits:2, maximumFractionDigits:2}) + ' €';
+}
+
+function renderMat(){
+  const cont = document.getElementById('articlesMat');
+  cont.innerHTML = '';
+  articlesMat.forEach(a=>{
+    const div = document.createElement('div');
+    div.className = 'article';
+    div.innerHTML = `
+      <div class="article-top">
+        <span style="font-size:0.8rem; color:var(--steel); font-weight:600;">Matériel</span>
+        <button class="remove-btn" data-removemat="${a.id}">✕</button>
+      </div>
+      <div class="article-fields">
+        <div class="field"><label>Achat HT (unité)</label><input type="number" inputmode="decimal" step="0.01" id="mat-${a.id}-achatht" data-matht="${a.id}" value="${a.achat ? (Number(a.achat)/TVA_COEF).toFixed(2) : ''}" placeholder="0,00"></div>
+        <div class="field"><label>Achat TTC (unité)</label><input type="number" inputmode="decimal" step="0.01" id="mat-${a.id}-achat" data-mat="${a.id}" data-f="achat" value="${a.achat}" placeholder="0,00"></div>
+      </div>
+      <div class="article-fields" style="margin-top:6px;">
+        <div class="field"><label>Vente TTC (unité)</label><input type="number" inputmode="decimal" step="0.01" id="mat-${a.id}-vente" data-mat="${a.id}" data-f="vente" value="${a.vente}" placeholder="0,00"></div>
+        <div class="field qte-field"><label>Qté</label><input type="number" inputmode="decimal" step="1" min="0" id="mat-${a.id}-qte" data-mat="${a.id}" data-f="qte" value="${a.qte === undefined ? 1 : a.qte}" placeholder="1"></div>
+      </div>
+      <div class="field" style="margin-top:6px;"><label>Catégorie</label><select id="mat-${a.id}-cat" data-mat="${a.id}" data-f="categorie">${categorieOptions(a.categorie||'autre')}</select></div>
+      <div class="article-net">
+        <span>Net ligne <b id="net-${a.id}">0,00 €</b></span>
+        <span>Coef <b id="coef-${a.id}">—</b></span>
+      </div>
+    `;
+    cont.appendChild(div);
+  });
+  attachHandlersMat();
+  compute();
+}
+
+function renderServ(){
+  const cont = document.getElementById('articlesServ');
+  cont.innerHTML = '';
+  articlesServ.forEach(a=>{
+    const div = document.createElement('div');
+    div.className = 'article';
+    div.innerHTML = `
+      <div class="article-top">
+        <span style="font-size:0.8rem; color:var(--violet-deep); font-weight:600;">Service</span>
+        <button class="remove-btn" data-removeserv="${a.id}">✕</button>
+      </div>
+      <div class="article-fields">
+        <div class="field"><label>Vente TTC</label><input type="number" inputmode="decimal" step="0.01" id="serv-${a.id}-vente" data-serv="${a.id}" value="${a.vente}" placeholder="0,00"></div>
+      </div>
+      <div class="article-net"><span>Net ligne</span><b id="net-${a.id}">0,00 €</b></div>
+    `;
+    cont.appendChild(div);
+  });
+  attachHandlersServ();
+  compute();
+}
+
+function attachHandlersMat(){
+  document.querySelectorAll('[data-removemat]').forEach(btn=>{
+    btn.onclick = ()=> removeArticleMat(btn.dataset.removemat);
+  });
+  document.querySelectorAll('[data-mat]').forEach(inp=>{
+    const handler = ()=>{
+      updateArticleMat(inp.dataset.mat, inp.dataset.f, inp.value);
+      if(inp.dataset.f === 'achat'){
+        const htInp = document.getElementById('mat-'+inp.dataset.mat+'-achatht');
+        if(htInp){
+          const ttc = Number(inp.value)||0;
+          htInp.value = ttc ? (ttc/TVA_COEF).toFixed(2) : '';
+        }
+      }
+    };
+    inp.oninput = handler;
+    inp.onchange = handler;
+  });
+  document.querySelectorAll('[data-matht]').forEach(inp=>{
+    const handler = ()=>{
+      const ht = Number(inp.value)||0;
+      const ttcVal = ht ? (ht*TVA_COEF).toFixed(2) : '';
+      const ttcInp = document.getElementById('mat-'+inp.dataset.matht+'-achat');
+      if(ttcInp) ttcInp.value = ttcVal;
+      updateArticleMat(inp.dataset.matht, 'achat', ttcVal);
+    };
+    inp.oninput = handler;
+    inp.onchange = handler;
+  });
+}
+
+function attachHandlersServ(){
+  document.querySelectorAll('[data-removeserv]').forEach(btn=>{
+    btn.onclick = ()=> removeArticleServ(btn.dataset.removeserv);
+  });
+  document.querySelectorAll('[data-serv]').forEach(inp=>{
+    inp.oninput = ()=> updateArticleServ(inp.dataset.serv, inp.value);
+  });
+}
+
+// Les frais fixes ne sont plus retirés de chaque devis : ils sont comptés au mois (fraisMoisTotal).
+function computeDayCost(){ return 0; }
+
+function fraisMoisTotal(){
+  const cfe = Math.max(0, Number(document.getElementById('cfeAn').value)||0);
+  return fraisFixes.reduce((t,f)=> t + (Number(f.amount)||0) / (f.per==='an' ? 12 : 1), 0) + cfe/12;
+}
+
+function renderFraisFixes(){
+  const cont = document.getElementById('fraisRows');
+  if(!cont) return;
+  cont.innerHTML = '';
+  fraisFixes.forEach(f=>{
+    const div = document.createElement('div');
+    div.className = 'private-ajout';
+    div.innerHTML = `<div class="private-custom-row">
+      <input type="text" placeholder="Prévoyance, assurance..." data-fflabel="${f.id}" value="${escapeHtml(f.label)}">
+      <input type="number" step="0.01" min="0" placeholder="0,00" data-ffamount="${f.id}" value="${f.amount}">
+      <select data-ffper="${f.id}"><option value="mois"${f.per==='mois'?' selected':''}>/ mois</option><option value="an"${f.per==='an'?' selected':''}>/ an</option></select>
+      <button class="remove-btn" data-ffremove="${f.id}" title="Supprimer">✕</button></div>`;
+    cont.appendChild(div);
+  });
+  const upd = (id,field,v)=>{ const f = fraisFixes.find(x=>x.id===id); if(f) f[field]=v; compute(); };
+  cont.querySelectorAll('[data-fflabel]').forEach(i=> i.oninput = ()=> upd(i.dataset.fflabel,'label',i.value));
+  cont.querySelectorAll('[data-ffamount]').forEach(i=> i.oninput = ()=> upd(i.dataset.ffamount,'amount',i.value));
+  cont.querySelectorAll('[data-ffper]').forEach(i=> i.onchange = ()=> upd(i.dataset.ffper,'per',i.value));
+  cont.querySelectorAll('[data-ffremove]').forEach(b=> b.onclick = ()=>{
+    fraisFixes = fraisFixes.filter(x=>x.id!==b.dataset.ffremove); renderFraisFixes(); compute();
+  });
+}
+
+function netMoyenDevis(){
+  const all = [].concat(...Object.values(devisHistory||{}));
+  return all.length ? all.reduce((t,d)=> t + (Number(d.net)||0), 0) / all.length : 0;
+}
+
+function fmtPct(x){ return x.toLocaleString('fr-FR',{minimumFractionDigits:1, maximumFractionDigits:1}) + ' %'; }
+function mixTxt(serv, mat){
+  const t = serv + mat;
+  return t > 0 ? 'Prest. ' + fmtPct(serv/t*100) + ' · Matériel ' + fmtPct(mat/t*100) : '—';
+}
+// Ventes encaissées du mois (factures payées), comme la boîte « À déclarer à l'URSSAF »
+function monthPaid(){
+  let mat = 0, serv = 0;
+  (devisHistory[currentMonth] || []).forEach(d=>{
+    if(d.paye !== false && d.breakdown && d.breakdown.venteMat !== undefined){
+      mat += Number(d.breakdown.venteMat)||0;
+      serv += Number(d.breakdown.venteServ)||0;
+    }
+  });
+  return { mat, serv };
+}
+function renderMix(){
+  if(!document.getElementById('mixBox')) return;
+  const obj = Math.min(95, Math.max(5, parseFloat(mixObjectif)||25));
+  let dm = 0, ds = 0;
+  articlesMat.forEach(a=>{ dm += (Number(a.vente)||0) * qteOf(a); });
+  articlesServ.forEach(a=>{ ds += Number(a.vente)||0; });
+  const m = monthPaid();
+  const tm = m.mat + dm, ts = m.serv + ds, tot = tm + ts;
+  const set = (id, t)=>{ const e = document.getElementById(id); if(e) e.textContent = t; };
+  set('mixDevis', mixTxt(ds, dm));
+  set('mixCumul', mixTxt(ts, tm));
+  if(tot <= 0){ set('mixGap', '—'); set('mixTaux', '—'); return; }
+  const p = ts/tot*100;
+  if(p > obj + 0.05){
+    const besoin = ts*(100-obj)/obj - tm;
+    set('mixGap', 'Il manque ' + fmt(besoin) + ' de matériel vendu');
+  } else {
+    set('mixGap', 'Objectif tenu (' + fmtPct(p) + ' ≤ ' + fmtPct(obj) + ')');
+  }
+  const r = RATES[regime];
+  set('mixTaux', fmtPct((tm*r.mat + ts*r.serv)/tot*100));
+}
+
+function compute(){
+  const rates = RATES[regime];
+  const dayCost = computeDayCost();
+
+  let totalVente=0, totalAchat=0, totalCharges=0, totalMarge=0;
+
+  articlesMat.forEach(a=>{
+    const q = qteOf(a);
+    const venteU = Number(a.vente)||0, achatU = Number(a.achat)||0;
+    const vente = venteU*q;
+    const achat = achatU*q;
+    const charges = vente*rates.mat;
+    const marge = vente - achat;
+    const net = marge - charges;
+
+    totalVente += vente; totalAchat += achat; totalCharges += charges; totalMarge += marge;
+    const el = document.getElementById('net-'+a.id);
+    if(el) el.textContent = fmt(net);
+    const coefEl = document.getElementById('coef-'+a.id);
+    if(coefEl){
+      coefEl.textContent = achatU > 0
+        ? (venteU/achatU).toLocaleString('fr-FR', {minimumFractionDigits:2, maximumFractionDigits:2}) + '×'
+        : '—';
+    }
+  });
+
+  articlesServ.forEach(a=>{
+    const vente = Number(a.vente)||0;
+    const charges = vente*rates.serv;
+    const marge = vente;
+    const net = marge - charges;
+
+    totalVente += vente; totalCharges += charges; totalMarge += marge;
+    const el = document.getElementById('net-'+a.id);
+    if(el) el.textContent = fmt(net);
+  });
+
+  const netFinal = totalMarge - totalCharges - dayCost;
+
+  document.getElementById('sVente').textContent = fmt(totalVente);
+  document.getElementById('sAchat').textContent = fmt(totalAchat);
+  document.getElementById('sMarge').textContent = fmt(totalMarge);
+  document.getElementById('sCharges').textContent = fmt(totalCharges);
+  document.getElementById('sNet').textContent = fmt(netFinal);
+  document.getElementById('summaryFinal').classList.toggle('neg', netFinal < 0);
+  const pct = totalVente > 0 ? (netFinal/totalVente*100) : 0;
+  document.getElementById('sNetPct').textContent = totalVente > 0
+    ? pct.toLocaleString('fr-FR',{minimumFractionDigits:1, maximumFractionDigits:1}) + ' % du total ventes'
+    : '0,0 % du total ventes';
+
+  renderMix();
+  computePrivate();
+  updateCeilingNote();
+  saveSettings();
+}
+
+function computePrivate(){
+  const revenu = Number(document.getElementById('revenuMois').value)||0;
+  const loyer = Number(document.getElementById('pLoyer').value)||0;
+  const tel = Number(document.getElementById('pTel').value)||0;
+  const courses = Number(document.getElementById('pCourses').value)||0;
+  const assurHab = Number(document.getElementById('pAssurHab').value)||0;
+  const assurMoto = Number(document.getElementById('pAssurMoto').value)||0;
+  const totalCustom = pCustom.reduce((s,c)=> s + (Number(c.amount)||0), 0);
+  const totalPrive = loyer+tel+courses+assurHab+assurMoto+totalCustom;
+  const ajouts = ajoutsDuMois();
+  const totalCouts = ajouts.filter(a=>a.type==='cout').reduce((t,a)=> t + (Number(a.amount)||0), 0);
+  const totalPrimes = ajouts.filter(a=>a.type==='prime').reduce((t,a)=> t + (Number(a.amount)||0), 0);
+  const frais = fraisMoisTotal();
+  const reste = revenu - (totalPrive + totalCouts - totalPrimes + frais);
+
+  document.getElementById('pTotal').textContent = fmt(totalPrive);
+  document.getElementById('pCoutsRow').style.display = totalCouts !== 0 ? '' : 'none';
+  document.getElementById('pCouts').textContent = fmt(totalCouts);
+  document.getElementById('pPrimesRow').style.display = totalPrimes !== 0 ? '' : 'none';
+  document.getElementById('pPrimes').textContent = '−' + fmt(totalPrimes);
+  document.getElementById('pFrais').textContent = fmt(frais);
+  const fv = document.getElementById('fraisMoisVal'); if(fv) fv.textContent = fmt(frais);
+  const moy = netMoyenDevis(), nb = moy > 0 ? Math.ceil(frais/moy) : null;
+  document.getElementById('pSeuilInfo').innerHTML = 'Seuil du mois : <b>' + fmt(frais) + '</b> de net à faire pour couvrir les frais fixes pro'
+    + (nb ? ' (≈ ' + nb + ' factures au net moyen de ' + fmt(moy) + ')' : '') + ' · '
+    + (revenu >= frais ? '<b style="color:var(--net-pos);">couvert</b>' : 'reste ' + fmt(frais - revenu) + ' à couvrir');
+  document.getElementById('pNet').textContent = fmt(reste);
+  const bn = document.getElementById('bNetCot');
+  if(bn){
+    bn.textContent = fmt(revenu);
+    document.getElementById('bFixes').textContent = fmt(frais);
+    const bres = document.getElementById('bReste');
+    bres.textContent = fmt(revenu - frais);
+    bres.style.color = (revenu - frais) < 0 ? 'var(--danger)' : '';
+  }
+  document.getElementById('privateFinal').classList.toggle('neg', reste < 0);
+}
+
+// ---- Ajouts privés du mois (coûts ponctuels et primes) ----
+function ajoutsDuMois(){
+  return pAjouts.filter(a=> a.mois === currentMonth || (a.mois === null && a.type === 'cout'));
+}
+
+function renderPrivateAjouts(){
+  const cont = document.getElementById('privateAjoutsRows');
+  if(!cont) return;
+  cont.innerHTML = '';
+  ajoutsDuMois().forEach(a=>{
+    const isPrime = a.type === 'prime';
+    const div = document.createElement('div');
+    div.className = 'private-ajout' + (isPrime ? ' prime' : '');
+    div.innerHTML = `
+      <div class="private-custom-row">
+        <span class="ico">${isPrime ? '🎁' : ''}</span>
+        <input type="text" placeholder="${isPrime ? 'Prime activité, aide...' : 'Loisirs, voyage, imprévu...'}" data-ajlabel="${a.id}" value="${escapeHtml(a.label)}">
+        <input type="number" step="0.01" min="0" placeholder="0,00" data-ajamount="${a.id}" value="${a.amount}">
+        <button class="remove-btn" data-ajremove="${a.id}" title="Supprimer">✕</button>
+      </div>
+      ${isPrime ? '' : `<label class="rec"><input type="checkbox" data-ajrec="${a.id}" ${a.mois === null ? 'checked' : ''}> 🔁 chaque mois (coût fixe)</label>`}`;
+    cont.appendChild(div);
+  });
+  cont.querySelectorAll('[data-ajlabel]').forEach(inp=>{
+    inp.oninput = ()=> updatePrivateAjout(inp.dataset.ajlabel, 'label', inp.value);
+  });
+  cont.querySelectorAll('[data-ajamount]').forEach(inp=>{
+    inp.oninput = ()=> updatePrivateAjout(inp.dataset.ajamount, 'amount', inp.value);
+  });
+  cont.querySelectorAll('[data-ajremove]').forEach(btn=>{
+    btn.onclick = ()=>{
+      pAjouts = pAjouts.filter(a=>a.id!==btn.dataset.ajremove);
+      renderPrivateAjouts();
+      compute();
+    };
+  });
+  cont.querySelectorAll('[data-ajrec]').forEach(chk=>{
+    chk.onchange = ()=>{
+      const a = pAjouts.find(x=>x.id===chk.dataset.ajrec);
+      if(a){ a.mois = chk.checked ? null : currentMonth; }
+      compute();
+    };
+  });
+}
+
+function addPrivateAjout(type){
+  pAjouts.push({ id:'pa'+(pAjoutsIdSeq++), type, label:'', amount:'', mois: currentMonth });
+  renderPrivateAjouts();
+  compute();
+}
+
+function updatePrivateAjout(id, field, value){
+  const a = pAjouts.find(x=>x.id===id);
+  if(a) a[field] = value;
+  compute();
+}
+
+function renderPrivateCustom(){
+  const cont = document.getElementById('privateCustomRows');
+  cont.innerHTML = '';
+  pCustom.forEach(c=>{
+    const div = document.createElement('div');
+    div.className = 'private-custom-row';
+    div.innerHTML = `
+      <input type="text" placeholder="Vacances, réparation vélo..." data-customlabel="${c.id}" value="${escapeHtml(c.label)}">
+      <input type="number" step="0.01" placeholder="0,00" data-customamount="${c.id}" value="${c.amount}">
+      <button class="remove-btn" data-removecustom="${c.id}" title="Supprimer">✕</button>
+    `;
+    cont.appendChild(div);
+  });
+  cont.querySelectorAll('[data-customlabel]').forEach(inp=>{
+    inp.oninput = ()=> updatePrivateCustom(inp.dataset.customlabel, 'label', inp.value);
+  });
+  cont.querySelectorAll('[data-customamount]').forEach(inp=>{
+    inp.oninput = ()=> updatePrivateCustom(inp.dataset.customamount, 'amount', inp.value);
+  });
+  cont.querySelectorAll('[data-removecustom]').forEach(btn=>{
+    btn.onclick = ()=> removePrivateCustom(btn.dataset.removecustom);
+  });
+}
+
+function addPrivateCustom(){
+  pCustom.push({ id: 'pc'+(pCustomIdSeq++), label: '', amount: '' });
+  renderPrivateCustom();
+  compute();
+}
+
+function removePrivateCustom(id){
+  pCustom = pCustom.filter(c=>c.id!==id);
+  renderPrivateCustom();
+  compute();
+}
+
+function updatePrivateCustom(id, field, value){
+  const c = pCustom.find(c=>c.id===id);
+  if(c) c[field] = value;
+  compute();
+}
+
+function exportPdf(){
+  const client = document.getElementById('clientName').value.trim() || 'Client non renseigné';
+  const dateStr = new Date().toLocaleDateString('fr-FR');
+
+  let rows = '';
+  articlesMat.forEach((a, i)=>{
+    const q = qteOf(a);
+    const achat = (Number(a.achat)||0)*q, vente = (Number(a.vente)||0)*q;
+    if(achat===0 && vente===0) return;
+    rows += `<tr><td>Matériel ${i+1}${q !== 1 ? ' (×' + q + ')' : ''}</td><td>${fmt(achat)}</td><td>${fmt(vente)}</td></tr>`;
+  });
+  articlesServ.forEach((a, i)=>{
+    const vente = Number(a.vente)||0;
+    if(vente===0) return;
+    rows += `<tr><td>Service ${i+1}</td><td>—</td><td>${fmt(vente)}</td></tr>`;
+  });
+  if(!rows) rows = '<tr><td colspan="3">Aucun article renseigné</td></tr>';
+
+  const get = (id)=> (document.getElementById(id)||{}).textContent || '0,00 €';
+
+  document.getElementById('printArea').innerHTML = `
+    <div class="print-header">
+      <h1>La Clé Universelle</h1>
+      <div class="print-sub">Dépannage serrurerie — Toulouse / Occitanie</div>
+    </div>
+    <div class="print-meta">
+      <div><strong>Client :</strong> ${escapeHtml(client)}</div>
+      <div><strong>Date :</strong> ${dateStr}</div>
+    </div>
+    <table class="print-table">
+      <thead><tr><th>Ligne</th><th>Achat</th><th>Vente</th></tr></thead>
+      <tbody>${rows}</tbody>
+    </table>
+    <div class="print-summary">
+      <div><span>Total ventes (CA)</span><b>${get('sVente')}</b></div>
+      <div><span>Total achat matériel</span><b>${get('sAchat')}</b></div>
+      <div><span>Marge brute</span><b>${get('sMarge')}</b></div>
+      <div><span>Charges URSSAF + CFP</span><b>${get('sCharges')}</b></div>
+      <div class="print-net"><span>Net pour vous</span><b>${get('sNet')}</b></div>
+    </div>
+  `;
+  document.body.classList.add('printing');
+  window.print();
+}
+window.addEventListener('afterprint', ()=> document.body.classList.remove('printing'));
+
+// ===== Passage automatique dans Compta (livre des recettes) =====
+let pendingCompta = null;   // infos lues dans le dernier PDF importé
+function comptaInfoFromLines(lines){
+  const txt = lines.join(' ').replace(/\s+/g,' ');
+  const o = { ref:'', date:'', mode:'', acquittee:false, montant:null };
+  let m = txt.match(/Facture N°\s*(\S+)/i); if(m) o.ref = m[1];
+  m = txt.match(/Net à payer\s*([\d\s.,]+?)\s*€/i); if(m) o.montant = pdfParseNumber(m[1]);
+  m = txt.match(/payée le\s*(\d{2})\/(\d{2})\/(\d{4})\s*par\s*([^.]+)\./i);
+  if(m){
+    o.acquittee = true;
+    o.date = m[3]+'-'+m[2]+'-'+m[1];
+    const t = m[4].toLowerCase();
+    o.mode = t.includes('virement') ? 'Virement' : t.includes('esp') ? 'Espèces'
+           : (t.includes('carte')||t.includes('cb')) ? 'Carte bancaire'
+           : (t.includes('chèque')||t.includes('cheque')) ? 'Chèque' : 'Autre';
+  }
+  return o;
+}
+// Retourne un message à afficher (ou '' si rien à dire)
+function pushToCompta(clientName){
+  const p = pendingCompta; pendingCompta = null;
+  if(!p) return '';
+  if(!p.acquittee || p.montant === null || !p.ref)
+    return "Non ajoutée au livre des recettes (facture non acquittée ou numéro/montant illisible) : importe-la dans 📒 Compta une fois payée.";
+  if(p.client && p.client.toLowerCase() !== clientName.toLowerCase())
+    return "Non ajoutée au livre des recettes : le nom du client a été modifié après l'import. Ajoute-la depuis 📒 Compta.";
+  let s = {}; try{ s = JSON.parse(localStorage.getItem('devisCalcSettings')||'{}'); }catch(e){}
+  const entries = (s.compta && s.compta.entries) || [];
+  if(entries.some(x=>x.ref === p.ref && x.montant > 0)) return 'Déjà dans le livre des recettes (facture '+p.ref+').';
+  entries.push({ id:'r'+Date.now(), date:p.date, client:clientName, montant:Math.round(p.montant*100)/100, mode:p.mode, ref:p.ref });
+  s.compta = Object.assign({}, s.compta||{}, { entries });
+  localStorage.setItem('devisCalcSettings', JSON.stringify(s));
+  return 'Ajoutée au livre des recettes (📒 Compta) : '+p.ref+', '+p.montant.toFixed(2).replace('.',',')+' €.';
+}
+
+function saveQuote(){
+  const clientName = document.getElementById('clientName').value.trim();
+  if(!clientName){
+    alert('Veuillez entrer le nom du client');
+    return;
+  }
+
+  const rates = RATES[regime];
+  let totalVente=0, totalAchat=0, totalCharges=0, totalMarge=0;
+  let venteMat=0, achatMat=0, venteServ=0;
+
+  const matLines = [];
+  const stockOut = {};
+  articlesMat.forEach(a=>{
+    const q = qteOf(a);
+    const vente = (Number(a.vente)||0)*q;
+    const achat = (Number(a.achat)||0)*q;
+    const charges = vente*rates.mat;
+    totalVente += vente; totalAchat += achat; totalCharges += charges; totalMarge += vente-achat;
+    venteMat += vente; achatMat += achat;
+    if(achat!==0 || vente!==0){
+      // achat / vente = totaux de la ligne (compatibles avec l'existant) ; qte en plus
+      matLines.push({ achat, vente, qte: q, categorie: a.categorie || 'autre' });
+      // Sortie de stock : par catégorie (la catégorie « Autre » n'est pas suivie)
+      const cat = a.categorie || 'autre';
+      if(cat !== 'autre' && q > 0) stockOut[cat] = (stockOut[cat]||0) + q;
+    }
+  });
+
+  articlesServ.forEach(a=>{
+    const vente = Number(a.vente)||0;
+    const charges = vente*rates.serv;
+    totalVente += vente; totalCharges += charges; totalMarge += vente;
+    venteServ += vente;
+  });
+
+  const dayCost = computeDayCost();
+  const netFinal = totalMarge - totalCharges - dayCost;
+
+  if(!devisHistory[currentMonth]) devisHistory[currentMonth] = [];
+  devisHistory[currentMonth].unshift({
+    id: 'h'+(devisIdSeq++),
+    client: clientName,
+    vente: totalVente,
+    net: netFinal,
+    date: new Date().toLocaleDateString('fr-FR'),
+    dateISO: new Date().toISOString().slice(0,10),
+    regime: regime,
+    ratesVer: 2,
+    paye: true,
+    activite: '',
+    breakdown: { venteMat, achatMat, venteServ, dayCost, matLines },
+    stockOut: stockOut
+  });
+
+  // Décrémentation du stock (avant saveSettings, qui relit le stock déjà écrit)
+  const negatives = applyStock(stockOut, -1);
+  const comptaMsg = pushToCompta(clientName);
+
+  document.getElementById('clientName').value = '';
+  renderHistory();
+  saveSettings();
+  if(negatives.length){
+    alert('Facture enregistrée. Stock insuffisant : ' + negatives.join(', ') + '.\nPense à saisir ton dernier réapprovisionnement dans 📦 Stock.' + (comptaMsg ? '\n\n' + comptaMsg : ''));
+  } else if(comptaMsg){
+    alert('Facture enregistrée.\n' + comptaMsg);
+  }
+}
+
+function escapeHtml(s){
+  return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+function pctBadge(vente, net){
+  if(!vente || vente<=0) return '<span class="pct-na">—</span>';
+  const seuil = Number(document.getElementById('seuilRenta').value)||0;
+  const pct = (net/vente)*100;
+  const cls = pct >= seuil ? 'pct-good' : 'pct-bad';
+  return `<span class="pct-badge ${cls}">${pct.toLocaleString('fr-FR',{minimumFractionDigits:1,maximumFractionDigits:1})} %</span>`;
+}
+
+function regimePill(d){
+  if(!d.breakdown){
+    return '<span class="regime-pill na" title="Facture antérieure à la mise à jour : pas de détail matériel/service enregistré, recalcul impossible">—</span>';
+  }
+  const label = d.regime === 'plein' ? 'Plein' : 'ACRE';
+  const cls = d.regime === 'plein' ? 'plein' : 'acre';
+  return `<span class="regime-pill ${cls}" data-toggleregime="${d.id}" title="Cliquer pour recalculer le net avec l'autre régime">${label}</span>`;
+}
+
+// Net après cotisations = ventes − achats − cotisations. Les anciennes factures enregistrées avec un
+// coût du jour (breakdown.dayCost) l'avaient déjà déduit : on le rajoute, car les frais fixes pro
+// sont désormais comptés une seule fois, au mois.
+function netCorr(d){
+  return (Number(d.net)||0) + ((d.breakdown && Number(d.breakdown.dayCost)) || 0);
+}
+function cotisOf(d){
+  if(!d.breakdown || d.breakdown.venteMat === undefined || d.breakdown.venteServ === undefined) return null;
+  const r = ratesOf(d);
+  return (Number(d.breakdown.venteMat)||0)*r.mat + (Number(d.breakdown.venteServ)||0)*r.serv;
+}
+const ACT_CYCLE = { '':'S', 'S':'V', 'V':'' };
+function actPill(d){
+  const a = d.activite || '';
+  const cls = a==='S' ? 's' : a==='V' ? 'v' : '';
+  const title = a==='S' ? 'Serrurerie' : a==='V' ? 'Vélo' : 'Non classée';
+  return `<span class="act-pill ${cls}" data-toggleact="${d.id}" title="${title} — toucher pour changer">${a || '?'}</span>`;
+}
+
+function recomputeDevisNet(d){
+  const b = d.breakdown;
+  const r = ratesOf(d);
+  const netMat = (b.venteMat - b.achatMat) - (b.venteMat * r.mat);
+  const netServ = b.venteServ - (b.venteServ * r.serv);
+  d.net = netMat + netServ - b.dayCost;
+}
+
+function syncRevenuMois(totalNet){
+  const el = document.getElementById('revenuMois');
+  if(!el) return;
+  el.value = totalNet.toFixed(2);
+  computePrivate();
+}
+
+function renderHistory(){
+  renderPrivateAjouts();
+  const cont = document.getElementById('historyContent');
+  document.getElementById('monthDisplay').textContent = getMonthLabel();
+  populateMonthSelect();
+  updateCeilingNote();
+
+  const totalsCont = document.getElementById('historyTotals');
+  const badge = document.getElementById('devisCountBadge');
+  if(!devisHistory[currentMonth] || devisHistory[currentMonth].length === 0){
+    cont.innerHTML = '<div class="empty-state">Aucune facture enregistrée pour ce mois</div>';
+    if(totalsCont) totalsCont.innerHTML = '';
+    if(badge) badge.textContent = '';
+    syncRevenuMois(0);
+    renderMix();
+    return;
+  }
+
+  const devis = devisHistory[currentMonth];
+  let html = '<table class="history-table"><thead><tr><th class="del-col"></th><th>Client</th><th>Vente</th><th>Net</th><th class="pct">%</th><th class="regime">Régime</th><th class="act">Act.</th><th class="paye">Payé</th><th></th></tr></thead><tbody>';
+
+  let totalVente = 0, totalNet = 0;
+  let totalAchatMat = 0;
+  let venteEncaisse = 0, netEncaisse = 0, venteAttente = 0, netAttente = 0;
+  let totalCotisations = 0, cotisApprox = false;
+  let declMat = 0, declServ = 0, declCot = 0;
+  const actAgg = { S:{ca:0,cot:0,net:0}, V:{ca:0,cot:0,net:0}, '':{ca:0,cot:0,net:0} };
+  let actSansDetail = 0;
+  devis.forEach((d, idx)=>{
+    const dnet = netCorr(d);
+    totalVente += d.vente;
+    totalNet += dnet;
+    if(d.breakdown) totalAchatMat += Number(d.breakdown.achatMat)||0;
+    const estPaye = d.paye !== false;
+    if(estPaye){ venteEncaisse += d.vente; netEncaisse += dnet; }
+    else { venteAttente += d.vente; netAttente += dnet; }
+
+    // Cotisations réelles = % sur vente matériel + % sur vente service (pas d'impact de l'achat matériel ni du coût fixe du jour).
+    if(d.breakdown && d.breakdown.venteMat !== undefined && d.breakdown.venteServ !== undefined){
+      const r = ratesOf(d);
+      totalCotisations += (Number(d.breakdown.venteMat)||0)*r.mat + (Number(d.breakdown.venteServ)||0)*r.serv;
+    } else {
+      // Facture antérieure à la mise à jour : pas de détail mat/serv, on approxime avec vente-net.
+      totalCotisations += (d.vente - d.net);
+      cotisApprox = true;
+    }
+
+    if(estPaye && d.breakdown && d.breakdown.venteMat !== undefined){
+      const rr = ratesOf(d);
+      const vm = Number(d.breakdown.venteMat)||0, vs = Number(d.breakdown.venteServ)||0;
+      declMat += vm; declServ += vs; declCot += vm*rr.mat + vs*rr.serv;
+    }
+    if(estPaye){
+      const ag = actAgg[d.activite || ''] || actAgg[''];
+      ag.ca += d.vente; ag.net += dnet;
+      const c = cotisOf(d);
+      if(c === null) actSansDetail++; else ag.cot += c;
+    }
+    const payeCheckbox = `<input type="checkbox" class="paye-check" data-payedevis="${d.id}" ${estPaye ? 'checked' : ''} title="Facture payée">`;
+
+    if(editingDevisId === d.id){
+      const b = d.breakdown || { achatMat:0, venteMat:0, venteServ:d.vente };
+      html += `<tr>
+        <td class="del-col"></td>
+        <td><input type="text" class="edit-input client-input" id="edit-client-${d.id}" value="${escapeHtml(d.client)}"></td>
+        <td><div class="edit-stack">
+          <input type="number" step="0.01" class="edit-mini" id="edit-achatMat-${d.id}" value="${b.achatMat}" placeholder="Achat mat." title="Achat matériel TTC">
+          <input type="number" step="0.01" class="edit-mini" id="edit-venteMat-${d.id}" value="${b.venteMat}" placeholder="Vente mat." title="Vente matériel TTC">
+        </div></td>
+        <td><div class="edit-stack">
+          <input type="number" step="0.01" class="edit-mini" id="edit-venteServ-${d.id}" value="${b.venteServ}" placeholder="Vente serv." title="Vente service TTC">
+          <b class="edit-net-preview" id="edit-netpreview-${d.id}">${fmt(dnet)}</b>
+        </div></td>
+        <td class="pct pct-na">—</td>
+        <td class="regime pct-na">—</td>
+        <td class="act">${actPill(d)}</td>
+        <td class="paye">${payeCheckbox}</td>
+        <td class="actions"><div class="edit-actions">
+          <button class="row-btn" title="Enregistrer" data-savedevis="${d.id}">✓</button>
+          <button class="row-btn del" title="Annuler" data-canceldevis="${d.id}">✕</button>
+        </div></td>
+      </tr>`;
+    } else if(movingDevisId === d.id){
+      html += `<tr>
+        <td class="del-col"></td>
+        <td colspan="7" style="padding:6px 4px;">
+          <div style="display:flex; align-items:center; gap:6px; flex-wrap:wrap;">
+            <span style="font-size:0.78rem; color:var(--ink-soft);">Déplacer « ${escapeHtml(d.client)} » vers :</span>
+            <input type="month" id="move-target-${d.id}" value="${currentMonth}" style="border:1px solid var(--line); border-radius:7px; padding:5px 7px; font-size:0.85rem; background:var(--bg); color:var(--ink); font-family:inherit;">
+            <button class="row-btn" title="Confirmer" data-confirmmove="${d.id}">✓</button>
+            <button class="row-btn del" title="Annuler" data-cancelmove="${d.id}">✕</button>
+          </div>
+        </td>
+      </tr>`;
+    } else {
+      html += `<tr>
+        <td class="del-col"><button class="row-btn del" title="Supprimer" data-deldevis="${d.id}">🗑</button></td>
+        <td>${escapeHtml(d.client)}</td>
+        <td>${fmt(d.vente)}</td>
+        <td>${fmt(dnet)}</td>
+        <td class="pct">${pctBadge(d.vente, dnet)}</td>
+        <td class="regime">${regimePill(d)}</td>
+        <td class="act">${actPill(d)}</td>
+        <td class="paye">${payeCheckbox}</td>
+        <td class="actions">
+          <button class="row-btn" title="Monter" data-moveup="${d.id}" ${idx===0 ? 'disabled' : ''}>↑</button>
+          <button class="row-btn" title="Descendre" data-movedown="${d.id}" ${idx===devis.length-1 ? 'disabled' : ''}>↓</button>
+          <button class="row-btn" title="Déplacer vers un autre mois" data-movedevis="${d.id}">🗓</button>
+          <button class="row-btn" title="Modifier" data-editdevis="${d.id}">✎</button>
+        </td>
+      </tr>`;
+    }
+  });
+
+  html += '</tbody></table>';
+  // Le revenu du bilan privé = net des factures payées uniquement (outillage et rattrapages : voir Trésorerie)
+  syncRevenuMois(netEncaisse);
+  const moyennePct = totalVente > 0 ? (totalNet/totalVente*100) : 0;
+  if(badge) badge.textContent = devis.length + (devis.length > 1 ? ' factures' : ' facture');
+  const totalsHtml = `
+  <div class="totals-main">
+    <div class="stat vente"><span class="label">Total ventes (CA)</span><span class="value">${fmt(totalVente)}</span></div>
+    <div class="stat net"><span class="label">Total net estimé</span><span class="value">${fmt(totalNet)}</span></div>
+    <div class="stat pct"><span class="label">Moyenne %</span><span class="value">${moyennePct.toLocaleString('fr-FR',{minimumFractionDigits:1,maximumFractionDigits:1})} %</span></div>
+  </div>
+  <div class="totals-secondary">
+    <span>Total achat matériel</span><b>${fmt(totalAchatMat)}</b>
+  </div>
+  <div class="totals-status">
+    <div class="chip"><span class="label">Payé (net / ventes)</span><span class="value">${fmt(netEncaisse)} / ${fmt(venteEncaisse)}</span></div>
+    <div class="chip"><span class="label">En attente (net / ventes)</span><span class="value">${fmt(netAttente)} / ${fmt(venteAttente)}</span></div>
+  </div>
+  <div class="totals-secondary" style="border-top:1px dashed var(--line);">
+    <span>Cotisations URSSAF totales${cotisApprox ? ' <small style="opacity:0.7;">(estimation pour les anciennes factures sans détail)</small>' : ''}</span><b>${fmt(totalCotisations)}</b>
+  </div>
+  <div class="urssaf-box">
+    <div class="ttl">Total à déclarer à l'URSSAF (factures payées du mois)</div>
+    <div class="ln"><span>Ventes de matériel</span><b>${fmt(declMat)}</b></div>
+    <div class="ln"><span>Ventes de services</span><b>${fmt(declServ)}</b></div>
+    <div class="ln tot"><span>Total à déclarer</span><b>${fmt(declMat + declServ)}</b></div>
+    <div class="ln"><span>Part prestations / matériel (objectif ${fmtPct(Math.min(95, Math.max(5, parseFloat(mixObjectif)||25)))})</span><b>${mixTxt(declServ, declMat)}</b></div>
+    <div class="ln cot"><span>Cotisations URSSAF correspondantes</span><b>${fmt(declCot)}</b></div>
+  </div>
+  <div class="act-box">
+    <div class="ttl">Par activité (factures payées)</div>
+    <table>
+      <thead><tr><th>Activité</th><th>CA</th><th>Cotis.</th><th>Net</th></tr></thead>
+      <tbody>
+        ${[['S','Serrurerie (S)'],['V','Vélo (V)'],['','Non classé']].map(([k,l])=>`<tr><td>${l}</td><td>${fmt(actAgg[k].ca)}</td><td>${fmt(actAgg[k].cot)}</td><td>${fmt(actAgg[k].net)}</td></tr>`).join('')}
+      </tbody>
+    </table>
+    <div class="note">Net avant frais fixes pro (non attribuables à une activité).${actSansDetail ? ' ' + actSansDetail + ' ancienne(s) facture(s) sans détail matériel/service : CA et net comptés, cotisations non calculables donc exclues.' : ''}</div>
+  </div>`;
+
+  if(totalsCont) totalsCont.innerHTML = totalsHtml;
+  cont.innerHTML = html;
+  attachHistoryHandlers();
+  renderMix();
+}
+
+function attachEditBreakdownHandlers(d){
+  const dayCost = (d.breakdown && d.breakdown.dayCost !== undefined) ? d.breakdown.dayCost : computeDayCost();
+  const recalc = ()=>{
+    const achatMat = Number((document.getElementById('edit-achatMat-'+d.id)||{}).value)||0;
+    const venteMat = Number((document.getElementById('edit-venteMat-'+d.id)||{}).value)||0;
+    const venteServ = Number((document.getElementById('edit-venteServ-'+d.id)||{}).value)||0;
+    const r = ratesOf(d);
+    const netMat = (venteMat - achatMat) - (venteMat * r.mat);
+    const netServ = venteServ - (venteServ * r.serv);
+    const net = netMat + netServ;
+    const el = document.getElementById('edit-netpreview-'+d.id);
+    if(el) el.textContent = fmt(net);
+  };
+  ['edit-achatMat-'+d.id,'edit-venteMat-'+d.id,'edit-venteServ-'+d.id].forEach(id=>{
+    const inp = document.getElementById(id);
+    if(inp) inp.oninput = recalc;
+  });
+  recalc();
+}
+
+function attachHistoryHandlers(){
+  if(editingDevisId && devisHistory[currentMonth]){
+    const d = devisHistory[currentMonth].find(x=>x.id===editingDevisId);
+    if(d) attachEditBreakdownHandlers(d);
+  }
+  document.querySelectorAll('[data-editdevis]').forEach(btn=>{
+    btn.onclick = ()=>{ editingDevisId = btn.dataset.editdevis; movingDevisId = null; renderHistory(); };
+  });
+  document.querySelectorAll('[data-canceldevis]').forEach(btn=>{
+    btn.onclick = ()=>{ editingDevisId = null; renderHistory(); };
+  });
+  document.querySelectorAll('[data-movedevis]').forEach(btn=>{
+    btn.onclick = ()=>{ movingDevisId = btn.dataset.movedevis; editingDevisId = null; renderHistory(); };
+  });
+  document.querySelectorAll('[data-cancelmove]').forEach(btn=>{
+    btn.onclick = ()=>{ movingDevisId = null; renderHistory(); };
+  });
+  document.querySelectorAll('[data-confirmmove]').forEach(btn=>{
+    btn.onclick = ()=>{
+      const id = btn.dataset.confirmmove;
+      const input = document.getElementById('move-target-'+id);
+      const target = input ? input.value : '';
+      if(!target){ alert('Choisis un mois valide.'); return; }
+      const arr = devisHistory[currentMonth];
+      const i = arr.findIndex(d=>d.id===id);
+      if(i === -1) return;
+      if(target === currentMonth){ movingDevisId = null; renderHistory(); return; }
+      const [d] = arr.splice(i, 1);
+      if(!devisHistory[target]) devisHistory[target] = [];
+      devisHistory[target].unshift(d);
+      movingDevisId = null;
+      saveSettings();
+      renderHistory();
+    };
+  });
+  document.querySelectorAll('[data-moveup]').forEach(btn=>{
+    btn.onclick = ()=>{
+      const id = btn.dataset.moveup;
+      const arr = devisHistory[currentMonth];
+      const i = arr.findIndex(d=>d.id===id);
+      if(i > 0){
+        [arr[i-1], arr[i]] = [arr[i], arr[i-1]];
+        saveSettings();
+        renderHistory();
+      }
+    };
+  });
+  document.querySelectorAll('[data-movedown]').forEach(btn=>{
+    btn.onclick = ()=>{
+      const id = btn.dataset.movedown;
+      const arr = devisHistory[currentMonth];
+      const i = arr.findIndex(d=>d.id===id);
+      if(i > -1 && i < arr.length-1){
+        [arr[i+1], arr[i]] = [arr[i], arr[i+1]];
+        saveSettings();
+        renderHistory();
+      }
+    };
+  });
+  document.querySelectorAll('[data-deldevis]').forEach(btn=>{
+    btn.onclick = ()=>{
+      const id = btn.dataset.deldevis;
+      if(!confirm('Supprimer cette facture de l\'historique ?')) return;
+      const dDel = devisHistory[currentMonth].find(d=>d.id===id);
+      if(dDel && dDel.stockOut && Object.keys(dDel.stockOut).length && confirm('Remettre les articles de cette facture en stock ?')){
+        applyStock(dDel.stockOut, +1);
+      }
+      devisHistory[currentMonth] = devisHistory[currentMonth].filter(d=>d.id!==id);
+      saveSettings();
+      renderHistory();
+    };
+  });
+  document.querySelectorAll('[data-payedevis]').forEach(chk=>{
+    chk.onchange = ()=>{
+      const id = chk.dataset.payedevis;
+      const d = devisHistory[currentMonth].find(x=>x.id===id);
+      if(!d) return;
+      d.paye = chk.checked;
+      saveSettings();
+      renderHistory();
+    };
+  });
+  document.querySelectorAll('[data-toggleact]').forEach(pill=>{
+    pill.onclick = ()=>{
+      const d = devisHistory[currentMonth].find(x=>x.id===pill.dataset.toggleact);
+      if(!d) return;
+      d.activite = ACT_CYCLE[d.activite || ''] ?? '';
+      saveSettings();
+      renderHistory();
+    };
+  });
+  document.querySelectorAll('[data-toggleregime]').forEach(pill=>{
+    pill.onclick = ()=>{
+      const id = pill.dataset.toggleregime;
+      const d = devisHistory[currentMonth].find(x=>x.id===id);
+      if(!d || !d.breakdown) return;
+      d.regime = (d.regime === 'plein') ? 'acre' : 'plein';
+      recomputeDevisNet(d);
+      saveSettings();
+      renderHistory();
+    };
+  });
+  document.querySelectorAll('[data-savedevis]').forEach(btn=>{
+    btn.onclick = ()=>{
+      const id = btn.dataset.savedevis;
+      const d = devisHistory[currentMonth].find(x=>x.id===id);
+      if(!d) return;
+      const client = document.getElementById('edit-client-'+id).value.trim();
+      const achatMat = Number(document.getElementById('edit-achatMat-'+id).value)||0;
+      const venteMat = Number(document.getElementById('edit-venteMat-'+id).value)||0;
+      const venteServ = Number(document.getElementById('edit-venteServ-'+id).value)||0;
+      if(!client){ alert('Le nom du client ne peut pas être vide'); return; }
+      const regimeToUse = d.regime || 'acre';
+      const dayCost = (d.breakdown && d.breakdown.dayCost !== undefined) ? d.breakdown.dayCost : computeDayCost();
+      const r = ratesOf(d, regimeToUse);
+      const netMat = (venteMat - achatMat) - (venteMat * r.mat);
+      const netServ = venteServ - (venteServ * r.serv);
+      d.client = client;
+      d.vente = venteMat + venteServ;
+      d.net = netMat + netServ - dayCost;
+      d.regime = regimeToUse;
+      // Conserver le détail par ligne (matLines) : sinon la trésorerie ignore ce devis.
+      const oldB = d.breakdown || {};
+      const newB = { venteMat, achatMat, venteServ, dayCost };
+      if(Array.isArray(oldB.matLines)){
+        const sameAmounts = Math.abs((Number(oldB.achatMat)||0) - achatMat) < 0.005 && Math.abs((Number(oldB.venteMat)||0) - venteMat) < 0.005;
+        if(sameAmounts){
+          newB.matLines = oldB.matLines;
+        } else if(achatMat !== 0 || venteMat !== 0){
+          const cats = Array.from(new Set(oldB.matLines.map(l=> l.categorie || 'autre')));
+          newB.matLines = [{ achat: achatMat, vente: venteMat, qte: 1, categorie: cats.length === 1 ? cats[0] : 'autre' }];
+        } else {
+          newB.matLines = [];
+        }
+      }
+      d.breakdown = newB;
+      editingDevisId = null;
+      saveSettings();
+      renderHistory();
+    };
+  });
+}
+
+function nextMonthKey(key){
+  const [year, month] = key.split('-').map(Number);
+  let y = year, m = month + 1;
+  if(m > 12){ m = 1; y += 1; }
+  return y + '-' + String(m).padStart(2,'0');
+}
+
+function exportData(){
+  let raw = {};
+  try{ raw = JSON.parse(localStorage.getItem('devisCalcSettings')||'{}'); }catch(e){}
+  const blob = new Blob([JSON.stringify(raw, null, 2)], {type:'application/json'});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  const dateStr = new Date().toISOString().slice(0,10);
+  a.href = url;
+  a.download = 'sauvegarde-calculette-'+dateStr+'.json';
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+}
+
+function importDataFile(file){
+  const reader = new FileReader();
+  reader.onload = (e)=>{
+    try{
+      const data = JSON.parse(e.target.result);
+      if(!confirm('Importer cette sauvegarde ? Cela remplacera toutes les données actuellement affichées dans ce navigateur.')) return;
+      localStorage.setItem('devisCalcSettings', JSON.stringify(data));
+      location.reload();
+    }catch(err){
+      alert('Fichier invalide, impossible de lire cette sauvegarde.');
+    }
+  };
+  reader.readAsText(file);
+}
+
+function newMonth(){
+  if(devisHistory[currentMonth] && devisHistory[currentMonth].length > 0){
+    if(!confirm('Passer au mois suivant (' + nextMonthKey(currentMonth) + ') ? Le mois actuel restera consultable dans l\'historique.')) return;
+  }
+  currentMonth = nextMonthKey(currentMonth);
+  if(!devisHistory[currentMonth]) devisHistory[currentMonth] = [];
+  renderHistory();
+  saveSettings();
+}
+
+document.getElementById('btnAcre').onclick = ()=>{
+  regime='acre';
+  document.getElementById('btnAcre').classList.add('active');
+  document.getElementById('btnPlein').classList.remove('active');
+  compute();
+};
+
+document.getElementById('btnPlein').onclick = ()=>{
+  regime='plein';
+  document.getElementById('btnPlein').classList.add('active');
+  document.getElementById('btnAcre').classList.remove('active');
+  compute();
+};
+
+document.getElementById('addFrais').onclick = ()=>{ fraisFixes.push({ id:'ff'+(fraisIdSeq++), label:'', amount:'', per:'mois' }); renderFraisFixes(); compute(); };
+document.getElementById('cfeAn').oninput = compute;
+document.getElementById('mixObjectif').oninput = (e)=>{ const v = parseFloat(e.target.value); if(!isNaN(v)) mixObjectif = v; compute(); };
+document.getElementById('addArticleMat').onclick = addArticleMat;
+document.getElementById('addArticleServ').onclick = addArticleServ;
+document.getElementById('saveQuoteBtn').onclick = saveQuote;
+document.getElementById('newMonthBtn').onclick = newMonth;
+document.getElementById('monthSelect').onchange = (e)=> goToMonth(e.target.value);
+document.getElementById('prevMonthBtn').onclick = ()=> goToMonth(prevMonthKeyOf(currentMonth));
+document.getElementById('nextMonthBtn').onclick = ()=> goToMonth(nextMonthKey(currentMonth));
+document.getElementById('exportBtn').onclick = exportData;
+document.getElementById('importBtn').onclick = ()=> document.getElementById('importFile').click();
+document.getElementById('importFile').onchange = (e)=>{
+  if(e.target.files && e.target.files[0]) importDataFile(e.target.files[0]);
+  e.target.value = '';
+};
+
+['pLoyer','pTel','pCourses','pAssurHab','pAssurMoto'].forEach(id=>{
+  document.getElementById(id).oninput = compute;
+});
+
+document.getElementById('seuilRenta').oninput = ()=>{ renderHistory(); saveSettings(); };
+document.getElementById('addPrivateCout').onclick = ()=> addPrivateAjout('cout');
+document.getElementById('addPrivatePrime').onclick = ()=> addPrivateAjout('prime');
+document.getElementById('addCatBtn').onclick = addCustomCategory;
+document.getElementById('newCatName').addEventListener('keydown', (e)=>{ if(e.key==='Enter') addCustomCategory(); });
+renderCatManager();
+
+// ===== Import PDF devis/facture (Khosmos) =====
+if(window.pdfjsLib){
+  pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+}
+
+function pdfParseNumber(s){
+  if(s==null) return 0;
+  return parseFloat(String(s).replace(/\s/g,'').replace(',', '.')) || 0;
+}
+
+async function extractPdfLines(arrayBuffer){
+  const pdf = await pdfjsLib.getDocument({data: arrayBuffer}).promise;
+  const lines = [];
+  for(let p=1; p<=pdf.numPages; p++){
+    const page = await pdf.getPage(p);
+    const content = await page.getTextContent();
+    let current = '';
+    content.items.forEach(item=>{
+      current += item.str;
+      if(item.hasEOL){
+        if(current.trim()) lines.push(current.trim());
+        current = '';
+      } else {
+        current += ' ';
+      }
+    });
+    if(current.trim()) lines.push(current.trim());
+  }
+  return lines;
+}
+
+function pdfTryParseRow(line, hasRemise){
+  const tokens = line.trim().split(/\s+/);
+  let i = tokens.length - 1;
+  if(i < 0) return null;
+
+  // Lit un montant à partir de la fin, en regroupant les milliers (« 1 236,32 »).
+  // Sûr pour le total et la remise : ils sont toujours précédés d'une unité (€, %, -).
+  const readAmountGreedy = ()=>{
+    if(i < 0 || !/^\d+([.,]\d+)?$/.test(tokens[i])) return null;
+    let str = tokens[i]; i--;
+    while(i >= 0 && /^\d{1,3}$/.test(tokens[i]) && /^\d{3}([.,]\d+)?$/.test(str)){ str = tokens[i] + str; i--; }
+    return pdfParseNumber(str);
+  };
+
+  // TVA (pourcentage ou "-")
+  if(tokens[i] === '-'){ i--; }
+  else if(tokens[i] === '%'){ i--; if(i<0) return null; i--; }
+  else return null;
+  if(i < 0) return null;
+
+  // Total HT (montant ou "-")
+  let totalHt;
+  if(tokens[i] === '-'){ totalHt = 0; i--; }
+  else if(tokens[i] === '€'){
+    i--; totalHt = readAmountGreedy();
+    if(totalHt === null) return null;
+  } else return null;
+  if(i < 0) return null;
+
+  // Remise (colonne optionnelle)
+  let remEur = 0, remPct = 0;
+  if(hasRemise){
+    if(tokens[i] === '-'){ i--; }
+    else if(tokens[i] === '€' || tokens[i] === '%'){
+      const unit = tokens[i]; i--;
+      const v = readAmountGreedy();
+      if(v === null) return null;
+      if(unit === '€') remEur = v; else remPct = v;
+    } else return null;
+    if(i < 0) return null;
+  }
+
+  // PU HT (montant ou "-")
+  if(tokens[i] === '-'){
+    i--;
+    if(i < 0 || !/^\d+$/.test(tokens[i])) return null;
+    return { qty: parseInt(tokens[i],10), puHt: 0, totalHt };
+  }
+  if(tokens[i] !== '€') return null;
+  i--; if(i < 0) return null;
+  const puTok = tokens[i];
+  if(!/^\d+([.,]\d+)?$/.test(puTok)) return null;
+
+  // Le PU peut être « 236,32 » (qty = jeton précédent) ou « 1 236,32 » (milliers, qty = jeton encore avant).
+  // On garde l'hypothèse dont le calcul qté × PU (− remise) retombe sur le total HT de la ligne.
+  const ecart = (qty, pu)=>{
+    const brut = qty*pu;
+    const net1 = remPct ? brut*(1-remPct/100) : brut - remEur;
+    const net2 = remPct ? net1 : qty*(pu - remEur);
+    return Math.min(Math.abs(net1 - totalHt), Math.abs(net2 - totalHt));
+  };
+  const cands = [];
+  if(i-1 >= 0 && /^\d+$/.test(tokens[i-1])){
+    const qty = parseInt(tokens[i-1],10), pu = pdfParseNumber(puTok);
+    cands.push({ qty, puHt: pu, err: ecart(qty, pu) });
+  }
+  if(i-2 >= 0 && /^\d{3}([.,]\d+)?$/.test(puTok) && /^\d{1,3}$/.test(tokens[i-1]) && /^\d+$/.test(tokens[i-2])){
+    const qty = parseInt(tokens[i-2],10), pu = pdfParseNumber(tokens[i-1] + puTok);
+    cands.push({ qty, puHt: pu, err: ecart(qty, pu) });
+  }
+  if(!cands.length) return null;
+  let best = cands[0];
+  if(cands.length > 1 && cands[1].err + 0.005 < cands[0].err) best = cands[1];
+  return { qty: best.qty, puHt: best.puHt, totalHt };
+}
+
+function parseDevisLines(lines){
+  let client = '';
+  const adrIdx = lines.findIndex(l=>l.trim().startsWith('Adressé à'));
+  if(adrIdx !== -1 && lines[adrIdx+1]) client = lines[adrIdx+1].trim();
+
+  let netAPayer = null;
+  for(let i=0;i<lines.length;i++){
+    const t = lines[i].trim();
+    if((t === 'Net à payer' || t === 'Total TTC') && lines[i+1]){
+      const m = lines[i+1].match(/([\d\s.,-]+)\s*€/);
+      if(m){ netAPayer = pdfParseNumber(m[1]); break; }
+    }
+  }
+
+  const headerRe = /^(Service|Matériel|Remise globale)\s+Qté\.?\s+PU\s*HT/i;
+  let currentSection = null;
+  let servTotal = 0, remiseTotal = 0;
+  let servCount = 0;
+  const matRows = [];
+
+  for(let idx=0; idx<lines.length; idx++){
+    const line = lines[idx].trim();
+    if(!line) continue;
+    if(line.startsWith('Coordonnées bancaires')) break;
+    const hm = line.match(headerRe);
+    if(hm){
+      const residual = line.slice(hm[1].length);
+      const hasRemise = /Remise/i.test(residual);
+      const nameLc = hm[1].toLowerCase();
+      const type = nameLc.startsWith('service') ? 'service' : (nameLc.startsWith('remise') ? 'remise' : 'materiel');
+      currentSection = { type, hasRemise };
+      continue;
+    }
+    if(!currentSection) continue;
+    const row = pdfTryParseRow(line, currentSection.hasRemise);
+    if(row){
+      if(currentSection.type === 'service'){ servTotal += row.totalHt; servCount++; }
+      else if(currentSection.type === 'materiel'){ if(row.totalHt > 0.005) matRows.push(row.totalHt); } // ignore les lignes à 0 € (ex. évacuation ancienne serrure)
+      else if(currentSection.type === 'remise'){ remiseTotal += row.totalHt; }
+    }
+  }
+
+  return { client, servTotal, matRows, remiseTotal, servCount, matCount: matRows.length, netAPayer };
+}
+
+document.getElementById('importPdfFile').onchange = async (e)=>{
+  const file = e.target.files[0];
+  e.target.value = '';
+  if(!file) return;
+  const statusEl = document.getElementById('importPdfStatus');
+  statusEl.textContent = 'Lecture du PDF…';
+  pendingCompta = null;
+  try{
+    const buf = await file.arrayBuffer();
+    const lines = await extractPdfLines(buf);
+    const r = parseDevisLines(lines);
+    pendingCompta = Object.assign(comptaInfoFromLines(lines), { client: r.client });
+
+    if(r.servCount === 0 && r.matCount === 0){
+      statusEl.textContent = "Je n'ai trouvé aucune ligne service/matériel reconnaissable dans ce PDF. Rien n'a été modifié.";
+      return;
+    }
+
+    // Répartition proportionnelle de la remise globale (si présente)
+    const matTotal = r.matRows.reduce((a,b)=>a+b, 0);
+    const brut = r.servTotal + matTotal;
+    let servFinal = r.servTotal;
+    let matRowsFinal = r.matRows.slice();
+    if(r.remiseTotal !== 0 && brut > 0){
+      const ratioMat = matTotal / brut;
+      const matRemisePart = r.remiseTotal * ratioMat;
+      servFinal = r.servTotal + r.remiseTotal * (1 - ratioMat);
+      matRowsFinal = matTotal > 0
+        ? r.matRows.map(v => v + matRemisePart * (v / matTotal))
+        : r.matRows;
+    }
+
+    articlesServ = r.servCount > 0 ? [{ id:'s'+(idSeq++), vente: servFinal.toFixed(2) }] : [];
+    articlesMat = matRowsFinal.map(v => ({ id:'m'+(idSeq++), achat:'', vente: v.toFixed(2), qte:'1', categorie:'autre' }));
+    if(articlesServ.length === 0) articlesServ.push({ id:'s'+(idSeq++), vente:'' });
+    if(articlesMat.length === 0) articlesMat.push({ id:'m'+(idSeq++), achat:'', vente:'', qte:'1', categorie:'autre' });
+    document.getElementById('clientName').value = r.client;
+    renderMat();
+    renderServ();
+
+    const computedTotal = servFinal + matRowsFinal.reduce((a,b)=>a+b, 0);
+    let msg = 'Importé : ' + (r.client||'client inconnu') + ' — ' + r.matCount + ' ligne(s) matériel, ' + r.servCount + ' ligne(s) service regroupée(s). Pense à choisir la catégorie de chaque ligne matériel et à saisir son achat.';
+    if(r.netAPayer !== null){
+      const ecart = Math.abs(computedTotal - r.netAPayer);
+      if(ecart > 0.02){
+        msg += ' ⚠️ Le total recalculé (' + computedTotal.toFixed(2) + ' €) ne correspond pas au "Net à payer" du PDF (' + r.netAPayer.toFixed(2) + ' €) : vérifie les montants à la main.';
+      } else {
+        msg += ' Total vérifié OK (' + computedTotal.toFixed(2) + ' €).';
+      }
+    }
+    statusEl.textContent = msg;
+  }catch(err){
+    statusEl.textContent = "Erreur de lecture du PDF (fichier abîmé, ou format inattendu) : " + err.message;
+  }
+};
+
+loadSettings();
+if(regime==='plein'){
+  document.getElementById('btnPlein').classList.add('active');
+  document.getElementById('btnAcre').classList.remove('active');
+}
+if(articlesMat.length === 0) articlesMat.push({ id:'m'+(idSeq++), achat:'', vente:'', qte:'1' });
+if(articlesServ.length === 0) articlesServ.push({ id:'s'+(idSeq++), vente:'' });
+renderMat();
+renderServ();
+renderFraisFixes();
+renderPrivateCustom();
+renderHistory();
+compute();
+
+if('serviceWorker' in navigator){
+  window.addEventListener('load', ()=>{
+    navigator.serviceWorker.register('sw.js').catch(()=>{});
+  });
+}
+</script>
+</body>
+</html>

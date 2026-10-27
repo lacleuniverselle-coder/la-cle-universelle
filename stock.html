@@ -1,0 +1,679 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Stock — La Clé Universelle</title>
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#4C3468">
+<link rel="icon" href="icon-192.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Stock">
+<meta name="robots" content="noindex, nofollow">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#EDEFEF; --surface:#FFFFFF; --line:#D8DBDB;
+  --ink:#1E2328; --ink-soft:#5B6266;
+  --violet:#4C3468; --violet-deep:#382450;
+  --steel:#43616B;
+  --net-pos:#2E6B4C; --net-bg:#E7F1EA;
+  --net-neg:#A23B3B; --net-neg-bg:#F4E6E6;
+  --danger:#A23B3B;
+  box-sizing:border-box;
+  padding-top:env(safe-area-inset-top,0px);
+  padding-bottom:env(safe-area-inset-bottom,0px);
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#181B1D; --surface:#22262A; --line:#33383C;
+    --ink:#EDEFEF; --ink-soft:#9AA3A7;
+    --net-bg:#1E2E24; --net-neg-bg:#2E1E1E;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#181B1D; --surface:#22262A; --line:#33383C;
+  --ink:#EDEFEF; --ink-soft:#9AA3A7;
+  --net-bg:#1E2E24; --net-neg-bg:#2E1E1E;
+}
+*{box-sizing:border-box;}
+html,body{height:100%;}
+html{scroll-padding-top:env(safe-area-inset-top,0px);}
+body{
+  margin:0; background:var(--bg); color:var(--ink);
+  font-family:'Inter',system-ui,-apple-system,sans-serif;
+  -webkit-font-smoothing:antialiased;
+}
+.wrap{max-width:640px; margin:0 auto; padding:20px 16px 40px;}
+h1{
+  font-family:'Fraunces',serif; font-weight:600; font-size:1.5rem;
+  margin:0 0 2px; letter-spacing:-0.01em;
+}
+.sub{color:var(--ink-soft); font-size:0.85rem; margin:0 0 16px;}
+h2.section-title{
+  font-family:'Fraunces',serif; font-weight:600; font-size:1rem;
+  margin:20px 0 3px; letter-spacing:-0.01em;
+}
+.section-sub{color:var(--ink-soft); font-size:0.76rem; margin:0 0 8px;}
+.panel{
+  background:var(--surface); border:1px solid var(--line); border-radius:10px;
+  padding:12px; margin-bottom:12px;
+}
+.panel h2{font-size:0.8rem; font-weight:600; margin:0 0 8px; color:var(--ink-soft); text-transform:none;}
+.back-link{
+  display:inline-block; font-size:0.78rem; color:var(--ink-soft); text-decoration:none;
+  border:1px solid var(--line); border-radius:7px; padding:6px 10px; background:var(--surface); font-weight:500;
+}
+.field{display:flex; flex-direction:column; gap:4px; flex:1; min-width:120px;}
+.field label{font-size:0.74rem; color:var(--ink-soft);}
+.field input, .field select{
+  border:1px solid var(--line); border-radius:7px; padding:7px 8px;
+  font-size:0.9rem; background:var(--bg); color:var(--ink); font-family:inherit;
+  font-variant-numeric:tabular-nums; width:100%;
+}
+.cat-table{width:100%; border-collapse:collapse; font-size:0.88rem;}
+.cat-table th{
+  text-align:left; padding:7px 6px; border-bottom:1px solid var(--line);
+  font-size:0.72rem; color:var(--ink-soft); font-weight:600; text-transform:uppercase;
+}
+.cat-table td{padding:7px 6px; border-bottom:1px solid var(--line);}
+.cat-table td:not(:first-child), .cat-table th:not(:first-child){text-align:right; font-variant-numeric:tabular-nums;}
+.cat-table tbody tr:last-child td{border-bottom:none;}
+.cat-table tfoot td{font-weight:600; border-top:1px solid var(--line); border-bottom:none; padding-top:9px;}
+.empty-state{text-align:center; padding:16px; color:var(--ink-soft); font-size:0.85rem;}
+
+.tool-add-row{display:flex; gap:8px; flex-wrap:wrap; align-items:flex-end; margin-bottom:12px;}
+.tool-add-row .field{min-width:100px;}
+.add-btn{
+  padding:8px 14px; background:var(--violet); color:#fff; border:none; border-radius:7px;
+  font-size:0.85rem; cursor:pointer; font-family:inherit; font-weight:500; white-space:nowrap;
+}
+.add-btn:hover{background:var(--violet-deep);}
+
+.manual-entry{
+  display:flex; justify-content:space-between; align-items:center; gap:8px;
+  padding:6px 2px; border-bottom:1px dashed var(--line); font-size:0.82rem;
+}
+.manual-entry:last-child{border-bottom:none;}
+.manual-entry .cat{color:var(--ink-soft);}
+.manual-entry .amt{font-variant-numeric:tabular-nums; font-weight:600;}
+.tool-card{
+  background:var(--bg); border:1px solid var(--line); border-radius:9px;
+  padding:10px 12px; margin-bottom:9px;
+}
+.tool-top{display:flex; justify-content:space-between; align-items:baseline; gap:8px; margin-bottom:2px;}
+.tool-name{font-weight:600; font-size:0.9rem;}
+.tool-meta{font-size:0.72rem; color:var(--ink-soft); margin-bottom:8px;}
+.tool-remove{background:none; border:none; color:var(--ink-soft); cursor:pointer; font-size:1rem; padding:0 4px;}
+.tool-remove:hover{color:var(--danger);}
+.progress-track{
+  width:100%; height:9px; border-radius:5px; background:var(--line); overflow:hidden; margin-bottom:5px;
+}
+.progress-fill{height:100%; background:var(--steel); border-radius:5px; transition:width 0.2s;}
+.progress-fill.done{background:var(--net-pos);}
+.tool-bottom{display:flex; justify-content:space-between; align-items:center; font-size:0.78rem; color:var(--ink-soft);}
+.tool-bottom b{color:var(--ink); font-variant-numeric:tabular-nums;}
+.badge-done{
+  display:inline-block; background:var(--net-bg); color:var(--net-pos); font-size:0.72rem;
+  font-weight:600; padding:2px 8px; border-radius:20px;
+}
+.note{font-size:0.72rem; color:var(--ink-soft); line-height:1.4; margin-top:4px;}
+footer{text-align:center; color:var(--ink-soft); font-size:0.75rem; margin-top:22px;}
+
+/* Écran de verrouillage (identique à la calculette) */
+#lockScreen{
+  position:fixed; inset:0; background:var(--bg); z-index:9999;
+  display:flex; align-items:center; justify-content:center; padding:20px;
+}
+#lockScreen.hidden{display:none;}
+.lock-box{
+  background:var(--surface); border:1px solid var(--line); border-radius:14px;
+  padding:28px 24px; max-width:300px; width:100%; text-align:center;
+}
+.lock-box h2{font-family:'Fraunces',serif; font-size:1.15rem; margin:0 0 4px;}
+.lock-box p{color:var(--ink-soft); font-size:0.8rem; margin:0 0 18px;}
+#lockInput{
+  width:100%; text-align:center; letter-spacing:0.5em; font-size:1.4rem;
+  border:1px solid var(--line); border-radius:9px; padding:10px 8px;
+  background:var(--bg); color:var(--ink); font-family:inherit;
+  font-variant-numeric:tabular-nums;
+}
+#lockError{color:var(--danger); font-size:0.78rem; margin-top:8px; min-height:1em;}
+#lockSubmit{
+  width:100%; margin-top:14px; padding:10px; border:none; border-radius:9px;
+  background:var(--violet); color:#fff; font-weight:600; font-size:0.9rem; cursor:pointer;
+}
+body.locked > .wrap{display:none;}
+
+.stock-summary{display:flex; gap:10px; margin-bottom:12px;}
+.stock-summary .box{flex:1; background:var(--surface); border:1px solid var(--line); border-radius:10px; padding:10px 12px;}
+.stock-summary .box span{display:block; font-size:0.72rem; color:var(--ink-soft);}
+.stock-summary .box b{font-size:1.25rem; font-variant-numeric:tabular-nums;}
+.stock-summary .box.warn{background:var(--net-neg-bg); border-color:var(--net-neg);}
+.stock-summary .box.warn b{color:var(--net-neg);}
+.stock-card{background:var(--surface); border:1px solid var(--line); border-radius:10px; padding:10px 12px; margin-bottom:9px;}
+.stock-card.low{border-color:#C98A2B; background:#FBF3E3;}
+.stock-card.neg{border-color:var(--net-neg); background:var(--net-neg-bg);}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]) .stock-card.low{background:#33291A;}
+}
+:root[data-theme="dark"] .stock-card.low{background:#33291A;}
+.stock-top{display:flex; justify-content:space-between; align-items:baseline; gap:8px; margin-bottom:8px;}
+.stock-name{font-weight:600; font-size:0.9rem;}
+.stock-flag{font-size:0.72rem; font-weight:600;}
+.stock-card.low .stock-flag{color:#8A5A10;}
+.stock-card.neg .stock-flag{color:var(--net-neg);}
+.stock-card.neg .qte-input{color:var(--net-neg); font-weight:600;}
+.stock-row{display:flex; gap:8px; flex-wrap:wrap; align-items:flex-end;}
+.stock-row .field{min-width:80px;}
+.add-btn{padding:7px 12px;}
+
+.imp-panel{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:12px;margin-bottom:12px;}
+.imp-panel h2{font-family:'Fraunces',serif;font-weight:600;font-size:1rem;margin:0 0 3px;}
+.imp-panel input[type=file]{font-size:0.82rem;margin:6px 0 4px;max-width:100%;}
+.imp-line{background:var(--bg);border:1px solid var(--line);border-radius:9px;padding:9px 10px;margin-bottom:8px;}
+.imp-desc{font-size:0.85rem;font-weight:600;display:flex;gap:8px;align-items:flex-start;margin-bottom:7px;}
+.imp-ref{font-weight:400;color:var(--ink-soft);font-size:0.72rem;display:block;}
+.imp-msg{font-size:0.78rem;margin:8px 0;padding:8px 10px;border-radius:8px;background:var(--net-neg-bg);color:var(--net-neg);}
+.imp-msg.ok{background:var(--net-bg);color:var(--net-pos);}
+.ghost-btn{padding:8px 14px;background:none;color:var(--ink-soft);border:1px solid var(--line);border-radius:7px;font-size:0.85rem;cursor:pointer;font-family:inherit;}
+.stock-pmp{font-size:0.74rem;color:var(--ink-soft);margin-top:7px;}
+.manual-entry{flex-wrap:wrap;}
+details.panel summary{cursor:pointer;font-size:0.9rem;margin-bottom:6px;}
+.jr{font-size:0.74rem;}
+#printJr{display:none;}
+@page{size:A4 landscape; margin:10mm;}
+@media print{
+  body.printing-jr > *:not(#printJr){display:none!important;}
+  body.printing-jr{background:#fff!important; color:#000!important;}
+  body.printing-jr #printJr{display:block!important; background:#fff; color:#000; font-family:Inter,Arial,sans-serif;}
+  #printJr h1{font-size:15pt; margin:0 0 2mm;}
+  #printJr .pj-sub{font-size:9pt; margin:0 0 4mm; color:#333;}
+  #printJr table{width:100%; border-collapse:collapse; font-size:8pt;}
+  #printJr th,#printJr td{border-bottom:0.3pt solid #999; padding:1.5mm 1.5mm; text-align:left; color:#000; background:#fff;}
+  #printJr th{border-bottom:0.8pt solid #000; font-weight:700;}
+  #printJr td:nth-child(n+7),#printJr th:nth-child(n+7){text-align:right; white-space:nowrap;}
+  #printJr thead{display:table-header-group;}
+  #printJr tr{page-break-inside:avoid;}
+  #printJr .pj-tot{margin-top:4mm; font-size:10pt; font-weight:700; text-align:right;}
+}
+.jr td,.jr th{white-space:nowrap;padding:5px 6px;text-align:left!important;}
+.jr td:nth-child(n+7),.jr th:nth-child(n+7){text-align:right!important;}
+</style>
+</head>
+<body class="locked">
+<div id="lockScreen">
+  <div class="lock-box">
+    <h2>Stock</h2>
+    <p>Connexion</p>
+    <input type="email" id="lockEmail" autocomplete="username" placeholder="E-mail">
+    <input type="password" id="lockPass" autocomplete="current-password" placeholder="Mot de passe">
+    <div id="lockError"></div>
+    <button id="lockSubmit">Se connecter</button>
+  </div>
+</div>
+<div class="wrap">
+  <h1>Stock</h1>
+  <p class="sub">La Clé Universelle — suivi par catégorie</p>
+  <div style="margin:-8px 0 14px;">
+    <a href="calculette.html" class="back-link">← Retour à la calculette</a>
+    <a href="treso.html" class="back-link" style="margin-left:6px;">🏦 Trésorerie</a>
+    <a href="compta.html" class="back-link" style="margin-left:6px;">📒 Compta</a>
+    <a href="bilan.html" class="back-link" style="margin-left:6px;">⚖️ Bilan</a>
+  </div>
+
+  <div class="stock-summary" id="stockSummary"></div>
+  <div class="imp-panel">
+    <h2>Importer des factures fournisseur</h2>
+    <p class="section-sub" style="margin:0;">Le PDF est lu sur cet appareil. Rien n'est enregistré avant « Valider ». Nécessite internet (lecteur PDF).</p>
+    <input type="file" id="impFile" accept="application/pdf" multiple>
+    <label class="note" style="display:flex;gap:6px;align-items:center;"><input type="checkbox" id="impHist" checked> Historique : ne modifie pas le stock</label>
+    <div id="impOut"></div>
+  </div>
+  <div class="imp-panel" id="echPanel"></div>
+  <p class="section-sub">Le stock baisse tout seul à l'enregistrement d'une facture (quantité de chaque ligne matériel, par catégorie). Tu peux aussi corriger la quantité à la main. Le seuil d'alerte met la catégorie en évidence quand la quantité lui est inférieure ou égale.</p>
+  <div id="stockList"></div>
+  <p class="note">Outillage, frais, hors activité et « Autre » ne sont pas suivis dans le stock.</p>
+  <details class="panel" id="cptPanel"><summary><b>Comptage physique</b></summary><div id="cptBody"></div></details>
+  <details class="panel"><summary><b>Journal d'achats</b></summary><div class="stock-row" style="margin:8px 0;"><button class="add-btn" id="jrPdf">Exporter en PDF</button></div><div id="jrBody"></div></details>
+
+  <footer>Données partagées avec la calculette et synchronisées entre vos appareils.</footer>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+<script src="sync.js"></script>
+<script>
+const BASE_CATEGORIES = [
+  { id:'poignees',    label:'Poignée' },
+  { id:'cylindre',    label:'Cylindre' },
+  { id:'multipoint',  label:'Serrure multipoint' },
+  { id:'monopoint',   label:'Serrure monopoint' },
+  { id:'cremone',     label:'Crémone' },
+  { id:'gacheverrou', label:'Gâche et verrou' }
+];
+// Catégories sans effet sur le stock
+const NOSTOCK = [{ id:'outillage', label:'Outillage' },{ id:'frais', label:'Frais' },{ id:'horsactivite', label:'Hors activité' }];
+const NOSTOCK_IDS = NOSTOCK.map(c=>c.id).concat('autre');
+function readSettings(){
+  try{ return JSON.parse(localStorage.getItem('devisCalcSettings')||'{}'); }catch(e){ return {}; }
+}
+function stockCategories(){ return BASE_CATEGORIES.concat(readSettings().customCategories || []); }
+function catLabel(id){
+  const c = stockCategories().concat(NOSTOCK).find(c=>c.id===id);
+  return c ? c.label : (id==='autre' ? 'Autre' : (id||'À classer'));
+}
+function loadStock(){ return readSettings().stock || {}; }
+function loadItems(){ return loadStock().items || {}; }
+// Relit les réglages juste avant d'écrire : ne touche qu'à la clé « stock »
+function saveStock(fn){
+  const s = readSettings(), st = s.stock || {};
+  fn(st); s.stock = st;
+  localStorage.setItem('devisCalcSettings', JSON.stringify(s));
+}
+function saveItem(id, patch){
+  saveStock(st=>{ const items = st.items || {}; items[id] = Object.assign({ qte:0, seuil:0 }, items[id] || {}, patch); st.items = items; });
+}
+function escapeHtml(s){
+  return String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+function num(v){ const n = parseFloat(String(v).replace(',','.')); return isNaN(n) ? 0 : n; }
+function round2(n){ return Math.round(n*100)/100; }
+function r4(n){ return Math.round(n*10000)/10000; }
+function fmtQ(n){ return round2(n).toLocaleString('fr-FR', {maximumFractionDigits:2}); }
+function fmtE(n){ return round2(n).toLocaleString('fr-FR',{minimumFractionDigits:2,maximumFractionDigits:2}) + ' €'; }
+function todayStr(){ return new Date().toISOString().slice(0,10); }
+function fmtD(d){ const m = /^(\d{4})-(\d{2})-(\d{2})$/.exec(d||''); return m ? m[3]+'/'+m[2]+'/'+m[1] : (d||'—'); }
+function tvaOf(l){ return l.tva==null ? 20 : num(l.tva); }
+
+// Anciennes catégories : Applique et Larder → Serrure monopoint (Crémone inchangée)
+function migrate(){
+  const st0 = loadStock();
+  if(st0.migV >= 2) return;
+  const M = { larder:'monopoint', applique:'monopoint' }, mapc = c=>M[c]||c;
+  saveStock(st=>{
+    const items = st.items || {};
+    Object.keys(M).forEach(o=>{
+      const a = items[o]; if(!a) return;
+      const t = items[M[o]] || { qte:0, seuil:0 };
+      const q1 = Math.max(0,num(t.qte)), q2 = Math.max(0,num(a.qte));
+      if(q1+q2 > 0){
+        t.pmpTtc = r4((q1*num(t.pmpTtc)+q2*num(a.pmpTtc))/(q1+q2));
+        t.pmpHt  = r4((q1*num(t.pmpHt) +q2*num(a.pmpHt)) /(q1+q2));
+      }
+      t.qte = round2(num(t.qte)+num(a.qte)); t.seuil = Math.max(num(t.seuil), num(a.seuil));
+      items[M[o]] = t; delete items[o];
+    });
+    Object.keys(st.refCat||{}).forEach(k=>{ st.refCat[k] = mapc(st.refCat[k]); });
+    (st.invoices||[]).forEach(f=>(f.lignes||[]).forEach(l=>{ l.cat = mapc(l.cat); }));
+    st.items = items; st.migV = 2;
+    if(!st.depart) st.depart = { date:'2026-07-01', valeur:0 };   // stock au 01/07/2026 : zéro matériel
+  });
+}
+
+function stateOf(it){
+  const q = num(it.qte), seuil = num(it.seuil);
+  if(q < 0) return 'neg';
+  if(seuil > 0 && q <= seuil) return 'low';
+  return 'ok';
+}
+function flagText(st){ return st==='neg' ? 'Stock négatif' : (st==='low' ? 'Sous le seuil' : ''); }
+
+function renderSummary(){
+  const items = loadItems();
+  let total = 0, alerts = 0, valeur = 0;
+  stockCategories().forEach(c=>{
+    const it = items[c.id] || {qte:0, seuil:0};
+    total += num(it.qte); valeur += Math.max(0, num(it.qte)) * num(it.pmpTtc);
+    if(stateOf(it) !== 'ok') alerts++;
+  });
+  document.getElementById('stockSummary').innerHTML =
+    '<div class="box"><span>Pièces en stock</span><b>' + fmtQ(total) + '</b></div>' +
+    '<div class="box"><span>Valeur (TTC)</span><b>' + fmtE(valeur) + '</b></div>' +
+    '<div class="box' + (alerts ? ' warn' : '') + '"><span>Catégories en alerte</span><b>' + alerts + '</b></div>';
+}
+
+function pmpText(it){
+  const t = num(it.pmpTtc);
+  if(!(t > 0)) return 'Prix moyen d\u2019achat : — (aucun achat importé)';
+  return 'Prix moyen d\u2019achat : ' + fmtE(t) + ' TTC (' + fmtE(num(it.pmpHt)) + ' HT) · valeur ' + fmtE(Math.max(0,num(it.qte))*t) + ' TTC';
+}
+
+function renderList(){
+  const items = loadItems();
+  document.getElementById('stockList').innerHTML = stockCategories().map(c=>{
+    const it = items[c.id] || {qte:0, seuil:0};
+    const st = stateOf(it);
+    return `<div class="stock-card ${st==='ok'?'':st}" id="card-${c.id}">
+      <div class="stock-top"><span class="stock-name">${escapeHtml(c.label)}</span><span class="stock-flag" id="flag-${c.id}">${flagText(st)}</span></div>
+      <div class="stock-row">
+        <div class="field"><label>En stock</label><input type="number" inputmode="decimal" step="any" class="qte-input" data-qte="${c.id}" value="${num(it.qte)}"></div>
+        <div class="field"><label>Seuil d'alerte</label><input type="number" inputmode="decimal" min="0" step="any" data-seuil="${c.id}" value="${num(it.seuil)}"></div>
+        <div class="field"><label>Réappro (+)</label><input type="number" inputmode="decimal" min="0" step="any" id="add-${c.id}" placeholder="0"></div>
+        <button class="add-btn" data-add="${c.id}">Ajouter</button>
+      </div>
+      <div class="stock-pmp" id="pmp-${c.id}">${pmpText(it)}</div>
+    </div>`;
+  }).join('');
+  const refresh = id=>{
+    const it = loadItems()[id] || {qte:0, seuil:0};
+    const st = stateOf(it);
+    document.getElementById('card-'+id).className = 'stock-card' + (st==='ok' ? '' : ' '+st);
+    document.getElementById('flag-'+id).textContent = flagText(st);
+    document.getElementById('pmp-'+id).textContent = pmpText(it);
+    renderSummary();
+  };
+  document.querySelectorAll('[data-qte]').forEach(inp=>{
+    inp.onchange = ()=>{ saveItem(inp.dataset.qte, { qte: round2(num(inp.value)) }); refresh(inp.dataset.qte); };
+  });
+  document.querySelectorAll('[data-seuil]').forEach(inp=>{
+    inp.onchange = ()=>{ saveItem(inp.dataset.seuil, { seuil: Math.max(0, round2(num(inp.value))) }); refresh(inp.dataset.seuil); };
+  });
+  document.querySelectorAll('[data-add]').forEach(btn=>{
+    btn.onclick = ()=>{
+      const id = btn.dataset.add, add = num(document.getElementById('add-'+id).value);
+      if(add <= 0) return;
+      const n = round2(num((loadItems()[id]||{}).qte) + add);
+      saveItem(id, { qte: n });
+      document.getElementById('add-'+id).value = '';
+      document.querySelector('[data-qte="'+id+'"]').value = n;
+      refresh(id);
+    };
+  });
+}
+
+// Comptage physique
+function renderCpt(){
+  const items = loadItems(), last = loadStock().comptage;
+  document.getElementById('cptBody').innerHTML =
+    `<p class="section-sub">Stock au 01/07/2026 : 0 (aucun matériel au départ). Le comptage remplace les quantités en stock.${last ? ' Dernier comptage : '+fmtD(last.date)+'.' : ''}</p>
+    <div class="stock-row"><div class="field"><label>Date du comptage</label><input type="date" id="cptD" value="${todayStr()}"></div></div>
+    <div class="stock-row" style="margin-top:8px;">` +
+    stockCategories().map(c=>`<div class="field"><label>${escapeHtml(c.label)}</label><input type="number" inputmode="decimal" min="0" step="any" data-cpt="${c.id}" value="${num((items[c.id]||{}).qte)}"></div>`).join('') +
+    `</div><div class="stock-row" style="margin-top:8px;"><button class="add-btn" id="cptOk">Enregistrer le comptage</button></div>`;
+  document.getElementById('cptOk').onclick = ()=>{
+    const q = {};
+    document.querySelectorAll('[data-cpt]').forEach(i=>{ q[i.dataset.cpt] = Math.max(0, round2(num(i.value))); });
+    const date = document.getElementById('cptD').value || todayStr();
+    saveStock(st=>{
+      const items = st.items || {};
+      Object.keys(q).forEach(id=>{ items[id] = Object.assign({qte:0,seuil:0}, items[id]||{}, { qte:q[id] }); });
+      st.items = items; st.comptage = { date, qtes:q };
+    });
+    renderSummary(); renderList(); renderCpt();
+  };
+}
+
+// Échéances fournisseurs
+function renderEch(){
+  const invs = (loadStock().invoices||[]).map((f,i)=>({f,i})).filter(x=>x.f.echeance && !x.f.payee).sort((a,b)=>a.f.echeance.localeCompare(b.f.echeance));
+  const today = todayStr(); let tot = 0;
+  const rows = invs.map(({f,i})=>{
+    tot += num(f.totalTtc);
+    const late = f.echeance < today;
+    return `<div class="manual-entry"><span>${fmtD(f.echeance)} · ${escapeHtml(f.fournisseur)} ${escapeHtml(f.num)}${late ? ' · <b style="color:var(--net-neg)">en retard</b>' : ''}</span><span class="amt">${fmtE(f.totalTtc)}</span><button class="add-btn" data-pay="${i}">Marquer comme payée</button></div>`;
+  }).join('');
+  document.getElementById('echPanel').innerHTML = '<h2>Échéances fournisseurs</h2>' +
+    (rows ? rows + '<p class="note">Reste à payer : <b>' + fmtE(tot) + '</b> TTC (' + invs.length + ' facture' + (invs.length>1?'s':'') + ').</p>' : '<p class="note">Aucune facture à payer.</p>');
+  document.querySelectorAll('[data-pay]').forEach(b=>{
+    b.onclick = ()=>{
+      saveStock(st=>{ const f = st.invoices[+b.dataset.pay]; f.payee = true; f.payeeLe = todayStr(); });
+      renderEch();
+    };
+  });
+}
+
+// Journal d'achats (une ligne par article, frais compris)
+function journalRows(){
+  const rows = [];
+  (loadStock().invoices||[]).forEach(f=>(f.lignes||[]).forEach(l=>rows.push({ d:f.date||'', f:f.fournisseur, n:f.num, l })));
+  rows.sort((a,b)=>b.d.localeCompare(a.d));
+  return rows;
+}
+function journalTable(rows, withTotal){
+  let tot = 0;
+  const body = rows.map(r=>{
+    const l = r.l, t = l.qte*l.puHt*(1+tvaOf(l)/100); tot += t;
+    return `<tr><td>${fmtD(r.d)}</td><td>${escapeHtml(r.f)}</td><td>${escapeHtml(r.n)}</td><td>${escapeHtml(l.ref)}</td><td>${escapeHtml(l.desc)}</td><td>${escapeHtml(catLabel(l.cat))}</td><td>${fmtQ(l.qte)}</td><td>${fmtE(l.puHt)}</td><td>${fmtQ(tvaOf(l))} %</td><td>${fmtE(t)}</td></tr>`;
+  }).join('');
+  const head = '<thead><tr><th>Date</th><th>Fournisseur</th><th>N°</th><th>Réf.</th><th>Désignation</th><th>Catégorie</th><th>Qté</th><th>PU HT</th><th>TVA</th><th>TTC</th></tr></thead>';
+  return { tot, html: `<table class="cat-table jr">${head}<tbody>${body}</tbody></table>` };
+}
+function renderJournal(){
+  const rows = journalRows();
+  const t = journalTable(rows);
+  const btn = document.getElementById('jrPdf'); if(btn) btn.disabled = !rows.length;
+  document.getElementById('jrBody').innerHTML = rows.length
+    ? `<div style="overflow-x:auto;">${t.html}</div><p class="note">${rows.length} ligne(s) · total ${fmtE(t.tot)} TTC (outillage et frais inclus).</p>`
+    : '<div class="empty-state">Aucun achat enregistré.</div>';
+}
+// Export PDF : vue d'impression dédiée (Enregistrer au format PDF dans la boîte de dialogue)
+function exportJournalPdf(){
+  const rows = journalRows();
+  if(!rows.length) return;
+  const t = journalTable(rows);
+  let box = document.getElementById('printJr');
+  if(!box){ box = document.createElement('div'); box.id = 'printJr'; document.body.appendChild(box); }
+  const d = rows[rows.length-1].d, f = rows[0].d;
+  box.innerHTML = `<h1>Journal d\u2019achats — La Clé Universelle</h1><p class="pj-sub">Du ${fmtD(d)} au ${fmtD(f)} · ${rows.length} ligne(s) · exporté le ${fmtD(todayStr())}</p>${t.html.replace(' class="cat-table jr"','')}<div class="pj-tot">Total : ${fmtE(t.tot)} TTC (outillage et frais inclus)</div>`;
+  const clean = ()=>{ document.body.classList.remove('printing-jr'); box.innerHTML=''; window.removeEventListener('afterprint', clean); };
+  window.addEventListener('afterprint', clean);
+  document.body.classList.add('printing-jr');
+  setTimeout(()=>window.print(), 50);
+}
+document.getElementById('jrPdf').addEventListener('click', exportJournalPdf);
+
+// PARSE-BEGIN
+function norm(s){ return String(s).normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase(); }
+function parseNum(s){ const n = parseFloat(String(s).replace(/\s/g,'').replace(',','.')); return isNaN(n) ? NaN : n; }
+const NUM_RE = /^-?\d+(?:[ \u00a0]\d{3})*(?:[.,]\d+)?$/;
+function groupRows(items){
+  const rows = [];
+  items.filter(i=>i.str.trim()).sort((a,b)=> b.y-a.y || a.x-b.x).forEach(it=>{
+    const r = rows.find(r=>Math.abs(r.y-it.y) <= 3);
+    if(r) r.items.push(it); else rows.push({ y:it.y, items:[it] });
+  });
+  rows.forEach(r=>r.items.sort((a,b)=>a.x-b.x));
+  return rows;
+}
+// pages : tableau (une entrée par page) de listes {str,x,y}
+function parseInvoice(pages){
+  const out = { fournisseur:'', num:'', date:'', echeance:'', totalHt:null, totalTtc:null, montantHt:null, ttcPdf:0, ff:0, ffTva:20, lignes:[], somme:0 };
+  const all = [];
+  pages.forEach(items=>{
+    groupRows(items).forEach(r=>{
+      const its = r.items.map(i=>i.str.trim()).filter(s=>s && s!=='Externe');
+      const txt = its.join(' '); all.push(txt);
+      let m;
+      if(!out.num && (m = txt.match(/FACTURE\s+n°\s*([A-Z0-9\-\/]+)/i))) out.num = m[1];
+      if(!out.date && (m = txt.match(/Date[\s.]*:\s*(\d{2})\/(\d{2})\/(\d{4})/))) out.date = m[3]+'-'+m[2]+'-'+m[1];
+      if(!out.echeance && (m = txt.match(/ch.{1,2}ance\D*(\d{2})\/(\d{2})\/(\d{4})/i))) out.echeance = m[3]+'-'+m[2]+'-'+m[1];
+      const lastNum = ()=>{ for(let k=its.length-1;k>=0;k--) if(NUM_RE.test(its[k])) return parseNum(its[k]); return null; };
+      if(out.totalHt===null && /TOTAL\s*HT\s*\.{2,}/i.test(txt)) out.totalHt = lastNum();
+      if(out.totalTtc===null && /TOTAL\s*TTC\s*\.{2,}/i.test(txt)) out.totalTtc = lastNum();
+      // Ligne de totaux : EUR, Montant HT, Ecotaxe, FT, Port, FF, % TVA, Mt TVA, Total TTC
+      if(its[0]==='EUR'){
+        const n = its.slice(1).filter(s=>NUM_RE.test(s)).map(parseNum);
+        if(n.length >= 8){ out.montantHt = n[0]; out.ff = n[4]; out.ffTva = n[5]; out.ttcPdf = n[7]; }
+      }
+      // Ligne article : réf. + désignation, puis ≥ 6 nombres (qté fact., prix public, remise, PU HT, montant net, TVA)
+      const nums = []; let first = -1;
+      its.forEach((s,k)=>{ if(k>=1 && NUM_RE.test(s)){ nums.push(parseNum(s)); if(first<0) first = k; } });
+      if(nums.length >= 6 && first >= 2 && /^[A-Za-z0-9][A-Za-z0-9\-.\/]*$/.test(its[0])){
+        let d = its.slice(1, first); if(d.length>1 && /^[A-Za-z]{1,4}$/.test(d[d.length-1])) d = d.slice(0,-1);
+        const n = nums.length;
+        const l = { ref:its[0], desc:d.join(' ').replace(/\s*0,00\s*\+\s*0,00\s*$/,'').trim(), qte:nums[n-6], puHt:nums[n-3], tva:nums[n-1], montant:nums[n-2] };
+        l.warn = Math.abs(l.qte*l.puHt - l.montant) > 0.05;
+        if(l.qte > 0 && l.desc){ out.lignes.push(l); out.somme += l.montant; }
+      }
+    });
+  });
+  out.somme = Math.round(out.somme*100)/100;
+  if(/AU FORUM DU BATIMENT|AFDB/i.test(all.join(' '))) out.fournisseur = 'AFDB';
+  if(out.lignes.length && out.ff > 0) out.lignes.push({ ref:'FF', desc:'Frais de facturation (FF)', qte:1, puHt:out.ff, tva:out.ffTva||20, montant:out.ff, frais:true });
+  return out;
+}
+// Ordre = priorité (le premier mot trouvé gagne). « $ » = mot entier ; sinon début de mot.
+const KW = [
+  ['outillage',   ['fraise','gant','huile','pate$']],
+  ['multipoint',  ['multipoint','3pts$','tringle']],
+  ['gacheverrou', ['gache','verrou']],
+  ['cremone',     ['cremone']],
+  ['monopoint',   ['monopoint','larder','coffre','cof$','encast']],
+  ['poignees',    ['poignee','bequille','ens$']],
+  ['cylindre',    ['cylindre','cyl$','barillet']]
+];
+function guessCat(desc){
+  const d = norm(desc);
+  for(const [id,ws] of KW) if(ws.some(w=>new RegExp('(^|[^a-z0-9])'+w.replace('$','(?![a-z0-9])')).test(d))) return id;
+  return '';
+}
+// PARSE-END
+
+async function readPdf(buf){
+  const pdf = await pdfjsLib.getDocument({data:buf}).promise, pages = [];
+  for(let p=1;p<=pdf.numPages;p++){
+    const c = await (await pdf.getPage(p)).getTextContent();
+    pages.push(c.items.map(i=>({ str:i.str, x:i.transform[4], y:i.transform[5] })));
+  }
+  return pages;
+}
+let IMP = null, QUEUE = [];
+function catFor(l){
+  if(l.frais) return 'frais';
+  const m = (loadStock().refCat) || {};
+  const k = (IMP.fournisseur+'|'+l.ref).toLowerCase();
+  if(m[k] && (stockCategories().concat(NOSTOCK).some(c=>c.id===m[k]) || m[k]==='autre')) return m[k];
+  return guessCat(l.desc);
+}
+function nextImp(pre){
+  pre = pre || '';
+  for(;;){
+    IMP = QUEUE.shift() || null;
+    if(!IMP || IMP.lignes.length) break;
+    pre += '<div class="imp-msg">Aucune ligne article détectée dans « ' + escapeHtml(IMP.nom) + ' ». Ignoré, rien n\u2019a été modifié.</div>';
+  }
+  document.getElementById('impOut').innerHTML = pre;
+  if(IMP) showImp();
+}
+function showImp(){
+  const out = document.getElementById('impOut');
+  const opts = sel => '<option value="">À classer — choisir</option>' +
+    stockCategories().concat(NOSTOCK).map(c=>`<option value="${c.id}"${c.id===sel?' selected':''}>${escapeHtml(c.label)}</option>`).join('') +
+    `<option value="autre"${sel==='autre'?' selected':''}>Autre (non suivi)</option>`;
+  const base = IMP.montantHt!==null ? IMP.montantHt : (IMP.totalHt!==null ? IMP.totalHt - IMP.ff : null);
+  const ecart = base!==null && Math.abs(IMP.somme - base) > 0.05;
+  const ctrl = base===null ? '' : (ecart
+    ? `<div class="imp-msg">Somme des lignes (${fmtE(IMP.somme)}) ≠ montant HT de la facture (${fmtE(base)}) : ligne non lue ? Vérifie avant de valider.</div>`
+    : `<div class="imp-msg ok">Contrôle OK : la somme des lignes égale le montant HT (${fmtE(base)})${IMP.ff>0 ? ', plus ' + fmtE(IMP.ff) + ' de frais (FF)' : ''}.</div>`);
+  out.insertAdjacentHTML('beforeend', `<p class="note"><b>${escapeHtml(IMP.nom)}</b>${QUEUE.length ? ' — ' + QUEUE.length + ' autre(s) PDF en attente' : ''}</p>
+    <div class="stock-row" style="margin-top:8px;">
+      <div class="field"><label>Fournisseur</label><input type="text" id="impF" value="${escapeHtml(IMP.fournisseur)}"></div>
+      <div class="field"><label>N° de facture</label><input type="text" id="impN" value="${escapeHtml(IMP.num)}"></div>
+      <div class="field"><label>Date</label><input type="date" id="impD" value="${IMP.date}"></div>
+      <div class="field"><label>Échéance</label><input type="date" id="impE" value="${IMP.echeance}"></div></div>` + ctrl +
+    IMP.lignes.map((l,i)=>`<div class="imp-line"><label class="imp-desc"><input type="checkbox" id="ik${i}" checked><span>${escapeHtml(l.desc)}<span class="imp-ref">Réf. ${escapeHtml(l.ref)}${l.warn?' · ⚠ montant ≠ qté × prix':''}</span></span></label>
+      <div class="stock-row">
+        <div class="field" style="flex:2;min-width:140px;"><label>Catégorie</label><select id="ic${i}">${opts(catFor(l))}</select></div>
+        <div class="field"><label>Qté</label><input type="number" inputmode="decimal" step="any" min="0" id="iq${i}" value="${l.qte}"></div>
+        <div class="field"><label>PU HT</label><input type="number" inputmode="decimal" step="any" min="0" id="ip${i}" value="${l.puHt}"></div>
+        <div class="field"><label>TVA %</label><input type="number" inputmode="decimal" step="any" min="0" id="it${i}" value="${l.tva}"></div>
+      </div></div>`).join('') +
+    '<div class="imp-msg" id="impErr" style="display:none;"></div>' +
+    '<div class="stock-row" style="margin-top:6px;"><button class="add-btn" id="impOk">Valider l\u2019import</button><button class="ghost-btn" id="impSkip">Ignorer celle-ci</button><button class="ghost-btn" id="impCancel">Tout annuler</button></div>');
+  document.getElementById('impOk').onclick = commitImport;
+  document.getElementById('impSkip').onclick = ()=>nextImp();
+  document.getElementById('impCancel').onclick = ()=>{ QUEUE = []; IMP = null; out.innerHTML = ''; };
+}
+// PMP recalculé sur tout le journal (utilisé en mode historique)
+function recomputePmp(items, invs){
+  const agg = {};
+  invs.forEach(f=>(f.lignes||[]).forEach(l=>{
+    if(!l.cat || NOSTOCK_IDS.includes(l.cat)) return;
+    const a = agg[l.cat] || (agg[l.cat] = { q:0, ht:0, ttc:0 });
+    a.q += l.qte; a.ht += l.qte*l.puHt; a.ttc += l.qte*l.puHt*(1+tvaOf(l)/100);
+  }));
+  Object.keys(agg).forEach(c=>{
+    if(!(agg[c].q > 0)) return;
+    const it = items[c] || { qte:0, seuil:0 };
+    it.pmpHt = r4(agg[c].ht/agg[c].q); it.pmpTtc = r4(agg[c].ttc/agg[c].q);
+    items[c] = it;
+  });
+}
+function commitImport(){
+  const g = id=>document.getElementById(id);
+  const err = t=>{ const e = g('impErr'); e.textContent = t; e.style.display = 'block'; };
+  const fourn = g('impF').value.trim(), numF = g('impN').value.trim(), date = g('impD').value, ech = g('impE').value, hist = g('impHist').checked;
+  if(!fourn || !numF) return err('Renseigne le fournisseur et le numéro de facture.');
+  const s = readSettings(), stock = s.stock || {}, items = stock.items || {}, invs = stock.invoices || [], refCat = stock.refCat || {};
+  if(invs.some(f=>String(f.fournisseur).toLowerCase()===fourn.toLowerCase() && f.num===numF)) return err('Facture déjà importée (' + fourn + ' n° ' + numF + '). Rien n\u2019a été modifié.');
+  const L = [], missing = [];
+  for(let i=0;i<IMP.lignes.length;i++){
+    if(!g('ik'+i).checked) continue;
+    const l = IMP.lignes[i], cat = g('ic'+i).value;
+    const q = num(g('iq'+i).value), pu = num(g('ip'+i).value), tva = num(g('it'+i).value);
+    if(!cat){ missing.push(l.desc); continue; }
+    if(!(q > 0) || !(pu >= 0)) return err('Quantité ou prix invalide pour : ' + l.desc);
+    L.push({ ref:l.ref, desc:l.desc, cat, qte:q, puHt:pu, tva });
+  }
+  if(missing.length) return err('Choisis une catégorie pour : ' + missing.join(', '));
+  if(!L.length) return err('Aucune ligne sélectionnée.');
+  let ttc = 0;
+  L.forEach(l=>{
+    refCat[(fourn+'|'+l.ref).toLowerCase()] = l.cat;
+    ttc += l.qte * l.puHt * (1 + l.tva/100);
+    if(hist || NOSTOCK_IDS.includes(l.cat)) return;      // historique ou hors stock : le stock ne bouge pas
+    const it = items[l.cat] || { qte:0, seuil:0 };
+    const oldQ = Math.max(0, num(it.qte)), pTtc = l.puHt * (1 + l.tva/100);
+    it.pmpTtc = r4((oldQ*num(it.pmpTtc) + l.qte*pTtc) / (oldQ + l.qte));
+    it.pmpHt  = r4((oldQ*num(it.pmpHt)  + l.qte*l.puHt) / (oldQ + l.qte));
+    it.qte = round2(num(it.qte) + l.qte);
+    items[l.cat] = it;
+  });
+  const total = (IMP.ttcPdf > 0 && L.length === IMP.lignes.length) ? IMP.ttcPdf : round2(ttc);
+  invs.push({ fournisseur:fourn, num:numF, date, echeance:ech, payee:false, historique:hist, totalTtc:total, lignes:L });
+  if(hist) recomputePmp(items, invs);
+  stock.items = items; stock.invoices = invs; stock.refCat = refCat; s.stock = stock;
+  localStorage.setItem('devisCalcSettings', JSON.stringify(s));
+  nextImp('<div class="imp-msg ok">Facture ' + escapeHtml(numF) + ' enregistrée (' + fmtE(total) + ' TTC)' + (hist ? ' en historique : stock inchangé.' : ' : stock mis à jour.') + '</div>');
+  renderAll();
+}
+function bindImport(){
+  const inp = document.getElementById('impFile');
+  inp.onchange = async ()=>{
+    const fs = Array.from(inp.files); if(!fs.length) return;
+    const out = document.getElementById('impOut');
+    if(!window.pdfjsLib){ out.innerHTML = '<div class="imp-msg">Lecteur PDF indisponible : connexion internet requise.</div>'; inp.value = ''; return; }
+    out.innerHTML = '<p class="note">Lecture de ' + fs.length + ' PDF…</p>';
+    pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+    QUEUE = [];
+    for(const f of fs){
+      try{ const p = parseInvoice(await readPdf(await f.arrayBuffer())); p.nom = f.name; QUEUE.push(p); }
+      catch(e){ QUEUE.push({ nom:f.name, lignes:[] }); }
+    }
+    inp.value = '';
+    nextImp();
+  };
+}
+
+function renderAll(){ renderSummary(); renderList(); renderEch(); renderJournal(); }
+function init(){
+  migrate();
+  renderAll();
+  renderCpt();
+  document.getElementById('cptPanel').ontoggle = renderCpt;
+  bindImport();
+}
+Sync.boot(function(){ init(); });
+
+if('serviceWorker' in navigator){
+  window.addEventListener('load', ()=>{
+    navigator.serviceWorker.register('sw.js').catch(()=>{});
+  });
+}
+</script>
+
+</body>
+</html>
