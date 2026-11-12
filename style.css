@@ -4011,3 +4011,28 @@ html { scroll-padding-top: 5rem; }
 .prest-card-list li { position: relative; padding: .12rem 0 .12rem 1.1rem; font-size: inherit; line-height: 1.4; }
 .prest-card-list li::before { content: "✓"; position: absolute; left: 0; color: var(--lilas); font-weight: 800; }
 .prestations-main-col .prest-card .prest-card-link { margin-top: .25rem; font-weight: 700; color: var(--violet); text-decoration: underline; text-underline-offset: 3px; }
+
+/* ===================================================================
+   PAGES DE ZONE (serrurier-*.html) + pastilles de zones (zones.html)
+   =================================================================== */
+section.zone-sec { background: var(--blanc); padding: 1.5rem 2.5rem 2rem; }
+section.zone-sec--intro { padding: 2rem 2.5rem 1.5rem; }
+section.zone-sec--violet { background: var(--violet); padding: 2rem 2.5rem; }
+
+.zone-h1 { margin-bottom: .6rem; font-size: 1.6rem; color: var(--violet); font-weight: 800; }
+.zone-h2 { margin: 1.8rem 0 .5rem; font-size: 1.1rem; color: var(--violet); font-weight: 700; }
+.zone-h2--light { color: var(--blanc); text-align: center; margin: 0 0 .2rem; }
+.zone-p { font-size: .92rem; color: var(--gris); line-height: 1.75; max-width: 640px; margin-bottom: .8rem; }
+.zone-list { font-size: .92rem; color: var(--gris); line-height: 1.9; max-width: 640px; padding-left: 1.4rem; margin-bottom: .8rem; }
+.zone-link { color: var(--violet); text-decoration: underline; }
+
+.zone-pills { margin: .8rem 0 0; }
+.zone-pill { display: inline-block; background: var(--lilas-pale); color: var(--violet); border: 1px solid var(--lilas-clair); padding: .3rem .8rem; border-radius: 6px; font-size: .8rem; font-weight: 600; margin: .25rem .25rem 0 0; text-decoration: none; }
+a.zone-pill:hover { background: var(--lilas-clair); }
+
+.zone-split { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 1.6rem; align-items: center; margin-top: 1.8rem; }
+.zone-split .zone-h2 { margin-top: 0; }
+.zone-split .zone-p { margin: 0; max-width: none; }
+.zone-photo { width: 100%; height: auto; border-radius: 12px; box-shadow: 0 2px 12px rgba(47, 26, 72, .15); }
+.zone-ico { width: 28px; height: 28px; object-fit: contain; margin-right: .5rem; flex: none; }
+.zone-cta-row { margin-top: 1.6rem; }

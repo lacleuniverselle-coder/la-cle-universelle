@@ -109,7 +109,16 @@
           <li><a href="tarifs.html">Tarifs</a></li>
         </ul>
       </li>
-      <li><a href="zones.html">Zones</a></li>
+      <li class="nav-dropdown">
+        <a href="zones.html" class="nav-dropdown-toggle" role="button" aria-haspopup="true">Zones <span class="nav-dropdown-arrow">▾</span></a>
+        <ul class="nav-dropdown-menu">
+          <li><a href="serrurier-l-union.html">L'Union</a></li>
+          <li><a href="serrurier-toulouse-centre.html">Toulouse Centre</a></li>
+          <li><a href="serrurier-minimes.html">Minimes</a></li>
+          <li><a href="serrurier-borderouge.html">Borderouge</a></li>
+          <li><a href="serrurier-balma.html">Balma</a></li>
+        </ul>
+      </li>
       <li><a href="index.html#concept">Le concept</a></li>
       <li><a href="pourquoi.html">Pourquoi moi</a></li>
       <li><a href="index.html#apropos">À propos</a></li>
@@ -138,7 +147,21 @@
           <a href="tarifs.html" onclick="closeMenu()">Tarifs</a>
         </div>
       </div>
-      <a href="zones.html" onclick="closeMenu()">Zones</a>
+      <div class="mobile-accordion">
+        <div class="mobile-accordion-row">
+          <a href="zones.html" class="mobile-accordion-link" onclick="closeMenu()">Zones</a>
+          <button class="mobile-accordion-toggle" aria-label="Sous-menu Zones" onclick="toggleMobileAccordion(this)" type="button">
+            <span class="accordion-arrow">▾</span>
+          </button>
+        </div>
+        <div class="mobile-accordion-panel">
+          <a href="serrurier-l-union.html" onclick="closeMenu()">L'Union</a>
+          <a href="serrurier-toulouse-centre.html" onclick="closeMenu()">Toulouse Centre</a>
+          <a href="serrurier-minimes.html" onclick="closeMenu()">Minimes</a>
+          <a href="serrurier-borderouge.html" onclick="closeMenu()">Borderouge</a>
+          <a href="serrurier-balma.html" onclick="closeMenu()">Balma</a>
+        </div>
+      </div>
       <a href="index.html#concept" onclick="closeMenu()">Le concept</a>
       <a href="pourquoi.html" onclick="closeMenu()">Pourquoi moi</a>
       <a href="index.html#apropos" onclick="closeMenu()">À propos</a>
@@ -161,27 +184,36 @@
           Toutes mes interventions se font à domicile, à vélo cargo. Ce mode de déplacement me permet de circuler rapidement dans les rues étroites du centre-ville comme dans les quartiers résidentiels, avec un délai d'intervention d'environ 30 minutes sur l'ensemble de ces secteurs.
         </p>
 
+        <span class="section-label">Ma zone en un clic</span>
+        <div class="zone-pills" style="margin-bottom:1.8rem;">
+          <a class="zone-pill" href="serrurier-l-union.html">L'Union</a>
+          <a class="zone-pill" href="serrurier-toulouse-centre.html">Toulouse Centre</a>
+          <a class="zone-pill" href="serrurier-minimes.html">Minimes</a>
+          <a class="zone-pill" href="serrurier-borderouge.html">Borderouge</a>
+          <a class="zone-pill" href="serrurier-balma.html">Balma</a>
+        </div>
+
         <div style="display:grid; grid-template-columns:1fr 1.4fr; gap:2rem; align-items:start;">
           <div>
             <h2 style="margin:0 0 0.4rem; line-height:1.4; font-family:inherit; font-size:0.72rem; font-weight:700; text-transform:uppercase; letter-spacing:2px; color:var(--violet); margin-bottom:0.4rem;">Toulouse Nord *</h2>
-            <p style="font-size:0.82rem; color:var(--gris); line-height:1.7; margin-bottom:0.4rem;">Serrurerie à domicile à Croix-Daurade, Borderouge, Minimes et à L'Union : ouverture de porte, changement de cylindre, installation de serrures.</p>
+            <p style="font-size:0.82rem; color:var(--gris); line-height:1.7; margin-bottom:0.4rem;">Serrurerie à domicile à Croix-Daurade, <a class="zone-link" href="serrurier-borderouge.html">Borderouge</a>, <a class="zone-link" href="serrurier-minimes.html">Minimes</a> et à <a class="zone-link" href="serrurier-l-union.html">L'Union</a> : ouverture de porte, changement de cylindre, installation de serrures.</p>
             <p style="font-size:0.82rem; color:var(--gris); line-height:2;">Minimes – Barrière de Paris &nbsp;·&nbsp;
               Sept Deniers – Ginestous &nbsp;·&nbsp; Lalande – Grand Selve &nbsp;·&nbsp; Izards – Borderouge – Croix
               Daurade</p>
             <p style="font-size:0.78rem; color:var(--violet); font-style:italic; font-weight:700; margin-bottom:1rem;">*
-              L'Union</p>
+              <a class="zone-link" href="serrurier-l-union.html">L'Union</a></p>
             <h2 style="margin:0 0 0.4rem; line-height:1.4; font-family:inherit; font-size:0.72rem; font-weight:700; text-transform:uppercase; letter-spacing:2px; color:var(--violet); margin-bottom:0.4rem;">Toulouse Centre *</h2>
-            <p style="font-size:0.82rem; color:var(--gris); line-height:1.7; margin-bottom:0.4rem;">Serrurerie à domicile au Capitole, à Saint-Aubin, Matabiau et Purpan : dépannage urgent, ouverture de porte claquée ou bloquée.</p>
+            <p style="font-size:0.82rem; color:var(--gris); line-height:1.7; margin-bottom:0.4rem;">Serrurerie à domicile au <a class="zone-link" href="serrurier-toulouse-centre.html">Capitole</a>, à Saint-Aubin, Matabiau et Purpan : dépannage urgent, ouverture de porte claquée ou bloquée.</p>
             <p style="font-size:0.82rem; color:var(--gris); line-height:2;">Capitole – Chalet – Saint-Aubin – Matabiau –
               Saint-Étienne &nbsp;·&nbsp; Amidonniers – Caffarelli</p>
             <p style="font-size:0.78rem; color:var(--violet); font-style:italic; font-weight:700; margin-bottom:1rem;">*
               Arènes Romaines – Ancely – Purpan – Cartoucherie</p>
             <h2 style="margin:0 0 0.4rem; line-height:1.4; font-family:inherit; font-size:0.72rem; font-weight:700; text-transform:uppercase; letter-spacing:2px; color:var(--violet); margin-bottom:0.4rem;">Toulouse Est *</h2>
-            <p style="font-size:0.82rem; color:var(--gris); line-height:1.7; margin-bottom:0.4rem;">Serrurerie à domicile à Bonnefoy, Roseraie, Jolimont et à Balma : dépannage urgent, changement de serrure.</p>
+            <p style="font-size:0.82rem; color:var(--gris); line-height:1.7; margin-bottom:0.4rem;">Serrurerie à domicile à Bonnefoy, Roseraie, Jolimont et à <a class="zone-link" href="serrurier-balma.html">Balma</a> : dépannage urgent, changement de serrure.</p>
             <p style="font-size:0.82rem; color:var(--gris); line-height:2;">Bonnefoy – Roseraie – Gramont &nbsp;·&nbsp;
               Jolimont – Soupetard – Bonhoure &nbsp;·&nbsp; Côte Pavée – Château de l'Hers – La Terrasse</p>
             <p style="font-size:0.78rem; color:var(--violet); font-style:italic; font-weight:700; margin-bottom:0;">*
-              Balma</p>
+              <a class="zone-link" href="serrurier-balma.html">Balma</a></p>
           </div>
           <div>
             <div id="map-zones"
