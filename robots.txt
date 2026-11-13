@@ -5,13 +5,13 @@ User-agent: anthropic-ai
 Allow: /
 
 User-agent: GPTBot
-Disallow: /
+Allow: /
 
 User-agent: ChatGPT-User
-Disallow: /
+Allow: /
 
 User-agent: Google-Extended
-Disallow: /
+Allow: /
 
 User-agent: CCBot
 Disallow: /
@@ -26,7 +26,9 @@ User-agent: Amazonbot
 Disallow: /
 
 User-agent: Applebot-Extended
-Disallow: /
+Allow: /
 
 User-agent: *
 Allow: /
+
+Sitemap: https://lacleuniverselle.fr/sitemap.xml
