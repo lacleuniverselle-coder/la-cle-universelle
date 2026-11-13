@@ -4036,3 +4036,46 @@ a.zone-pill:hover { background: var(--lilas-clair); }
 .zone-photo { width: 100%; height: auto; border-radius: 12px; box-shadow: 0 2px 12px rgba(47, 26, 72, .15); }
 .zone-ico { width: 28px; height: 28px; object-fit: contain; margin-right: .5rem; flex: none; }
 .zone-cta-row { margin-top: 1.6rem; }
+
+
+/* ===================================================================
+   PAGES DE ZONE : bloc de confiance, pastilles « Autres zones », cartes
+   (s'applique uniquement aux pages serrurier-*.html)
+   =================================================================== */
+
+/* ---- 1. Bloc de confiance (haut de page) ---- */
+.zone-trust { max-width: 640px; margin: 1.1rem 0 0; display: grid; gap: .7rem; }
+
+/* Avis Google : ligne seule, cliquable */
+.zone-rating { display: flex; align-items: center; gap: .6rem; padding: .65rem 1rem; background: var(--blanc); border: 1.5px solid var(--violet); border-radius: 10px; color: var(--violet); font-size: .86rem; line-height: 1.2; text-decoration: none; transition: background .2s, box-shadow .2s; }
+.zone-rating:hover { background: var(--lilas-pale); box-shadow: 0 2px 10px rgba(47, 26, 72, .15); }
+.zone-rating-stars { color: #e7bb2b; font-size: 1.05rem; letter-spacing: 2px; }
+.zone-rating-note { font-weight: 800; }
+.zone-rating-txt { color: var(--gris); font-weight: 600; }
+.zone-rating-arrow { margin-left: auto; font-weight: 800; }
+
+/* Garanties : barre violette, icônes dorées, filets de séparation */
+.zone-guarantees { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(2, 1fr); background: var(--violet); border-radius: 10px; overflow: hidden; }
+.zone-guarantees li { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: .4rem; padding: .85rem .5rem; color: var(--blanc); font-size: .76rem; font-weight: 700; line-height: 1.25; text-align: center; }
+.zone-guarantees svg { width: 22px; height: 22px; fill: none; stroke: #e7bb2b; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+.zone-guarantees li:nth-child(odd) { border-right: 1px solid rgba(255, 255, 255, .22); }
+.zone-guarantees li:nth-child(-n+2) { border-bottom: 1px solid rgba(255, 255, 255, .22); }
+@media (min-width: 720px) {
+  .zone-guarantees { grid-template-columns: repeat(4, 1fr); }
+  .zone-guarantees li:nth-child(n) { border: 0; border-right: 1px solid rgba(255, 255, 255, .22); }
+  .zone-guarantees li:last-child { border-right: 0; }
+}
+
+/* ---- 2. Pastilles « Autres zones » ---- */
+.zone-sec .zone-pills { display: flex; flex-wrap: wrap; gap: .5rem; margin-top: .6rem; }
+.zone-sec a.zone-pill { margin: 0; padding: .5rem 1rem; background: var(--blanc); color: var(--violet); border: 1.5px solid var(--violet); border-radius: 8px; font-size: .82rem; font-weight: 700; transition: background .2s, color .2s; }
+.zone-sec a.zone-pill:hover { background: var(--violet); color: var(--blanc); }
+.zone-sec a.zone-pill[href="zones.html"] { background: var(--violet); color: var(--blanc); }
+.zone-sec a.zone-pill[href="zones.html"]:hover { background: #3d1f5c; }
+
+/* ---- 3. Cartes « Comment ça se passe » : icône centrée sur le bord haut ---- */
+.zone-sec .prest-steps { margin-top: 2.4rem; gap: 26px 14px; }
+.zone-sec .prest-steps .card { padding: 1.7rem 1rem 1.1rem; }
+.zone-sec .prest-steps .card-icon { left: 50%; transform: translateX(-50%); margin: 0; }
+.zone-sec .prest-steps .card-title-row { margin-bottom: .5rem; }
+.zone-sec .prest-steps .card p { margin: 0; min-height: 0; }
