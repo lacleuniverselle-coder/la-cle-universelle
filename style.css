@@ -3946,41 +3946,45 @@ html { scroll-padding-top: 5rem; }
 /* ===== Pages services : mise en page commune (hero compact, tarifs, situations) =====
    Préfixe .svc-page : surcharge les doublons .svc-btn plus haut sans toucher à la page prestations. */
 .svc-page { max-width: 960px; padding: 3.5rem 1.2rem 3rem; }
-.svc-page .back-btn { margin: 0 0 1.2rem; }
-.svc-page .svc-hero { max-width: 640px; margin: 0 auto; }
-.svc-page .svc-hero h1 { font-family: "Inter", sans-serif; font-size: clamp(1.6rem, 4vw, 2.2rem); line-height: 1.2; font-weight: 800; letter-spacing: -.01em; margin: .2rem 0 1rem; }
-.svc-page .svc-rating { padding: .3rem .85rem; font-size: .8rem; }
-.svc-page .svc-features { display: flex; flex-wrap: wrap; justify-content: center; gap: .5rem 1.6rem; max-width: none; margin: 1.2rem 0; }
-.svc-page .svc-feature { flex-direction: column; align-items: center; text-align: center; gap: .3rem; font-size: .68rem; }
-.svc-page .svc-feature span { font-size: 1.4rem; line-height: 1; }
-.svc-page .svc-feature + .svc-feature { border-left: 1px solid var(--lilas-clair); padding-left: 1.6rem; }
+.svc-page .back-btn { margin: 0 0 .6rem; }
+.svc-page .svc-hero { max-width: 720px; margin: 0 auto; }
+.svc-page .svc-hero h1 { font-family: "Inter", sans-serif; font-size: clamp(1.2rem, 3vw, 1.6rem); line-height: 1.2; font-weight: 800; letter-spacing: -.01em; margin: .1rem 0 .6rem; }
+.svc-page .svc-hero { display: flex; flex-direction: column; }
+.svc-page .svc-rating { order: 1; align-self: center; margin-top: .7rem; padding: .2rem .7rem; font-size: .72rem; }
+.svc-page .svc-features { display: flex; flex-wrap: wrap; justify-content: center; gap: .3rem 1rem; max-width: none; margin: .7rem 0; }
+.svc-page .svc-feature { flex-direction: column; align-items: center; text-align: center; gap: .15rem; font-size: .6rem; }
+.svc-page .svc-feature span { font-size: 1.1rem; line-height: 1; }
+.svc-page .svc-feature + .svc-feature { border-left: 1px solid var(--lilas-clair); padding-left: 1rem; }
 .svc-page .svc-actions { display: flex; flex-wrap: nowrap; justify-content: center; gap: .6rem; max-width: none; margin: 0; }
-.svc-page .svc-btn { width: auto; max-width: none; flex: 0 1 auto; padding: .6rem 1.2rem; border-radius: 10px; font-size: .88rem; white-space: nowrap; }
-.svc-page .svc-pills { margin-top: 1rem; }
-.svc-page .svc-pills span { font-size: .72rem; padding: .25rem .7rem; }
-.svc-page .svc-section { margin-top: 2.8rem; text-align: center; }
+.svc-page .svc-btn { width: auto; max-width: none; flex: 0 1 auto; padding: .4rem .9rem; border-radius: 8px; font-size: .8rem; white-space: nowrap; }
+.svc-page .svc-pills { margin-top: .7rem; gap: .2rem 1.2rem; }
+.svc-page .svc-pills span { background: none; border: 0; border-radius: 0; padding: 0; font-size: .78rem; font-weight: 700; color: var(--violet); }
+.svc-page .svc-pills span::before { content: "✓"; margin-right: .35em; }
+.svc-page .svc-section { margin-top: 1.6rem; text-align: center; }
 .svc-page .svc-section h2 { font-size: clamp(1.15rem, 2.6vw, 1.5rem); margin-bottom: 1.4rem; }
 .svc-page .svc-infoline { display: flex; flex-wrap: wrap; justify-content: center; gap: .3rem 0; margin: -.4rem 0 1.4rem; font-size: .88rem; font-weight: 600; color: var(--gris); }
 .svc-page .svc-infoline span + span::before { content: "·"; margin: 0 .7rem; color: var(--lilas); font-weight: 800; }
 
 /* Cartes de prix : bandeau violet + liste des inclus */
-.svc-page .svc-pricecards { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; text-align: left; }
+.svc-page .svc-pricecards { display: grid; grid-template-columns: repeat(3, 1fr); gap: .8rem; text-align: left; }
 .svc-page .svc-pricecard { display: flex; flex-direction: column; background: #fff; border: 1.5px solid var(--lilas-clair); border-radius: 16px; overflow: hidden; box-shadow: 0 4px 14px rgba(72,38,100,.1); }
-.svc-page .svc-pc-head { background: var(--violet); color: #fff; text-align: center; padding: 1.2rem 1rem 1.3rem; }
-.svc-page .svc-pricecard h3 { font-size: .78rem; letter-spacing: 2px; text-transform: uppercase; color: var(--lilas-clair); margin: 0 0 .4rem; }
-.svc-page .svc-bigprice { font-size: 2rem; font-weight: 800; line-height: 1.1; color: #fff; margin: 0; }
+.svc-page .svc-pc-head { background: var(--violet); color: #fff; text-align: center; padding: .85rem .8rem .95rem; }
+.svc-page .svc-pricecard h3 { font-size: .68rem; letter-spacing: 1.5px; text-transform: uppercase; color: var(--lilas-clair); margin: 0 0 .3rem; }
+.svc-page .svc-bigprice { font-size: 1.45rem; font-weight: 700; line-height: 1.15; color: #fff; margin: 0; }
 .svc-page .svc-bigprice small { font-size: .85rem; font-weight: 600; color: var(--lilas-clair); margin-right: .2rem; }
 .svc-page .svc-dash { display: inline-block; width: .4em; height: 3px; margin: 0 .35em; border-radius: 2px; background: currentColor; vertical-align: middle; position: relative; top: -.06em; }
 .svc-page .svc-price-pill .svc-dash { width: .55em; height: 2px; margin: 0 .25em; top: -.04em; }
-.svc-page .svc-pc-body { margin: 0; padding: 1rem 1.3rem 1.2rem; }
-.svc-page .svc-pc-body li { font-size: .84rem; padding: .4rem 0 .4rem 1.5rem; }
+.svc-page .svc-pc-body { margin: 0; padding: .7rem 1rem .9rem; }
+.svc-page .svc-pc-body li { font-size: .78rem; padding: .3rem 0 .3rem 1.3rem; }
+/* Bouton éventuel dans une carte de prix (ex. « En savoir plus ») */
+.svc-page .svc-pricecard > .svc-btn { width: auto; margin: auto .9rem .9rem; padding: .5rem .8rem; font-size: .8rem; border-radius: 8px; }
 .svc-page .svc-tarifs-link { display: inline-block; margin-top: 1.1rem; font-weight: 700; font-size: .9rem; color: var(--violet); text-decoration: underline; text-underline-offset: 3px; }
 .svc-page .svc-tarifs-link:hover { color: var(--lilas); }
 .svc-page .svc-note { margin-top: .6rem; }
 
 /* Blocs "situations" : lignes empilées sur fond pâle */
 .svc-page .svc-cases { display: grid; grid-template-columns: 1fr; gap: 1rem; max-width: 820px; margin: 0 auto; text-align: left; }
-.svc-page .svc-case { display: grid; grid-template-columns: 2.6rem 1fr; column-gap: 1rem; align-items: start; background: var(--lilas-pale); border: 0; border-radius: 16px; padding: 1.3rem 1.4rem; }
+.svc-page .svc-case { display: grid; grid-template-columns: 2.6rem minmax(0, 1fr); column-gap: 1rem; align-items: start; background: var(--lilas-pale); border: 0; border-radius: 16px; padding: 1.3rem 1.4rem; }
 .svc-page .svc-case > * { grid-column: 2; }
 .svc-page .svc-case .svc-case-ico { grid-column: 1; grid-row: 1 / span 4; font-size: 1.8rem; line-height: 1.2; margin: 0; text-align: center; }
 .svc-page .svc-case h3 { font-size: .95rem; text-transform: uppercase; letter-spacing: .02em; margin: 0 0 .5rem; }
@@ -3994,17 +3998,65 @@ html { scroll-padding-top: 5rem; }
 .svc-sticky .svc-btn { width: 100%; max-width: none; }
 
 @media (max-width: 760px) {
-  .svc-page { padding: 2.5rem 1rem 6rem; }
-  .svc-page .svc-features { display: grid; grid-template-columns: repeat(3, 1fr); gap: .4rem .6rem; }
-  .svc-page .svc-feature { font-size: .6rem; letter-spacing: .5px; }
+  .svc-page { padding: 2rem 1rem 6rem; }
+  .svc-page .back-btn { margin: 0 0 .4rem; }
+  .svc-page .svc-hero h1 { font-size: 1.25rem; margin: .1rem 0 .45rem; }
+  .svc-page .svc-rating { margin-top: .5rem; padding: .15rem .6rem; font-size: .68rem; }
+  .svc-page .svc-section { margin-top: 1.2rem; }
+  .svc-page .svc-features { display: grid; grid-template-columns: repeat(3, 1fr); gap: .3rem .4rem; margin: .55rem 0; }
+  .svc-page .svc-feature { font-size: .5rem; letter-spacing: .3px; gap: .1rem; }
+  .svc-page .svc-feature span { font-size: 1rem; }
   .svc-page .svc-feature + .svc-feature { border-left: 0; padding-left: 0; }
-  .svc-page .svc-btn { padding: .55rem .9rem; font-size: .82rem; }
+  .svc-page .svc-btn { padding: .4rem .7rem; font-size: .76rem; }
+  .svc-page .svc-pills { margin-top: .45rem; }
+  .svc-page .svc-pills { gap: .15rem .9rem; }
+  .svc-page .svc-pills span { font-size: .68rem; }
   .svc-page .svc-infoline { flex-direction: column; align-items: center; }
   .svc-page .svc-infoline span + span::before { content: none; }
-  .svc-page .svc-pricecards { grid-template-columns: 1fr; }
-  .svc-page .svc-case { grid-template-columns: 2rem 1fr; column-gap: .8rem; padding: 1.1rem 1rem; }
+  .svc-page .svc-pricecards { grid-template-columns: repeat(3, 1fr); gap: .35rem; }
+  .svc-page .svc-pricecard { border-radius: 10px; border-width: 1px; }
+  .svc-page .svc-pc-head { padding: .5rem .25rem .55rem; }
+  .svc-page .svc-pricecard h3 { font-size: clamp(.46rem, 2.3vw, .58rem); letter-spacing: .3px; margin: 0 0 .25rem; line-height: 1.25; }
+  .svc-page .svc-bigprice { font-size: clamp(.72rem, 3.6vw, .95rem); line-height: 1.2; }
+  .svc-page .svc-pc-body { padding: .3rem .4rem .5rem; }
+  .svc-page .svc-pc-body li { font-size: clamp(.5rem, 2.4vw, .62rem); line-height: 1.3; padding: .28rem 0 .28rem .9rem; }
+  .svc-page .svc-pc-body li::before { font-size: .6rem; }
+  .svc-page .svc-pricecard > .svc-btn { margin: auto .4rem .5rem; padding: .35rem .3rem; font-size: clamp(.5rem, 2.4vw, .62rem); border-radius: 6px; }
+  .svc-page .svc-case { grid-template-columns: 2rem minmax(0, 1fr); column-gap: .8rem; padding: 1.1rem 1rem; }
 }
 @media (max-width: 380px) { .svc-page .svc-actions { flex-wrap: wrap; } }
+
+/* ===== Pages services : identité visuelle propre (frise, cartes à barre, liseré jaune, fonds alternés) ===== */
+/* Titres de section : petit trait jaune sous le h2 */
+.svc-page .svc-section h2::after { content: ""; display: block; width: 2.4rem; height: 3px; margin: .5rem auto 0; background: #e7bb2b; border-radius: 2px; }
+/* Fonds alternés pleine largeur : étapes et "à découvrir aussi" */
+.svc-page .svc-section:has(.svc-steps),
+.svc-page .svc-section:has(.svc-more) { background: var(--lilas-pale); box-shadow: 0 0 0 100vmax var(--lilas-pale); clip-path: inset(0 -100vmax); padding: 1.6rem 0; margin-top: 2.2rem; }
+/* Tarifs : liseré jaune sous le bandeau violet */
+.svc-page .svc-pc-head { border-bottom: 4px solid #e7bb2b; }
+/* Étapes : frise numérotée reliée par un trait, sans boîtes */
+.svc-page .svc-steps { gap: 1.2rem; }
+.svc-page .svc-step { position: relative; background: none; border-radius: 0; padding: 0 .4rem; }
+.svc-page .svc-step .svc-num { position: relative; z-index: 1; width: 2.8rem; height: 2.8rem; line-height: 2.8rem; margin: 0 auto .7rem; border-radius: 50%; background: var(--violet); color: #fff; font-size: 1rem; text-align: center; box-shadow: 0 0 0 5px var(--lilas-pale); }
+.svc-page .svc-step + .svc-step::before { content: ""; position: absolute; top: 1.4rem; left: calc(-50% - 1.2rem); width: calc(100% + 1.2rem); height: 2px; background: var(--lilas-clair); }
+/* Cas : cartes blanches à barre violette, prix en texte à droite */
+.svc-page .svc-case { grid-template-columns: 2.6rem minmax(0, 1fr) auto; background: #fff; border: 1px solid #e6dcf0; border-left: 5px solid var(--violet); border-radius: 10px; box-shadow: 0 6px 18px rgba(72,38,100,.08); }
+.svc-page .svc-case .svc-case-ico { align-self: start; display: flex; align-items: center; justify-content: center; width: 2.6rem; height: 2.6rem; border-radius: 12px; background: var(--lilas-pale); font-size: 1.4rem; line-height: 1; }
+.svc-page .svc-price-pill { grid-column: 3; grid-row: 1; justify-self: end; max-width: 13rem; padding: 0; background: none; border-radius: 0; font-size: 1.05rem; line-height: 1.3; text-align: right; white-space: normal; }
+.svc-page .svc-case > * { min-width: 0; }
+@media (max-width: 760px) {
+  .svc-page .svc-section:has(.svc-steps),
+  .svc-page .svc-section:has(.svc-more) { padding: 1.2rem 0; margin-top: 1.4rem; }
+  .svc-page .svc-steps { gap: 1.2rem; }
+  .svc-page .svc-step { display: grid; grid-template-columns: 2.8rem 1fr; column-gap: 1rem; text-align: left; padding: 0; }
+  .svc-page .svc-step .svc-num { grid-row: 1 / span 2; margin: 0; }
+  .svc-page .svc-step h3, .svc-page .svc-step p { grid-column: 2; }
+  .svc-page .svc-step + .svc-step::before { display: none; }
+  .svc-page .svc-step:not(:last-child)::after { content: ""; position: absolute; left: 1.4rem; top: 2.8rem; bottom: -1.2rem; width: 2px; margin-left: -1px; background: var(--lilas-clair); }
+  .svc-page .svc-case { grid-template-columns: 2.2rem minmax(0, 1fr); }
+  .svc-page .svc-case .svc-case-ico { width: 2.2rem; height: 2.2rem; font-size: 1.1rem; }
+  .svc-page .svc-price-pill { grid-column: 2; grid-row: auto; justify-self: start; max-width: 100%; text-align: left; }
+}
 
 /* Page prestations : carte "Ouverture de porte" (liste des cas) et flèche "Voir ..." */
 .prest-card-list { list-style: none; margin: 0 0 .5rem; padding: 0; }
@@ -4043,21 +4095,14 @@ a.zone-pill:hover { background: var(--lilas-clair); }
    (s'applique uniquement aux pages serrurier-*.html)
    =================================================================== */
 
-/* ---- 1. Bloc de confiance (haut de page) ---- */
-.zone-trust { max-width: 640px; margin: 1.1rem 0 0; display: grid; gap: .7rem; }
+/* ---- 1. Bloc de confiance (haut de page) ----
+   Ordre dans le HTML : barre des 4 garanties, puis avis Google en petit dessous */
+.zone-trust { max-width: 640px; margin: 1.1rem 0 0; display: grid; gap: .5rem; }
 
-/* Avis Google : ligne seule, cliquable */
-.zone-rating { display: flex; align-items: center; gap: .6rem; padding: .65rem 1rem; background: var(--blanc); border: 1.5px solid var(--violet); border-radius: 10px; color: var(--violet); font-size: .86rem; line-height: 1.2; text-decoration: none; transition: background .2s, box-shadow .2s; }
-.zone-rating:hover { background: var(--lilas-pale); box-shadow: 0 2px 10px rgba(47, 26, 72, .15); }
-.zone-rating-stars { color: #e7bb2b; font-size: 1.05rem; letter-spacing: 2px; }
-.zone-rating-note { font-weight: 800; }
-.zone-rating-txt { color: var(--gris); font-weight: 600; }
-.zone-rating-arrow { margin-left: auto; font-weight: 800; }
-
-/* Garanties : barre violette, icônes dorées, filets de séparation */
+/* Garanties : barre violette fine, icônes dorées, filets de séparation */
 .zone-guarantees { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(2, 1fr); background: var(--violet); border-radius: 10px; overflow: hidden; }
-.zone-guarantees li { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: .4rem; padding: .85rem .5rem; color: var(--blanc); font-size: .76rem; font-weight: 700; line-height: 1.25; text-align: center; }
-.zone-guarantees svg { width: 22px; height: 22px; fill: none; stroke: #e7bb2b; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+.zone-guarantees li { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: .25rem; padding: .5rem .4rem; color: var(--blanc); font-size: .72rem; font-weight: 700; line-height: 1.2; text-align: center; }
+.zone-guarantees svg { width: 17px; height: 17px; fill: none; stroke: #e7bb2b; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
 .zone-guarantees li:nth-child(odd) { border-right: 1px solid rgba(255, 255, 255, .22); }
 .zone-guarantees li:nth-child(-n+2) { border-bottom: 1px solid rgba(255, 255, 255, .22); }
 @media (min-width: 720px) {
@@ -4065,6 +4110,14 @@ a.zone-pill:hover { background: var(--lilas-clair); }
   .zone-guarantees li:nth-child(n) { border: 0; border-right: 1px solid rgba(255, 255, 255, .22); }
   .zone-guarantees li:last-child { border-right: 0; }
 }
+
+/* Avis Google : petite ligne discrète sous la barre, cliquable */
+.zone-rating { display: flex; align-items: center; gap: .4rem; padding: 0 .2rem; color: var(--violet); font-size: .78rem; line-height: 1.2; text-decoration: none; }
+.zone-rating:hover .zone-rating-txt { text-decoration: underline; text-underline-offset: 3px; }
+.zone-rating-stars { color: #e7bb2b; font-size: .85rem; letter-spacing: 1px; }
+.zone-rating-note { font-weight: 800; }
+.zone-rating-txt { color: var(--gris); font-weight: 600; }
+.zone-rating-arrow { font-weight: 800; }
 
 /* ---- 2. Pastilles « Autres zones » ---- */
 .zone-sec .zone-pills { display: flex; flex-wrap: wrap; gap: .5rem; margin-top: .6rem; }
@@ -4079,3 +4132,438 @@ a.zone-pill:hover { background: var(--lilas-clair); }
 .zone-sec .prest-steps .card-icon { left: 50%; transform: translateX(-50%); margin: 0; }
 .zone-sec .prest-steps .card-title-row { margin-bottom: .5rem; }
 .zone-sec .prest-steps .card p { margin: 0; min-height: 0; }
+
+/* === MENU : hauteur du panneau mobile (5 entrées max) === */
+.mobile-accordion-panel.open{max-height:320px}
+
+/* ===== MENU : Services cliquable ===== */
+/* Dernière ligne des sous-menus : « Tous nos services → » / « Toutes nos zones → » */
+.nav-dropdown-menu li.nav-all{border-top:1px solid var(--lilas-clair);margin-top:.3rem;padding-top:.3rem}
+.nav-dropdown-menu li.nav-all a{font-weight:700;color:var(--violet)}
+
+/* Soulignement violet animé au survol de « Services » */
+.nav-links a.nav-services{position:relative}
+.nav-links a.nav-services::after{content:"";position:absolute;left:0;right:0;bottom:-4px;height:2px;background:var(--violet);transform:scaleX(0);transform-origin:left;transition:transform .25s ease}
+.nav-links .nav-dropdown:hover a.nav-services::after,
+.nav-links a.nav-services:focus-visible::after{transform:scaleX(1)}
+
+/* Page de service active : Services reste en violet */
+.nav-links a.is-current,
+.mobile-menu a.mobile-accordion-link.is-current{color:var(--violet)}
+.mobile-accordion-panel a.nav-all-mobile{font-weight:700;color:var(--violet)}
+/* ===== PAGES DE ZONE : ordre des blocs de l'intro (valable pour toutes les pages serrurier-*) =====
+   Ordre affiché : titre, intro (30 min), quartiers desservis (si présents),
+   logements + photo, puis bloc de confiance centré, puis interventions. */
+.zone-sec--intro .section-inner { display: flex; flex-direction: column; }
+.zone-sec--intro .section-inner > .zone-split { order: 1; }
+.zone-sec--intro .section-inner > .zone-trust { order: 2; width: 100%; max-width: 640px; margin: 1.8rem auto 0; }
+.zone-sec--intro .zone-rating { justify-content: center; }
+
+/* ===== Grille quartiers (zones.html) ===== */
+#zones .section-inner > .quartier-grid { display: grid; grid-template-columns: repeat(6, 1fr) !important; gap: .5rem !important; margin: .6rem 0 1.6rem; }
+a.quartier-cell { box-sizing: border-box; display: flex; align-items: center; justify-content: center; text-align: center; height: 2.8rem; padding: .2rem .4rem; background: var(--violet); color: var(--blanc); border-radius: 8px; font-size: .8rem; font-weight: 700; line-height: 1.2; text-decoration: none; transition: background .2s, transform .2s; }
+a.quartier-cell:hover { background: #3d1f5c; transform: translateY(-1px); }
+a.quartier-cell--call { background: #e7bb2b; color: #2f1a48; font-size: .68rem; }
+a.quartier-cell--call:hover { background: #d4a820; }
+@media (max-width: 600px) {
+  #zones .section-inner > .quartier-grid { grid-template-columns: repeat(3, 1fr) !important; gap: .4rem !important; }
+  a.quartier-cell { font-size: .78rem; padding: .2rem .25rem; }
+  a.quartier-cell--call { font-size: .64rem; }
+}
+
+/* =====================================================================
+   PAGE PRESTATIONS v2 : plus de contraste, plus compact (limité à .prestations-main-col)
+   ===================================================================== */
+/* Bandeau Urgence */
+.prestations-main-col .prest-urgence { display: flex; align-items: center; justify-content: center; flex-wrap: wrap; gap: .1rem .5rem; margin: .5rem 0 .2rem; padding: .3rem .7rem; background: var(--lilas-pale); color: #2a1540; border: 1px solid #e6dcf0; border-radius: 8px; text-decoration: none; }
+.prestations-main-col .prest-urgence-ico { font-size: .9rem; line-height: 1; }
+.prestations-main-col .prest-urgence-txt { flex: none; font-size: .78rem; line-height: 1.3; }
+.prestations-main-col .prest-urgence-go { flex: none; color: var(--violet); font-weight: 700; font-size: .78rem; text-decoration: underline; white-space: nowrap; }
+.prestations-main-col .prest-urgence:hover .prest-urgence-go { color: #2a1540; }
+
+/* Titres de catégories : bandeau violet foncé, filet jaune */
+.prestations-main-col .prest-cat-title,
+.prestations-main-col .prest-comment { display: flex; align-items: center; justify-content: center; gap: .5rem; background: #2a1540; color: #fff; border-radius: 10px; padding: .55rem .9rem .8rem; margin: 1.1rem 0 .6rem; font-size: 1.05rem; text-align: center; }
+.prestations-main-col .prest-cat-title .prest-icon { width: 30px; height: 30px; background: #fff; border-radius: 50%; padding: 4px; }
+.prestations-main-col .prest-cat-title::after { background: radial-gradient(circle, #e7bb2b 2.5px, transparent 3px) 0 0 / 10px 5px repeat-x; bottom: .3rem; }
+
+/* Cartes : blanches, barre violette à gauche, compactes */
+.prestations-main-col .prest-grid { gap: 8px; }
+.prestations-main-col .prest-card { background: #fff; border: 1px solid #e6dcf0; border-left: 5px solid var(--violet); border-radius: 8px; padding: .4rem .7rem; box-shadow: 0 2px 8px rgba(72,38,100,.08); }
+.prestations-main-col .prest-card h3 { font-size: .9rem; color: var(--violet); }
+.prestations-main-col .prest-card p,
+.prestations-main-col .prest-card-list { font-size: .8rem; line-height: 1.35; color: var(--texte); }
+.prestations-main-col .prest-card-highlight { background: var(--lilas-pale); border-left-color: #e7bb2b; border-color: var(--violet); }
+
+/* Boutons vers les pages dédiées */
+.prestations-main-col .prest-more-row { margin: .6rem 0 0; text-align: center; }
+.prestations-main-col .prest-more { display: inline-block; background: #e7bb2b; color: #2a1540; font-weight: 800; font-size: .82rem; padding: .4rem .9rem; border-radius: 8px; text-decoration: none; box-shadow: 0 2px 6px rgba(42,21,64,.2); }
+.prestations-main-col .prest-more:hover { background: #f2c93f; }
+
+/* Audit : 3 blocs violet foncé, accents jaunes */
+.prestations-main-col .audit-block { background: #2a1540; color: #fff; border: 0; border-top: 4px solid #e7bb2b; border-radius: 10px; padding: .6rem .8rem .55rem; }
+.prestations-main-col .audit-block h3 { color: #fff; }
+.prestations-main-col .audit-lead { color: #e0d2f0; }
+.prestations-main-col .audit-lead::after { background: #e7bb2b; }
+.prestations-main-col .audit-block li { border-top-color: rgba(255,255,255,.15); color: #fff; }
+.prestations-main-col .audit-block li::before { background: #e7bb2b; }
+.prestations-main-col .audit-foot { color: #e7bb2b; border-top-color: rgba(231,187,43,.5); }
+.prestations-main-col .audit-intro { color: var(--texte); font-weight: 600; }
+.prestations-main-col .prest-cta-row { display: flex; flex-wrap: wrap; justify-content: center; gap: .6rem; margin-top: .9rem; }
+.prestations-main-col .prest-cta-row .prest-cta { margin-top: 0; }
+.prestations-main-col .prest-cta--alt { background: #e7bb2b; color: #2a1540; }
+
+/* Étapes : cartes compactes à liseré jaune */
+.prestations-main-col .prest-steps .card { background: #fff; border: 1px solid #e6dcf0; border-top: 4px solid #e7bb2b; border-radius: 10px; }
+
+/* ---------- Mobile ---------- */
+@media (max-width: 760px) {
+  .prestations-main-col .prest-urgence { padding: .35rem .6rem; gap: .05rem .4rem; }
+  .prestations-main-col .prest-urgence-txt, .prestations-main-col .prest-urgence-go { font-size: .76rem; }
+  /* Carrousel bien visible : bandeau photo pleine largeur sous le titre, pastille jaune + points */
+  .prestations-main-col .prest-block,
+  .prestations-main-col .prest-block--flip { grid-template-columns: minmax(0, 1fr); column-gap: 0; align-items: stretch; margin-bottom: 1rem; }
+  .prestations-main-col .prest-cat-title { grid-column: 1; grid-row: 1; margin: .6rem 0 .45rem; font-size: clamp(.9rem, 4.2vw, 1.05rem); }
+  .prestations-main-col .prest-block .prest-media,
+  .prestations-main-col .prest-block--flip .prest-media { grid-column: 1; grid-row: 2; width: 100%; height: 135px; border-radius: 10px; margin-bottom: .5rem; box-shadow: 0 2px 8px rgba(47,26,72,.25); }
+  .prestations-main-col .prest-media::after { content: "📷 ›"; position: absolute; top: 8px; right: 8px; z-index: 2; background: #e7bb2b; color: #2a1540; font-size: .95rem; line-height: 1; font-weight: 800; padding: .3rem .6rem; border-radius: 999px; box-shadow: 0 1px 4px rgba(0,0,0,.35); pointer-events: none; }
+  .prestations-main-col .prest-media .prest-dots { display: flex; bottom: 7px; z-index: 2; }
+  .prestations-main-col .prest-grid { grid-column: 1; grid-row: 3; grid-template-columns: 1fr; }
+  .prestations-main-col .prest-more-row { grid-column: 1; grid-row: 4; }
+  /* Étapes : 3 colonnes sur une seule ligne */
+  .prestations-main-col .prest-steps { grid-template-columns: repeat(3, 1fr); gap: .4rem; row-gap: .4rem; margin-top: .8rem; }
+  .prestations-main-col .prest-steps .card { padding: .5rem .3rem .45rem; text-align: center; }
+  .prestations-main-col .prest-steps .card-title-row { flex-direction: column; align-items: center; gap: .2rem; margin-bottom: .2rem; }
+  .prestations-main-col .prest-steps .card h3 { font-size: .74rem; margin: 0; }
+  .prestations-main-col .prest-steps .card p { font-size: .64rem; line-height: 1.3; }
+  .prestations-main-col .audit-grid { gap: 8px; }
+}
+
+
+/* =====================================================================
+   PAGE « LE CONCEPT » (pourquoi.html) : styles dédiés, préfixe .pq-
+   Aucune dépendance aux règles partagées (#concept, #pourquoi, .raison,
+   .concept-grid, .apropos-*, .back-btn…) utilisées par l'accueil.
+   ===================================================================== */
+.pq-page { background: #fff; }
+.pq-page main { display: block; }
+.pq-page .pq-sec { padding: 2.6rem 1.2rem; }
+.pq-page .pq-wrap { max-width: 1040px; margin: 0 auto; }
+
+/* Fonds alternés pour structurer la lecture */
+.pq-page .pq-hero  { background: #2a1540; color: #fff; padding-top: 3rem; padding-bottom: 3rem; }
+.pq-page .pq-light { background: #fff; color: #241238; }
+.pq-page .pq-tint  { background: #f4eefa; color: #241238; }
+.pq-page .pq-dark  { background: #2a1540; color: #fff; }
+.pq-page .pq-final { background: #e7bb2b; color: #2a1540; text-align: center; }
+
+/* Typographie */
+.pq-page .pq-eyebrow { font-size: .75rem; font-weight: 800; letter-spacing: 2px; text-transform: uppercase; color: #e7bb2b; margin-bottom: .8rem; }
+.pq-page .pq-hero h1 { font-size: clamp(1.35rem, 4.6vw, 2.3rem); line-height: 1.12; font-weight: 800; letter-spacing: -.5px; color: #fff; margin-bottom: 1rem; }
+.pq-page .pq-hero h1 span { color: #e7bb2b; }
+.pq-page .pq-lead { font-size: 1.02rem; line-height: 1.65; color: #efe6f8; max-width: 680px; margin-bottom: 1.3rem; }
+.pq-page .pq-lead strong { color: #fff; }
+.pq-page .pq-label { font-size: .72rem; font-weight: 800; letter-spacing: 2.5px; text-transform: uppercase; color: #7a3fa8; margin-bottom: .4rem; }
+.pq-page .pq-label--gold { color: #e7bb2b; }
+.pq-page .pq-h2 { font-size: clamp(1.4rem, 3.8vw, 2.05rem); line-height: 1.2; font-weight: 800; letter-spacing: -.3px; color: #482664; margin: 0 0 .7rem; }
+.pq-page .pq-dark .pq-h2 { color: #fff; }
+.pq-page .pq-final .pq-h2 { color: #2a1540; }
+.pq-page .pq-h2::after { content: ""; display: block; width: 3rem; height: 4px; margin-top: .6rem; background: #e7bb2b; border-radius: 2px; }
+.pq-page .pq-final .pq-h2::after { margin-left: auto; margin-right: auto; background: #2a1540; }
+.pq-page .pq-intro { font-size: 1rem; line-height: 1.65; color: #3a2354; max-width: 720px; margin: 0 0 1.5rem; }
+.pq-page .pq-dark .pq-intro { color: #e0d2f0; }
+.pq-page .pq-final .pq-intro { color: #2a1540; margin-left: auto; margin-right: auto; }
+
+/* Pastilles de réassurance */
+.pq-page .pq-chips { list-style: none; display: flex; flex-wrap: wrap; gap: .5rem; margin: 0 0 1.5rem; padding: 0; }
+.pq-page .pq-chips li { background: rgba(255,255,255,.1); border: 1px solid rgba(231,187,43,.55); color: #fff; font-size: .85rem; font-weight: 600; padding: .4rem .8rem; border-radius: 999px; line-height: 1.3; }
+
+/* Boutons */
+.pq-page .pq-cta { display: flex; flex-wrap: wrap; gap: .7rem; }
+.pq-page .pq-cta--center { justify-content: center; margin: 1.2rem 0 1rem; }
+.pq-page .pq-btn { display: inline-block; text-align: center; font-weight: 800; font-size: 1rem; padding: .8rem 1.5rem; border-radius: 12px; text-decoration: none; border: 2px solid transparent; transition: transform .15s, box-shadow .15s, background .15s; }
+.pq-page .pq-btn:hover { transform: translateY(-2px); box-shadow: 0 6px 16px rgba(0,0,0,.25); }
+.pq-page .pq-btn--main { background: #e7bb2b; color: #2a1540; }
+.pq-page .pq-btn--main:hover { background: #f2c93f; }
+.pq-page .pq-btn--ghost { background: transparent; color: #fff; border-color: #fff; }
+.pq-page .pq-btn--ghost:hover { background: rgba(255,255,255,.12); }
+.pq-page .pq-btn--dark { background: #2a1540; color: #fff; }
+.pq-page .pq-btn--dark:hover { background: #482664; }
+.pq-page .pq-btn--outline { background: transparent; color: #2a1540; border-color: #2a1540; }
+.pq-page .pq-btn--outline:hover { background: rgba(42,21,64,.08); }
+
+/* Grilles et cartes */
+.pq-page .pq-grid { display: grid; gap: 1rem; grid-template-columns: 1fr; }
+.pq-page .pq-card { background: #fff; border: 1px solid #e3d6f0; border-top: 5px solid #e7bb2b; border-radius: 14px; padding: 1.1rem 1.1rem 1.2rem; box-shadow: 0 4px 14px rgba(72,38,100,.09); }
+.pq-page .pq-ico { display: inline-flex; align-items: center; justify-content: center; width: 2.6rem; height: 2.6rem; font-size: 1.4rem; background: #f4eefa; border-radius: 12px; margin-bottom: .6rem; }
+.pq-page .pq-card h3 { font-size: 1.1rem; font-weight: 800; color: #482664; margin: 0 0 .35rem; }
+.pq-page .pq-card p { font-size: .95rem; line-height: 1.6; color: #241238; margin: 0; }
+
+.pq-page .pq-reason { background: #fff; border-left: 6px solid #482664; border-radius: 12px; padding: 1.1rem 1.2rem; box-shadow: 0 3px 12px rgba(72,38,100,.1); }
+.pq-page .pq-reason h3 { font-size: 1.08rem; font-weight: 800; color: #482664; margin: 0 0 .35rem; }
+.pq-page .pq-reason p { font-size: .95rem; line-height: 1.6; color: #241238; margin: 0; }
+
+/* À propos */
+.pq-page .pq-about { display: grid; grid-template-columns: 1fr; gap: 1.5rem; align-items: center; }
+.pq-page .pq-photo { margin: 0 auto; width: min(100%, 300px); }
+.pq-page .pq-photo img { display: block; width: 100%; height: auto; aspect-ratio: 3 / 4; object-fit: cover; object-position: center top; border-radius: 18px; border: 4px solid #e7bb2b; box-shadow: 0 10px 28px rgba(72,38,100,.25); -webkit-user-drag: none; user-select: none; }
+.pq-page .pq-about-txt p { font-size: 1rem; line-height: 1.7; color: #241238; margin: 0 0 .9rem; }
+.pq-page .pq-about-txt .pq-label { margin-bottom: .4rem; }
+.pq-page .pq-creds { list-style: none; display: flex; flex-wrap: wrap; gap: .5rem; margin: 1rem 0 0; padding: 0; }
+.pq-page .pq-creds li { background: #f4eefa; border: 1px solid #d9c6ec; color: #2a1540; font-size: .85rem; padding: .4rem .8rem; border-radius: 10px; }
+.pq-page .pq-creds strong { color: #482664; }
+
+/* Engagement */
+.pq-page .pq-panel { background: rgba(255,255,255,.07); border: 1px solid rgba(255,255,255,.22); border-radius: 14px; padding: 1.3rem; }
+.pq-page .pq-panel h3 { font-size: 1.15rem; font-weight: 800; color: #e7bb2b; margin: 0 0 .6rem; }
+.pq-page .pq-panel p { font-size: .98rem; line-height: 1.65; color: #f1e9f9; margin: 0 0 .8rem; }
+.pq-page .pq-panel p:last-child { margin-bottom: 0; }
+.pq-page .pq-panel strong { color: #fff; }
+.pq-page .pq-panel--gold { background: #e7bb2b; border-color: #e7bb2b; }
+.pq-page .pq-panel--gold h3 { color: #2a1540; }
+.pq-page .pq-panel--gold p { color: #2a1540; }
+.pq-page .pq-panel--gold strong { color: #2a1540; }
+
+/* Liens */
+.pq-page .pq-more { margin: 1.3rem 0 0; font-size: .92rem; }
+.pq-page .pq-more a { color: #482664; font-weight: 700; text-decoration: underline; }
+.pq-page .pq-final .pq-more a { color: #2a1540; }
+
+/* Tablette / bureau */
+@media (min-width: 720px) {
+  .pq-page .pq-about { grid-template-columns: 300px 1fr; gap: 2.5rem; }
+  .pq-page .pq-sec { padding: 3.6rem 2rem; }
+  .pq-page .pq-hero { padding-top: 4.2rem; padding-bottom: 4.2rem; }
+  .pq-page .pq-lead { font-size: 1.12rem; }
+  .pq-page .pq-grid--2 { grid-template-columns: repeat(2, 1fr); gap: 1.2rem; }
+  .pq-page .pq-grid--4 { grid-template-columns: repeat(2, 1fr); }
+  }
+@media (min-width: 980px) {
+  .pq-page .pq-grid--4 { grid-template-columns: repeat(4, 1fr); }
+}
+@media (max-width: 480px) {
+  .pq-page .pq-btn { width: 100%; }
+  .pq-page .pq-chips li { font-size: .8rem; }
+}
+
+
+/* =====================================================================
+   PAGES TARIFS / MÉCANIQUE VÉLO / FAQ : même charte que « Le concept »
+   (body.pq-page). Les boutons, accordéons et sélecteurs gérés par
+   script.js gardent leurs classes : seuls les styles changent.
+   ===================================================================== */
+.pq-page .pq-hero--page { padding-bottom: 2.4rem; }
+.pq-page .pq-hero--page h1 { font-size: clamp(1.3rem, 4.2vw, 2rem); }
+.pq-page .pq-back { display: inline-block; color: #e7bb2b; font-size: .85rem; font-weight: 700; text-decoration: none; margin-bottom: 1rem; }
+.pq-page .pq-back:hover { text-decoration: underline; }
+.pq-page .pq-chips a { color: inherit; text-decoration: none; }
+.pq-page .pq-chips li:has(a):hover { background: rgba(231,187,43,.25); }
+
+/* Fond clair + largeur */
+.pq-page #page-tarifs-serrurerie,
+.pq-page #page-tarifs-velo { background: #f4eefa; padding: 1.8rem 0 2.2rem; }
+.pq-page .tarifs-page-wrapper { max-width: 940px; padding: 0 1.2rem; }
+.pq-page .page-content.tarifs-main-col { padding: 0; min-height: 0; max-width: none; }
+
+/* Bloc « Prestations principales » (3 modes : jour / soir / week-end) */
+body.pq-page #page-tarifs-serrurerie .tarif-principal { background: #fff; color: #241238; border: 0; border-top: 6px solid #e7bb2b; border-radius: 14px; padding: 1.3rem 1.3rem .7rem; box-shadow: 0 6px 20px rgba(72,38,100,.14); margin-bottom: 1.2rem; }
+body.pq-page #page-tarifs-serrurerie[data-mode="nuit"] .tarif-principal { background: #2a1540; color: #fff; }
+body.pq-page #page-tarifs-serrurerie[data-mode="ferie"] .tarif-principal { background: #e7bb2b; color: #2a1540; border-top-color: #2a1540; }
+body.pq-page #page-tarifs-serrurerie .tarif-principal h2 { font-size: clamp(1.3rem, 3.4vw, 1.6rem); font-weight: 800; color: inherit; margin: 0 0 .3rem; }
+body.pq-page #page-tarifs-serrurerie .tarif-principal > p { color: inherit; opacity: .85; font-size: .85rem !important; }
+body.pq-page #page-tarifs-serrurerie .mode-switch { border: 2px solid #482664; border-radius: 999px; overflow: hidden; }
+body.pq-page #page-tarifs-serrurerie .mode-btn { font-size: .92rem; font-weight: 700; min-height: 40px; padding: .4rem 1.2rem; background: #fff; color: #482664; }
+body.pq-page #page-tarifs-serrurerie .mode-btn + .mode-btn { border-left: 2px solid #482664; }
+body.pq-page #page-tarifs-serrurerie .mode-btn:hover { background: #f4eefa; }
+body.pq-page #page-tarifs-serrurerie .mode-btn.actif { background: #482664; color: #fff; }
+body.pq-page #page-tarifs-serrurerie[data-mode="nuit"] .mode-switch { border-color: #e7bb2b; }
+body.pq-page #page-tarifs-serrurerie[data-mode="nuit"] .mode-btn { background: transparent; color: #fff; }
+body.pq-page #page-tarifs-serrurerie[data-mode="nuit"] .mode-btn + .mode-btn { border-left-color: #e7bb2b; }
+body.pq-page #page-tarifs-serrurerie[data-mode="nuit"] .mode-btn:hover { background: rgba(255,255,255,.14); }
+body.pq-page #page-tarifs-serrurerie[data-mode="nuit"] .mode-btn.actif { background: #e7bb2b; color: #2a1540; }
+body.pq-page #page-tarifs-serrurerie[data-mode="ferie"] .mode-switch { border-color: #2a1540; }
+body.pq-page #page-tarifs-serrurerie[data-mode="ferie"] .mode-btn { background: transparent; color: #2a1540; }
+body.pq-page #page-tarifs-serrurerie[data-mode="ferie"] .mode-btn + .mode-btn { border-left-color: #2a1540; }
+body.pq-page #page-tarifs-serrurerie[data-mode="ferie"] .mode-btn:hover { background: rgba(42,21,64,.12); }
+body.pq-page #page-tarifs-serrurerie[data-mode="ferie"] .mode-btn.actif { background: #2a1540; color: #fff; }
+body.pq-page #page-tarifs-serrurerie .mode-legende { font-size: .85rem; font-weight: 600; opacity: .9; margin-top: .6rem; }
+body.pq-page #page-tarifs-serrurerie .tp-table td { padding: .75rem 0; }
+body.pq-page #page-tarifs-serrurerie .tp-nom { font-size: 1rem; font-weight: 600; }
+body.pq-page #page-tarifs-serrurerie .tp-nom a.tp-lien { color: inherit; font-weight: 700; text-decoration: underline; text-decoration-color: #e7bb2b; text-decoration-thickness: 2px; text-underline-offset: 4px; }
+body.pq-page #page-tarifs-serrurerie .tp-ap { font-size: .72rem; opacity: .8; }
+body.pq-page #page-tarifs-serrurerie .tp-montant { font-size: 1.25rem; font-weight: 800; color: #482664; }
+body.pq-page #page-tarifs-serrurerie[data-mode="nuit"] .tp-montant { color: #e7bb2b; }
+body.pq-page #page-tarifs-serrurerie[data-mode="ferie"] .tp-montant { color: #2a1540; }
+body.pq-page #page-tarifs-serrurerie .devis-centre { background: #fff; border: 1px dashed #482664; border-radius: 12px; padding: .8rem 1rem; font-weight: 700; color: #482664; margin: 0 0 1.5rem; }
+
+/* Tableaux de prix (accordéons et forfaits) */
+.pq-page .tarif-fixe-label { background: #482664; color: #fff; border: 0; border-radius: 12px 12px 0 0; padding: .7rem 1rem; font-size: .82rem; letter-spacing: 1.4px; margin-top: .4rem; }
+.pq-page table.tarifs { border-collapse: separate; border-spacing: 0; background: #fff; border-radius: 0 0 12px 12px; overflow: hidden; box-shadow: 0 3px 12px rgba(72,38,100,.1); font-size: 1rem; }
+.pq-page table.tarifs td { padding: .75rem 1rem; border-bottom: 1px solid #eadff5; color: #241238; }
+.pq-page table.tarifs tr:nth-child(even) td { background: #faf6fd; }
+.pq-page table.tarifs tr:last-child td { border-bottom: 0; }
+.pq-page table.tarifs td.prix-semaine,
+.pq-page table.tarifs td.prix-nuit,
+.pq-page table.tarifs td.prix-ferie { color: #482664; font-weight: 800; }
+.pq-page table.tarifs td.na-tag { color: #6b5a7e; font-weight: 500; font-size: .9rem; }
+.pq-page .tarif-accordeon { background: #482664; color: #fff; border: 0; border-radius: 12px; padding: .9rem 1.1rem; margin-top: 1rem; font-size: .85rem; letter-spacing: 1.3px; box-shadow: 0 3px 10px rgba(72,38,100,.2); }
+.pq-page .tarif-accordeon:hover { background: #2a1540; color: #fff; }
+.pq-page .tarif-accordeon .accord-arrow,
+.pq-page .tarif-accordeon.ouvert .accord-arrow { color: #e7bb2b; }
+.pq-page .tarif-accordeon.ouvert { border-radius: 12px 12px 0 0; background: #2a1540; }
+.pq-page .tarif-panel table.tarifs { border-radius: 0 0 12px 12px; }
+
+/* Fournisseurs, assurance, notes */
+body.pq-page #page-tarifs-serrurerie .fournisseurs-bloc { max-width: none; margin: 1.5rem 0 0; padding: 1rem 1.2rem; background: #fff; border: 1px solid #e3d6f0; border-radius: 12px; text-align: left; color: #241238; }
+body.pq-page #page-tarifs-serrurerie .fournisseurs-bloc p { color: #241238; font-size: .92rem; }
+body.pq-page #page-tarifs-serrurerie .assurance-bloc { max-width: none; background: #2a1540; border: 0; border-top: 6px solid #e7bb2b; border-radius: 14px; padding: 1.4rem; margin: 1.5rem 0; }
+body.pq-page #page-tarifs-serrurerie .assurance-bloc h2 { color: #fff; font-size: 1.3rem; }
+body.pq-page #page-tarifs-serrurerie .assurance-bloc p { color: #efe6f8; }
+body.pq-page #page-tarifs-serrurerie .assurance-lien { background: #e7bb2b; color: #2a1540; font-weight: 800; border-radius: 10px; }
+body.pq-page #page-tarifs-serrurerie .assurance-lien:hover { background: #f2c93f; }
+.pq-page .page-content p.tarifs-note { background: #fff; color: #3a2354; font-style: normal; font-size: .82rem; line-height: 1.6; border: 1px solid #e3d6f0; border-left: 5px solid #e7bb2b; border-radius: 10px; padding: .9rem 1rem; margin-top: 1.5rem; }
+.pq-page .page-content p.tarifs-note-legal { color: #3a2354; font-style: normal; font-size: .8rem; line-height: 1.55; opacity: 1 !important; margin-top: .6rem; }
+.pq-page .tarifs-note-legal a { color: #482664; text-decoration: underline; }
+
+/* Mécanique vélo : cartes d'intro, légende, sélecteur latéral */
+.pq-page .velo-blocs { max-width: none; margin: 0 0 1rem; grid-template-columns: 1fr; gap: 1rem; }
+@media (min-width: 720px) { .pq-page .velo-blocs { grid-template-columns: 1fr 1fr; } }
+.pq-page .velo-blocs .card { background: #fff; color: #241238; border: 1px solid #e3d6f0; border-top: 6px solid #e7bb2b; border-radius: 14px; padding: 1.2rem; box-shadow: 0 4px 14px rgba(72,38,100,.1); }
+.pq-page .velo-blocs .card-title-row { display: flex; align-items: center; gap: .7rem; margin-bottom: .5rem; }
+.pq-page .velo-blocs .card-icon { font-size: 1.5rem; }
+.pq-page .velo-blocs .card h3 { color: #482664; font-size: 1.05rem; font-weight: 800; margin: 0; }
+.pq-page .velo-blocs .card p { color: #241238; font-size: .95rem; line-height: 1.6; min-height: 0; margin-bottom: .8rem; }
+.pq-page .velo-blocs .card-detail { background: #f4eefa; color: #482664; border-radius: 8px; padding: .55rem .75rem; font-size: .82rem; font-weight: 700; }
+.pq-page .velo-blocs .card-featured { background: #2a1540; border-color: #2a1540; border-top-color: #e7bb2b; }
+.pq-page .velo-blocs .card-featured h3 { color: #fff; }
+.pq-page .velo-blocs .card-featured p { color: #efe6f8; }
+.pq-page .velo-blocs .card-featured .card-detail { background: rgba(255,255,255,.1); color: #e7bb2b; }
+.pq-page .tarif-legende-bandeau { background: #fff; border: 1px solid #d9c6ec; color: #2a1540; font-size: .85rem; border-radius: 12px; justify-content: center; padding: .6rem .9rem; margin: .5rem 0 1rem; }
+.pq-page .tarifs-side-col { padding-top: 5rem; top: 70px; }
+.pq-page .prix-toggle-widget { background: #2a1540; border-radius: 30px; padding: .5rem .3rem; gap: .5rem; box-shadow: 0 6px 16px rgba(42,21,64,.3); }
+.pq-page .prix-toggle { background: transparent; border: 2px solid rgba(255,255,255,.35); color: #fff; }
+.pq-page .prix-toggle:hover { background: rgba(255,255,255,.15); border-color: #fff; }
+.pq-page .prix-toggle.actif { background: #e7bb2b; border-color: #e7bb2b; color: #2a1540; }
+
+/* FAQ */
+.pq-page .pq-faqband { background: #f4eefa; padding: 2rem 1.2rem 2.5rem; }
+.pq-page .pq-faqband .page-content { padding: 0; min-height: 0; max-width: 860px; }
+.pq-page .faq-serrurerie,
+.pq-page .faq-velo { margin: 0 0 1.6rem; padding: 1.4rem 1.2rem 1rem; border-radius: 16px; border: 0; border-top: 6px solid #e7bb2b; box-shadow: 0 6px 20px rgba(72,38,100,.14); scroll-margin-top: 80px; }
+.pq-page .faq-serrurerie { background: #fff; }
+.pq-page .faq-velo { background: #2a1540; }
+.pq-page .faq-serrurerie h2,
+.pq-page .faq-velo h2 { font-size: 1.45rem; font-weight: 800; margin: 0 0 1rem; padding-bottom: .7rem; border-bottom: 3px solid #e7bb2b; }
+.pq-page .faq-serrurerie h2 { color: #482664; }
+.pq-page .faq-velo h2 { color: #fff; }
+.pq-page .faq-item { background: #faf6fd; border: 1px solid #e3d6f0; border-radius: 12px; padding: 0 1rem; margin-bottom: .6rem; }
+.pq-page .faq-item[open] { background: #fff; border-left: 5px solid #e7bb2b; }
+.pq-page .faq-item summary { font-size: 1rem; line-height: 1.4; color: #2a1540; padding: .9rem 0; }
+.pq-page .faq-item summary::after { color: #482664; font-size: 1rem; }
+.pq-page .faq-item p { color: #241238; font-size: .98rem; line-height: 1.65; padding: .1rem 0 1rem; margin: 0; }
+.pq-page .faq-item p a { color: #482664; font-weight: 700; text-decoration: underline; }
+.pq-page .faq-velo .faq-item { background: rgba(255,255,255,.07); border: 1px solid rgba(255,255,255,.2); }
+.pq-page .faq-velo .faq-item[open] { background: rgba(255,255,255,.12); border-left: 5px solid #e7bb2b; }
+.pq-page .faq-velo .faq-item summary,
+.pq-page .faq-velo .faq-item summary:hover { color: #fff; }
+.pq-page .faq-velo .faq-item summary::after,
+.pq-page .faq-velo .faq-item[open] summary::after { color: #e7bb2b; }
+.pq-page .faq-velo .faq-item p { color: #efe6f8; }
+.pq-page .faq-velo .faq-item p a { color: #e7bb2b; }
+
+
+/* =====================================================================
+   COMPACT MOBILE : titres, pastilles et boutons plus petits (≤ 719 px)
+   ===================================================================== */
+@media (max-width: 719px) {
+  .pq-page .pq-sec { padding: 1.6rem 1rem; }
+  .pq-page .pq-hero, .pq-page .pq-hero--page { padding-top: 1rem; padding-bottom: 1.3rem; }
+  .pq-page .pq-back { font-size: .8rem; margin-bottom: .5rem; }
+  .pq-page .pq-eyebrow { font-size: .66rem; letter-spacing: 1.5px; margin-bottom: .4rem; }
+  .pq-page .pq-hero h1, .pq-page .pq-hero--page h1 { font-size: 1.3rem; line-height: 1.18; letter-spacing: -.2px; margin-bottom: .5rem; }
+  .pq-page .pq-lead { font-size: .88rem; line-height: 1.5; margin-bottom: .8rem; }
+  .pq-page .pq-chips { gap: .3rem; margin-bottom: .9rem; }
+  .pq-page .pq-chips li { font-size: .7rem; padding: .2rem .55rem; }
+  .pq-page .pq-cta { gap: .5rem; flex-wrap: nowrap; }
+  .pq-page .pq-btn { flex: 1 1 0; width: auto; padding: .6rem .5rem; font-size: .9rem; border-radius: 10px; }
+  .pq-page .pq-cta .pq-btn:first-child { flex: 1.5 1 0; }
+  .pq-page .pq-h2 { font-size: 1.25rem; margin-bottom: .5rem; }
+  .pq-page .pq-h2::after { width: 2.2rem; height: 3px; margin-top: .4rem; }
+  .pq-page .pq-intro { font-size: .9rem; line-height: 1.55; margin-bottom: 1rem; }
+  .pq-page .pq-grid { gap: .6rem; }
+  .pq-page .pq-card { padding: .8rem .9rem; }
+  .pq-page .pq-ico { width: 2rem; height: 2rem; font-size: 1.1rem; margin-bottom: .35rem; }
+  .pq-page .pq-card h3, .pq-page .pq-reason h3 { font-size: 1rem; }
+  .pq-page .pq-card p, .pq-page .pq-reason p { font-size: .88rem; line-height: 1.5; }
+  .pq-page .pq-reason { padding: .8rem .9rem; }
+  .pq-page .pq-panel { padding: 1rem; }
+  .pq-page .pq-panel h3 { font-size: 1.05rem; }
+  .pq-page .pq-panel p { font-size: .9rem; line-height: 1.55; }
+  .pq-page .pq-photo { width: min(68%, 220px); }
+  .pq-page .pq-about-txt p { font-size: .92rem; line-height: 1.6; }
+  .pq-page .pq-creds li { font-size: .78rem; padding: .3rem .6rem; }
+  .pq-page .pq-more { margin-top: .9rem; font-size: .88rem; }
+  .pq-page .pq-final .pq-cta { margin: .9rem 0 .7rem; }
+  .pq-page #page-tarifs-serrurerie, .pq-page #page-tarifs-velo { padding: 1rem 0 1.4rem; }
+  .pq-page .pq-faqband { padding: 1.1rem .8rem 1.5rem; }
+  .pq-page .faq-serrurerie, .pq-page .faq-velo { padding: 1rem .8rem .6rem; margin-bottom: 1rem; }
+  .pq-page .faq-serrurerie h2, .pq-page .faq-velo h2 { font-size: 1.15rem; margin-bottom: .7rem; padding-bottom: .5rem; }
+  .pq-page .faq-item summary { font-size: .95rem; padding: .75rem 0; }
+  .pq-page .faq-item p { font-size: .92rem; }
+  .pq-page #page-prestations-serrurerie { background: #f4eefa; }
+}
+
+/* Page prestations : fond lilas pâle comme les autres */
+.pq-page #page-prestations-serrurerie { background: #f4eefa; }
+.pq-page .prestations-main-col { padding-top: .6rem; }
+
+
+/* =====================================================================
+   PAGE ZONES + OUVERTURE DE PORTE (body.pq-page)
+   ===================================================================== */
+/* Zones */
+.pq-page .pq-quartiers { display: grid !important; grid-template-columns: repeat(3, 1fr) !important; gap: .4rem !important; margin: .8rem 0 0 !important; }
+.pq-page a.quartier-cell { height: 2.4rem; padding: .2rem .3rem; background: #2a1540; color: #fff; border-radius: 10px; border-bottom: 3px solid #e7bb2b; font-size: .78rem; font-weight: 700; }
+.pq-page a.quartier-cell:hover { background: #482664; }
+.pq-page a.quartier-cell--call { background: #e7bb2b; color: #2a1540; border-bottom-color: #2a1540; font-size: .66rem; }
+.pq-page a.quartier-cell--call:hover { background: #f2c93f; }
+.pq-page .pq-grid--3 { margin-bottom: 1rem; }
+.pq-page .pq-zone { background: #fff; border: 1px solid #e3d6f0; border-top: 5px solid #e7bb2b; border-radius: 14px; padding: .9rem 1rem; box-shadow: 0 4px 14px rgba(72,38,100,.09); }
+.pq-page .pq-zone h3 { font-size: 1.05rem; font-weight: 800; color: #482664; margin: 0 0 .4rem; }
+.pq-page .pq-zone p { font-size: .9rem; line-height: 1.55; color: #241238; margin: 0 0 .5rem; }
+.pq-page .pq-zone .pq-zone-list { font-size: .85rem; line-height: 1.8; color: #3a2354; font-weight: 600; }
+.pq-page .pq-zone .pq-zone-note { font-size: .8rem; font-style: italic; font-weight: 700; color: #482664; margin: 0; }
+.pq-page .zone-link { color: #482664; font-weight: 700; text-decoration: underline; }
+.pq-page #map-zones { height: 240px; border-radius: 14px; overflow: hidden; border: 3px solid #e7bb2b; box-shadow: 0 6px 18px rgba(72,38,100,.18); }
+.pq-page .pq-zone-out { margin: 1rem 0 0; font-size: .9rem; line-height: 1.6; color: #241238; background: #f4eefa; border-left: 5px solid #e7bb2b; border-radius: 10px; padding: .8rem 1rem; }
+
+/* Ouverture de porte : cartes de prix, étapes, cas, barre d'appel */
+.pq-page .svc-page { padding: 1.2rem 1rem 5.5rem; }
+.pq-page .svc-page .svc-pricecard { border: 1px solid #e3d6f0; border-radius: 14px; }
+.pq-page .svc-page .svc-pc-head { background: #2a1540; border-bottom: 4px solid #e7bb2b; }
+.pq-page .svc-page .svc-pricecard h3 { color: #e7bb2b; }
+.pq-page .svc-page .svc-bigprice small { color: #e0d2f0; }
+.pq-page .svc-page .svc-section h2 { color: #482664; }
+.pq-page .svc-page .svc-step .svc-num { background: #2a1540; color: #e7bb2b; }
+.pq-page .svc-page .svc-case { border-left-color: #e7bb2b; }
+.pq-page .svc-page .svc-price-pill { color: #482664; }
+.pq-page .svc-sticky .svc-btn--main { background: #e7bb2b; color: #2a1540; border-color: #e7bb2b; }
+
+@media (min-width: 720px) {
+  .pq-page .pq-quartiers { grid-template-columns: repeat(6, 1fr) !important; gap: .5rem !important; }
+  .pq-page #map-zones { height: 320px; }
+  .pq-page .svc-page { padding: 2rem 1.2rem 3rem; }
+}
+@media (min-width: 900px) {
+  .pq-page .pq-grid--3 { grid-template-columns: repeat(3, 1fr); }
+}
+@media (max-width: 760px) {
+  .pq-page .svc-page .svc-pricecards { grid-template-columns: 1fr; gap: .6rem; }
+  .pq-page .svc-page .svc-pricecard { border-radius: 12px; }
+  .pq-page .svc-page .svc-pc-head { display: flex; align-items: center; justify-content: space-between; gap: .6rem; text-align: left; padding: .6rem .9rem; }
+  .pq-page .svc-page .svc-pricecard h3 { font-size: .8rem; letter-spacing: .8px; margin: 0; }
+  .pq-page .svc-page .svc-bigprice { font-size: 1.15rem; white-space: nowrap; }
+  .pq-page .svc-page .svc-pc-body { padding: .4rem .9rem .6rem; }
+  .pq-page .svc-page .svc-pc-body li { font-size: .85rem; line-height: 1.4; padding: .3rem 0 .3rem 1.3rem; }
+  .pq-page .svc-page .svc-pc-body li::before { font-size: .85rem; }
+}
