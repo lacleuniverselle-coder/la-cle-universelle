@@ -22,6 +22,9 @@
   <meta name="theme-color" content="#482664">
   <meta name="robots" content="index, follow">
 
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap">
   <link rel="stylesheet" href="style.css" />
   <link rel="icon" type="image/x-icon" href="favicon.ico">
   <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
@@ -31,38 +34,36 @@
   <script src="script.js" defer></script>
   <title>Simulateur perte ou vol de clés à Toulouse | La clé universElle</title>
   <style>
-    #page-simulateur .assurance-page h1 { margin: 0 0 .9rem; font-family: "Inter", sans-serif; font-size: clamp(1.45rem, 4.2vw, 1.9rem); font-weight: 700; line-height: 1.25; letter-spacing: 0; text-transform: none; color: var(--violet); }
-    #page-simulateur .assur-intro { margin-bottom: 1.5rem; }
-    #page-simulateur .sim-card { background: var(--blanc); border: 1px solid #e4dcee; border-radius: 12px; padding: 1.6rem; margin-bottom: 1.25rem; }
-    #page-simulateur .sim-card label { display: block; margin-bottom: .4rem; font-size: .8rem; font-weight: 600; letter-spacing: .06em; text-transform: uppercase; color: var(--lilas); }
-    #page-simulateur .sim-card select { width: 100%; padding: .75rem .9rem; font-family: "Inter", sans-serif; font-size: .95rem; color: var(--texte); background: var(--blanc); border: 1px solid #d5c8e3; border-radius: 8px; }
-    #page-simulateur .sim-card select:focus-visible { outline: 3px solid var(--lilas); outline-offset: 2px; }
-    #page-simulateur #resultat { margin-top: 1.5rem; padding-top: 1.5rem; border-top: 1px solid #e4dcee; }
+    #page-simulateur .sim-card { background: #fff; border: 1px solid #e3d6f0; border-top: 5px solid #e7bb2b; border-radius: 14px; padding: 1.4rem; margin-bottom: 1.1rem; box-shadow: 0 4px 14px rgba(72,38,100,.09); }
+    #page-simulateur .sim-card label { display: block; margin-bottom: .4rem; font-size: .8rem; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; color: #482664; }
+    #page-simulateur .sim-card select { width: 100%; padding: .75rem .9rem; font-family: "Inter", sans-serif; font-size: .95rem; color: #241238; background: #fff; border: 1.5px solid #482664; border-radius: 8px; }
+    #page-simulateur .sim-card select:focus-visible { outline: 3px solid #e7bb2b; outline-offset: 2px; }
+    #page-simulateur #resultat { margin-top: 1.5rem; padding-top: 1.5rem; border-top: 1px solid #e3d6f0; }
     #page-simulateur #resultat[hidden] { display: none; }
-    #page-simulateur #resultat h3 { margin: 0 0 .5rem; font-size: 1.05rem; color: var(--violet); }
-    #page-simulateur .sim-label { margin: 0 0 .25rem; font-size: .75rem; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; color: var(--lilas); }
-    #page-simulateur .sim-plafond { margin: 0 0 1.4rem; font-size: 2.1rem; font-weight: 700; line-height: 1.15; color: var(--violet); }
-    #page-simulateur .sim-plafond small { font-size: .85rem; font-weight: 400; color: var(--texte); opacity: .65; margin-left: .35rem; }
-    #page-simulateur .sim-rows { display: grid; grid-template-columns: 9rem 1fr; gap: .9rem 1.2rem; margin: 0 0 1.2rem; font-size: .95rem; }
-    #page-simulateur .sim-rows dt { font-size: .75rem; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; color: var(--lilas); padding-top: .2rem; }
+    #page-simulateur #resultat h3 { margin: 0 0 .5rem; font-size: 1.05rem; color: #482664; }
+    #page-simulateur .sim-label { margin: 0 0 .25rem; font-size: .75rem; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: #482664; }
+    #page-simulateur .sim-plafond { margin: 0 0 1.4rem; font-size: 2.1rem; font-weight: 800; line-height: 1.15; color: #482664; }
+    #page-simulateur .sim-plafond small { font-size: .85rem; font-weight: 400; color: #241238; margin-left: .35rem; }
+    #page-simulateur .sim-rows { display: grid; grid-template-columns: 9rem 1fr; gap: .9rem 1.2rem; margin: 0 0 1.2rem; font-size: .95rem; color: #241238; }
+    #page-simulateur .sim-rows dt { font-size: .75rem; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: #482664; padding-top: .2rem; }
     #page-simulateur .sim-rows dd { margin: 0; }
-    #page-simulateur .sim-mentions { margin: 0; padding-top: 1rem; border-top: 1px solid #efe9f5; font-size: .82rem; line-height: 1.55; color: var(--texte); opacity: .7; }
-    #page-simulateur .sim-legal { margin-top: 2rem; font-size: .75rem; line-height: 1.55; color: var(--texte); opacity: .65; }
+    #page-simulateur .sim-mentions { margin: 0; padding-top: 1rem; border-top: 1px solid #e3d6f0; font-size: .82rem; line-height: 1.55; color: #3a2354; }
+    #page-simulateur .sim-legal { margin-top: 1.5rem; font-size: .78rem; line-height: 1.55; color: #3a2354; }
     #page-simulateur .sim-legal p { margin: 0 0 .5rem; }
-    #page-simulateur .sim-demarches h2 { text-align: center; margin: 0 0 1.1rem; font-size: 1.2rem; color: var(--violet); }
-    #page-simulateur .assur-etapes { list-style: none; counter-reset: etape; margin: 0; padding: 0; }
+    #page-simulateur .sim-demarches h2 { text-align: center; margin: 0 0 1.1rem; font-size: 1.2rem; font-weight: 800; color: #482664; }
+    #page-simulateur .assur-etapes { list-style: none; counter-reset: etape; margin: 0; padding: 0; color: #241238; }
     #page-simulateur .assur-etapes li { counter-increment: etape; display: flex; gap: .9rem; align-items: flex-start; margin-bottom: .8rem; font-size: .96rem; }
-    #page-simulateur .assur-etapes li::before { content: counter(etape); flex: 0 0 1.7rem; height: 1.7rem; border-radius: 50%; background: var(--violet); color: #fff; font-size: .85rem; font-weight: 600; display: flex; align-items: center; justify-content: center; }
+    #page-simulateur .assur-etapes li::before { content: counter(etape); flex: 0 0 1.7rem; height: 1.7rem; border-radius: 50%; background: #2a1540; color: #e7bb2b; font-size: .85rem; font-weight: 700; display: flex; align-items: center; justify-content: center; }
+    #page-simulateur .pq-sim { max-width: 760px; }
     @media (max-width: 640px) {
-      #page-simulateur .assurance-page { padding: 3rem 1.25rem; }
-      #page-simulateur .sim-card { padding: 1.2rem; }
+      #page-simulateur .sim-card { padding: 1.1rem; }
       #page-simulateur .sim-rows { grid-template-columns: 1fr; gap: .2rem; }
       #page-simulateur .sim-rows dd { margin-bottom: .8rem; }
     }
   </style>
 </head>
 
-<body>
+<body class="pq-page">
 
   <!-- NAV -->
   <nav id="main-nav">
@@ -148,11 +149,18 @@
   </nav>
 
 <div id="page-simulateur">
-  <div class="page-content assurance-page">
-    <a class="back-btn" href="tarifs.html">← Retour aux tarifs</a>
-    <span class="section-label">Simulateur*</span>
-    <h1>Perte ou vol de clés : quelle prise en charge&nbsp;?</h1>
-    <p class="assur-intro">Choisissez votre banque pour connaître le plafond indicatif.</p>
+  <main>
+  <section class="pq-sec pq-hero pq-hero--page" aria-labelledby="pq-titre">
+    <div class="pq-wrap">
+      <a class="pq-back" href="tarifs.html">← Retour aux tarifs</a>
+      <p class="pq-eyebrow">Simulateur*</p>
+      <h1 id="pq-titre">Perte ou vol de clés : quelle <span>prise en charge</span>&nbsp;?</h1>
+      <p class="pq-lead">Choisissez votre banque pour connaître le plafond indicatif.</p>
+    </div>
+  </section>
+
+  <section class="pq-sec pq-tint">
+  <div class="pq-wrap pq-sim">
 
     <form class="sim-card" id="simu" autocomplete="off" onsubmit="return false">
       <label for="banque">Votre banque</label>
@@ -170,9 +178,9 @@
       </ol>
     </section>
 
-    <div class="contact-btns-row">
-      <a class="contact-tel-btn" href="sms:+33743990437" aria-label="Envoyer un SMS">SMS</a>
-      <a class="contact-tel-btn" href="tel:0743990437">07 43 99 04 37</a>
+    <div class="pq-cta pq-cta--center">
+      <a class="pq-btn pq-btn--dark" href="sms:+33743990437" aria-label="Envoyer un SMS">💬 SMS</a>
+      <a class="pq-btn pq-btn--dark" href="tel:0743990437">📞 07 43 99 04 37</a>
     </div>
 
     <div class="sim-legal">
@@ -180,6 +188,8 @@
       <p>* Simulateur issu du site SécurClés.</p>
     </div>
   </div>
+  </section>
+  </main>
 
   <footer>
     <p>© 2026 <span>La clé universElle</span></p>

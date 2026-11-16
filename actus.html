@@ -25,6 +25,9 @@
   <meta name="theme-color" content="#482664">
   <meta name="robots" content="index, follow">
 
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap">
   <link rel="stylesheet" href="style.css" />
   <link rel="icon" type="image/x-icon" href="favicon.ico">
   <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
@@ -35,7 +38,7 @@
   <title>Actus — La clé universElle</title>
 </head>
 
-<body>
+<body class="pq-page">
 
   <!-- NAV -->
   <nav id="main-nav">
@@ -121,32 +124,39 @@
   </nav>
 
   <div id="page-actus">
-    <div class="page-content" style="max-width:700px; margin:0 auto; padding:3rem 1.2rem 2rem;">
-      <a class="back-btn" href="index.html">← Retour au site</a>
-      <span class="section-label">Actus</span>
-      <h1>Les derniers posts Insta *</h1>
-      <p style="font-size:clamp(.78rem, 3.3vw, .95rem);">Chantiers, galères de cylindres, crevaisons du dimanche :<br>le direct des interventions, disponible ici 👀</p>
+    <main>
+      <section class="pq-sec pq-hero pq-hero--page" aria-labelledby="pq-titre">
+        <div class="pq-wrap">
+          <a class="pq-back" href="index.html">← Retour au site</a>
+          <p class="pq-eyebrow">Actus</p>
+          <h1 id="pq-titre">Les derniers posts <span>Insta *</span></h1>
+          <p class="pq-lead">Chantiers, galères de cylindres, crevaisons du dimanche :<br>le direct des interventions, disponible ici 👀</p>
+        </div>
+      </section>
 
-      <!-- Widget Instagram — SnapWidget (version gratuite) -->
-      <iframe src="https://snapwidget.com/embed/1127359"
+      <section class="pq-sec pq-tint">
+        <div class="pq-wrap pq-actus">
+          <div class="pq-card">
+            <!-- Widget Instagram — SnapWidget (version gratuite) -->
+            <iframe src="https://snapwidget.com/embed/1127359"
         class="snapwidget-widget"
         allowtransparency="true"
         frameborder="0"
         scrolling="no"
-        style="border:none; overflow:hidden; width:100%; max-width:429px; aspect-ratio:1/1; margin-top:2rem; margin-left:auto; margin-right:auto; display:block; pointer-events:none;"
+        style="border:none; overflow:hidden; width:100%; max-width:429px; aspect-ratio:1/1; margin-top:0; margin-left:auto; margin-right:auto; display:block; pointer-events:none;"
         title="Posts from Instagram">
       </iframe>
-
-      <div style="text-align:center; margin-top:1.5rem;">
-        <p style="font-size:0.9rem; margin-bottom:0.5rem;">Suis-moi sur Instagram 👇</p>
-        <a href="https://www.instagram.com/lacleuniverselle/" target="_blank" rel="noopener">
-          <img src="lacleuniverselle_qr.png" alt="QR code Instagram La clé universElle" style="width:160px; height:auto;">
-        </a>
-      </div>
-
-      <p style="margin-top:1.5rem; font-size:0.95rem; opacity:0.8;">* Si je poste pas tous les jours, c'est surtout que j'ai les gants — la sicurezza prima di tutto — donc pas moyen de sortir le téléphone pour chercher le bon filtre 😉📸</p>
-
-    </div>
+            <div class="pq-actus-qr">
+              <p>Suis-moi sur Instagram 👇</p>
+              <a href="https://www.instagram.com/lacleuniverselle/" target="_blank" rel="noopener">
+                <img src="lacleuniverselle_qr.png" alt="QR code Instagram La clé universElle">
+              </a>
+            </div>
+          </div>
+          <p class="pq-note">* Si je poste pas tous les jours, c'est surtout que j'ai les gants — la sicurezza prima di tutto — donc pas moyen de sortir le téléphone pour chercher le bon filtre 😉📸</p>
+        </div>
+      </section>
+    </main>
   </div>
 
   <footer>
